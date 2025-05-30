@@ -1,20 +1,14 @@
-﻿Imports System.Management
-Imports System.Net.NetworkInformation
+﻿Imports System.IO
 Imports System.Net
-Imports System.Linq
-Imports System.IO
-Imports System.Threading.Tasks
-Imports System.Windows.Forms
-Imports System.Drawing
-Imports System.Collections.Generic
 Imports System.Text
-Imports System.ComponentModel
-Imports System.Runtime.InteropServices
-Imports System.Diagnostics
-Imports OpenHardwareMonitor.Hardware
-Imports System.Activities.Statements
-Imports HidSharp
+Imports System.Threading
+Imports System.Windows.Forms.DataVisualization.Charting
+Imports Timer = System.Windows.Forms.Timer
 
+Public Structure CoreTempData
+    Public Property Timestamp As DateTime
+    Public Property CoreTemperatures As Dictionary(Of String, Single) ' Key: CoreName, Value: Temperatur
+End Structure
 
 Public Class Form1
     Private systemInfoRepository As SystemInfoRepository
@@ -29,6 +23,10 @@ Public Class Form1
     Private coreTemperatures As New List(Of ISensor)()
     Private ReadOnly CoreTempBoxes As New Dictionary(Of Integer, TextBox)()
     Private ReadOnly coreIndex As Integer
+    Private isMonitoringActive As Boolean = False
+    Private backgroundTempMeasurements As New List(Of CoreTempData)() ' Liste für gesammelte Temperaturdaten
+    Private monitoringTask As Task ' Task für die Hintergrundüberwachung
+    Private cts As CancellationTokenSource ' Für das Abbrechen des Tasks
 
     Public Sub New()
         InitializeComponent()
@@ -56,6 +54,155 @@ Public Class Form1
         If Not MaxTemp1 Is Nothing Then MaxTempBoxes.Add(1, MaxTemp1)
         If Not MaxTemp2 Is Nothing Then MaxTempBoxes.Add(2, MaxTemp2)
         If Not MaxTemp3 Is Nothing Then MaxTempBoxes.Add(3, MaxTemp3)
+        'AddHandler BtnToggleMonitoring.Click, AddressOf BtnToggleMonitoring_Click
+        refreshTimer.Start()
+    End Sub
+
+    Private Async Sub BtnToggleMonitoring_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitoring.Click
+        If Not isMonitoringActive Then
+            ' Monitoring starten
+            isMonitoringActive = True
+            BtnToggleMonitoring.Text = "Stop Temp. Monitoring"
+            LblStatusMessage.Text = "Background temperature monitoring started..."
+            LblStatusMessage.ForeColor = Color.Orange
+
+            backgroundTempMeasurements.Clear() ' Vorherige Daten löschen
+            cts = New CancellationTokenSource()
+            monitoringTask = Task.Run(Sub() RecordTemperaturesInBackground(cts.Token))
+
+            ' Optional: Deaktivieren Sie den normalen RefreshTimer, um Konflikte zu vermeiden
+            refreshTimer.Stop()
+            Me.Invoke(Sub() ClearCpuDisplayControls()) ' Optional: UI leeren während der Hintergrundmessung
+
+        Else
+            ' Monitoring stoppen
+            isMonitoringActive = False
+            BtnToggleMonitoring.Text = "Start Temp. Monitoring"
+            LblStatusMessage.Text = "Background temperature monitoring stopped. Preparing chart..."
+            LblStatusMessage.ForeColor = Color.DarkOrange
+
+            cts?.Cancel() ' Hintergrund-Task abbrechen
+            Try
+                If monitoringTask IsNot Nothing Then
+                    Await monitoringTask ' Warten, bis der Task beendet ist
+                End If
+            Catch ex As OperationCanceledException
+                ' Dies ist normal, wenn der Task abgebrochen wird.
+            Catch ex As Exception
+                Debug.WriteLine($"Error awaiting monitoring task: {ex.Message}")
+            End Try
+
+
+            ' Diagramm anzeigen und Daten speichern
+            If backgroundTempMeasurements.Any() Then
+                ' Daten in CSV speichern
+                SaveTemperatureDataToCsv(backgroundTempMeasurements)
+
+                ' Neues Fenster mit Diagramm anzeigen
+                Dim chartForm As New Form2(backgroundTempMeasurements)
+                chartForm.Show()
+            Else
+                MessageBox.Show("No temperature data recorded.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+
+            ' Optional: Aktivieren Sie den normalen RefreshTimer wieder
+            refreshTimer.Start()
+            LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
+            LblStatusMessage.ForeColor = Color.Green
+        End If
+    End Sub
+
+
+
+    Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
+        Dim intervalMs As Integer = 2000 ' Messintervall von 2 Sekunden (anpassbar)
+
+        Do While Not cancellationToken.IsCancellationRequested
+            Try
+                ' Sicherstellen, dass die Hardware aktualisiert wird
+                cpu?.Update() ' Verwenden Sie das vorhandene cpu-Objekt
+
+                Dim currentCoreTemps As New Dictionary(Of String, Single)()
+                ' Iterieren Sie über die tatsächlich gefundenen coreTemperatures-Sensoren
+                For Each sensor As ISensor In coreTemperatures
+                    If sensor.Value.HasValue Then
+                        currentCoreTemps.Add(sensor.Name, sensor.Value.Value)
+                    End If
+                Next
+
+                If currentCoreTemps.Any() Then
+                    Dim newEntry As New CoreTempData With {
+                    .Timestamp = DateTime.Now,
+                    .CoreTemperatures = currentCoreTemps
+                }
+                    SyncLock backgroundTempMeasurements ' Thread-sicherer Zugriff auf die Liste
+                        backgroundTempMeasurements.Add(newEntry)
+                    End SyncLock
+                End If
+
+                Task.Delay(intervalMs, cancellationToken).Wait() ' Auf das nächste Intervall warten
+
+            Catch ex As OperationCanceledException
+                ' Task wurde abgebrochen, ist normal
+                Debug.WriteLine("Temperature monitoring task cancelled.")
+                Exit Do
+            Catch ex As Exception
+                Debug.WriteLine($"Error during background temperature recording: {ex.Message}")
+                ' Hier könnte man eine Fehlerbehandlung implementieren, z.B. eine Statusmeldung in der UI
+                ' Me.Invoke(Sub() LblStatusMessage.Text = $"Error in background: {ex.Message}")
+                Exit Do ' Schleife bei schwerwiegendem Fehler beenden
+            End Try
+        Loop
+    End Sub
+
+    Private Sub SaveTemperatureDataToCsv(data As List(Of CoreTempData))
+        Using sfd As New SaveFileDialog()
+            sfd.Filter = "CSV files (*.csv)|*.csv"
+            sfd.Title = "Save Temperature Data"
+            sfd.FileName = $"CoolCore_Temp_Log_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+
+            If sfd.ShowDialog() = DialogResult.OK Then
+                Try
+                    Using writer As New StreamWriter(sfd.FileName, False, Encoding.UTF8)
+                        ' Header schreiben
+                        Dim coreNames As New SortedSet(Of String)() ' Für sortierte Kernnamen
+                        For Each entry In data
+                            For Each kvp In entry.CoreTemperatures
+                                coreNames.Add(kvp.Key)
+                            Next
+                        Next
+                        writer.Write("Timestamp")
+                        For Each coreName In coreNames
+                            writer.Write($",{coreName} (°C)")
+                        Next
+                        writer.WriteLine()
+
+                        ' Daten schreiben
+                        For Each entry In data
+                            writer.Write(entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff"))
+                            For Each coreName In coreNames
+                                Dim temp As Single = 0
+                                If entry.CoreTemperatures.TryGetValue(coreName, temp) Then
+                                    writer.Write($",{temp:F1}")
+                                Else
+                                    writer.Write(",N/A") ' N/A, wenn der Sensor für diesen Zeitpunkt nicht verfügbar war
+                                End If
+                            Next
+                            writer.WriteLine()
+                        Next
+                    End Using
+                    Me.Invoke(Sub()
+                                  LblStatusMessage.Text = $"Temperature data saved to {sfd.FileName}"
+                                  LblStatusMessage.ForeColor = Color.Blue
+                              End Sub)
+                Catch ex As Exception
+                    Me.Invoke(Sub()
+                                  LblStatusMessage.Text = $"Error saving data: {ex.Message}"
+                                  LblStatusMessage.ForeColor = Color.Red
+                              End Sub)
+                End Try
+            End If
+        End Using
     End Sub
 
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -342,9 +489,5 @@ Public Class Form1
 
     Private Sub CloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CloseToolStripMenuItem.Click
         Me.Close()
-    End Sub
-
-    Private Sub PowerBox_TextChanged(sender As Object, e As EventArgs) Handles PowerBox.TextChanged
-
     End Sub
 End Class

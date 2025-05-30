@@ -32,7 +32,10 @@ Partial Class Form1
         Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogOnOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BtnToggleMonitoring = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.BtnToggleMonitor = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.CoreTemp3 = New System.Windows.Forms.TextBox()
@@ -102,7 +105,7 @@ Partial Class Form1
         'MenuStrip1
         '
         Me.MenuStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ToolsToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
         resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
         Me.MenuStrip1.MdiWindowListItem = Me.OptionsToolStripMenuItem
         Me.MenuStrip1.Name = "MenuStrip1"
@@ -159,9 +162,24 @@ Partial Class Form1
         Me.LogOnOffToolStripMenuItem.Name = "LogOnOffToolStripMenuItem"
         resources.ApplyResources(Me.LogOnOffToolStripMenuItem, "LogOnOffToolStripMenuItem")
         '
+        'HelpToolStripMenuItem
+        '
+        Me.HelpToolStripMenuItem.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BtnToggleMonitoring})
+        Me.HelpToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaption
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        resources.ApplyResources(Me.HelpToolStripMenuItem, "HelpToolStripMenuItem")
+        '
+        'BtnToggleMonitoring
+        '
+        Me.BtnToggleMonitoring.Image = Global.CoolCore.My.Resources.Resources._021_about
+        Me.BtnToggleMonitoring.Name = "BtnToggleMonitoring"
+        resources.ApplyResources(Me.BtnToggleMonitoring, "BtnToggleMonitoring")
+        '
         'Panel1
         '
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.BtnToggleMonitor)
         Me.Panel1.Controls.Add(Me.Label3)
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Controls.Add(Me.Lithography)
@@ -186,6 +204,12 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.Model)
         resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Name = "Panel1"
+        '
+        'BtnToggleMonitor
+        '
+        resources.ApplyResources(Me.BtnToggleMonitor, "BtnToggleMonitor")
+        Me.BtnToggleMonitor.Name = "BtnToggleMonitor"
+        Me.BtnToggleMonitor.UseVisualStyleBackColor = True
         '
         'Label3
         '
@@ -747,4 +771,7 @@ Partial Class Form1
     Friend WithEvents ThreadBox As TextBox
     Friend WithEvents CoresBox As TextBox
     Friend WithEvents ExportCPUInfoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BtnToggleMonitoring As ToolStripMenuItem
+    Friend WithEvents BtnToggleMonitor As Button
 End Class
