@@ -1,0 +1,82 @@
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+Partial Class Form3
+    Inherits System.Windows.Forms.Form
+
+    'Das Formular überschreibt den Löschvorgang, um die Komponentenliste zu bereinigen.
+    <System.Diagnostics.DebuggerNonUserCode()> _
+    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        Try
+            If disposing AndAlso components IsNot Nothing Then
+                components.Dispose()
+            End If
+        Finally
+            MyBase.Dispose(disposing)
+        End Try
+    End Sub
+
+    'Wird vom Windows Form-Designer benötigt.
+    Private components As System.ComponentModel.IContainer
+
+    'Hinweis: Die folgende Prozedur ist für den Windows Form-Designer erforderlich.
+    'Das Bearbeiten ist mit dem Windows Form-Designer möglich.  
+    'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
+    <System.Diagnostics.DebuggerStepThrough()> _
+    Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form3))
+        Me.BtnStopMonitoring = New System.Windows.Forms.Button()
+        Me.LblLoadingText = New System.Windows.Forms.Label()
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
+        Me.SuspendLayout()
+        '
+        'BtnStopMonitoring
+        '
+        Me.BtnStopMonitoring.Location = New System.Drawing.Point(179, 126)
+        Me.BtnStopMonitoring.Name = "BtnStopMonitoring"
+        Me.BtnStopMonitoring.Size = New System.Drawing.Size(82, 30)
+        Me.BtnStopMonitoring.TabIndex = 0
+        Me.BtnStopMonitoring.Text = "Stop Monitor"
+        Me.BtnStopMonitoring.UseVisualStyleBackColor = True
+        '
+        'LblLoadingText
+        '
+        Me.LblLoadingText.AutoSize = True
+        Me.LblLoadingText.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 13.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LblLoadingText.Location = New System.Drawing.Point(17, 25)
+        Me.LblLoadingText.Name = "LblLoadingText"
+        Me.LblLoadingText.Size = New System.Drawing.Size(400, 22)
+        Me.LblLoadingText.TabIndex = 1
+        Me.LblLoadingText.Text = "Bitte warten, Monitoring erfasst die CPU Temperaturen..."
+        '
+        'ProgressBar1
+        '
+        Me.ProgressBar1.Location = New System.Drawing.Point(21, 84)
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(396, 25)
+        Me.ProgressBar1.TabIndex = 2
+        '
+        'Form3
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
+        Me.ClientSize = New System.Drawing.Size(438, 162)
+        Me.Controls.Add(Me.ProgressBar1)
+        Me.Controls.Add(Me.LblLoadingText)
+        Me.Controls.Add(Me.BtnStopMonitoring)
+        Me.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
+        Me.Name = "Form3"
+        Me.ShowInTaskbar = False
+        Me.Text = "Form3"
+        Me.TopMost = True
+        Me.ResumeLayout(False)
+        Me.PerformLayout()
+
+    End Sub
+
+    Friend WithEvents BtnStopMonitoring As Button
+    Friend WithEvents LblLoadingText As Label
+    Friend WithEvents ProgressBar1 As ProgressBar
+End Class

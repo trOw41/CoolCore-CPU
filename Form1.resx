@@ -176,6 +176,18 @@
   <data name="ToolsToolStripMenuItem.Text" xml:space="preserve">
     <value>Tools</value>
   </data>
+  <data name="BtnToggleMonitoring.Size" type="System.Drawing.Size, System.Drawing">
+    <value>95, 22</value>
+  </data>
+  <data name="BtnToggleMonitoring.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="HelpToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 20</value>
+  </data>
+  <data name="HelpToolStripMenuItem.Text" xml:space="preserve">
+    <value>Help</value>
+  </data>
   <data name="MenuStrip1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
@@ -207,8 +219,11 @@
   <data name="Label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="Label3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>229, 173</value>
+    <value>229, 164</value>
   </data>
   <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>125, 14</value>
@@ -229,6 +244,81 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Label3.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="BtnToggleMonitor1.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="BtnToggleMonitor1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="BtnToggleMonitor1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>124, 0</value>
+  </data>
+  <data name="BtnToggleMonitor1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>41, 36</value>
+  </data>
+  <data name="BtnToggleMonitor1.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitor1.Name" xml:space="preserve">
+    <value>BtnToggleMonitor1</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitor1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitor1.Parent" xml:space="preserve">
+    <value>Panel3</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitor1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="Label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>27, 11</value>
+  </data>
+  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 14</value>
+  </data>
+  <data name="Label1.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="Label1.Text" xml:space="preserve">
+    <value>Moinitor Temp.</value>
+  </data>
+  <data name="&gt;&gt;Label1.Name" xml:space="preserve">
+    <value>Label1</value>
+  </data>
+  <data name="&gt;&gt;Label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label1.Parent" xml:space="preserve">
+    <value>Panel3</value>
+  </data>
+  <data name="&gt;&gt;Label1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="Panel3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>174, 8</value>
+  </data>
+  <data name="Panel3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>189, 38</value>
+  </data>
+  <data name="Panel3.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;Panel3.Name" xml:space="preserve">
+    <value>Panel3</value>
+  </data>
+  <data name="&gt;&gt;Panel3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Panel3.Parent" xml:space="preserve">
+    <value>Panel2</value>
+  </data>
+  <data name="&gt;&gt;Panel3.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="CoreTemp3.Font" type="System.Drawing.Font, System.Drawing">
@@ -256,7 +346,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;CoreTemp3.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="CoreTemp2.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -283,7 +373,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;CoreTemp2.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="CoreTemp1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -310,7 +400,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;CoreTemp1.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="TjMax.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -337,22 +427,22 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;TjMax.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="Power.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="Power.Location" type="System.Drawing.Point, System.Drawing">
-    <value>14, 32</value>
+    <value>5, 32</value>
   </data>
   <data name="Power.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 14</value>
+    <value>53, 14</value>
   </data>
   <data name="Power.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="Power.Text" xml:space="preserve">
-    <value>Power:</value>
+    <value>Power V:</value>
   </data>
   <data name="&gt;&gt;Power.Name" xml:space="preserve">
     <value>Power</value>
@@ -364,13 +454,13 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;Power.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="Label5.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>269, 56</value>
+    <value>281, 56</value>
   </data>
   <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 21</value>
@@ -394,13 +484,13 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;Label5.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="MaxTemplbl.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="MaxTemplbl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>215, 56</value>
+    <value>222, 56</value>
   </data>
   <data name="MaxTemplbl.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 19</value>
@@ -424,13 +514,13 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;MaxTemplbl.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="MinTemplbl.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="MinTemplbl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>172, 56</value>
+    <value>177, 56</value>
   </data>
   <data name="MinTemplbl.Size" type="System.Drawing.Size, System.Drawing">
     <value>44, 21</value>
@@ -454,7 +544,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;MinTemplbl.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="Core0.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -481,7 +571,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;Core0.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="Core1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -508,7 +598,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;Core1.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="Core2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -535,7 +625,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;Core2.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="Core3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -562,7 +652,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;Core3.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="CoreTemp.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -589,7 +679,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;CoreTemp.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="LoadBox2.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -616,7 +706,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;LoadBox2.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="MaxTemp2.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -643,7 +733,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;MaxTemp2.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="LoadBox1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -670,7 +760,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;LoadBox1.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>16</value>
   </data>
   <data name="MaxTemp1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -697,7 +787,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;MaxTemp1.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="MinTemp2.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -724,7 +814,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;MinTemp2.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>18</value>
   </data>
   <data name="MinTemp1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -751,115 +841,34 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;MinTemp1.ZOrder" xml:space="preserve">
-    <value>18</value>
-  </data>
-  <data name="TextBox13.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
-  </data>
-  <data name="TextBox13.Location" type="System.Drawing.Point, System.Drawing">
-    <value>277, 25</value>
-  </data>
-  <data name="TextBox13.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="TextBox13.Size" type="System.Drawing.Size, System.Drawing">
-    <value>60, 21</value>
-  </data>
-  <data name="TextBox13.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;TextBox13.Name" xml:space="preserve">
-    <value>TextBox13</value>
-  </data>
-  <data name="&gt;&gt;TextBox13.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;TextBox13.Parent" xml:space="preserve">
-    <value>Panel2</value>
-  </data>
-  <data name="&gt;&gt;TextBox13.ZOrder" xml:space="preserve">
     <value>19</value>
   </data>
-  <data name="TextBox9.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="PowerBox2.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
-  <data name="TextBox9.Location" type="System.Drawing.Point, System.Drawing">
-    <value>225, 25</value>
-  </data>
-  <data name="TextBox9.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="TextBox9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 21</value>
-  </data>
-  <data name="TextBox9.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;TextBox9.Name" xml:space="preserve">
-    <value>TextBox9</value>
-  </data>
-  <data name="&gt;&gt;TextBox9.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;TextBox9.Parent" xml:space="preserve">
-    <value>Panel2</value>
-  </data>
-  <data name="&gt;&gt;TextBox9.ZOrder" xml:space="preserve">
-    <value>20</value>
-  </data>
-  <data name="TextBox3.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
-  </data>
-  <data name="TextBox3.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="PowerBox2.Location" type="System.Drawing.Point, System.Drawing">
     <value>124, 25</value>
   </data>
-  <data name="TextBox3.Multiline" type="System.Boolean, mscorlib">
+  <data name="PowerBox2.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="TextBox3.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="PowerBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>42, 21</value>
   </data>
-  <data name="TextBox3.TabIndex" type="System.Int32, mscorlib">
+  <data name="PowerBox2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;TextBox3.Name" xml:space="preserve">
-    <value>TextBox3</value>
+  <data name="&gt;&gt;PowerBox2.Name" xml:space="preserve">
+    <value>PowerBox2</value>
   </data>
-  <data name="&gt;&gt;TextBox3.Type" xml:space="preserve">
+  <data name="&gt;&gt;PowerBox2.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;TextBox3.Parent" xml:space="preserve">
+  <data name="&gt;&gt;PowerBox2.Parent" xml:space="preserve">
     <value>Panel2</value>
   </data>
-  <data name="&gt;&gt;TextBox3.ZOrder" xml:space="preserve">
-    <value>21</value>
-  </data>
-  <data name="TextBox24.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
-  </data>
-  <data name="TextBox24.Location" type="System.Drawing.Point, System.Drawing">
-    <value>174, 25</value>
-  </data>
-  <data name="TextBox24.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="TextBox24.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 21</value>
-  </data>
-  <data name="TextBox24.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;TextBox24.Name" xml:space="preserve">
-    <value>TextBox24</value>
-  </data>
-  <data name="&gt;&gt;TextBox24.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;TextBox24.Parent" xml:space="preserve">
-    <value>Panel2</value>
-  </data>
-  <data name="&gt;&gt;TextBox24.ZOrder" xml:space="preserve">
-    <value>22</value>
+  <data name="&gt;&gt;PowerBox2.ZOrder" xml:space="preserve">
+    <value>20</value>
   </data>
   <data name="LoadBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -889,7 +898,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;LoadBox.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>21</value>
   </data>
   <data name="MaxTemp3.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -916,7 +925,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;MaxTemp3.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>22</value>
   </data>
   <data name="MaxTemp.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -943,7 +952,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;MaxTemp.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>23</value>
   </data>
   <data name="LoadBox3.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -970,7 +979,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;LoadBox3.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>24</value>
   </data>
   <data name="MinTemp.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -997,7 +1006,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;MinTemp.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>25</value>
   </data>
   <data name="MinTemp3.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1024,7 +1033,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;MinTemp3.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>26</value>
   </data>
   <data name="TJBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1051,7 +1060,7 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;TJBox.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>27</value>
   </data>
   <data name="PowerBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1078,13 +1087,13 @@
     <value>Panel2</value>
   </data>
   <data name="&gt;&gt;PowerBox.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>28</value>
   </data>
   <data name="Panel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 181</value>
+    <value>13, 173</value>
   </data>
   <data name="Panel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>364, 201</value>
+    <value>364, 209</value>
   </data>
   <data name="Panel2.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1105,7 +1114,7 @@
     <value>NoControl</value>
   </data>
   <data name="Lithography.Location" type="System.Drawing.Point, System.Drawing">
-    <value>186, 97</value>
+    <value>186, 96</value>
   </data>
   <data name="Lithography.Size" type="System.Drawing.Size, System.Drawing">
     <value>76, 14</value>
@@ -1132,7 +1141,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>31, 153</value>
+    <value>31, 152</value>
   </data>
   <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>48, 14</value>
@@ -1213,7 +1222,7 @@
     <value>NoControl</value>
   </data>
   <data name="TDP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>229, 127</value>
+    <value>229, 125</value>
   </data>
   <data name="TDP.Size" type="System.Drawing.Size, System.Drawing">
     <value>31, 14</value>
@@ -1270,7 +1279,7 @@
     <value>NoControl</value>
   </data>
   <data name="VID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>45, 97</value>
+    <value>45, 96</value>
   </data>
   <data name="VID.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 14</value>
@@ -1320,6 +1329,9 @@
   <data name="&gt;&gt;Frequency.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
+  <data name="Platform.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="Platform.Location" type="System.Drawing.Point, System.Drawing">
     <value>16, 42</value>
   </data>
@@ -1348,7 +1360,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="TDPBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>266, 124</value>
+    <value>266, 122</value>
   </data>
   <data name="TDPBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1375,7 +1387,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="LitBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>266, 94</value>
+    <value>266, 93</value>
   </data>
   <data name="LitBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1429,7 +1441,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="CPUIDBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 149</value>
+    <value>79, 148</value>
   </data>
   <data name="CPUIDBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1456,7 +1468,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="VidBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 93</value>
+    <value>79, 92</value>
   </data>
   <data name="VidBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1617,6 +1629,9 @@
   <data name="Model.AccessibleDescription" xml:space="preserve">
     <value />
   </data>
+  <data name="Model.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="Model.Location" type="System.Drawing.Point, System.Drawing">
     <value>31, 17</value>
   </data>
@@ -1648,7 +1663,7 @@
     <value>4, 36</value>
   </data>
   <data name="Panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 390</value>
+    <value>376, 393</value>
   </data>
   <data name="Panel1.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1668,8 +1683,11 @@
   <data name="Label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="Label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="Label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>14, 28</value>
+    <value>14, 26</value>
   </data>
   <data name="Label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>128, 17</value>
@@ -1699,13 +1717,16 @@
     <value>True</value>
   </data>
   <data name="LblStatusMessage.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift SemiLight, 8pt, style=Italic</value>
+    <value>Bahnschrift SemiLight, 9pt, style=Italic</value>
+  </data>
+  <data name="LblStatusMessage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="LblStatusMessage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1, 439</value>
+    <value>5, 436</value>
   </data>
   <data name="LblStatusMessage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 13</value>
+    <value>41, 14</value>
   </data>
   <data name="LblStatusMessage.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -1732,7 +1753,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Center</value>
+    <value>Stretch</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>379, 455</value>
@@ -1884,6 +1905,18 @@
     <value>LogOnOffToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;LogOnOffToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;HelpToolStripMenuItem.Name" xml:space="preserve">
+    <value>HelpToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;HelpToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitoring.Name" xml:space="preserve">
+    <value>BtnToggleMonitoring</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitoring.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;DataSet1.Name" xml:space="preserve">

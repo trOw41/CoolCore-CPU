@@ -32,7 +32,10 @@ Partial Class Form1
         Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogOnOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BtnToggleMonitoring = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.BtnToggleMonitor1 = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.CoreTemp3 = New System.Windows.Forms.TextBox()
@@ -54,10 +57,7 @@ Partial Class Form1
         Me.MaxTemp1 = New System.Windows.Forms.TextBox()
         Me.MinTemp2 = New System.Windows.Forms.TextBox()
         Me.MinTemp1 = New System.Windows.Forms.TextBox()
-        Me.TextBox13 = New System.Windows.Forms.TextBox()
-        Me.TextBox9 = New System.Windows.Forms.TextBox()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
-        Me.TextBox24 = New System.Windows.Forms.TextBox()
+        Me.PowerBox2 = New System.Windows.Forms.TextBox()
         Me.LoadBox = New System.Windows.Forms.TextBox()
         Me.MaxTemp3 = New System.Windows.Forms.TextBox()
         Me.MaxTemp = New System.Windows.Forms.TextBox()
@@ -92,17 +92,20 @@ Partial Class Form1
         Me.DataColumn1 = New System.Data.DataColumn()
         Me.DataColumn2 = New System.Data.DataColumn()
         Me.LblStatusMessage = New System.Windows.Forms.Label()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
         Me.MenuStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ToolsToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
         resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
         Me.MenuStrip1.MdiWindowListItem = Me.OptionsToolStripMenuItem
         Me.MenuStrip1.Name = "MenuStrip1"
@@ -159,6 +162,20 @@ Partial Class Form1
         Me.LogOnOffToolStripMenuItem.Name = "LogOnOffToolStripMenuItem"
         resources.ApplyResources(Me.LogOnOffToolStripMenuItem, "LogOnOffToolStripMenuItem")
         '
+        'HelpToolStripMenuItem
+        '
+        Me.HelpToolStripMenuItem.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BtnToggleMonitoring})
+        Me.HelpToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaption
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        resources.ApplyResources(Me.HelpToolStripMenuItem, "HelpToolStripMenuItem")
+        '
+        'BtnToggleMonitoring
+        '
+        Me.BtnToggleMonitoring.Image = Global.CoolCore.My.Resources.Resources._021_about
+        Me.BtnToggleMonitoring.Name = "BtnToggleMonitoring"
+        resources.ApplyResources(Me.BtnToggleMonitoring, "BtnToggleMonitoring")
+        '
         'Panel1
         '
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -187,6 +204,13 @@ Partial Class Form1
         resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Name = "Panel1"
         '
+        'BtnToggleMonitor1
+        '
+        Me.BtnToggleMonitor1.BackgroundImage = Global.CoolCore.My.Resources.Resources._033_monitor_1
+        resources.ApplyResources(Me.BtnToggleMonitor1, "BtnToggleMonitor1")
+        Me.BtnToggleMonitor1.Name = "BtnToggleMonitor1"
+        Me.BtnToggleMonitor1.UseVisualStyleBackColor = True
+        '
         'Label3
         '
         resources.ApplyResources(Me.Label3, "Label3")
@@ -195,6 +219,7 @@ Partial Class Form1
         'Panel2
         '
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel2.Controls.Add(Me.Panel3)
         Me.Panel2.Controls.Add(Me.CoreTemp3)
         Me.Panel2.Controls.Add(Me.CoreTemp2)
         Me.Panel2.Controls.Add(Me.CoreTemp1)
@@ -214,10 +239,7 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.MaxTemp1)
         Me.Panel2.Controls.Add(Me.MinTemp2)
         Me.Panel2.Controls.Add(Me.MinTemp1)
-        Me.Panel2.Controls.Add(Me.TextBox13)
-        Me.Panel2.Controls.Add(Me.TextBox9)
-        Me.Panel2.Controls.Add(Me.TextBox3)
-        Me.Panel2.Controls.Add(Me.TextBox24)
+        Me.Panel2.Controls.Add(Me.PowerBox2)
         Me.Panel2.Controls.Add(Me.LoadBox)
         Me.Panel2.Controls.Add(Me.MaxTemp3)
         Me.Panel2.Controls.Add(Me.MaxTemp)
@@ -364,41 +386,14 @@ Partial Class Form1
         Me.MinTemp1.Name = "MinTemp1"
         Me.MinTemp1.ReadOnly = True
         '
-        'TextBox13
+        'PowerBox2
         '
-        Me.TextBox13.BackColor = System.Drawing.Color.AliceBlue
-        Me.TextBox13.Cursor = System.Windows.Forms.Cursors.IBeam
-        resources.ApplyResources(Me.TextBox13, "TextBox13")
-        Me.TextBox13.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.TextBox13.Name = "TextBox13"
-        Me.TextBox13.ReadOnly = True
-        '
-        'TextBox9
-        '
-        Me.TextBox9.BackColor = System.Drawing.Color.AliceBlue
-        Me.TextBox9.Cursor = System.Windows.Forms.Cursors.IBeam
-        resources.ApplyResources(Me.TextBox9, "TextBox9")
-        Me.TextBox9.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.TextBox9.Name = "TextBox9"
-        Me.TextBox9.ReadOnly = True
-        '
-        'TextBox3
-        '
-        Me.TextBox3.BackColor = System.Drawing.Color.AliceBlue
-        Me.TextBox3.Cursor = System.Windows.Forms.Cursors.IBeam
-        resources.ApplyResources(Me.TextBox3, "TextBox3")
-        Me.TextBox3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.ReadOnly = True
-        '
-        'TextBox24
-        '
-        Me.TextBox24.BackColor = System.Drawing.Color.AliceBlue
-        Me.TextBox24.Cursor = System.Windows.Forms.Cursors.IBeam
-        resources.ApplyResources(Me.TextBox24, "TextBox24")
-        Me.TextBox24.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.TextBox24.Name = "TextBox24"
-        Me.TextBox24.ReadOnly = True
+        Me.PowerBox2.BackColor = System.Drawing.Color.AliceBlue
+        Me.PowerBox2.Cursor = System.Windows.Forms.Cursors.IBeam
+        resources.ApplyResources(Me.PowerBox2, "PowerBox2")
+        Me.PowerBox2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.PowerBox2.Name = "PowerBox2"
+        Me.PowerBox2.ReadOnly = True
         '
         'LoadBox
         '
@@ -649,6 +644,21 @@ Partial Class Form1
         resources.ApplyResources(Me.LblStatusMessage, "LblStatusMessage")
         Me.LblStatusMessage.Name = "LblStatusMessage"
         '
+        'Panel3
+        '
+        Me.Panel3.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel3.Controls.Add(Me.BtnToggleMonitor1)
+        Me.Panel3.Controls.Add(Me.Label1)
+        resources.ApplyResources(Me.Panel3, "Panel3")
+        Me.Panel3.Name = "Panel3"
+        '
+        'Label1
+        '
+        Me.Label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        resources.ApplyResources(Me.Label1, "Label1")
+        Me.Label1.Name = "Label1"
+        '
         'Form1
         '
         resources.ApplyResources(Me, "$this")
@@ -673,6 +683,7 @@ Partial Class Form1
         Me.Panel2.PerformLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel3.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -730,13 +741,10 @@ Partial Class Form1
     Friend WithEvents MaxTemp3 As TextBox
     Friend WithEvents MinTemp3 As TextBox
     Friend WithEvents PowerBox As TextBox
-    Friend WithEvents TextBox24 As TextBox
     Friend WithEvents LoadBox3 As TextBox
     Friend WithEvents Label3 As Label
     Friend WithEvents Label5 As Label
-    Friend WithEvents TextBox13 As TextBox
-    Friend WithEvents TextBox9 As TextBox
-    Friend WithEvents TextBox3 As TextBox
+    Friend WithEvents PowerBox2 As TextBox
     Friend WithEvents DataSet1 As DataSet
     Friend WithEvents DataTable1 As DataTable
     Friend WithEvents DataColumn1 As DataColumn
@@ -747,4 +755,9 @@ Partial Class Form1
     Friend WithEvents ThreadBox As TextBox
     Friend WithEvents CoresBox As TextBox
     Friend WithEvents ExportCPUInfoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BtnToggleMonitoring As ToolStripMenuItem
+    Friend WithEvents BtnToggleMonitor1 As Button
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents Label1 As Label
 End Class

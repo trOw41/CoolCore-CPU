@@ -1,20 +1,15 @@
-﻿Imports System.Management
-Imports System.Net.NetworkInformation
-Imports System.Net
-Imports System.Linq
+﻿Imports System.Drawing.Text
 Imports System.IO
-Imports System.Threading.Tasks
-Imports System.Windows.Forms
-Imports System.Drawing
-Imports System.Collections.Generic
+Imports System.Net
 Imports System.Text
-Imports System.ComponentModel
-Imports System.Runtime.InteropServices
-Imports System.Diagnostics
-Imports OpenHardwareMonitor.Hardware
-Imports System.Activities.Statements
-Imports HidSharp
+Imports System.Threading
+Imports System.Windows.Forms.DataVisualization.Charting
+Imports Timer = System.Windows.Forms.Timer
 
+Public Structure CoreTempData
+    Public Property Timestamp As DateTime
+    Public Property CoreTemperatures As Dictionary(Of String, Single) ' Key: CoreName, Value: Temperatur
+End Structure
 
 Public Class Form1
     Private systemInfoRepository As SystemInfoRepository
@@ -29,6 +24,11 @@ Public Class Form1
     Private coreTemperatures As New List(Of ISensor)()
     Private ReadOnly CoreTempBoxes As New Dictionary(Of Integer, TextBox)()
     Private ReadOnly coreIndex As Integer
+    Private loadingForm As Form3
+    Private isMonitoringActive As Boolean = False
+    Private backgroundTempMeasurements As New List(Of CoreTempData)() ' Liste für gesammelte Temperaturdaten
+    Private monitoringTask As Task ' Task für die Hintergrundüberwachung
+    Private cts As CancellationTokenSource ' Für das Abbrechen des Tasks
 
     Public Sub New()
         InitializeComponent()
@@ -56,22 +56,123 @@ Public Class Form1
         If Not MaxTemp1 Is Nothing Then MaxTempBoxes.Add(1, MaxTemp1)
         If Not MaxTemp2 Is Nothing Then MaxTempBoxes.Add(2, MaxTemp2)
         If Not MaxTemp3 Is Nothing Then MaxTempBoxes.Add(3, MaxTemp3)
+        'AddHandler BtnToggleMonitoring.Click, AddressOf BtnToggleMonitoring_Click
+        refreshTimer.Start()
+    End Sub
+
+    Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
+        Dim intervalMs As Integer = 2000 ' Messintervall von 2 Sekunden (anpassbar)
+
+        Do While Not cancellationToken.IsCancellationRequested
+            Try
+                ' Sicherstellen, dass die Hardware aktualisiert wird
+                cpu?.Update() ' Verwenden Sie das vorhandene cpu-Objekt
+
+                Dim currentCoreTemps As New Dictionary(Of String, Single)()
+                ' Iterieren Sie über die tatsächlich gefundenen coreTemperatures-Sensoren
+                For Each sensor As ISensor In coreTemperatures
+                    If sensor.Value.HasValue Then
+                        currentCoreTemps.Add(sensor.Name, sensor.Value.Value)
+                    End If
+                Next
+
+                If currentCoreTemps.Any() Then
+                    Dim newEntry As New CoreTempData With {
+                    .Timestamp = DateTime.Now,
+                    .CoreTemperatures = currentCoreTemps
+                }
+                    SyncLock backgroundTempMeasurements ' Thread-sicherer Zugriff auf die Liste
+                        backgroundTempMeasurements.Add(newEntry)
+                    End SyncLock
+                End If
+
+                Task.Delay(intervalMs, cancellationToken).Wait() ' Auf das nächste Intervall warten
+
+            Catch ex As OperationCanceledException
+                ' Task wurde abgebrochen, ist normal
+                Debug.WriteLine("Temperature monitoring task cancelled.")
+                Exit Do
+            Catch ex As Exception
+                Debug.WriteLine($"Error during background temperature recording: {ex.Message}")
+                ' Hier könnte man eine Fehlerbehandlung implementieren, z.B. eine Statusmeldung in der UI
+                ' Me.Invoke(Sub() LblStatusMessage.Text = $"Error in background: {ex.Message}")
+                Exit Do ' Schleife bei schwerwiegendem Fehler beenden
+            End Try
+        Loop
+    End Sub
+
+    Private Sub SaveTemperatureDataToCsv(data As List(Of CoreTempData))
+        Using sfd As New SaveFileDialog()
+            sfd.Filter = "CSV files (*.csv)|*.csv"
+            sfd.Title = "Save Temperature Data"
+            sfd.FileName = $"CoolCore_Temp_Log_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+
+            If sfd.ShowDialog() = DialogResult.OK Then
+                Try
+                    Using writer As New StreamWriter(sfd.FileName, False, Encoding.UTF8)
+                        ' Header schreiben
+                        Dim coreNames As New SortedSet(Of String)() ' Für sortierte Kernnamen
+                        For Each entry In data
+                            For Each kvp In entry.CoreTemperatures
+                                coreNames.Add(kvp.Key)
+                            Next
+                        Next
+                        writer.Write("Timestamp")
+                        For Each coreName In coreNames
+                            writer.Write($",{coreName} (°C)")
+                        Next
+                        writer.WriteLine()
+
+                        ' Daten schreiben
+                        For Each entry In data
+                            writer.Write(entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff"))
+                            For Each coreName In coreNames
+                                Dim temp As Single = 0
+                                If entry.CoreTemperatures.TryGetValue(coreName, temp) Then
+                                    writer.Write($",{temp:F1}")
+                                Else
+                                    writer.Write(",N/A") ' N/A, wenn der Sensor für diesen Zeitpunkt nicht verfügbar war
+                                End If
+                            Next
+                            writer.WriteLine()
+                        Next
+                    End Using
+                    Me.Invoke(Sub()
+                                  LblStatusMessage.Text = $"Temperature data saved to {sfd.FileName}"
+                                  LblStatusMessage.ForeColor = Color.Blue
+                              End Sub)
+                Catch ex As Exception
+                    Me.Invoke(Sub()
+                                  LblStatusMessage.Text = $"Error saving data: {ex.Message}"
+                                  LblStatusMessage.ForeColor = Color.Red
+                              End Sub)
+                End Try
+            End If
+        End Using
     End Sub
 
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LblStatusMessage.Text = "Ready to read system information."
-        LblStatusMessage.ForeColor = Color.AliceBlue
+        LblStatusMessage.ForeColor = Color.Black
         ClearCpuDisplayControls()
-        'computer.ToString() ' Initialize the computer object
-        computer = New Computer()
+
+        ' Initialize the computer object with enabled hardware monitoring
+        If computer Is Nothing Then
+            computer = New Computer() ' Create a new Computer object if it doesn't exist
+        End If
+        computer.Hardware.Clear() ' Clear any existing hardware to ensure fresh data
         computer.Open(True) ' Open the computer object to access hardware
         computer.IsCpuEnabled = True ' Enable CPU monitoring
-        Await ReadAndDisplaySystemInfoAsync()
+        computer.IsGpuEnabled = True ' Enable GPU monitoring if needed
+
+
+        LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
+        LblStatusMessage.ForeColor = Color.Firebrick
         InitializePerCoreCounters()
         InitializeCoreTemperatureSensors()
+        ' Read and display system information asynchronously
+        Await ReadAndDisplaySystemInfoAsync()
         refreshTimer.Start()
-        LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
-        LblStatusMessage.ForeColor = Color.Green
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -117,6 +218,10 @@ Public Class Form1
     Private Sub InitializeCoreTemperatureSensors()
         Try
             ' CPU-Hardwareobjekt finden
+            If computer Is Nothing Then
+                computer = New Computer()
+                computer.Open(True) ' Open the computer object to access hardware
+            End If
             cpu = computer.Hardware.FirstOrDefault(Function(h) h.HardwareType = HardwareType.Cpu)
             Dim numberOfLogicalProcessors As Integer = 0
             Dim searcher As New ManagementObjectSearcher("SELECT NumberOfLogicalProcessors FROM Win32_Processor")
@@ -145,7 +250,7 @@ Public Class Form1
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show($"Fehler beim Initialisieren der Temperatursensoren: {ex.Message}", "Initialisierungsfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            'MessageBox.Show($"Fehler beim Initialisieren der Temperatursensoren: {ex.Message}", "Initialisierungsfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Debug.WriteLine($"Fehler beim Initialisieren der Temperatursensoren: {ex.ToString()}")
         End Try
     End Sub
@@ -163,12 +268,11 @@ Public Class Form1
                 End If
             Next
 
-            Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package Power"))
-            If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
+            If cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = Global.OpenHardwareMonitor.Hardware.SensorType.Power AndAlso s.Name.Contains("Package Power")) IsNot Nothing AndAlso cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = Global.OpenHardwareMonitor.Hardware.SensorType.Power AndAlso s.Name.Contains("Package Power")).Value.HasValue Then
                 ' Update a TextBox like TDPBox with the current power draw
-                PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W"
+                PowerBox.Text = $"{cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = Global.OpenHardwareMonitor.Hardware.SensorType.Power AndAlso s.Name.Contains("Package Power")).Value.Value:F1}W"
             Else
-                PowerBox.Text = "N/A (Power)"
+                PowerBox.Text = "N/A"
             End If
 
             ' Update Core Temperatures
@@ -272,38 +376,39 @@ Public Class Form1
                           PlatformBox.Text = systemInfo.Architecture
                           CoresBox.Text = systemInfo.NumberOfCores.ToString()
                           ThreadBox.Text = systemInfo.NumberOfLogicalProcessors.ToString()
-                          '#--------------------------------------------------------------------------------------------------------------------'
-                          ' Try to get more detailed info from OpenHardwareMonitor's CPU object
-                          If cpu IsNot Nothing Then
-                              ' Display identifier for more info
-                              ModelBox.Text &= $" ({cpu.Identifier})" ' Append to existing model name or use a new box
-                              ' Search for specific sensors for power/voltage if they exist
-                              Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
-                              If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
-                                  TDPBox.Text = $"{packagePowerSensor.Value.Value:F1}W" ' Display current package power
-                              Else
-                                  TDPBox.Text = "N/A"
-                              End If
-
-                              Dim coreVoltageSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Voltage AndAlso s.Name.Contains("Core"))
-                              If coreVoltageSensor IsNot Nothing AndAlso coreVoltageSensor.Value.HasValue Then
-                                  VidBox.Text = $"{coreVoltageSensor.Value.Value:F3}V"
-                              Else
-                                  VidBox.Text = "N/A"
-                              End If
-
-                              ' Revision might be in cpu.Version or cpu.Identifier
-                              RevisionBox.Text = cpu.Identifier.ToString ' Or try parsing cpu.Identifier
-                              CPUIDBox.Text = "N/A" ' Not directly exposed
-                              LitBox.Text = "N/A (" ' Not directly exposed
-                          Else
-                              TDPBox.Text = "N/A"
-                              VidBox.Text = "N/A"
-                              RevisionBox.Text = "N/A"
-                              CPUIDBox.Text = "N/A"
-                              LitBox.Text = "N/A"
-                          End If
                       End Sub)
+            '#--------------------------------------------------------------------------------------------------------------------'
+            ' Try to get more detailed info from OpenHardwareMonitor's CPU object
+            If cpu IsNot Nothing Then
+                ' Display identifier for more info
+                ModelBox.Text &= $" ({cpu.Identifier})" ' Append to existing model name or use a new box
+                ' Search for specific sensors for power/voltage if they exist
+                Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
+                If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
+                    PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W" ' Display current package power
+                Else
+                    PowerBox.Text = "N/A"
+                End If
+
+                Dim coreVoltageSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Voltage AndAlso s.Name.Contains("Core"))
+                If coreVoltageSensor IsNot Nothing AndAlso coreVoltageSensor.Value.HasValue Then
+                    PowerBox2.Text = $"{coreVoltageSensor.Value.Value:F3}V"
+                Else
+                    PowerBox2.Text = "N/A"
+                End If
+
+                ' Revision might be in cpu.Version or cpu.Identifier
+                RevisionBox.Text = cpu.Identifier.ToString.LastIndexOf("/"c) ' Or try parsing cpu.Identifier
+                CPUIDBox.Text = "N/A" ' Not directly exposed
+                LitBox.Text = "N/A" ' Not directly exposed
+            Else
+                TDPBox.Text = "N/A"
+                VidBox.Text = "N/A"
+                RevisionBox.Text = "N/A"
+                CPUIDBox.Text = "N/A"
+                LitBox.Text = "N/A"
+                          End If
+
             '#--------------------------------------------------------------------------------------------------------------------'
             Await systemInfoRepository.SaveSystemInfoAsync(systemInfo)
             Me.Invoke(Sub()
@@ -325,8 +430,7 @@ Public Class Form1
         ModelBox.Text = ""
         FrequencyBox.Text = ""
         PlatformBox.Text = ""
-        TextBox3.Text = ""
-        TextBox9.Text = ""
+        PowerBox2.Text = ""
         TDPBox.Text = ""
         LitBox.Text = ""
         RevisionBox.Text = ""
@@ -344,7 +448,129 @@ Public Class Form1
         Me.Close()
     End Sub
 
-    Private Sub PowerBox_TextChanged(sender As Object, e As EventArgs) Handles PowerBox.TextChanged
 
+    Private Sub BtnToggleMonitor1_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitor1.Click
+        If Not isMonitoringActive Then
+            ' Monitoring starten
+            isMonitoringActive = True
+            BtnToggleMonitoring.Text = "Stop Temp. Monitoring"
+            ' LblStatusMessage.Text = "Background temperature monitoring started..." ' Wird jetzt von Form3 übernommen
+            ' LblStatusMessage.ForeColor = Color.Orange
+
+            backgroundTempMeasurements.Clear() ' Vorherige Daten löschen
+            cts = New CancellationTokenSource()
+
+            ' Ladeformular erstellen und anzeigen
+            loadingForm = New Form3()
+            AddHandler loadingForm.StopRequested, AddressOf LoadingForm_StopRequested ' Event abonnieren
+            loadingForm.Show() ' Nicht ShowDialog(), damit Form1 weiterhin bedienbar bleibt, aber der Nutzer weiß, dass etwas läuft.
+
+            monitoringTask = Task.Run(Sub() RecordTemperaturesInBackground(cts.Token))
+
+            ' Optional: Deaktivieren Sie den normalen RefreshTimer, um Konflikte zu vermeiden
+            refreshTimer.Stop()
+            Me.Invoke(Sub() ClearCpuDisplayControls()) ' UI leeren während der Hintergrundmessung
+
+        Else
+            ' Monitoring stoppen (durch Klick auf den Button in Form1 oder Form3)
+            Call StopMonitoringProcess() ' Eine neue Methode, um die Stopp-Logik zu kapseln
+        End If
+    End Sub
+    Private Function StartMonitoringAsync() As Task
+        If Not isMonitoringActive Then
+            ' Monitoring starten
+            isMonitoringActive = True
+            BtnToggleMonitoring.Text = "Stop Temp. Monitoring"
+            LblStatusMessage.Text = "Background temperature monitoring started..."
+            LblStatusMessage.ForeColor = Color.Orange
+
+            backgroundTempMeasurements.Clear() ' Vorherige Daten löschen
+            cts = New CancellationTokenSource()
+            monitoringTask = Task.Run(Sub() RecordTemperaturesInBackground(cts.Token))
+
+            ' Optional: Deaktivieren Sie den normalen RefreshTimer, um Konflikte zu vermeiden
+            refreshTimer.Stop()
+            'Me.Invoke(Sub() ClearCpuDisplayControls()) ' Optional: UI leeren während der Hintergrundmessung
+
+        Else
+
+
+        End If
+
+        Return Task.CompletedTask
+    End Function
+
+    Private Async Function StopmonitoringAsync() As Task
+        ' Diagramm anzeigen und Daten speichern
+        If backgroundTempMeasurements.Any() Then
+            ' Daten in CSV speichern
+            SaveTemperatureDataToCsv(backgroundTempMeasurements)
+
+            ' Neues Fenster mit Diagramm anzeigen
+            Dim chartForm As New Form2(backgroundTempMeasurements)
+            chartForm.Show()
+        Else
+            MessageBox.Show("No temperature data recorded.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+
+        ' Optional: Aktivieren Sie den normalen RefreshTimer wieder
+        refreshTimer.Start()
+        LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
+        LblStatusMessage.ForeColor = Color.Green
+        Await ReadAndDisplaySystemInfoAsync()
+        InitializePerCoreCounters()
+        InitializeCoreTemperatureSensors()
+    End Function
+    Private Async Sub StopMonitoringProcess()
+        If Not isMonitoringActive Then Exit Sub ' Nur stoppen, wenn es aktiv ist
+
+        isMonitoringActive = False
+        BtnToggleMonitoring.Text = "Start Temp. Monitoring"
+        LblStatusMessage.Text = "Background temperature monitoring stopped. Preparing chart..."
+        LblStatusMessage.ForeColor = Color.DarkOrange
+
+        ' Ladeformular schließen, falls es offen ist
+        If loadingForm IsNot Nothing AndAlso Not loadingForm.IsDisposed Then
+            loadingForm.Close()
+            loadingForm = Nothing ' Referenz löschen
+        End If
+
+        cts?.Cancel() ' Hintergrund-Task abbrechen
+        Try
+            If monitoringTask IsNot Nothing Then
+                Await monitoringTask ' Warten, bis der Task beendet ist
+            End If
+        Catch ex As OperationCanceledException
+            ' Dies ist normal, wenn der Task abgebrochen wird.
+        Catch ex As Exception
+            Debug.WriteLine($"Error awaiting monitoring task: {ex.Message}")
+        End Try
+
+        ' Diagramm anzeigen und Daten speichern
+        If backgroundTempMeasurements.Any() Then
+            ' Daten in CSV speichern
+            SaveTemperatureDataToCsv(backgroundTempMeasurements)
+
+            ' Neues Fenster mit Diagramm anzeigen
+            Dim chartForm As New Form2(backgroundTempMeasurements)
+            chartForm.Show()
+        Else
+            MessageBox.Show("No temperature data recorded.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+
+        ' Optional: Aktivieren Sie den normalen RefreshTimer wieder
+        refreshTimer.Start()
+        ' Me.Invoke(Sub() ReadAndDisplaySystemInfoAsync().Wait()) ' Optional: UI sofort aktualisieren
+        Await ReadAndDisplaySystemInfoAsync() ' Async aufrufen
+        InitializePerCoreCounters()
+        InitializeCoreTemperatureSensors()
+
+        LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
+        LblStatusMessage.ForeColor = Color.Green
+    End Sub
+
+    Private Sub LoadingForm_StopRequested(sender As Object, e As EventArgs)
+        ' Dies wird aufgerufen, wenn der Benutzer auf den Stop-Button in Form3 klickt
+        Call StopMonitoringProcess()
     End Sub
 End Class
