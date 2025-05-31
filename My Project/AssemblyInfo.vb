@@ -9,10 +9,10 @@ Imports System.Runtime.InteropServices
 
 ' Werte der Assemblyattribute überprüfen
 
-<Assembly: AssemblyTitle("CoolCore")>
-<Assembly: AssemblyDescription("Advanced Processor (CPU) Information System")>
+<Assembly: AssemblyTitle("CoolCore CPU")>
+<Assembly: AssemblyDescription("CPU-Real Time Monitoring about Temperature / load and Statistics of each Core.")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("CoolCore")>
+<Assembly: AssemblyProduct("CoolCore CPU")>
 <Assembly: AssemblyCopyright("Copyright ©  2025 Daniel Trojan")>
 <Assembly: AssemblyTrademark("")>
 
@@ -31,4 +31,4 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyVersion("1.0.0.0")>
 <Assembly: AssemblyFileVersion("1.0.0.0")>
-<Assembly: NeutralResourcesLanguage("")>
+<Assembly: NeutralResourcesLanguage("de-DE")>

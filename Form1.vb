@@ -279,13 +279,10 @@ Public Class Form1
                 End If
             Next
 
-            If cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = Global.OpenHardwareMonitor.Hardware.SensorType.Power AndAlso s.Name.Contains("Package Power")) IsNot Nothing AndAlso cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = Global.OpenHardwareMonitor.Hardware.SensorType.Power AndAlso s.Name.Contains("Package Power")).Value.HasValue Then
-                ' Update a TextBox like TDPBox with the current power draw
-                PowerBox.Text = $"{cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = Global.OpenHardwareMonitor.Hardware.SensorType.Power AndAlso s.Name.Contains("Package Power")).Value.Value:F1}W"
-            Else
-                PowerBox.Text = "N/A"
+            Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
+            If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
+                PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W" ' Display current package power
             End If
-
             ' Update Core Temperatures
             For i As Integer = 0 To coreTemperatures.Count - 1
                 Dim sensor As ISensor = coreTemperatures(i)
@@ -388,37 +385,37 @@ Public Class Form1
                           CoresBox.Text = systemInfo.NumberOfCores.ToString()
                           ThreadBox.Text = systemInfo.NumberOfLogicalProcessors.ToString()
                           PowerBox.Text = "N/A" ' Placeholder, will be updated later
+
+                          '#--------------------------------------------------------------------------------------------------------------------'
+                          ' Try to get more detailed info from OpenHardwareMonitor's CPU object
+                          If cpu IsNot Nothing Then
+                              ' Display identifier for more info
+                              ModelBox.Text &= $" ({cpu.Identifier})" ' Append to existing model name or use a new box
+                              ' Search for specific sensors for power/voltage if they exist
+                              Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
+                              If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
+                                  PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W" ' Display current package power
+                              End If
+
+                              Dim coreVoltageSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Voltage AndAlso s.Name.Contains("Core"))
+                              If coreVoltageSensor IsNot Nothing AndAlso coreVoltageSensor.Value.HasValue Then
+                                  PowerBox2.Text = $"{coreVoltageSensor.Value.Value:F3}V"
+                              Else
+                                  PowerBox2.Text = "N/A"
+                              End If
+
+                              ' Revision might be in cpu.Version or cpu.Identifier
+                              RevisionBox.Text = cpu.Identifier.ToString.LastIndexOf("/"c) ' Or try parsing cpu.Identifier
+                              CPUIDBox.Text = "N/A" ' Not directly exposed
+                              LitBox.Text = "N/A" ' Not directly exposed
+                          Else
+                              TDPBox.Text = "N/A"
+                              VidBox.Text = "N/A"
+                              RevisionBox.Text = "N/A"
+                              CPUIDBox.Text = "N/A"
+                              LitBox.Text = "N/A"
+                          End If
                       End Sub)
-            '#--------------------------------------------------------------------------------------------------------------------'
-            ' Try to get more detailed info from OpenHardwareMonitor's CPU object
-            If cpu IsNot Nothing Then
-                ' Display identifier for more info
-                ModelBox.Text &= $" ({cpu.Identifier})" ' Append to existing model name or use a new box
-                ' Search for specific sensors for power/voltage if they exist
-                Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
-                If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
-                    PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W" ' Display current package power
-                End If
-
-                Dim coreVoltageSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Voltage AndAlso s.Name.Contains("Core"))
-                If coreVoltageSensor IsNot Nothing AndAlso coreVoltageSensor.Value.HasValue Then
-                    PowerBox2.Text = $"{coreVoltageSensor.Value.Value:F3}V"
-                Else
-                    PowerBox2.Text = "N/A"
-                End If
-
-                ' Revision might be in cpu.Version or cpu.Identifier
-                RevisionBox.Text = cpu.Identifier.ToString.LastIndexOf("/"c) ' Or try parsing cpu.Identifier
-                CPUIDBox.Text = "N/A" ' Not directly exposed
-                LitBox.Text = "N/A" ' Not directly exposed
-            Else
-                TDPBox.Text = "N/A"
-                VidBox.Text = "N/A"
-                RevisionBox.Text = "N/A"
-                CPUIDBox.Text = "N/A"
-                LitBox.Text = "N/A"
-            End If
-
             '#--------------------------------------------------------------------------------------------------------------------'
             Await systemInfoRepository.SaveSystemInfoAsync(systemInfo)
             Me.Invoke(Sub()
@@ -621,5 +618,9 @@ Public Class Form1
                 LblStatusMessage.ForeColor = Color.Gray
             End If
         End Using
+    End Sub
+
+    Private Sub BtnToggleMonitoring_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitoring.Click
+        AboutBox1.ShowDialog()
     End Sub
 End Class

@@ -79,7 +79,7 @@ Public Class Form2
         legend.Docking = Docking.Bottom ' Legende unten platzieren
         legend.Alignment = StringAlignment.Center ' Zentrieren
         legend.IsTextAutoFit = True
-        legend.LegendStyle = LegendStyle.Row
+        legend.LegendStyle = LegendStyle.Column
         legend.MaximumAutoSize = 80 ' Platz für Legende
 
         ' Chart Titel
@@ -88,7 +88,7 @@ Public Class Form2
         Dim mainTitle As New Title With {
             .Name = "MainTitle",
             .Text = Me.Text, ' Der Text des Titels ist der Text des Formulars (Me.Text)
-            .Font = New Font("Arial", 14, FontStyle.Bold)
+            .Font = New Font("Bahnschrift", 11, FontStyle.Regular)
         }
         Chart1.Titles.Add(mainTitle) ' Fügen Sie das Title-Objekt hinzu
     End Sub
@@ -220,11 +220,11 @@ Public Class Form2
         ' Für jeden Kern eine Serie erstellen
         For Each coreName In allCoreNames
             Dim series As New Series(coreName) With {
-                .ChartType = SeriesChartType.Spline, ' Glatte Linie für Temperaturverlauf
+                .ChartType = SeriesChartType.FastLine, ' Glatte Linie für Temperaturverlauf
                 .ChartArea = "MainChartArea",
                 .XValueType = ChartValueType.DateTime, ' X-Achse ist Zeit
                 .YValueType = ChartValueType.Single, ' Y-Achse ist Single (Temperatur)
-                .BorderWidth = 2 ' Dickere Linie für bessere Sichtbarkeit
+                .BorderWidth = 1 ' Dickere Linie für bessere Sichtbarkeit
                 }
             Chart1.Series.Add(series)
         Next

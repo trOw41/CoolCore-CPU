@@ -165,7 +165,7 @@
     <value>Options</value>
   </data>
   <data name="LogOnOffToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>143, 22</value>
   </data>
   <data name="LogOnOffToolStripMenuItem.Text" xml:space="preserve">
     <value>Log On/Off</value>
@@ -173,7 +173,7 @@
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAS
-        4wAAEuMB4AUlXgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAVJSURBVHhe7d1p
+        4gAAEuIBMkLHugAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAVJSURBVHhe7d1p
         6GVzHMfxsY4tO2UNQzNRthklZY0hpHkiRYlERJ4IWUtGIcsD2RLZ5sGgKck6RckD4hmlJGMnYcow9uX9
         Kbem6fv/nfs//3N+99zf7/Op1yN+957lM/d/z7m/c848x3Ecx3Ecx3Ecx3Ecx3Ecx3Ecx8mZPXEEFs/R
         HnCmJNvgOnyMfzv0I+7CPnAGmkX4CNEO7IqKcCqcgWUvfIVop3XtLxwPZ0B5AdHO6svn2AHOAHIoop3U
@@ -200,7 +200,7 @@
 </value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>143, 22</value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Text" xml:space="preserve">
     <value>Temp. Archiv</value>
@@ -212,7 +212,7 @@
     <value>Tools</value>
   </data>
   <data name="BtnToggleMonitoring.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="BtnToggleMonitoring.Text" xml:space="preserve">
     <value>Info</value>
@@ -251,33 +251,6 @@
   <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="BtnToggleMonitor.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="BtnToggleMonitor.Location" type="System.Drawing.Point, System.Drawing">
-    <value>266, 151</value>
-  </data>
-  <data name="BtnToggleMonitor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 20</value>
-  </data>
-  <data name="BtnToggleMonitor.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="BtnToggleMonitor.Text" xml:space="preserve">
-    <value>Monitor</value>
-  </data>
-  <data name="&gt;&gt;BtnToggleMonitor.Name" xml:space="preserve">
-    <value>BtnToggleMonitor</value>
-  </data>
-  <data name="&gt;&gt;BtnToggleMonitor.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;BtnToggleMonitor.Parent" xml:space="preserve">
-    <value>Panel1</value>
-  </data>
-  <data name="&gt;&gt;BtnToggleMonitor.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="Label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -306,7 +279,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Label3.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="BtnToggleMonitor1.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Zoom</value>
@@ -1170,7 +1143,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Panel2.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="Lithography.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1197,7 +1170,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Lithography.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="Label4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1224,7 +1197,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Label4.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="Threads.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1251,7 +1224,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Threads.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="AllCores.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1278,7 +1251,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;AllCores.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="TDP.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1305,7 +1278,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;TDP.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="Revision.Font" type="System.Drawing.Font, System.Drawing">
     <value>Bahnschrift SemiLight, 9pt</value>
@@ -1335,7 +1308,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Revision.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>7</value>
   </data>
   <data name="VID.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1362,7 +1335,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;VID.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>8</value>
   </data>
   <data name="Frequency.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1389,10 +1362,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Frequency.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="Platform.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+    <value>9</value>
   </data>
   <data name="Platform.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1419,7 +1389,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Platform.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>10</value>
   </data>
   <data name="TDPBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1446,7 +1416,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;TDPBox.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>11</value>
   </data>
   <data name="LitBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1473,7 +1443,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;LitBox.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>12</value>
   </data>
   <data name="RevisionBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1500,7 +1470,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;RevisionBox.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>13</value>
   </data>
   <data name="CPUIDBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1527,7 +1497,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;CPUIDBox.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>14</value>
   </data>
   <data name="VidBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1554,7 +1524,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;VidBox.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>15</value>
   </data>
   <data name="FrequencyBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1581,7 +1551,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;FrequencyBox.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>16</value>
   </data>
   <data name="ThreadBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1608,7 +1578,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;ThreadBox.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>17</value>
   </data>
   <data name="CoresBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1635,7 +1605,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;CoresBox.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>18</value>
   </data>
   <data name="PlatformBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1662,7 +1632,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;PlatformBox.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>19</value>
   </data>
   <data name="ModelBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1689,7 +1659,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;ModelBox.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>20</value>
   </data>
   <data name="Model.AccessibleDescription" xml:space="preserve">
     <value />
@@ -1719,7 +1689,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Model.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>21</value>
   </data>
   <data name="Panel1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Bahnschrift SemiLight, 9pt</value>
@@ -1783,9 +1753,6 @@
   </data>
   <data name="LblStatusMessage.Font" type="System.Drawing.Font, System.Drawing">
     <value>Bahnschrift SemiLight, 9pt, style=Italic</value>
-  </data>
-  <data name="LblStatusMessage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
   </data>
   <data name="LblStatusMessage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1918,6 +1885,9 @@
         rwAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 3, 4, 3</value>
   </data>
@@ -1933,22 +1903,10 @@
   <data name="&gt;&gt;FileToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;CloseToolStripMenuItem.Name" xml:space="preserve">
-    <value>CloseToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;CloseToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;OptionsToolStripMenuItem.Name" xml:space="preserve">
     <value>OptionsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;OptionsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;SettingsToolStripMenuItem.Name" xml:space="preserve">
-    <value>SettingsToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;SettingsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;ToolStripSeparator1.Name" xml:space="preserve">
@@ -1957,40 +1915,16 @@
   <data name="&gt;&gt;ToolStripSeparator1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ExportCPUInfoToolStripMenuItem.Name" xml:space="preserve">
-    <value>ExportCPUInfoToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;ExportCPUInfoToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;ToolsToolStripMenuItem.Name" xml:space="preserve">
     <value>ToolsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;ToolsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Name" xml:space="preserve">
-    <value>LogOnOffToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Name" xml:space="preserve">
-    <value>LoadArchivedMeasurementsToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;HelpToolStripMenuItem.Name" xml:space="preserve">
     <value>HelpToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;HelpToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;BtnToggleMonitoring.Name" xml:space="preserve">
-    <value>BtnToggleMonitoring</value>
-  </data>
-  <data name="&gt;&gt;BtnToggleMonitoring.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;DataSet1.Name" xml:space="preserve">
@@ -2016,6 +1950,42 @@
   </data>
   <data name="&gt;&gt;DataColumn2.Type" xml:space="preserve">
     <value>System.Data.DataColumn, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;CloseToolStripMenuItem.Name" xml:space="preserve">
+    <value>CloseToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;CloseToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SettingsToolStripMenuItem.Name" xml:space="preserve">
+    <value>SettingsToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;SettingsToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ExportCPUInfoToolStripMenuItem.Name" xml:space="preserve">
+    <value>ExportCPUInfoToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;ExportCPUInfoToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Name" xml:space="preserve">
+    <value>LogOnOffToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Name" xml:space="preserve">
+    <value>LoadArchivedMeasurementsToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitoring.Name" xml:space="preserve">
+    <value>BtnToggleMonitoring</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitoring.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Form1</value>
