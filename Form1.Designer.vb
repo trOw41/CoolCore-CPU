@@ -32,12 +32,15 @@ Partial Class Form1
         Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogOnOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LoadArchivedMeasurementsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BtnToggleMonitoring = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.BtnToggleMonitor1 = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.BtnToggleMonitor1 = New System.Windows.Forms.Button()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.CoreTemp3 = New System.Windows.Forms.TextBox()
         Me.CoreTemp2 = New System.Windows.Forms.TextBox()
         Me.CoreTemp1 = New System.Windows.Forms.TextBox()
@@ -92,14 +95,12 @@ Partial Class Form1
         Me.DataColumn1 = New System.Data.DataColumn()
         Me.DataColumn2 = New System.Data.DataColumn()
         Me.LblStatusMessage = New System.Windows.Forms.Label()
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -151,7 +152,7 @@ Partial Class Form1
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogOnOffToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogOnOffToolStripMenuItem, Me.LoadArchivedMeasurementsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.AppWorkspace
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
@@ -161,6 +162,11 @@ Partial Class Form1
         Me.LogOnOffToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._034_signature
         Me.LogOnOffToolStripMenuItem.Name = "LogOnOffToolStripMenuItem"
         resources.ApplyResources(Me.LogOnOffToolStripMenuItem, "LogOnOffToolStripMenuItem")
+        '
+        'LoadArchivedMeasurementsToolStripMenuItem
+        '
+        resources.ApplyResources(Me.LoadArchivedMeasurementsToolStripMenuItem, "LoadArchivedMeasurementsToolStripMenuItem")
+        Me.LoadArchivedMeasurementsToolStripMenuItem.Name = "LoadArchivedMeasurementsToolStripMenuItem"
         '
         'HelpToolStripMenuItem
         '
@@ -204,13 +210,6 @@ Partial Class Form1
         resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Name = "Panel1"
         '
-        'BtnToggleMonitor1
-        '
-        Me.BtnToggleMonitor1.BackgroundImage = Global.CoolCore.My.Resources.Resources._033_monitor_1
-        resources.ApplyResources(Me.BtnToggleMonitor1, "BtnToggleMonitor1")
-        Me.BtnToggleMonitor1.Name = "BtnToggleMonitor1"
-        Me.BtnToggleMonitor1.UseVisualStyleBackColor = True
-        '
         'Label3
         '
         resources.ApplyResources(Me.Label3, "Label3")
@@ -250,6 +249,27 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.PowerBox)
         resources.ApplyResources(Me.Panel2, "Panel2")
         Me.Panel2.Name = "Panel2"
+        '
+        'Panel3
+        '
+        Me.Panel3.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel3.Controls.Add(Me.BtnToggleMonitor1)
+        Me.Panel3.Controls.Add(Me.Label1)
+        resources.ApplyResources(Me.Panel3, "Panel3")
+        Me.Panel3.Name = "Panel3"
+        '
+        'BtnToggleMonitor1
+        '
+        Me.BtnToggleMonitor1.BackgroundImage = Global.CoolCore.My.Resources.Resources._033_monitor_1
+        resources.ApplyResources(Me.BtnToggleMonitor1, "BtnToggleMonitor1")
+        Me.BtnToggleMonitor1.Name = "BtnToggleMonitor1"
+        '
+        'Label1
+        '
+        Me.Label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        resources.ApplyResources(Me.Label1, "Label1")
+        Me.Label1.Name = "Label1"
         '
         'CoreTemp3
         '
@@ -644,21 +664,6 @@ Partial Class Form1
         resources.ApplyResources(Me.LblStatusMessage, "LblStatusMessage")
         Me.LblStatusMessage.Name = "LblStatusMessage"
         '
-        'Panel3
-        '
-        Me.Panel3.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel3.Controls.Add(Me.BtnToggleMonitor1)
-        Me.Panel3.Controls.Add(Me.Label1)
-        resources.ApplyResources(Me.Panel3, "Panel3")
-        Me.Panel3.Name = "Panel3"
-        '
-        'Label1
-        '
-        Me.Label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        resources.ApplyResources(Me.Label1, "Label1")
-        Me.Label1.Name = "Label1"
-        '
         'Form1
         '
         resources.ApplyResources(Me, "$this")
@@ -681,9 +686,9 @@ Partial Class Form1
         Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
+        Me.Panel3.ResumeLayout(False)
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel3.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -760,4 +765,5 @@ Partial Class Form1
     Friend WithEvents BtnToggleMonitor1 As Button
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Label1 As Label
+    Friend WithEvents LoadArchivedMeasurementsToolStripMenuItem As ToolStripMenuItem
 End Class

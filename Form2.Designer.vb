@@ -36,6 +36,7 @@ Partial Class Form2
         Legend1.Font = New System.Drawing.Font("Bahnschrift Light SemiCondensed", 8.0!)
         Legend1.InterlacedRows = True
         Legend1.IsEquallySpacedItems = True
+        Legend1.IsTextAutoFit = False
         Legend1.Name = "Legend1"
         Legend1.TitleBackColor = System.Drawing.Color.Transparent
         Legend1.TitleFont = New System.Drawing.Font("Bahnschrift Condensed", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -53,9 +54,9 @@ Partial Class Form2
         '
         'PanelColorLegend
         '
-        Me.PanelColorLegend.Location = New System.Drawing.Point(65, 511)
+        Me.PanelColorLegend.Location = New System.Drawing.Point(70, 511)
         Me.PanelColorLegend.Name = "PanelColorLegend"
-        Me.PanelColorLegend.Size = New System.Drawing.Size(588, 17)
+        Me.PanelColorLegend.Size = New System.Drawing.Size(288, 21)
         Me.PanelColorLegend.TabIndex = 1
         '
         'Form2
@@ -68,7 +69,7 @@ Partial Class Form2
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimizeBox = False
         Me.Name = "Form2"
-        Me.Text = "Form2"
+        Me.Text = "Chart"
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 

@@ -1,27 +1,40 @@
-﻿Imports System.Windows.Forms.DataVisualization.Charting
+﻿Imports System.Collections.Generic
 Imports System.Drawing
+Imports System.Globalization
+Imports System.IO
 Imports System.Linq
-Imports System.Collections.Generic
-Imports System.Windows.Forms ' Wichtig für Panel und Chart controls
+Imports System.Text
+Imports System.Windows.Forms
+Imports System.Windows.Forms.DataVisualization.Charting
 
 Public Class Form2
-    Private temperatureData As List(Of CoreTempData) ' Beachten Sie, dass CoreTempData jetzt global verfügbar ist,
-    ' da wir es als Public Structure in Form1.vb hinzugefügt haben.
+    Private temperatureData As List(Of CoreTempData) = New List(Of CoreTempData)()
+    Private sourceFilePath As String
 
     Public Sub New(data As List(Of CoreTempData))
         InitializeComponent()
         temperatureData = data
-        Me.Text = "CPU Temperature History"
+        Me.Text = "CPU Temperature History (Live Data)"
+        SetupFormAndChart()
+    End Sub
+
+    Public Sub New(filePath As String)
+        InitializeComponent()
+        sourceFilePath = filePath
+        Me.Text = $"CPU Temperature History: {Path.GetFileName(filePath)}"
+        SetupFormAndChart()
+        LoadDataFromCsv(filePath)
+    End Sub
+
+    Private Sub SetupFormAndChart()
         Me.Width = 800
         Me.Height = 600
 
-        ' Diagramm initialisieren (sicherstellen, dass Chart1 im Designer platziert wurde)
         If Chart1 IsNot Nothing Then
             InitializeChart()
-            LoadChartData()
+
         End If
 
-        ' Farblegende zeichnen
         AddHandler PanelColorLegend.Paint, AddressOf PanelColorLegend_Paint
     End Sub
 
@@ -49,78 +62,172 @@ Public Class Form2
         Chart1.Series("Temperatures").ToolTip = "Temp: #VALX{F1}°C, Count: #VALY"
     End Sub
 
-    Private Sub LoadChartData()
-        If temperatureData Is Nothing OrElse Not temperatureData.Any() Then
+    Private Sub LoadDataFromCsv(filePath As String)
+        temperatureData.Clear()
+        Debug.WriteLine($"Attempting to load CSV from: {filePath}")
+
+        If Not File.Exists(filePath) Then
+            MessageBox.Show($"Die Datei wurde nicht gefunden: {filePath}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine("File not found.")
             Exit Sub
         End If
 
-        ' Alle gemessenen Temperaturen sammeln und abflachen (von allen Kernen)
+        Try
+            Using reader As New StreamReader(filePath, Encoding.UTF8)
+                Dim headerLine As String = reader.ReadLine()
+                If String.IsNullOrEmpty(headerLine) Then
+                    Debug.WriteLine("CSV header is empty or null.")
+                    Exit Sub
+                End If
+                Debug.WriteLine($"CSV Header: {headerLine}")
+
+                Dim headers() As String = headerLine.Split(","c).Select(Function(s) s.Trim()).ToArray()
+                Dim coreHeaderIndices As New Dictionary(Of String, Integer)()
+                For i As Integer = 1 To headers.Length - 1
+                    Dim header As String = headers(i)
+                    If header.EndsWith(" (°C)", StringComparison.OrdinalIgnoreCase) Then
+
+                        Dim coreName As String = header.Replace(" (°C)", "").Trim()
+                        coreHeaderIndices.Add(coreName, i)
+                        Debug.WriteLine($"Found core header: {coreName} at index {i}")
+                    Else
+                        Debug.WriteLine($"Skipping unknown header: {header}")
+                    End If
+                Next
+
+                If Not coreHeaderIndices.Any() Then
+                    Debug.WriteLine("No valid core temperature headers found in CSV. Expected format like 'Core #0 (°C)'.")
+                    MessageBox.Show("Keine Temperaturspalten im CSV gefunden. Erwartetes Format ist 'Core #X (°C)'.", "CSV-Formatfehler", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Exit Sub
+                End If
+
+
+                While Not reader.EndOfStream
+                    Dim line As String = reader.ReadLine()
+                    If String.IsNullOrEmpty(line) Then Continue While
+
+                    Debug.WriteLine($"Processing line: {line}")
+                    Dim parts() As String = line.Split(","c).Select(Function(s) s.Trim()).ToArray()
+
+                    If parts.Length > 0 Then
+                        Dim timestamp As DateTime
+                        If DateTime.TryParse(parts(0), timestamp) Then
+                            Dim coreTemps As New Dictionary(Of String, Single)()
+                            For Each kvp In coreHeaderIndices
+                                If parts.Length > kvp.Value Then
+                                    Dim tempString As String = parts(kvp.Value)
+                                    Dim tempValue As Single
+
+                                    If Single.TryParse(tempString, NumberStyles.Any, CultureInfo.InvariantCulture, tempValue) Then
+                                        coreTemps.Add(kvp.Key, tempValue)
+                                        Debug.WriteLine($"  Parsed core {kvp.Key}: {tempValue}°C")
+                                    ElseIf tempString.Equals("N/A", StringComparison.OrdinalIgnoreCase) Then
+                                        Debug.WriteLine($"  Core {kvp.Key} is N/A - skipping this value.")
+
+                                    Else
+                                        Debug.WriteLine($"  Failed to parse temperature for core {kvp.Key}: '{parts(kvp.Value)}'")
+                                    End If
+                                End If
+                            Next
+                            If coreTemps.Any() Then
+                                temperatureData.Add(New CoreTempData() With {
+                                    .Timestamp = timestamp,
+                                    .CoreTemperatures = coreTemps
+                                })
+                                'Debug.WriteLine($"Added entry for {timestamp} with {coreTemps.Count} temperatures. Total entries: {temperatureData.Count}")
+                            Else
+                                Debug.WriteLine($"No valid temperatures found for timestamp: {timestamp}.")
+                            End If
+                        Else
+                            Debug.WriteLine($"Failed to parse timestamp: '{parts(0)}'")
+                        End If
+                    Else
+                        Debug.WriteLine("Line is empty after splitting or malformed.")
+                    End If
+                End While
+            End Using
+
+            Debug.WriteLine($"Finished reading CSV. Total data points collected: {temperatureData.Count}")
+            If temperatureData.Any() Then
+                LoadChartData()
+            Else
+                Debug.WriteLine("No data points in temperatureData list after parsing. Chart will be empty.")
+                Chart1.Series("Temperatures").Points.Clear()
+            End If
+
+
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Lesen der CSV-Datei: {ex.Message}{Environment.NewLine}Datei: {filePath}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"Exception during CSV loading: {ex.Message}{Environment.NewLine}{ex.StackTrace}")
+        End Try
+    End Sub
+
+    Private Sub LoadChartData()
+        Debug.WriteLine($"LoadChartData called. Data points available in internal list: {temperatureData.Count}")
+        If temperatureData Is Nothing OrElse Not temperatureData.Any() Then
+            Chart1.Series("Temperatures").Points.Clear()
+            Debug.WriteLine("No data in temperatureData list, chart cleared.")
+            Exit Sub
+        End If
+        Chart1.Series("Temperatures").Points.Clear()
         Dim allTemperatures As New List(Of Single)()
         For Each entry In temperatureData
             For Each kvp In entry.CoreTemperatures
                 allTemperatures.Add(kvp.Value)
             Next
         Next
+        Debug.WriteLine($"Total individual temperature values gathered for chart: {allTemperatures.Count}")
 
         If Not allTemperatures.Any() Then
+            Debug.WriteLine("No individual temperature values collected. Chart will be empty.")
+            Chart1.Series("Temperatures").Points.Clear()
             Exit Sub
         End If
-
-        ' Histogramm-Daten erstellen
-        Dim minOverallTemp As Integer = CInt(Math.Floor(allTemperatures.Min()))
-        Dim maxOverallTemp As Integer = CInt(Math.Ceiling(allTemperatures.Max()))
+        Dim minOverallTemp As Single = CInt(Math.Floor(allTemperatures.Min()))
+        Dim maxOverallTemp As Single = CInt(Math.Ceiling(allTemperatures.Max()))
         Dim binSize As Integer = 2 ' Bins von 2°C
         If (maxOverallTemp - minOverallTemp) < binSize AndAlso (maxOverallTemp - minOverallTemp) > 0 Then binSize = 1 ' Mindestens 1 Grad bei kleiner Spanne
-        If (maxOverallTemp - minOverallTemp) = 0 Then maxOverallTemp += 1 ' Falls nur ein Wert gemessen wird, um Division durch Null zu vermeiden
+        If (maxOverallTemp - minOverallTemp) = 0 Then maxOverallTemp += 1
 
-        Dim temperatureBins As New SortedDictionary(Of Integer, Integer)() ' Key: Bin-Start, Value: Count
-
-        ' Bins initialisieren
-        For temp As Integer = minOverallTemp To maxOverallTemp + binSize Step binSize ' +binSize, um den letzten Bin sicher abzudecken
+        Dim temperatureBins As New SortedDictionary(Of Integer, Integer)()
+        For temp As Integer = CInt(minOverallTemp) To CInt(maxOverallTemp + binSize) Step binSize ' +
             temperatureBins.Add(temp, 0)
         Next
-
-        ' Temperaturen den Bins zuordnen
         For Each temp In allTemperatures
             Dim binStart As Integer = CInt(Math.Floor(temp / binSize)) * binSize
-            ' Sicherstellen, dass binStart innerhalb der vorbereiteten Bins liegt oder angepasst wird
-            If binStart < minOverallTemp Then binStart = minOverallTemp
-            If binStart > maxOverallTemp Then binStart = CInt(Math.Floor(maxOverallTemp / binSize)) * binSize
+
+            If binStart < CInt(minOverallTemp) Then binStart = CInt(minOverallTemp)
+
+            If binStart > CInt(maxOverallTemp) Then binStart = CInt(Math.Floor(maxOverallTemp / binSize)) * binSize
 
             If temperatureBins.ContainsKey(binStart) Then
                 temperatureBins(binStart) += 1
             Else
-                ' Dies sollte bei korrekter Initialisierung der Bins nicht passieren, aber zur Sicherheit
+
                 temperatureBins.Add(binStart, 1)
             End If
         Next
-
-        ' Daten zum Diagramm hinzufügen und einfärben
-        Chart1.Series("Temperatures").Points.Clear()
-        For Each kvp In temperatureBins.OrderBy(Function(x) x.Key) ' Nach Temperatur sortieren
+        For Each kvp In temperatureBins.OrderBy(Function(x) x.Key)
             Dim tempValue As Single = kvp.Key
             Dim count As Integer = kvp.Value
-
-            ' Nur Bins mit Werten oder relevanten Bereichen anzeigen
-            If count > 0 OrElse (tempValue >= minOverallTemp AndAlso tempValue <= maxOverallTemp) Then
+            If count > 0 Then
                 Dim dataPoint As DataPoint = New DataPoint()
-                dataPoint.SetValueXY($"{tempValue}°C - {tempValue + binSize}°C", count) ' X-Achse als Bereich
+                dataPoint.SetValueXY($"{tempValue}°C - {tempValue + binSize}°C", count)
                 dataPoint.Label = $"{count}"
                 dataPoint.Color = GetTemperatureColor(tempValue, minOverallTemp, maxOverallTemp)
                 Chart1.Series("Temperatures").Points.Add(dataPoint)
             End If
         Next
-
-        ' Achsen anpassen
         Chart1.ChartAreas("ChartArea1").RecalculateAxesScale()
         If temperatureBins.Any() Then
             Chart1.ChartAreas("ChartArea1").AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount
-            Chart1.ChartAreas("ChartArea1").AxisX.LabelStyle.Angle = -45 ' Winkel für X-Achsen-Labels
-            Chart1.ChartAreas("ChartArea1").AxisX.LabelStyle.IsStaggered = True ' Gestaffelte Labels
-
-            ' Umbenennung der X-Achse von numerisch zu Kategorien
+            Chart1.ChartAreas("ChartArea1").AxisX.LabelStyle.Angle = -45
+            Chart1.ChartAreas("ChartArea1").AxisX.LabelStyle.IsStaggered = True
             Chart1.Series("Temperatures").XValueType = ChartValueType.String
         End If
+        Chart1.Invalidate()
+        PanelColorLegend.Invalidate()
+        Debug.WriteLine("Chart data loaded and drawn.")
     End Sub
 
     Private Function GetTemperatureColor(temp As Single, minOverallTemp As Single, maxOverallTemp As Single) As Color
@@ -130,9 +237,10 @@ Public Class Form2
         Dim normalizedTemp As Single = (temp - minOverallTemp) / (maxOverallTemp - minOverallTemp)
         normalizedTemp = Math.Max(0, Math.Min(1, normalizedTemp)) ' Sicherstellen, dass es zwischen 0 und 1 liegt
 
-        Dim blue As Integer
-        Dim red As Integer
-        Dim green As Integer
+        Dim red As Integer = 0
+        Dim green As Integer = 0
+        Dim blue As Integer = 0
+
         If normalizedTemp < 0.5 Then
             ' Von Blau zu Grün (0.0 bis 0.5)
             blue = CInt(255 * (1 - normalizedTemp * 2)) ' Von 255 (Blau) nach 0
@@ -145,7 +253,7 @@ Public Class Form2
             blue = 0
         End If
 
-        Return Color.FromArgb(red, green, 0)
+        Return Color.FromArgb(red, green, blue)
     End Function
 
     Private Sub PanelColorLegend_Paint(sender As Object, e As PaintEventArgs) Handles PanelColorLegend.Paint
@@ -179,7 +287,6 @@ Public Class Form2
                                 panelHeight)
             End Using
         Next
-
         ' Temperaturwerte an der Legende hinzufügen
         Using font As New Font("Arial", 8, FontStyle.Bold)
             Using brush As New SolidBrush(Color.Black)
@@ -208,11 +315,6 @@ Public Class Form2
                 g.DrawString($"{midTemp2:F0}°C", font, brush, midX2 - midTextSize2.Width / 2, 0)
             End Using
         End Using
-    End Sub
-
-    ' Optional: Wenn sich die Größe des Formulars ändert, die Legende neu zeichnen
-    Private Sub Form2_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        PanelColorLegend.Invalidate()
     End Sub
 
 End Class

@@ -165,10 +165,45 @@
     <value>Options</value>
   </data>
   <data name="LogOnOffToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>135, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="LogOnOffToolStripMenuItem.Text" xml:space="preserve">
     <value>Log On/Off</value>
+  </data>
+  <data name="LoadArchivedMeasurementsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+</value>
+  </data>
+  <data name="LoadArchivedMeasurementsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="LoadArchivedMeasurementsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Temp. Archiv</value>
   </data>
   <data name="ToolsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>46, 20</value>
@@ -1905,6 +1940,12 @@
     <value>LogOnOffToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;LogOnOffToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Name" xml:space="preserve">
+    <value>LoadArchivedMeasurementsToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;HelpToolStripMenuItem.Name" xml:space="preserve">

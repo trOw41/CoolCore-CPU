@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing.Text
+Imports System.Globalization
 Imports System.IO
 Imports System.Net
 Imports System.Text
@@ -101,55 +102,67 @@ Public Class Form1
         Loop
     End Sub
 
-    Private Sub SaveTemperatureDataToCsv(data As List(Of CoreTempData))
-        Using sfd As New SaveFileDialog()
-            sfd.Filter = "CSV files (*.csv)|*.csv"
-            sfd.Title = "Save Temperature Data"
-            sfd.FileName = $"CoolCore_Temp_Log_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+    Private Function SaveTemperatureDataToCsv(data As List(Of CoreTempData))
+        ' Den Pfad des aktuellen Programms ermitteln
+        Dim programDirectory As String = AppDomain.CurrentDomain.BaseDirectory
+        Dim logDirectory As String = Path.Combine(programDirectory, "TemperatureLogs")
 
-            If sfd.ShowDialog() = DialogResult.OK Then
-                Try
-                    Using writer As New StreamWriter(sfd.FileName, False, Encoding.UTF8)
-                        ' Header schreiben
-                        Dim coreNames As New SortedSet(Of String)() ' Für sortierte Kernnamen
-                        For Each entry In data
-                            For Each kvp In entry.CoreTemperatures
-                                coreNames.Add(kvp.Key)
-                            Next
-                        Next
-                        writer.Write("Timestamp")
-                        For Each coreName In coreNames
-                            writer.Write($",{coreName} (°C)")
-                        Next
-                        writer.WriteLine()
+        ' Sicherstellen, dass das Verzeichnis existiert
+        If Not Directory.Exists(logDirectory) Then
+            Directory.CreateDirectory(logDirectory)
+        End If
 
-                        ' Daten schreiben
-                        For Each entry In data
-                            writer.Write(entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff"))
-                            For Each coreName In coreNames
-                                Dim temp As Single = 0
-                                If entry.CoreTemperatures.TryGetValue(coreName, temp) Then
-                                    writer.Write($",{temp:F1}")
-                                Else
-                                    writer.Write(",N/A") ' N/A, wenn der Sensor für diesen Zeitpunkt nicht verfügbar war
-                                End If
-                            Next
-                            writer.WriteLine()
-                        Next
-                    End Using
-                    Me.Invoke(Sub()
-                                  LblStatusMessage.Text = $"Temperature data saved to {sfd.FileName}"
-                                  LblStatusMessage.ForeColor = Color.Blue
-                              End Sub)
-                Catch ex As Exception
-                    Me.Invoke(Sub()
-                                  LblStatusMessage.Text = $"Error saving data: {ex.Message}"
-                                  LblStatusMessage.ForeColor = Color.Red
-                              End Sub)
-                End Try
-            End If
-        End Using
-    End Sub
+        ' Dateiname generieren (z.B. CoolCore_Temp_Log_YYYYMMDD_HHMMSS.csv)
+        Dim fileName As String = $"CoolCore_Temp_Log_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+        Dim filePath As String = Path.Combine(logDirectory, fileName)
+
+        Try
+            Using writer As New StreamWriter(filePath, False, Encoding.UTF8)
+                ' Header schreiben
+                Dim coreNames As New SortedSet(Of String)() ' Für sortierte Kernnamen
+                For Each entry In data
+                    For Each kvp In entry.CoreTemperatures
+                        coreNames.Add(kvp.Key) ' Hier werden die Namen wie "Core #0", "Core #1" gesammelt
+                    Next
+                Next
+                writer.Write("Timestamp")
+                For Each coreName In coreNames
+                    ' HIER wird der Header für JEDEN KERN geschrieben
+                    writer.Write($",{coreName} (°C)")
+                Next
+                writer.WriteLine()
+
+                ' Daten schreiben
+                For Each entry In data
+                    writer.Write(entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff"))
+                    For Each coreName In coreNames
+                        Dim temp As Single = 0
+                        If entry.CoreTemperatures.TryGetValue(coreName, temp) Then
+                            ' HIER wird der Wert für JEDEN KERN geschrieben
+                            ' WICHTIG: Verwenden Sie CultureInfo.InvariantCulture für den Punkt als Dezimaltrennzeichen
+                            writer.Write($",{temp.ToString("F1", CultureInfo.InvariantCulture)}")
+                        Else
+                            writer.Write(",N/A") ' N/A, wenn der Sensor für diesen Zeitpunkt nicht verfügbar war
+                        End If
+                    Next
+                    writer.WriteLine()
+                Next
+            End Using
+            Me.Invoke(Sub()
+                          LblStatusMessage.Text = $"Temperature data saved to {filePath}"
+                          LblStatusMessage.ForeColor = Color.Blue
+                      End Sub)
+            Return filePath ' Dateipfad zurückgeben
+        Catch ex As Exception
+            Me.Invoke(Sub()
+                          LblStatusMessage.Text = $"Error saving data: {ex.Message}"
+                          LblStatusMessage.ForeColor = Color.Red
+                      End Sub)
+            Return Nothing ' Im Fehlerfall Nothing zurückgeben
+        End Try
+        ' Rückgabe des Dateipfads für die direkte Nutzung im Chart-Fenster
+        Return filePath
+    End Function
 
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LblStatusMessage.Text = "Ready to read system information."
@@ -376,6 +389,7 @@ Public Class Form1
                           PlatformBox.Text = systemInfo.Architecture
                           CoresBox.Text = systemInfo.NumberOfCores.ToString()
                           ThreadBox.Text = systemInfo.NumberOfLogicalProcessors.ToString()
+                          PowerBox.Text = "N/A" ' Placeholder, will be updated later
                       End Sub)
             '#--------------------------------------------------------------------------------------------------------------------'
             ' Try to get more detailed info from OpenHardwareMonitor's CPU object
@@ -386,8 +400,6 @@ Public Class Form1
                 Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
                 If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
                     PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W" ' Display current package power
-                Else
-                    PowerBox.Text = "N/A"
                 End If
 
                 Dim coreVoltageSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Voltage AndAlso s.Name.Contains("Core"))
@@ -407,7 +419,7 @@ Public Class Form1
                 RevisionBox.Text = "N/A"
                 CPUIDBox.Text = "N/A"
                 LitBox.Text = "N/A"
-                          End If
+            End If
 
             '#--------------------------------------------------------------------------------------------------------------------'
             Await systemInfoRepository.SaveSystemInfoAsync(systemInfo)
@@ -469,7 +481,7 @@ Public Class Form1
 
             ' Optional: Deaktivieren Sie den normalen RefreshTimer, um Konflikte zu vermeiden
             refreshTimer.Stop()
-            Me.Invoke(Sub() ClearCpuDisplayControls()) ' UI leeren während der Hintergrundmessung
+            'Me.Invoke(Sub() ClearCpuDisplayControls()) ' UI leeren während der Hintergrundmessung
 
         Else
             ' Monitoring stoppen (durch Klick auf den Button in Form1 oder Form3)
@@ -548,19 +560,24 @@ Public Class Form1
 
         ' Diagramm anzeigen und Daten speichern
         If backgroundTempMeasurements.Any() Then
-            ' Daten in CSV speichern
-            SaveTemperatureDataToCsv(backgroundTempMeasurements)
+            ' Daten in CSV speichern und Dateipfad erhalten
+            Dim savedFilePath As String = SaveTemperatureDataToCsv(backgroundTempMeasurements)
 
-            ' Neues Fenster mit Diagramm anzeigen
-            Dim chartForm As New Form2(backgroundTempMeasurements)
-            chartForm.Show()
+            If Not String.IsNullOrEmpty(savedFilePath) Then
+                ' Neues Fenster mit Diagramm anzeigen und den Dateipfad übergeben
+                ' Form2 muss dafür einen Konstruktor bekommen, der einen Dateipfad akzeptiert
+                Dim chartForm As New Form2(savedFilePath) ' <-- Änderung hier
+                chartForm.Show()
+            Else
+                MessageBox.Show("Failed to save temperature data.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
         Else
             MessageBox.Show("No temperature data recorded.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
 
         ' Optional: Aktivieren Sie den normalen RefreshTimer wieder
         refreshTimer.Start()
-        ' Me.Invoke(Sub() ReadAndDisplaySystemInfoAsync().Wait()) ' Optional: UI sofort aktualisieren
+        Me.Invoke(Sub() ReadAndDisplaySystemInfoAsync().Wait()) ' Optional: UI sofort aktualisieren
         Await ReadAndDisplaySystemInfoAsync() ' Async aufrufen
         InitializePerCoreCounters()
         InitializeCoreTemperatureSensors()
@@ -572,5 +589,37 @@ Public Class Form1
     Private Sub LoadingForm_StopRequested(sender As Object, e As EventArgs)
         ' Dies wird aufgerufen, wenn der Benutzer auf den Stop-Button in Form3 klickt
         Call StopMonitoringProcess()
+    End Sub
+
+    Private Sub LoadArchivedMeasurementsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoadArchivedMeasurementsToolStripMenuItem.Click
+        Dim programDirectory As String = AppDomain.CurrentDomain.BaseDirectory
+        Dim logDirectory As String = Path.Combine(programDirectory, "TemperatureLogs")
+
+        If Not Directory.Exists(logDirectory) Then
+            MessageBox.Show("Keine archivierten Messungen gefunden. Der Ordner 'TemperatureLogs' existiert nicht.", "Archiv leer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Exit Sub
+        End If
+
+        Using ofd As New OpenFileDialog()
+            ofd.InitialDirectory = logDirectory
+            ofd.Filter = "CSV Temperature Logs (*.csv)|CoolCore_Temp_Log_*.csv|All files (*.*)|*.*"
+            ofd.Title = "Wählen Sie eine archivierte Temperaturmessung"
+
+            If ofd.ShowDialog() = DialogResult.OK Then
+                Try
+                    Dim selectedFilePath As String = ofd.FileName
+                    ' Überprüfen, ob das ausgewählte Formular bereits offen ist und die Daten neu laden kann.
+                    ' Oder immer ein neues Formular öffnen. Hier öffnen wir ein neues.
+                    Dim chartForm As New Form2(selectedFilePath) ' Form2 muss jetzt einen String-Pfad akzeptieren
+                    chartForm.Show()
+                    LblStatusMessage.Text = $"Archivierte Messung '{Path.GetFileName(selectedFilePath)}' geladen."
+                    LblStatusMessage.ForeColor = Color.DarkGreen
+                Catch ex As Exception
+                    MessageBox.Show($"Fehler beim Laden der Messung: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    LblStatusMessage.Text = $"Fehler beim Laden der Messung: {ex.Message}"
+                    LblStatusMessage.ForeColor = Color.Red
+                End Try
+            End If
+        End Using
     End Sub
 End Class
