@@ -19,8 +19,8 @@ Partial Class Form2
     Private Sub InitializeComponent()
         Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form2))
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.PanelColorLegend = New System.Windows.Forms.Panel()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -41,35 +41,28 @@ Partial Class Form2
         Legend1.TitleBackColor = System.Drawing.Color.Transparent
         Legend1.TitleFont = New System.Drawing.Font("Bahnschrift Condensed", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Chart1.Legends.Add(Legend1)
-        Me.Chart1.Location = New System.Drawing.Point(2, 12)
+        resources.ApplyResources(Me.Chart1, "Chart1")
         Me.Chart1.Name = "Chart1"
         Series1.ChartArea = "ChartArea1"
         Series1.Font = New System.Drawing.Font("Bahnschrift", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Series1.Legend = "Legend1"
         Series1.Name = "Temperature"
         Me.Chart1.Series.Add(Series1)
-        Me.Chart1.Size = New System.Drawing.Size(798, 493)
-        Me.Chart1.TabIndex = 0
-        Me.Chart1.Text = "Chart1"
         '
         'PanelColorLegend
         '
-        Me.PanelColorLegend.Location = New System.Drawing.Point(70, 511)
+        resources.ApplyResources(Me.PanelColorLegend, "PanelColorLegend")
         Me.PanelColorLegend.Name = "PanelColorLegend"
-        Me.PanelColorLegend.Size = New System.Drawing.Size(288, 21)
-        Me.PanelColorLegend.TabIndex = 1
         '
         'Form2
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 540)
         Me.Controls.Add(Me.PanelColorLegend)
         Me.Controls.Add(Me.Chart1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Form2"
-        Me.Text = "Chart"
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 

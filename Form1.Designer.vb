@@ -36,7 +36,6 @@ Partial Class Form1
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BtnToggleMonitoring = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.BtnToggleMonitor = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
@@ -186,7 +185,7 @@ Partial Class Form1
         'Panel1
         '
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel1.Controls.Add(Me.BtnToggleMonitor)
+
         Me.Panel1.Controls.Add(Me.Label3)
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Controls.Add(Me.Lithography)
@@ -212,11 +211,7 @@ Partial Class Form1
         resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Name = "Panel1"
         '
-        'BtnToggleMonitor
-        '
-        resources.ApplyResources(Me.BtnToggleMonitor, "BtnToggleMonitor")
-        Me.BtnToggleMonitor.Name = "BtnToggleMonitor"
-        Me.BtnToggleMonitor.UseVisualStyleBackColor = True
+
         '
         'Label3
         '

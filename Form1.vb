@@ -1,19 +1,13 @@
-﻿Imports System.Management
-Imports System.Net.NetworkInformation
-Imports System.Net
-Imports System.Linq
-Imports System.Net
-Imports System.Linq
+﻿Imports System.Net
 Imports System.IO
-Imports System.Net
 Imports System.Text
 Imports System.Threading
-Imports System.Windows.Forms.DataVisualization.Charting
 Imports Timer = System.Windows.Forms.Timer
+Imports System.Globalization
 
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
-    Public Property CoreTemperatures As Dictionary(Of String, Single) ' Key: CoreName, Value: Temperatur
+    Public Property CoreTemperatures As Dictionary(Of String, Single)
 End Structure
 
 Public Class Form1
@@ -24,14 +18,14 @@ Public Class Form1
     Private ReadOnly LoadBoxes As New Dictionary(Of Integer, TextBox)()
     Private ReadOnly MinTempBoxes As New Dictionary(Of Integer, TextBox)()
     Private ReadOnly MaxTempBoxes As New Dictionary(Of Integer, TextBox)()
-    Private computer As Computer ' Initialize the computer object with enabled hardware monitoring
-    Private cpu As IHardware ' To hold the CPU hardware object
+    Private computer As Computer
+    Private cpu As IHardware
     Private coreTemperatures As New List(Of ISensor)()
     Private loadingForm As Form3
     Private isMonitoringActive As Boolean = False
-    Private backgroundTempMeasurements As New List(Of CoreTempData)() ' Liste für gesammelte Temperaturdaten
-    Private monitoringTask As Task ' Task für die Hintergrundüberwachung
-    Private cts As CancellationTokenSource ' Für das Abbrechen des Tasks
+    Private backgroundTempMeasurements As New List(Of CoreTempData)()
+    Private monitoringTask As Task
+    Private cts As CancellationTokenSource
     Private ReadOnly CoreTempBoxes As New Dictionary(Of Integer, TextBox)()
     Private ReadOnly coreIndex As Integer
 
@@ -39,30 +33,32 @@ Public Class Form1
         InitializeComponent()
         systemInfoRepository = New SystemInfoRepository()
         cpuLoadCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
-        refreshTimer = New Timer()
-        refreshTimer.Interval = 1000 ' 1000 milliseconds = 1 second
+        refreshTimer = New Timer With {
+            .Interval = 1000
+            }
         AddHandler refreshTimer.Tick, AddressOf RefreshTimer_Tick
-        If Not LoadBox Is Nothing Then LoadBoxes.Add(0, LoadBox)
-        If Not LoadBox1 Is Nothing Then LoadBoxes.Add(1, LoadBox1)
-        If Not LoadBox2 Is Nothing Then LoadBoxes.Add(2, LoadBox2)
-        If Not LoadBox3 Is Nothing Then LoadBoxes.Add(3, LoadBox3)
+        If LoadBox IsNot Nothing Then LoadBoxes.Add(0, LoadBox)
+        If LoadBox1 IsNot Nothing Then LoadBoxes.Add(1, LoadBox1)
+        If LoadBox2 IsNot Nothing Then LoadBoxes.Add(2, LoadBox2)
+        If LoadBox3 IsNot Nothing Then LoadBoxes.Add(3, LoadBox3)
         ' Map Temperature Boxes to core indices
-        If Not CoreTemp Is Nothing Then CoreTempBoxes.Add(0, CoreTemp)
-        If Not CoreTemp1 Is Nothing Then CoreTempBoxes.Add(1, CoreTemp1)
-        If Not CoreTemp2 Is Nothing Then CoreTempBoxes.Add(2, CoreTemp2)
-        If Not CoreTemp3 Is Nothing Then CoreTempBoxes.Add(3, CoreTemp3)
+        If CoreTemp IsNot Nothing Then CoreTempBoxes.Add(0, CoreTemp)
+        If CoreTemp1 IsNot Nothing Then CoreTempBoxes.Add(1, CoreTemp1)
+        If CoreTemp2 IsNot Nothing Then CoreTempBoxes.Add(2, CoreTemp2)
+        If CoreTemp3 IsNot Nothing Then CoreTempBoxes.Add(3, CoreTemp3)
 
-        If Not MinTemp Is Nothing Then MinTempBoxes.Add(0, MinTemp)
-        If Not MinTemp1 Is Nothing Then MinTempBoxes.Add(1, MinTemp1)
-        If Not MinTemp2 Is Nothing Then MinTempBoxes.Add(2, MinTemp2)
-        If Not MinTemp3 Is Nothing Then MinTempBoxes.Add(3, MinTemp3)
+        If MinTemp IsNot Nothing Then MinTempBoxes.Add(0, MinTemp)
+        If MinTemp1 IsNot Nothing Then MinTempBoxes.Add(1, MinTemp1)
+        If MinTemp2 IsNot Nothing Then MinTempBoxes.Add(2, MinTemp2)
+        If MinTemp3 IsNot Nothing Then MinTempBoxes.Add(3, MinTemp3)
 
-        If Not MaxTemp Is Nothing Then MaxTempBoxes.Add(0, MaxTemp)
-        If Not MaxTemp1 Is Nothing Then MaxTempBoxes.Add(1, MaxTemp1)
+        If MaxTemp IsNot Nothing Then MaxTempBoxes.Add(0, MaxTemp)
+        If MaxTemp1 IsNot Nothing Then MaxTempBoxes.Add(1, MaxTemp1)
         'AddHandler BtnToggleMonitoring.Click, AddressOf BtnToggleMonitoring_Click
         refreshTimer.Start()
-        If Not MaxTemp2 Is Nothing Then MaxTempBoxes.Add(2, MaxTemp2)
-        If Not MaxTemp3 Is Nothing Then MaxTempBoxes.Add(3, MaxTemp3)
+        If MaxTemp2 IsNot Nothing Then MaxTempBoxes.Add(2, MaxTemp2)
+        If MaxTemp3 IsNot Nothing Then MaxTempBoxes.Add(3, MaxTemp3)
+    End Sub
     Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
         Dim intervalMs As Integer = 2000 ' Messintervall von 2 Sekunden (anpassbar)
 
@@ -166,8 +162,6 @@ Public Class Form1
         Return filePath
     End Function
 
-    End Sub
-
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LblStatusMessage.Text = "Ready to read system information."
         LblStatusMessage.ForeColor = Color.Black
@@ -227,7 +221,7 @@ Public Class Form1
 
         Catch ex As Exception
             MessageBox.Show($"Error initializing per-core counters: {ex.Message}", "Initialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Error initializing per-core counters: {ex.ToString()}")
+            Debug.WriteLine($"Error initializing per-core counters: {ex.Message}")
         End Try
     End Sub
 
@@ -268,7 +262,7 @@ Public Class Form1
             End If
         Catch ex As Exception
             'MessageBox.Show($"Fehler beim Initialisieren der Temperatursensoren: {ex.Message}", "Initialisierungsfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Fehler beim Initialisieren der Temperatursensoren: {ex.ToString()}")
+            Debug.WriteLine($"Fehler beim Initialisieren der Temperatursensoren: {ex.Message}")
         End Try
     End Sub
 
@@ -461,33 +455,28 @@ Public Class Form1
     End Sub
 
     Private Sub CloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CloseToolStripMenuItem.Click
-
+        Me.Close()
+    End Sub
 
     Private Sub BtnToggleMonitor1_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitor1.Click
         If Not isMonitoringActive Then
-            ' Monitoring starten
             isMonitoringActive = True
             BtnToggleMonitoring.Text = "Stop Temp. Monitoring"
-            ' LblStatusMessage.Text = "Background temperature monitoring started..." ' Wird jetzt von Form3 übernommen
+            ' LblStatusMessage.Text = "Background temperature monitoring started..." 
             ' LblStatusMessage.ForeColor = Color.Orange
 
             backgroundTempMeasurements.Clear() ' Vorherige Daten löschen
             cts = New CancellationTokenSource()
-
-            ' Ladeformular erstellen und anzeigen
             loadingForm = New Form3()
-            AddHandler loadingForm.StopRequested, AddressOf LoadingForm_StopRequested ' Event abonnieren
-            loadingForm.Show() ' Nicht ShowDialog(), damit Form1 weiterhin bedienbar bleibt, aber der Nutzer weiß, dass etwas läuft.
+            AddHandler loadingForm.StopRequested, AddressOf LoadingForm_StopRequested
+            loadingForm.Show()
 
             monitoringTask = Task.Run(Sub() RecordTemperaturesInBackground(cts.Token))
 
-            ' Optional: Deaktivieren Sie den normalen RefreshTimer, um Konflikte zu vermeiden
             refreshTimer.Stop()
-            'Me.Invoke(Sub() ClearCpuDisplayControls()) ' UI leeren während der Hintergrundmessung
 
         Else
-            ' Monitoring stoppen (durch Klick auf den Button in Form1 oder Form3)
-            Call StopMonitoringProcess() ' Eine neue Methode, um die Stopp-Logik zu kapseln
+            Call StopMonitoringProcess()
         End If
     End Sub
     Private Function StartMonitoringAsync() As Task
@@ -602,28 +591,35 @@ Public Class Form1
             Exit Sub
         End If
 
-        Using ofd As New OpenFileDialog()
-            ofd.InitialDirectory = logDirectory
-            ofd.Filter = "CSV Temperature Logs (*.csv)|CoolCore_Temp_Log_*.csv|All files (*.*)|*.*"
-            ofd.Title = "Wählen Sie eine archivierte Temperaturmessung"
+        ' Instanz von Form4 erstellen und den Archivordner übergeben
+        Using archiveSelectionForm As New Form4(logDirectory)
+            ' Form4 als Dialog anzeigen
+            Dim dialogResult As DialogResult = archiveSelectionForm.ShowDialog(Me) ' 'Me' setzt Form1 als Parent
 
-            If ofd.ShowDialog() = DialogResult.OK Then
-                Try
-                    Dim selectedFilePath As String = ofd.FileName
-                    ' Überprüfen, ob das ausgewählte Formular bereits offen ist und die Daten neu laden kann.
-                    ' Oder immer ein neues Formular öffnen. Hier öffnen wir ein neues.
-                    Dim chartForm As New Form2(selectedFilePath) ' Form2 muss jetzt einen String-Pfad akzeptieren
-                    chartForm.Show()
-                    LblStatusMessage.Text = $"Archivierte Messung '{Path.GetFileName(selectedFilePath)}' geladen."
-                    LblStatusMessage.ForeColor = Color.DarkGreen
-                Catch ex As Exception
-                    MessageBox.Show($"Fehler beim Laden der Messung: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    LblStatusMessage.Text = $"Fehler beim Laden der Messung: {ex.Message}"
-                    LblStatusMessage.ForeColor = Color.Red
-                End Try
+            If dialogResult = DialogResult.OK Then
+                ' Wenn der Benutzer auf "Auswählen" geklickt hat und eine Datei ausgewählt wurde
+                Dim selectedFilePath As String = archiveSelectionForm.SelectedFilePath
+
+                If Not String.IsNullOrEmpty(selectedFilePath) Then
+                    Try
+                        ' Neues Fenster mit Diagramm anzeigen und den Dateipfad übergeben
+                        Dim chartForm As New Form2(selectedFilePath)
+                        chartForm.Show()
+                        LblStatusMessage.Text = $"Archivierte Messung '{Path.GetFileName(selectedFilePath)}' geladen."
+                        LblStatusMessage.ForeColor = Color.DarkGreen
+                    Catch ex As Exception
+                        MessageBox.Show($"Fehler beim Laden der Messung: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        LblStatusMessage.Text = $"Fehler beim Laden der Messung: {ex.Message}"
+                        LblStatusMessage.ForeColor = Color.Red
+                    End Try
+                Else
+                    MessageBox.Show("Keine Datei ausgewählt.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                End If
+            Else
+                ' Der Benutzer hat auf "Abbrechen" geklickt
+                LblStatusMessage.Text = "Auswahl abgebrochen."
+                LblStatusMessage.ForeColor = Color.Gray
             End If
         End Using
-    End Sub
-
     End Sub
 End Class
