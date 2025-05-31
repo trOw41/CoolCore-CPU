@@ -23,25 +23,24 @@
 ---
 
 ### 📸 Screenshots
-* MAIN WINDOW
++ MAIN WINDOW
 ![main_window](screenshots/main_window.png)
 
-### CHART SCREEN
++ CHART SCREEN
 ![chart_window](screenshots/chart_window.png)
 
-### ARCHIVE BOX
++ ARCHIVE BOX
   ![archive box](screenshots/archive_dialog.png)
 
 
 
 ➡️ Erste Schritte
 Um CoolCore CPU zu nutzen, klonen Sie dieses Repository und kompilieren Sie das Projekt in Visual Studio.
-
-Bash
-
-git clone [https://github.com/your-username/CoolCoreCPU.git](https://github.com/trOw41/CoolCore-CPU.git)
-cd CoolCoreCPU
-Öffnen Sie die .sln-Datei in Visual Studio und erstellen Sie das Projekt.
+```markdown
+git clone [https://github.com/trOw41/CoolCore-CPU.git](https://github.com/trOw41/CoolCore-CPU.git)
+cd CoolCore-CPU
+```
++ Öffnen Sie die .sln-Datei in Visual Studio und erstellen Sie das Projekt.
 
 Voraussetzungen:
 
@@ -54,7 +53,7 @@ Monitoring starten: Klicken Sie auf den Button "Monitoring Starten", um die Echt
 Messungen archivieren: Nach Beendigung des Monitorings werden die Daten automatisch als CSV-Datei im Ordner TemperatureLogs im Programmverzeichnis abgelegt.
 Archivierte Messungen laden: Über das "Tools" Menü (oder ein ähnliches Menü) können Sie "Archivierte Messungen laden" auswählen, um eine Liste der gespeicherten CSV-Dateien anzuzeigen und eine zur Analyse auszuwählen.
 🤝 Mitwirken
-Dieses Projekt ist unter [Lizenztyp, z.B. MIT-Lizenz] lizenziert. Wenn Sie zur Entwicklung beitragen möchten, sind Pull Requests herzlich willkommen!
+Dieses Projekt ist unter ![MIT-Lizenz](LICENSE.txt) lizenziert. Wenn Sie zur Entwicklung beitragen möchten, sind Pull Requests herzlich willkommen!
 
 ⚖️ Lizenz / Copyright
 © 2025 Daniel Trojan. Alle Rechte vorbehalten.
