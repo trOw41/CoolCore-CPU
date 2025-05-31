@@ -216,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="78_11594827525_045-firmware.ico" />
+    <Content Include="LICENSE.txt" />
     <Content Include="Resources\002-app-1.png" />
     <Content Include="Resources\004-computer-science.png" />
     <Content Include="Resources\014-close.png" />

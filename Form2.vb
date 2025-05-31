@@ -8,7 +8,7 @@ Imports System.Windows.Forms
 Imports System.Windows.Forms.DataVisualization.Charting
 
 Public Class Form2
-    Private temperatureData As List(Of CoreTempData) = New List(Of CoreTempData)()
+    Private temperatureData As New List(Of CoreTempData)()
     Private sourceFilePath As String
 
     Public Sub New(data As List(Of CoreTempData))
@@ -41,27 +41,56 @@ Public Class Form2
     End Sub
 
     Private Sub InitializeChart()
+        ' Sicherstellen, dass das Chart existiert
+        If Chart1 Is Nothing Then
+            Chart1 = New Chart()
+            Me.Controls.Add(Chart1)
+            Chart1.Dock = DockStyle.Fill
+        End If
+
         Chart1.Series.Clear()
-        Chart1.Titles.Clear()
         Chart1.ChartAreas.Clear()
+        Chart1.Legends.Clear()
 
-        Chart1.Titles.Add("Core Temperature Distribution")
-        Chart1.ChartAreas.Add("ChartArea1") ' Standard ChartArea
-        Chart1.ChartAreas("ChartArea1").AxisX.Title = "Temperature (°C)"
-        Chart1.ChartAreas("ChartArea1").AxisY.Title = "Frequency / Count"
+        ' ChartArea hinzufügen
+        Dim chartArea As New ChartArea("MainChartArea")
+        Chart1.ChartAreas.Add(chartArea)
 
-        ' Automatische Skalierung für Y-Achse
-        Chart1.ChartAreas("ChartArea1").AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount
-        Chart1.ChartAreas("ChartArea1").AxisY.LabelAutoFitStyle = LabelAutoFitStyles.StaggeredLabels Or LabelAutoFitStyles.LabelsAngleStep90
+        ' Achsen konfigurieren
+        chartArea.AxisX.Title = "Zeit"
+        chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds ' Intervalle in Sekunden
+        chartArea.AxisX.LabelStyle.Format = "HH:mm:ss" ' Anzeigeformat für Zeit
+        chartArea.AxisX.MajorGrid.LineColor = Color.LightGray
+        chartArea.AxisX.MinorGrid.LineColor = Color.LightGray
+        chartArea.AxisX.MinorGrid.Enabled = True
+        chartArea.AxisX.LabelStyle.Angle = -45 ' Schräge Beschriftung
+        chartArea.AxisX.LabelStyle.IsStaggered = True ' Gestaffelte Labels
 
-        Dim series As New Series("Temperatures")
-        series.ChartType = SeriesChartType.Bar
-        series.IsValueShownAsLabel = True ' Werte auf den Balken anzeigen
-        series.Font = New Font("Arial", 8, FontStyle.Bold) ' Kleinere Schrift für Labels
-        Chart1.Series.Add(series)
+        chartArea.AxisY.Title = "Temperatur (°C)"
+        chartArea.AxisY.MajorGrid.LineColor = Color.LightGray
+        chartArea.AxisY.MinorGrid.LineColor = Color.LightGray
+        chartArea.AxisY.MinorGrid.Enabled = True
+        chartArea.AxisY.Minimum = 0 ' Oder ein sinnvollerer Minimalwert, z.B. 20
+        chartArea.AxisY.Maximum = 100 ' Oder ein sinnvollerer Maximalwert, z.B. 100 oder 105
 
-        ' Verbesserte Tooltips
-        Chart1.Series("Temperatures").ToolTip = "Temp: #VALX{F1}°C, Count: #VALY"
+        ' Legende hinzufügen
+        Dim legend As New Legend("CoreLegend")
+        Chart1.Legends.Add(legend)
+        legend.Docking = Docking.Bottom ' Legende unten platzieren
+        legend.Alignment = StringAlignment.Center ' Zentrieren
+        legend.IsTextAutoFit = True
+        legend.LegendStyle = LegendStyle.Row
+        legend.MaximumAutoSize = 80 ' Platz für Legende
+
+        ' Chart Titel
+        Chart1.Titles.Clear()
+        ' Erstellen Sie ein neues Title-Objekt
+        Dim mainTitle As New Title With {
+            .Name = "MainTitle",
+            .Text = Me.Text, ' Der Text des Titels ist der Text des Formulars (Me.Text)
+            .Font = New Font("Arial", 14, FontStyle.Bold)
+        }
+        Chart1.Titles.Add(mainTitle) ' Fügen Sie das Title-Objekt hinzu
     End Sub
 
     Private Sub LoadDataFromCsv(filePath As String)
@@ -167,86 +196,109 @@ Public Class Form2
     Private Sub LoadChartData()
         Debug.WriteLine($"LoadChartData called. Data points available in internal list: {temperatureData.Count}")
         If temperatureData Is Nothing OrElse Not temperatureData.Any() Then
-            Chart1.Series("Temperatures").Points.Clear()
+            Chart1.Series.Clear() ' Alle Serien entfernen
             Debug.WriteLine("No data in temperatureData list, chart cleared.")
             Exit Sub
         End If
-        Chart1.Series("Temperatures").Points.Clear()
-        Dim allTemperatures As New List(Of Single)()
+
+        ' Alle bestehenden Serien entfernen
+        Chart1.Series.Clear()
+
+        ' Alle Kernnamen aus den Daten sammeln und sortieren
+        Dim allCoreNames As New SortedSet(Of String)()
         For Each entry In temperatureData
             For Each kvp In entry.CoreTemperatures
-                allTemperatures.Add(kvp.Value)
+                allCoreNames.Add(kvp.Key)
             Next
         Next
-        Debug.WriteLine($"Total individual temperature values gathered for chart: {allTemperatures.Count}")
 
-        If Not allTemperatures.Any() Then
-            Debug.WriteLine("No individual temperature values collected. Chart will be empty.")
-            Chart1.Series("Temperatures").Points.Clear()
+        If Not allCoreNames.Any() Then
+            Debug.WriteLine("No core names found in temperatureData. Chart will be empty.")
             Exit Sub
         End If
-        Dim minOverallTemp As Single = CInt(Math.Floor(allTemperatures.Min()))
-        Dim maxOverallTemp As Single = CInt(Math.Ceiling(allTemperatures.Max()))
-        Dim binSize As Integer = 2 ' Bins von 2°C
-        If (maxOverallTemp - minOverallTemp) < binSize AndAlso (maxOverallTemp - minOverallTemp) > 0 Then binSize = 1 ' Mindestens 1 Grad bei kleiner Spanne
-        If (maxOverallTemp - minOverallTemp) = 0 Then maxOverallTemp += 1
 
-        Dim temperatureBins As New SortedDictionary(Of Integer, Integer)()
-        For temp As Integer = CInt(minOverallTemp) To CInt(maxOverallTemp + binSize) Step binSize ' +
-            temperatureBins.Add(temp, 0)
+        ' Für jeden Kern eine Serie erstellen
+        For Each coreName In allCoreNames
+            Dim series As New Series(coreName) With {
+                .ChartType = SeriesChartType.Spline, ' Glatte Linie für Temperaturverlauf
+                .ChartArea = "MainChartArea",
+                .XValueType = ChartValueType.DateTime, ' X-Achse ist Zeit
+                .YValueType = ChartValueType.Single, ' Y-Achse ist Single (Temperatur)
+                .BorderWidth = 2 ' Dickere Linie für bessere Sichtbarkeit
+                }
+            Chart1.Series.Add(series)
         Next
 
-        ' Temperaturen den Bins zuordnen
-        For Each temp In allTemperatures
-            Dim binStart As Integer = CInt(Math.Floor(temp / binSize)) * binSize
+        ' Daten zu den Serien hinzufügen
+        Dim minChartTemp As Single = Single.MaxValue
+            Dim maxChartTemp As Single = Single.MinValue
+            Dim firstTimestamp As DateTime = DateTime.MaxValue
+            Dim lastTimestamp As DateTime = DateTime.MinValue
 
-            If binStart < CInt(minOverallTemp) Then binStart = CInt(minOverallTemp)
+            For Each entry In temperatureData.OrderBy(Function(e) e.Timestamp) ' Daten nach Zeitstempel sortieren
+                If entry.Timestamp < firstTimestamp Then firstTimestamp = entry.Timestamp
+                If entry.Timestamp > lastTimestamp Then lastTimestamp = entry.Timestamp
 
-            If binStart > CInt(maxOverallTemp) Then binStart = CInt(Math.Floor(maxOverallTemp / binSize)) * binSize
+                For Each kvp In entry.CoreTemperatures
+                    Dim coreName As String = kvp.Key
+                    Dim tempValue As Single = kvp.Value
 
-            If temperatureBins.ContainsKey(binStart) Then
-                temperatureBins(binStart) += 1
-            Else
+                If Chart1.Series.Any(Function(s) s.Name.Equals(coreName, StringComparison.OrdinalIgnoreCase)) Then
+                    Dim dataPoint As New DataPoint()
+                    dataPoint.SetValueXY(entry.Timestamp, tempValue)
 
-                temperatureBins.Add(binStart, 1)
+                    ' Tooltip Text
+                    dataPoint.ToolTip = $"Zeit: {entry.Timestamp:HH:mm:ss.fff}{Environment.NewLine}" &
+                                       $"Kern: {coreName}{Environment.NewLine}" &
+                                       $"Temp: {tempValue:F1}°C"
+
+                    Chart1.Series(coreName).Points.Add(dataPoint)
+
+                    If tempValue < minChartTemp Then minChartTemp = tempValue
+                    If tempValue > maxChartTemp Then maxChartTemp = tempValue
+                End If
+            Next
+            Next
+
+            ' Achsenbereich dynamisch anpassen
+            If temperatureData.Any() Then
+                Chart1.ChartAreas("MainChartArea").AxisY.Minimum = CInt(Math.Floor(minChartTemp - 5)) ' Etwas Puffer unten
+                Chart1.ChartAreas("MainChartArea").AxisY.Maximum = CInt(Math.Ceiling(maxChartTemp + 5)) ' Etwas Puffer oben
+
+                ' X-Achsenbereich anpassen
+                Chart1.ChartAreas("MainChartArea").AxisX.Minimum = firstTimestamp.ToOADate()
+                Chart1.ChartAreas("MainChartArea").AxisX.Maximum = lastTimestamp.ToOADate()
+
+                ' Intervall der X-Achse anpassen basierend auf der Dauer der Messung
+                Dim totalDuration As TimeSpan = lastTimestamp - firstTimestamp
+                If totalDuration.TotalSeconds < 60 Then ' Kurze Messung: jede Sekunde anzeigen
+                    Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Seconds
+                    Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5 ' Jede 5 Sekunden
+                    Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm:ss"
+                ElseIf totalDuration.TotalMinutes < 30 Then ' Mittlere Messung: jede Minute anzeigen
+                    Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Minutes
+                    Chart1.ChartAreas("MainChartArea").AxisX.Interval = 1 ' Jede Minute
+                    Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm"
+                Else ' Lange Messung: alle 5 Minuten oder mehr
+                    Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Minutes
+                    Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5 ' Jede 5 Minuten
+                    Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm"
+                End If
             End If
-        Next
-        For Each kvp In temperatureBins.OrderBy(Function(x) x.Key)
-            Dim tempValue As Single = kvp.Key
-            Dim count As Integer = kvp.Value
-            If count > 0 Then
-                Dim dataPoint As DataPoint = New DataPoint()
-                dataPoint.SetValueXY($"{tempValue}°C - {tempValue + binSize}°C", count)
-                dataPoint.Label = $"{count}"
-                dataPoint.Color = GetTemperatureColor(tempValue, minOverallTemp, maxOverallTemp)
-                Chart1.Series("Temperatures").Points.Add(dataPoint)
-            End If
-        Next
 
-        ' Achsen anpassen
-        Chart1.ChartAreas("ChartArea1").RecalculateAxesScale()
-        If temperatureBins.Any() Then
-            Chart1.ChartAreas("ChartArea1").AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount
-            Chart1.ChartAreas("ChartArea1").AxisX.LabelStyle.Angle = -45
-            Chart1.ChartAreas("ChartArea1").AxisX.LabelStyle.IsStaggered = True
-            Chart1.Series("Temperatures").XValueType = ChartValueType.String
-        End If
-        Chart1.Invalidate()
-        PanelColorLegend.Invalidate()
-        Debug.WriteLine("Chart data loaded and drawn.")
+            ' Chart aktualisieren
+            Chart1.Invalidate()
+            PanelColorLegend.Invalidate() ' Legende neu zeichnen erzwingen (optional, da diese jetzt für ein Histogramm ist)
+            Debug.WriteLine("Chart data loaded and drawn for time series.")
     End Sub
-
     Private Function GetTemperatureColor(temp As Single, minOverallTemp As Single, maxOverallTemp As Single) As Color
         ' Einfache lineare Farbskala von Blau nach Rot über Grün
         If maxOverallTemp <= minOverallTemp Then Return Color.Gray ' Vermeidet Division durch Null
-
         Dim normalizedTemp As Single = (temp - minOverallTemp) / (maxOverallTemp - minOverallTemp)
         normalizedTemp = Math.Max(0, Math.Min(1, normalizedTemp)) ' Sicherstellen, dass es zwischen 0 und 1 liegt
-
-        Dim red As Integer = 0
-        Dim green As Integer = 0
-        Dim blue As Integer = 0
-
+        Dim red As Integer
+        Dim green As Integer
+        Dim blue As Integer
         If normalizedTemp < 0.5 Then
             ' Von Blau zu Grün (0.0 bis 0.5)
             blue = CInt(255 * (1 - normalizedTemp * 2)) ' Von 255 (Blau) nach 0
