@@ -232,7 +232,7 @@ Partial Class Form1
         'CoreTemp3
         '
         Me.CoreTemp3.BackColor = System.Drawing.Color.AliceBlue
-        Me.CoreTemp3.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CoreTemp3.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.CoreTemp3, "CoreTemp3")
         Me.CoreTemp3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CoreTemp3.Name = "CoreTemp3"
@@ -241,7 +241,7 @@ Partial Class Form1
         'CoreTemp2
         '
         Me.CoreTemp2.BackColor = System.Drawing.Color.AliceBlue
-        Me.CoreTemp2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CoreTemp2.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.CoreTemp2, "CoreTemp2")
         Me.CoreTemp2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CoreTemp2.Name = "CoreTemp2"
@@ -250,7 +250,7 @@ Partial Class Form1
         'CoreTemp1
         '
         Me.CoreTemp1.BackColor = System.Drawing.Color.AliceBlue
-        Me.CoreTemp1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CoreTemp1.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.CoreTemp1, "CoreTemp1")
         Me.CoreTemp1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CoreTemp1.Name = "CoreTemp1"
@@ -304,7 +304,7 @@ Partial Class Form1
         'CoreTemp
         '
         Me.CoreTemp.BackColor = System.Drawing.Color.AliceBlue
-        Me.CoreTemp.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CoreTemp.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.CoreTemp, "CoreTemp")
         Me.CoreTemp.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CoreTemp.Name = "CoreTemp"
@@ -313,7 +313,7 @@ Partial Class Form1
         'LoadBox2
         '
         Me.LoadBox2.BackColor = System.Drawing.Color.AliceBlue
-        Me.LoadBox2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.LoadBox2.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.LoadBox2, "LoadBox2")
         Me.LoadBox2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.LoadBox2.Name = "LoadBox2"
@@ -322,7 +322,7 @@ Partial Class Form1
         'MaxTemp2
         '
         Me.MaxTemp2.BackColor = System.Drawing.Color.AliceBlue
-        Me.MaxTemp2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.MaxTemp2.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MaxTemp2, "MaxTemp2")
         Me.MaxTemp2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.MaxTemp2.Name = "MaxTemp2"
@@ -331,7 +331,7 @@ Partial Class Form1
         'LoadBox1
         '
         Me.LoadBox1.BackColor = System.Drawing.Color.AliceBlue
-        Me.LoadBox1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.LoadBox1.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.LoadBox1, "LoadBox1")
         Me.LoadBox1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.LoadBox1.Name = "LoadBox1"
@@ -340,7 +340,7 @@ Partial Class Form1
         'MaxTemp1
         '
         Me.MaxTemp1.BackColor = System.Drawing.Color.AliceBlue
-        Me.MaxTemp1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.MaxTemp1.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MaxTemp1, "MaxTemp1")
         Me.MaxTemp1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.MaxTemp1.Name = "MaxTemp1"
@@ -349,7 +349,7 @@ Partial Class Form1
         'MinTemp2
         '
         Me.MinTemp2.BackColor = System.Drawing.Color.AliceBlue
-        Me.MinTemp2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.MinTemp2.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MinTemp2, "MinTemp2")
         Me.MinTemp2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.MinTemp2.Name = "MinTemp2"
@@ -358,7 +358,7 @@ Partial Class Form1
         'MinTemp1
         '
         Me.MinTemp1.BackColor = System.Drawing.Color.AliceBlue
-        Me.MinTemp1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.MinTemp1.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MinTemp1, "MinTemp1")
         Me.MinTemp1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.MinTemp1.Name = "MinTemp1"
@@ -376,7 +376,7 @@ Partial Class Form1
         'LoadBox
         '
         Me.LoadBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.LoadBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.LoadBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.LoadBox, "LoadBox")
         Me.LoadBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.LoadBox.HideSelection = False
@@ -386,7 +386,7 @@ Partial Class Form1
         'MaxTemp3
         '
         Me.MaxTemp3.BackColor = System.Drawing.Color.AliceBlue
-        Me.MaxTemp3.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.MaxTemp3.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MaxTemp3, "MaxTemp3")
         Me.MaxTemp3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.MaxTemp3.Name = "MaxTemp3"
@@ -395,7 +395,7 @@ Partial Class Form1
         'MaxTemp
         '
         Me.MaxTemp.BackColor = System.Drawing.Color.AliceBlue
-        Me.MaxTemp.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.MaxTemp.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MaxTemp, "MaxTemp")
         Me.MaxTemp.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.MaxTemp.Name = "MaxTemp"
@@ -404,7 +404,7 @@ Partial Class Form1
         'LoadBox3
         '
         Me.LoadBox3.BackColor = System.Drawing.Color.AliceBlue
-        Me.LoadBox3.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.LoadBox3.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.LoadBox3, "LoadBox3")
         Me.LoadBox3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.LoadBox3.Name = "LoadBox3"
@@ -413,7 +413,7 @@ Partial Class Form1
         'MinTemp
         '
         Me.MinTemp.BackColor = System.Drawing.Color.AliceBlue
-        Me.MinTemp.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.MinTemp.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MinTemp, "MinTemp")
         Me.MinTemp.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.MinTemp.Name = "MinTemp"
@@ -422,7 +422,7 @@ Partial Class Form1
         'MinTemp3
         '
         Me.MinTemp3.BackColor = System.Drawing.Color.AliceBlue
-        Me.MinTemp3.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.MinTemp3.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MinTemp3, "MinTemp3")
         Me.MinTemp3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.MinTemp3.Name = "MinTemp3"
@@ -499,7 +499,7 @@ Partial Class Form1
         'TDPBox
         '
         Me.TDPBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.TDPBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TDPBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.TDPBox, "TDPBox")
         Me.TDPBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.TDPBox.Name = "TDPBox"
@@ -508,7 +508,7 @@ Partial Class Form1
         'LitBox
         '
         Me.LitBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.LitBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.LitBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.LitBox, "LitBox")
         Me.LitBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.LitBox.Name = "LitBox"
@@ -517,7 +517,7 @@ Partial Class Form1
         'RevisionBox
         '
         Me.RevisionBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.RevisionBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.RevisionBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.RevisionBox, "RevisionBox")
         Me.RevisionBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.RevisionBox.Name = "RevisionBox"
@@ -526,7 +526,7 @@ Partial Class Form1
         'CPUIDBox
         '
         Me.CPUIDBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.CPUIDBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CPUIDBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.CPUIDBox, "CPUIDBox")
         Me.CPUIDBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CPUIDBox.Name = "CPUIDBox"
@@ -535,7 +535,7 @@ Partial Class Form1
         'VidBox
         '
         Me.VidBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.VidBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.VidBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.VidBox, "VidBox")
         Me.VidBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.VidBox.Name = "VidBox"
@@ -544,7 +544,7 @@ Partial Class Form1
         'FrequencyBox
         '
         Me.FrequencyBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.FrequencyBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.FrequencyBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.FrequencyBox, "FrequencyBox")
         Me.FrequencyBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.FrequencyBox.Name = "FrequencyBox"
@@ -553,7 +553,7 @@ Partial Class Form1
         'ThreadBox
         '
         Me.ThreadBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.ThreadBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.ThreadBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.ThreadBox, "ThreadBox")
         Me.ThreadBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ThreadBox.Name = "ThreadBox"
@@ -562,7 +562,7 @@ Partial Class Form1
         'CoresBox
         '
         Me.CoresBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.CoresBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.CoresBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.CoresBox, "CoresBox")
         Me.CoresBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CoresBox.Name = "CoresBox"
@@ -571,7 +571,7 @@ Partial Class Form1
         'PlatformBox
         '
         Me.PlatformBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.PlatformBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.PlatformBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.PlatformBox, "PlatformBox")
         Me.PlatformBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.PlatformBox.Name = "PlatformBox"
@@ -580,7 +580,7 @@ Partial Class Form1
         'ModelBox
         '
         Me.ModelBox.BackColor = System.Drawing.Color.AliceBlue
-        Me.ModelBox.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.ModelBox.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.ModelBox, "ModelBox")
         Me.ModelBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ModelBox.Name = "ModelBox"

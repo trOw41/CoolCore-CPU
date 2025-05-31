@@ -220,7 +220,7 @@ Public Class Form2
         ' Für jeden Kern eine Serie erstellen
         For Each coreName In allCoreNames
             Dim series As New Series(coreName) With {
-                .ChartType = SeriesChartType.FastLine, ' Glatte Linie für Temperaturverlauf
+                .ChartType = SeriesChartType.RangeBar, ' Glatte Linie für Temperaturverlauf
                 .ChartArea = "MainChartArea",
                 .XValueType = ChartValueType.DateTime, ' X-Achse ist Zeit
                 .YValueType = ChartValueType.Single, ' Y-Achse ist Single (Temperatur)

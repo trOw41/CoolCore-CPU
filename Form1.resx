@@ -288,7 +288,7 @@
     <value>NoControl</value>
   </data>
   <data name="BtnToggleMonitor1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>124, 0</value>
+    <value>102, 0</value>
   </data>
   <data name="BtnToggleMonitor1.Size" type="System.Drawing.Size, System.Drawing">
     <value>41, 36</value>
@@ -312,7 +312,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>27, 11</value>
+    <value>17, 11</value>
   </data>
   <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
     <value>91, 14</value>
@@ -336,10 +336,10 @@
     <value>1</value>
   </data>
   <data name="Panel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>174, 8</value>
+    <value>184, 8</value>
   </data>
   <data name="Panel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>189, 38</value>
+    <value>179, 38</value>
   </data>
   <data name="Panel3.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -366,10 +366,13 @@
     <value>True</value>
   </data>
   <data name="CoreTemp3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>101, 21</value>
+    <value>113, 21</value>
   </data>
   <data name="CoreTemp3.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="CoreTemp3.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
   <data name="&gt;&gt;CoreTemp3.Name" xml:space="preserve">
     <value>CoreTemp3</value>
@@ -393,10 +396,13 @@
     <value>True</value>
   </data>
   <data name="CoreTemp2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>101, 21</value>
+    <value>113, 21</value>
   </data>
   <data name="CoreTemp2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="CoreTemp2.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
   <data name="&gt;&gt;CoreTemp2.Name" xml:space="preserve">
     <value>CoreTemp2</value>
@@ -420,10 +426,13 @@
     <value>True</value>
   </data>
   <data name="CoreTemp1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>101, 21</value>
+    <value>113, 21</value>
   </data>
   <data name="CoreTemp1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="CoreTemp1.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
   <data name="&gt;&gt;CoreTemp1.Name" xml:space="preserve">
     <value>CoreTemp1</value>
@@ -495,7 +504,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>281, 56</value>
+    <value>296, 56</value>
   </data>
   <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 21</value>
@@ -525,7 +534,7 @@
     <value>NoControl</value>
   </data>
   <data name="MaxTemplbl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>222, 56</value>
+    <value>237, 56</value>
   </data>
   <data name="MaxTemplbl.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 19</value>
@@ -555,7 +564,7 @@
     <value>NoControl</value>
   </data>
   <data name="MinTemplbl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>177, 56</value>
+    <value>192, 56</value>
   </data>
   <data name="MinTemplbl.Size" type="System.Drawing.Size, System.Drawing">
     <value>44, 21</value>
@@ -699,10 +708,13 @@
     <value>True</value>
   </data>
   <data name="CoreTemp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 21</value>
+    <value>114, 21</value>
   </data>
   <data name="CoreTemp.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="CoreTemp.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
   <data name="&gt;&gt;CoreTemp.Name" xml:space="preserve">
     <value>CoreTemp</value>
@@ -720,7 +732,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="LoadBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>276, 133</value>
+    <value>291, 133</value>
   </data>
   <data name="LoadBox2.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -747,7 +759,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MaxTemp2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>224, 133</value>
+    <value>239, 133</value>
   </data>
   <data name="MaxTemp2.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -774,7 +786,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="LoadBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>276, 106</value>
+    <value>291, 106</value>
   </data>
   <data name="LoadBox1.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -801,7 +813,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MaxTemp1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>224, 106</value>
+    <value>239, 106</value>
   </data>
   <data name="MaxTemp1.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -828,7 +840,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>174, 133</value>
+    <value>189, 133</value>
   </data>
   <data name="MinTemp2.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -855,7 +867,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>174, 106</value>
+    <value>189, 106</value>
   </data>
   <data name="MinTemp1.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -888,7 +900,7 @@
     <value>True</value>
   </data>
   <data name="PowerBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>42, 21</value>
+    <value>54, 21</value>
   </data>
   <data name="PowerBox2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -912,7 +924,7 @@
     <value>On</value>
   </data>
   <data name="LoadBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>276, 79</value>
+    <value>291, 79</value>
   </data>
   <data name="LoadBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -939,7 +951,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MaxTemp3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>224, 162</value>
+    <value>239, 162</value>
   </data>
   <data name="MaxTemp3.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -966,7 +978,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MaxTemp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>224, 79</value>
+    <value>239, 79</value>
   </data>
   <data name="MaxTemp.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -993,7 +1005,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="LoadBox3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>276, 162</value>
+    <value>291, 162</value>
   </data>
   <data name="LoadBox3.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1020,7 +1032,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>174, 79</value>
+    <value>189, 79</value>
   </data>
   <data name="MinTemp.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1047,7 +1059,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>174, 162</value>
+    <value>189, 162</value>
   </data>
   <data name="MinTemp3.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1080,7 +1092,7 @@
     <value>True</value>
   </data>
   <data name="TJBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 21</value>
+    <value>57, 21</value>
   </data>
   <data name="TJBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
