@@ -1,5 +1,9 @@
-﻿Imports System.Drawing.Text
-Imports System.Globalization
+﻿Imports System.Management
+Imports System.Net.NetworkInformation
+Imports System.Net
+Imports System.Linq
+Imports System.Net
+Imports System.Linq
 Imports System.IO
 Imports System.Net
 Imports System.Text
@@ -23,13 +27,13 @@ Public Class Form1
     Private computer As Computer ' Initialize the computer object with enabled hardware monitoring
     Private cpu As IHardware ' To hold the CPU hardware object
     Private coreTemperatures As New List(Of ISensor)()
-    Private ReadOnly CoreTempBoxes As New Dictionary(Of Integer, TextBox)()
-    Private ReadOnly coreIndex As Integer
     Private loadingForm As Form3
     Private isMonitoringActive As Boolean = False
     Private backgroundTempMeasurements As New List(Of CoreTempData)() ' Liste für gesammelte Temperaturdaten
     Private monitoringTask As Task ' Task für die Hintergrundüberwachung
     Private cts As CancellationTokenSource ' Für das Abbrechen des Tasks
+    Private ReadOnly CoreTempBoxes As New Dictionary(Of Integer, TextBox)()
+    Private ReadOnly coreIndex As Integer
 
     Public Sub New()
         InitializeComponent()
@@ -55,12 +59,10 @@ Public Class Form1
 
         If Not MaxTemp Is Nothing Then MaxTempBoxes.Add(0, MaxTemp)
         If Not MaxTemp1 Is Nothing Then MaxTempBoxes.Add(1, MaxTemp1)
-        If Not MaxTemp2 Is Nothing Then MaxTempBoxes.Add(2, MaxTemp2)
-        If Not MaxTemp3 Is Nothing Then MaxTempBoxes.Add(3, MaxTemp3)
         'AddHandler BtnToggleMonitoring.Click, AddressOf BtnToggleMonitoring_Click
         refreshTimer.Start()
-    End Sub
-
+        If Not MaxTemp2 Is Nothing Then MaxTempBoxes.Add(2, MaxTemp2)
+        If Not MaxTemp3 Is Nothing Then MaxTempBoxes.Add(3, MaxTemp3)
     Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
         Dim intervalMs As Integer = 2000 ' Messintervall von 2 Sekunden (anpassbar)
 
@@ -163,6 +165,8 @@ Public Class Form1
         ' Rückgabe des Dateipfads für die direkte Nutzung im Chart-Fenster
         Return filePath
     End Function
+
+    End Sub
 
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LblStatusMessage.Text = "Ready to read system information."
@@ -457,8 +461,6 @@ Public Class Form1
     End Sub
 
     Private Sub CloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CloseToolStripMenuItem.Click
-        Me.Close()
-    End Sub
 
 
     Private Sub BtnToggleMonitor1_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitor1.Click
@@ -621,5 +623,7 @@ Public Class Form1
                 End Try
             End If
         End Using
+    End Sub
+
     End Sub
 End Class

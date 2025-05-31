@@ -1,5 +1,5 @@
 ﻿
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Form2
     Inherits System.Windows.Forms.Form
     <System.Diagnostics.DebuggerNonUserCode()>

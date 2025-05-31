@@ -30,11 +30,13 @@ Public Class Form2
         Me.Width = 800
         Me.Height = 600
 
+        ' Diagramm initialisieren (sicherstellen, dass Chart1 im Designer platziert wurde)
         If Chart1 IsNot Nothing Then
             InitializeChart()
 
         End If
 
+        ' Farblegende zeichnen
         AddHandler PanelColorLegend.Paint, AddressOf PanelColorLegend_Paint
     End Sub
 
@@ -131,7 +133,7 @@ Public Class Form2
                             Next
                             If coreTemps.Any() Then
                                 temperatureData.Add(New CoreTempData() With {
-                                    .Timestamp = timestamp,
+                                    .timestamp = timestamp,
                                     .CoreTemperatures = coreTemps
                                 })
                                 'Debug.WriteLine($"Added entry for {timestamp} with {coreTemps.Count} temperatures. Total entries: {temperatureData.Count}")
@@ -193,6 +195,8 @@ Public Class Form2
         For temp As Integer = CInt(minOverallTemp) To CInt(maxOverallTemp + binSize) Step binSize ' +
             temperatureBins.Add(temp, 0)
         Next
+
+        ' Temperaturen den Bins zuordnen
         For Each temp In allTemperatures
             Dim binStart As Integer = CInt(Math.Floor(temp / binSize)) * binSize
 
@@ -218,6 +222,8 @@ Public Class Form2
                 Chart1.Series("Temperatures").Points.Add(dataPoint)
             End If
         Next
+
+        ' Achsen anpassen
         Chart1.ChartAreas("ChartArea1").RecalculateAxesScale()
         If temperatureBins.Any() Then
             Chart1.ChartAreas("ChartArea1").AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount
@@ -287,6 +293,7 @@ Public Class Form2
                                 panelHeight)
             End Using
         Next
+
         ' Temperaturwerte an der Legende hinzufügen
         Using font As New Font("Arial", 8, FontStyle.Bold)
             Using brush As New SolidBrush(Color.Black)
@@ -315,6 +322,11 @@ Public Class Form2
                 g.DrawString($"{midTemp2:F0}°C", font, brush, midX2 - midTextSize2.Width / 2, 0)
             End Using
         End Using
+    End Sub
+
+    ' Optional: Wenn sich die Größe des Formulars ändert, die Legende neu zeichnen
+    Private Sub Form2_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        PanelColorLegend.Invalidate()
     End Sub
 
 End Class

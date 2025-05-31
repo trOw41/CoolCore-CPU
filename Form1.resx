@@ -251,6 +251,33 @@
   <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
+  <data name="BtnToggleMonitor.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="BtnToggleMonitor.Location" type="System.Drawing.Point, System.Drawing">
+    <value>266, 151</value>
+  </data>
+  <data name="BtnToggleMonitor.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 20</value>
+  </data>
+  <data name="BtnToggleMonitor.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="BtnToggleMonitor.Text" xml:space="preserve">
+    <value>Monitor</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitor.Name" xml:space="preserve">
+    <value>BtnToggleMonitor</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitor.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitor.Parent" xml:space="preserve">
+    <value>Panel1</value>
+  </data>
+  <data name="&gt;&gt;BtnToggleMonitor.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="Label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -279,7 +306,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Label3.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="BtnToggleMonitor1.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Zoom</value>
@@ -1143,7 +1170,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Panel2.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="Lithography.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1170,7 +1197,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Lithography.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="Label4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1197,7 +1224,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Label4.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="Threads.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1224,7 +1251,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Threads.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="AllCores.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1251,7 +1278,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;AllCores.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="TDP.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1278,7 +1305,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;TDP.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="Revision.Font" type="System.Drawing.Font, System.Drawing">
     <value>Bahnschrift SemiLight, 9pt</value>
@@ -1308,7 +1335,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Revision.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="VID.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1335,7 +1362,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;VID.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="Frequency.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1362,7 +1389,10 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Frequency.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
+  </data>
+  <data name="Platform.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="Platform.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1389,7 +1419,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Platform.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="TDPBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1416,7 +1446,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;TDPBox.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="LitBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1443,7 +1473,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;LitBox.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="RevisionBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1470,7 +1500,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;RevisionBox.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="CPUIDBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1497,7 +1527,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;CPUIDBox.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="VidBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1524,7 +1554,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;VidBox.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>16</value>
   </data>
   <data name="FrequencyBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1551,7 +1581,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;FrequencyBox.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="ThreadBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1578,7 +1608,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;ThreadBox.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>18</value>
   </data>
   <data name="CoresBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1605,7 +1635,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;CoresBox.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>19</value>
   </data>
   <data name="PlatformBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1632,7 +1662,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;PlatformBox.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>20</value>
   </data>
   <data name="ModelBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1659,7 +1689,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;ModelBox.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>21</value>
   </data>
   <data name="Model.AccessibleDescription" xml:space="preserve">
     <value />
@@ -1689,7 +1719,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Model.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>22</value>
   </data>
   <data name="Panel1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Bahnschrift SemiLight, 9pt</value>
@@ -1753,6 +1783,9 @@
   </data>
   <data name="LblStatusMessage.Font" type="System.Drawing.Font, System.Drawing">
     <value>Bahnschrift SemiLight, 9pt, style=Italic</value>
+  </data>
+  <data name="LblStatusMessage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="LblStatusMessage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
