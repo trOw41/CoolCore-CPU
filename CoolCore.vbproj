@@ -181,7 +181,7 @@
     <Compile Include="SystemInfoData.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="SystemInfoRepository.vb">
+    <Compile Include="InfoRepository.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
@@ -226,12 +226,17 @@
   <ItemGroup>
     <Content Include="45_11594827525_023-cpu.ico" />
     <Content Include="78_11594827525_045-firmware.ico" />
-    <Content Include="LICENSE.txt" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\002-app-1.png" />
     <Content Include="Resources\004-computer-science.png" />
     <Content Include="Resources\014-close.png" />
     <Content Include="Resources\018-close-button.png" />
     <Content Include="Resources\019-person.png" />
+    <None Include="README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\021-about.png" />
     <Content Include="Resources\022-processor.png" />
     <Content Include="Resources\025-help.png" />

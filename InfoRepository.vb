@@ -2,7 +2,7 @@
 Imports System.IO
 Imports System.Diagnostics ' For Debug.WriteLine
 
-Public Class SystemInfoRepository
+Public Class InfoRepository
 
     Private Const DB_FILE_NAME As String = "SystemInfo.db"
     Private ReadOnly DB_PATH As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DB_FILE_NAME)
@@ -201,7 +201,7 @@ Public Class SystemInfoRepository
             End Using
         Catch ex As Exception
             MessageBox.Show($"Error retrieving system information: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Retrieval error in Repository: {ex.ToString()}")
+            Debug.WriteLine($"Retrieval error in Repository: {ex.Message}")
         End Try
         Return readings
     End Function

@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.Generic
 Imports System.Drawing
+Imports System.Drawing.Text
 Imports System.Globalization
 Imports System.IO
 Imports System.Linq
@@ -10,6 +11,7 @@ Imports System.Windows.Forms.DataVisualization.Charting
 Public Class Form2
     Private temperatureData As New List(Of CoreTempData)()
     Private sourceFilePath As String
+    Public Property PanelColorLegend As Color
 
     Public Sub New(data As List(Of CoreTempData))
         InitializeComponent()
@@ -37,7 +39,7 @@ Public Class Form2
         End If
 
         ' Farblegende zeichnen
-        AddHandler PanelColorLegend.Paint, AddressOf PanelColorLegend_Paint
+
     End Sub
 
     Private Sub InitializeChart()
@@ -162,7 +164,7 @@ Public Class Form2
                             Next
                             If coreTemps.Any() Then
                                 temperatureData.Add(New CoreTempData() With {
-                                    .timestamp = timestamp,
+                                    .Timestamp = timestamp,
                                     .CoreTemperatures = coreTemps
                                 })
                                 'Debug.WriteLine($"Added entry for {timestamp} with {coreTemps.Count} temperatures. Total entries: {temperatureData.Count}")
@@ -220,8 +222,7 @@ Public Class Form2
         ' Für jeden Kern eine Serie erstellen
         For Each coreName In allCoreNames
             Dim series As New Series(coreName) With {
-                .ChartType = SeriesChartType.RangeBar, ' Glatte Linie für Temperaturverlauf
-                .ChartArea = "MainChartArea",
+                .ChartType = SeriesChartType.StackedArea.Bar, ' Stacked Area Spline für bessere Visualisierung
                 .XValueType = ChartValueType.DateTime, ' X-Achse ist Zeit
                 .YValueType = ChartValueType.Single, ' Y-Achse ist Single (Temperatur)
                 .BorderWidth = 1 ' Dickere Linie für bessere Sichtbarkeit
@@ -231,18 +232,24 @@ Public Class Form2
 
         ' Daten zu den Serien hinzufügen
         Dim minChartTemp As Single = Single.MaxValue
-            Dim maxChartTemp As Single = Single.MinValue
-            Dim firstTimestamp As DateTime = DateTime.MaxValue
-            Dim lastTimestamp As DateTime = DateTime.MinValue
+        Dim maxChartTemp As Single = Single.MinValue
+        Dim firstTimestamp As DateTime = DateTime.MaxValue
+        Dim lastTimestamp As DateTime = DateTime.MinValue
 
-            For Each entry In temperatureData.OrderBy(Function(e) e.Timestamp) ' Daten nach Zeitstempel sortieren
-                If entry.Timestamp < firstTimestamp Then firstTimestamp = entry.Timestamp
-                If entry.Timestamp > lastTimestamp Then lastTimestamp = entry.Timestamp
+        For Each entry In temperatureData.OrderBy(Function(e) e.Timestamp) ' Daten nach Zeitstempel sortieren
+            If entry.Timestamp < firstTimestamp Then firstTimestamp = entry.Timestamp
+            If entry.Timestamp > lastTimestamp Then lastTimestamp = entry.Timestamp
 
-                For Each kvp In entry.CoreTemperatures
-                    Dim coreName As String = kvp.Key
-                    Dim tempValue As Single = kvp.Value
-
+            For Each kvp In entry.CoreTemperatures
+                Dim coreName As String = kvp.Key
+                Dim tempValue As Single = kvp.Value
+                Dim item As LegendItem = New LegendItem With {
+                    .Name = coreName,
+                    .Color = GetTemperatureColor(tempValue, 0, 100), ' Hier können Sie die Min/Max-Temperatur anpassen
+                    .BorderColor = Color.Black,
+                    .BorderWidth = 1,
+                    .SeriesPointIndex = 0 ' Platzhalter, da wir keine Punkte in der Legende benötigen
+                }
                 If Chart1.Series.Any(Function(s) s.Name.Equals(coreName, StringComparison.OrdinalIgnoreCase)) Then
                     Dim dataPoint As New DataPoint()
                     dataPoint.SetValueXY(entry.Timestamp, tempValue)
@@ -252,44 +259,45 @@ Public Class Form2
                                        $"Kern: {coreName}{Environment.NewLine}" &
                                        $"Temp: {tempValue:F1}°C"
 
+                    Chart1.Legends.Add(tempValue)
                     Chart1.Series(coreName).Points.Add(dataPoint)
 
                     If tempValue < minChartTemp Then minChartTemp = tempValue
                     If tempValue > maxChartTemp Then maxChartTemp = tempValue
                 End If
             Next
-            Next
+        Next
 
-            ' Achsenbereich dynamisch anpassen
-            If temperatureData.Any() Then
-                Chart1.ChartAreas("MainChartArea").AxisY.Minimum = CInt(Math.Floor(minChartTemp - 5)) ' Etwas Puffer unten
-                Chart1.ChartAreas("MainChartArea").AxisY.Maximum = CInt(Math.Ceiling(maxChartTemp + 5)) ' Etwas Puffer oben
+        ' Achsenbereich dynamisch anpassen
+        If temperatureData.Any() Then
+            Chart1.ChartAreas("MainChartArea").AxisY.Minimum = CInt(Math.Floor(minChartTemp - 5)) ' Etwas Puffer unten
+            Chart1.ChartAreas("MainChartArea").AxisY.Maximum = CInt(Math.Ceiling(maxChartTemp + 5)) ' Etwas Puffer oben
 
-                ' X-Achsenbereich anpassen
-                Chart1.ChartAreas("MainChartArea").AxisX.Minimum = firstTimestamp.ToOADate()
-                Chart1.ChartAreas("MainChartArea").AxisX.Maximum = lastTimestamp.ToOADate()
+            ' X-Achsenbereich anpassen
+            Chart1.ChartAreas("MainChartArea").AxisX.Minimum = firstTimestamp.ToOADate()
+            Chart1.ChartAreas("MainChartArea").AxisX.Maximum = lastTimestamp.ToOADate()
 
-                ' Intervall der X-Achse anpassen basierend auf der Dauer der Messung
-                Dim totalDuration As TimeSpan = lastTimestamp - firstTimestamp
-                If totalDuration.TotalSeconds < 60 Then ' Kurze Messung: jede Sekunde anzeigen
-                    Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Seconds
-                    Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5 ' Jede 5 Sekunden
-                    Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm:ss"
-                ElseIf totalDuration.TotalMinutes < 30 Then ' Mittlere Messung: jede Minute anzeigen
-                    Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Minutes
-                    Chart1.ChartAreas("MainChartArea").AxisX.Interval = 1 ' Jede Minute
-                    Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm"
-                Else ' Lange Messung: alle 5 Minuten oder mehr
-                    Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Minutes
-                    Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5 ' Jede 5 Minuten
-                    Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm"
-                End If
+            ' Intervall der X-Achse anpassen basierend auf der Dauer der Messung
+            Dim totalDuration As TimeSpan = lastTimestamp - firstTimestamp
+            If totalDuration.TotalSeconds < 60 Then ' Kurze Messung: jede Sekunde anzeigen
+                Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Seconds
+                Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5 ' Jede 5 Sekunden
+                Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm:ss"
+            ElseIf totalDuration.TotalMinutes < 30 Then ' Mittlere Messung: jede Minute anzeigen
+                Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Minutes
+                Chart1.ChartAreas("MainChartArea").AxisX.Interval = 1 ' Jede Minute
+                Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm"
+            Else ' Lange Messung: alle 5 Minuten oder mehr
+                Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Minutes
+                Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5 ' Jede 5 Minuten
+                Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm"
             End If
+        End If
 
-            ' Chart aktualisieren
-            Chart1.Invalidate()
-            PanelColorLegend.Invalidate() ' Legende neu zeichnen erzwingen (optional, da diese jetzt für ein Histogramm ist)
-            Debug.WriteLine("Chart data loaded and drawn for time series.")
+        ' Chart aktualisieren
+        Chart1.Invalidate()
+        'PanelColorLegend.Invalidate() ' Legende neu zeichnen erzwingen (optional, da diese jetzt für ein Histogramm ist)
+        Debug.WriteLine("Chart data loaded and drawn for time series.")
     End Sub
     Private Function GetTemperatureColor(temp As Single, minOverallTemp As Single, maxOverallTemp As Single) As Color
         ' Einfache lineare Farbskala von Blau nach Rot über Grün
@@ -314,10 +322,8 @@ Public Class Form2
         Return Color.FromArgb(red, green, blue)
     End Function
 
-    Private Sub PanelColorLegend_Paint(sender As Object, e As PaintEventArgs) Handles PanelColorLegend.Paint
+    Private Sub PanelColorLegend_Paint(sender As Object, e As PaintEventArgs)
         Dim g As Graphics = e.Graphics
-        Dim panelWidth As Integer = PanelColorLegend.Width
-        Dim panelHeight As Integer = PanelColorLegend.Height
         Dim numSteps As Integer = 100 ' Für einen glatten Farbverlauf
 
         Dim minOverallTemp As Single = 0 ' Standardwerte
@@ -337,48 +343,16 @@ Public Class Form2
             Dim temp As Single = minOverallTemp + (maxOverallTemp - minOverallTemp) * (i / (numSteps - 1))
             Dim color As Color = GetTemperatureColor(temp, minOverallTemp, maxOverallTemp)
             Using brush As New SolidBrush(color)
-                ' Zeichne einen kleinen Streifen für jeden Schritt des Farbverlaufs
-                g.FillRectangle(brush,
-                                CInt(i * panelWidth / numSteps), _            ' <-- Hier umwandeln zu Integer
-                                0,
-                                CInt((i + 1) * panelWidth / numSteps + 1), _  ' <-- Hier umwandeln zu Integer
-                                panelHeight)
             End Using
         Next
-
-        ' Temperaturwerte an der Legende hinzufügen
-        Using font As New Font("Arial", 8, FontStyle.Bold)
-            Using brush As New SolidBrush(Color.Black)
-                Dim p As New Pen(Color.Black, 1)
-
-                ' Min-Temperatur
-                g.DrawString($"{minOverallTemp}°C", font, brush, 0, 0)
-                g.DrawLine(p, 0, panelHeight - 1, 0, 0)
-
-                ' Max-Temperatur
-                Dim textSize As SizeF = g.MeasureString($"{maxOverallTemp}°C", font)
-                g.DrawString($"{maxOverallTemp}°C", font, brush, panelWidth - textSize.Width, 0)
-                g.DrawLine(p, panelWidth - 1, panelHeight - 1, panelWidth - 1, 0)
-
-                ' Eine oder zwei Zwischenpunkte hinzufügen (optional)
-                Dim midTemp1 As Single = minOverallTemp + (maxOverallTemp - minOverallTemp) / 3
-                Dim midTemp2 As Single = minOverallTemp + 2 * (maxOverallTemp - minOverallTemp) / 3
-
-                Dim midX1 As Single = panelWidth / 3
-                Dim midX2 As Single = 2 * panelWidth / 3
-
-                Dim midTextSize1 As SizeF = g.MeasureString($"{midTemp1:F0}°C", font)
-                Dim midTextSize2 As SizeF = g.MeasureString($"{midTemp2:F0}°C", font)
-
-                g.DrawString($"{midTemp1:F0}°C", font, brush, midX1 - midTextSize1.Width / 2, 0)
-                g.DrawString($"{midTemp2:F0}°C", font, brush, midX2 - midTextSize2.Width / 2, 0)
-            End Using
-        End Using
     End Sub
 
     ' Optional: Wenn sich die Größe des Formulars ändert, die Legende neu zeichnen
     Private Sub Form2_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        PanelColorLegend.Invalidate()
+        ' PanelColorLegend.Invalidate()
+        If Chart1 IsNot Nothing Then
+            Chart1.Invalidate() ' Aktualisiert das Diagramm, wenn das Formular neu gezeichnet wird
+        End If
     End Sub
 
 End Class

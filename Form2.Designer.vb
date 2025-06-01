@@ -18,11 +18,10 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form2))
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
-        Me.PanelColorLegend = New System.Windows.Forms.Panel()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -30,6 +29,7 @@ Partial Class Form2
         '
         ChartArea1.Name = "ChartArea1"
         Me.Chart1.ChartAreas.Add(ChartArea1)
+        resources.ApplyResources(Me.Chart1, "Chart1")
         Legend1.AutoFitMinFontSize = 9
         Legend1.BorderColor = System.Drawing.Color.Black
         Legend1.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash
@@ -41,7 +41,6 @@ Partial Class Form2
         Legend1.TitleBackColor = System.Drawing.Color.Transparent
         Legend1.TitleFont = New System.Drawing.Font("Bahnschrift Condensed", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Chart1.Legends.Add(Legend1)
-        resources.ApplyResources(Me.Chart1, "Chart1")
         Me.Chart1.Name = "Chart1"
         Series1.ChartArea = "ChartArea1"
         Series1.Font = New System.Drawing.Font("Bahnschrift", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -49,16 +48,10 @@ Partial Class Form2
         Series1.Name = "Temperature"
         Me.Chart1.Series.Add(Series1)
         '
-        'PanelColorLegend
-        '
-        resources.ApplyResources(Me.PanelColorLegend, "PanelColorLegend")
-        Me.PanelColorLegend.Name = "PanelColorLegend"
-        '
         'Form2
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.Controls.Add(Me.PanelColorLegend)
         Me.Controls.Add(Me.Chart1)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
@@ -69,5 +62,4 @@ Partial Class Form2
     End Sub
 
     Friend WithEvents Chart1 As DataVisualization.Charting.Chart
-    Friend WithEvents PanelColorLegend As Panel
 End Class

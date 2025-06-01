@@ -33,13 +33,13 @@ Partial Class AboutBox1
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AboutBox1))
         Me.TableLayoutPanel = New System.Windows.Forms.TableLayoutPanel()
+        Me.LogoPictureBox = New System.Windows.Forms.PictureBox()
         Me.LabelProductName = New System.Windows.Forms.Label()
         Me.LabelVersion = New System.Windows.Forms.Label()
         Me.LabelCopyright = New System.Windows.Forms.Label()
         Me.LabelCompanyName = New System.Windows.Forms.Label()
         Me.TextBoxDescription = New System.Windows.Forms.TextBox()
         Me.OKButton = New System.Windows.Forms.Button()
-        Me.LogoPictureBox = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel.SuspendLayout()
         CType(Me.LogoPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -68,6 +68,18 @@ Partial Class AboutBox1
         Me.TableLayoutPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
         Me.TableLayoutPanel.Size = New System.Drawing.Size(550, 326)
         Me.TableLayoutPanel.TabIndex = 0
+        '
+        'LogoPictureBox
+        '
+        Me.LogoPictureBox.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LogoPictureBox.Image = Global.CoolCore.My.Resources.Resources._021_about
+        Me.LogoPictureBox.Location = New System.Drawing.Point(3, 3)
+        Me.LogoPictureBox.Name = "LogoPictureBox"
+        Me.TableLayoutPanel.SetRowSpan(Me.LogoPictureBox, 6)
+        Me.LogoPictureBox.Size = New System.Drawing.Size(175, 320)
+        Me.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.LogoPictureBox.TabIndex = 0
+        Me.LogoPictureBox.TabStop = False
         '
         'LabelProductName
         '
@@ -128,7 +140,7 @@ Partial Class AboutBox1
         'TextBoxDescription
         '
         Me.TextBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxDescription.Font = New System.Drawing.Font("Bahnschrift", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBoxDescription.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxDescription.Location = New System.Drawing.Point(187, 131)
         Me.TextBoxDescription.Margin = New System.Windows.Forms.Padding(6, 3, 3, 3)
         Me.TextBoxDescription.Multiline = True
@@ -149,18 +161,6 @@ Partial Class AboutBox1
         Me.OKButton.Size = New System.Drawing.Size(75, 23)
         Me.OKButton.TabIndex = 0
         Me.OKButton.Text = "&OK"
-        '
-        'LogoPictureBox
-        '
-        Me.LogoPictureBox.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LogoPictureBox.Image = Global.CoolCore.My.Resources.Resources._021_about
-        Me.LogoPictureBox.Location = New System.Drawing.Point(3, 3)
-        Me.LogoPictureBox.Name = "LogoPictureBox"
-        Me.TableLayoutPanel.SetRowSpan(Me.LogoPictureBox, 6)
-        Me.LogoPictureBox.Size = New System.Drawing.Size(175, 320)
-        Me.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.LogoPictureBox.TabIndex = 0
-        Me.LogoPictureBox.TabStop = False
         '
         'AboutBox1
         '

@@ -72,7 +72,7 @@ Public Class Form4
         If ListBoxArchives.SelectedItem IsNot Nothing AndAlso ListBoxArchives.Enabled Then
             SelectedFilePath = Path.Combine(logDirectoryPath, ListBoxArchives.SelectedItem.ToString())
             Me.DialogResult = DialogResult.OK ' Dialogergebnis auf OK setzen
-            Me.Close() ' Formular schließen
+            'Me.Close() ' Formular schließen
         Else
             MessageBox.Show("Bitte wählen Sie eine Messung aus der Liste aus.", "Auswahl erforderlich", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
@@ -94,4 +94,6 @@ Public Class Form4
         BtnSelect.Location = New Point(Me.ClientSize.Width - BtnSelect.Width - 10, Me.ClientSize.Height - BtnSelect.Height - 10)
         BtnCancel.Location = New Point(BtnSelect.Left - BtnCancel.Width - 10, Me.ClientSize.Height - BtnCancel.Height - 10)
     End Sub
+
+
 End Class

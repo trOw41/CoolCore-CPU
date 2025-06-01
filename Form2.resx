@@ -117,12 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Chart1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Chart1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 12</value>
+    <value>0, 0</value>
   </data>
   <data name="Chart1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>798, 493</value>
+    <value>800, 540</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Chart1.TabIndex" type="System.Int32, mscorlib">
@@ -141,27 +145,6 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;Chart1.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="PanelColorLegend.Location" type="System.Drawing.Point, System.Drawing">
-    <value>70, 511</value>
-  </data>
-  <data name="PanelColorLegend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>288, 21</value>
-  </data>
-  <data name="PanelColorLegend.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;PanelColorLegend.Name" xml:space="preserve">
-    <value>PanelColorLegend</value>
-  </data>
-  <data name="&gt;&gt;PanelColorLegend.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;PanelColorLegend.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;PanelColorLegend.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

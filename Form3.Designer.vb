@@ -26,13 +26,15 @@ Partial Class Form3
         Me.BtnStopMonitoring = New System.Windows.Forms.Button()
         Me.LblLoadingText = New System.Windows.Forms.Label()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
+        Me.TimeLabel = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'BtnStopMonitoring
         '
-        Me.BtnStopMonitoring.Location = New System.Drawing.Point(179, 126)
+        Me.BtnStopMonitoring.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.BtnStopMonitoring.Location = New System.Drawing.Point(256, 42)
         Me.BtnStopMonitoring.Name = "BtnStopMonitoring"
-        Me.BtnStopMonitoring.Size = New System.Drawing.Size(82, 30)
+        Me.BtnStopMonitoring.Size = New System.Drawing.Size(82, 21)
         Me.BtnStopMonitoring.TabIndex = 0
         Me.BtnStopMonitoring.Text = "Stop Monitor"
         Me.BtnStopMonitoring.UseVisualStyleBackColor = True
@@ -40,25 +42,37 @@ Partial Class Form3
         'LblLoadingText
         '
         Me.LblLoadingText.AutoSize = True
-        Me.LblLoadingText.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 13.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LblLoadingText.Location = New System.Drawing.Point(17, 25)
+        Me.LblLoadingText.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LblLoadingText.Location = New System.Drawing.Point(12, 9)
         Me.LblLoadingText.Name = "LblLoadingText"
-        Me.LblLoadingText.Size = New System.Drawing.Size(400, 22)
+        Me.LblLoadingText.Size = New System.Drawing.Size(334, 18)
         Me.LblLoadingText.TabIndex = 1
         Me.LblLoadingText.Text = "Bitte warten, Monitoring erfasst die CPU Temperaturen..."
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(21, 84)
+        Me.ProgressBar1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.ProgressBar1.Location = New System.Drawing.Point(0, 78)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(396, 25)
+        Me.ProgressBar1.Size = New System.Drawing.Size(350, 25)
+        Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 2
+        '
+        'TimeLabel
+        '
+        Me.TimeLabel.AutoSize = True
+        Me.TimeLabel.Location = New System.Drawing.Point(12, 49)
+        Me.TimeLabel.Name = "TimeLabel"
+        Me.TimeLabel.Size = New System.Drawing.Size(38, 14)
+        Me.TimeLabel.TabIndex = 3
+        Me.TimeLabel.Text = "Label1"
         '
         'Form3
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
-        Me.ClientSize = New System.Drawing.Size(438, 162)
+        Me.ClientSize = New System.Drawing.Size(350, 103)
+        Me.Controls.Add(Me.TimeLabel)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.LblLoadingText)
         Me.Controls.Add(Me.BtnStopMonitoring)
@@ -79,4 +93,5 @@ Partial Class Form3
     Friend WithEvents BtnStopMonitoring As Button
     Friend WithEvents LblLoadingText As Label
     Friend WithEvents ProgressBar1 As ProgressBar
+    Friend WithEvents TimeLabel As Label
 End Class

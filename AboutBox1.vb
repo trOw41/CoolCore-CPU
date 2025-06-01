@@ -1,4 +1,6 @@
-﻿Public NotInheritable Class AboutBox1
+﻿Imports System.IO
+
+Public NotInheritable Class AboutBox1
 
     Private Sub AboutBox1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' Legen Sie den Titel des Formulars fest.
@@ -16,7 +18,7 @@
         Me.LabelVersion.Text = String.Format("Version {0}", My.Application.Info.Version.ToString)
         Me.LabelCopyright.Text = My.Application.Info.Copyright
         Me.LabelCompanyName.Text = My.Application.Info.CompanyName
-        Me.TextBoxDescription.Text = My.Application.Info.Description
+        Me.TextBoxDescription.Text = File.ReadAllText("LICENSE.txt") ' Lesen Sie die Beschreibung aus der README-Datei
     End Sub
 
     Private Sub OKButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OKButton.Click

@@ -4,6 +4,7 @@ Imports System.Text
 Imports System.Threading
 Imports Timer = System.Windows.Forms.Timer
 Imports System.Globalization
+Imports System.Drawing.Text
 
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
@@ -11,7 +12,7 @@ Public Structure CoreTempData
 End Structure
 
 Public Class Form1
-    Private systemInfoRepository As SystemInfoRepository
+    Private systemInfoRepository As InfoRepository
     Private cpuLoadCounter As PerformanceCounter
     Private refreshTimer As Timer
     Private cpuLoadCounters As New List(Of PerformanceCounter)()
@@ -31,7 +32,7 @@ Public Class Form1
 
     Public Sub New()
         InitializeComponent()
-        systemInfoRepository = New SystemInfoRepository()
+        systemInfoRepository = New InfoRepository()
         cpuLoadCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
         refreshTimer = New Timer With {
             .Interval = 1000
@@ -60,87 +61,64 @@ Public Class Form1
         If MaxTemp3 IsNot Nothing Then MaxTempBoxes.Add(3, MaxTemp3)
     End Sub
     Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
-        Dim intervalMs As Integer = 2000 ' Messintervall von 2 Sekunden (anpassbar)
-
+        Dim intervalMs As Integer = 1000
         Do While Not cancellationToken.IsCancellationRequested
             Try
-                ' Sicherstellen, dass die Hardware aktualisiert wird
-                cpu?.Update() ' Verwenden Sie das vorhandene cpu-Objekt
-
+                cpu?.Update()
                 Dim currentCoreTemps As New Dictionary(Of String, Single)()
-                ' Iterieren Sie über die tatsächlich gefundenen coreTemperatures-Sensoren
                 For Each sensor As ISensor In coreTemperatures
                     If sensor.Value.HasValue Then
                         currentCoreTemps.Add(sensor.Name, sensor.Value.Value)
                     End If
                 Next
-
                 If currentCoreTemps.Any() Then
                     Dim newEntry As New CoreTempData With {
                     .Timestamp = DateTime.Now,
                     .CoreTemperatures = currentCoreTemps
-                }
-                    SyncLock backgroundTempMeasurements ' Thread-sicherer Zugriff auf die Liste
+                    SyncLock backgroundTempMeasurements
                         backgroundTempMeasurements.Add(newEntry)
                     End SyncLock
                 End If
-
-                Task.Delay(intervalMs, cancellationToken).Wait() ' Auf das nächste Intervall warten
-
+                Task.Delay(intervalMs, cancellationToken).Wait()
             Catch ex As OperationCanceledException
-                ' Task wurde abgebrochen, ist normal
-                Debug.WriteLine("Temperature monitoring task cancelled.")
+
                 Exit Do
             Catch ex As Exception
-                Debug.WriteLine($"Error during background temperature recording: {ex.Message}")
-                ' Hier könnte man eine Fehlerbehandlung implementieren, z.B. eine Statusmeldung in der UI
-                ' Me.Invoke(Sub() LblStatusMessage.Text = $"Error in background: {ex.Message}")
-                Exit Do ' Schleife bei schwerwiegendem Fehler beenden
+                Exit Do
             End Try
         Loop
     End Sub
 
     Private Function SaveTemperatureDataToCsv(data As List(Of CoreTempData))
-        ' Den Pfad des aktuellen Programms ermitteln
         Dim programDirectory As String = AppDomain.CurrentDomain.BaseDirectory
         Dim logDirectory As String = Path.Combine(programDirectory, "TemperatureLogs")
-
-        ' Sicherstellen, dass das Verzeichnis existiert
         If Not Directory.Exists(logDirectory) Then
             Directory.CreateDirectory(logDirectory)
         End If
-
-        ' Dateiname generieren (z.B. CoolCore_Temp_Log_YYYYMMDD_HHMMSS.csv)
         Dim fileName As String = $"CoolCore_Temp_Log_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
         Dim filePath As String = Path.Combine(logDirectory, fileName)
 
         Try
             Using writer As New StreamWriter(filePath, False, Encoding.UTF8)
-                ' Header schreiben
-                Dim coreNames As New SortedSet(Of String)() ' Für sortierte Kernnamen
+                Dim coreNames As New SortedSet(Of String)()
                 For Each entry In data
                     For Each kvp In entry.CoreTemperatures
-                        coreNames.Add(kvp.Key) ' Hier werden die Namen wie "Core #0", "Core #1" gesammelt
+                        coreNames.Add(kvp.Key)
                     Next
                 Next
                 writer.Write("Timestamp")
                 For Each coreName In coreNames
-                    ' HIER wird der Header für JEDEN KERN geschrieben
                     writer.Write($",{coreName} (°C)")
                 Next
                 writer.WriteLine()
-
-                ' Daten schreiben
                 For Each entry In data
                     writer.Write(entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff"))
                     For Each coreName In coreNames
                         Dim temp As Single = 0
                         If entry.CoreTemperatures.TryGetValue(coreName, temp) Then
-                            ' HIER wird der Wert für JEDEN KERN geschrieben
-                            ' WICHTIG: Verwenden Sie CultureInfo.InvariantCulture für den Punkt als Dezimaltrennzeichen
                             writer.Write($",{temp.ToString("F1", CultureInfo.InvariantCulture)}")
                         Else
-                            writer.Write(",N/A") ' N/A, wenn der Sensor für diesen Zeitpunkt nicht verfügbar war
+                            writer.Write(",N/A")
                         End If
                     Next
                     writer.WriteLine()
@@ -150,40 +128,35 @@ Public Class Form1
                           LblStatusMessage.Text = $"Temperature data saved to {filePath}"
                           LblStatusMessage.ForeColor = Color.Blue
                       End Sub)
-            Return filePath ' Dateipfad zurückgeben
+            Return filePath
         Catch ex As Exception
             Me.Invoke(Sub()
                           LblStatusMessage.Text = $"Error saving data: {ex.Message}"
                           LblStatusMessage.ForeColor = Color.Red
                       End Sub)
-            Return Nothing ' Im Fehlerfall Nothing zurückgeben
+            Return Nothing
         End Try
-        ' Rückgabe des Dateipfads für die direkte Nutzung im Chart-Fenster
         Return filePath
     End Function
 
-    Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LblStatusMessage.Text = "Ready to read system information."
         LblStatusMessage.ForeColor = Color.Black
         ClearCpuDisplayControls()
-
-        ' Initialize the computer object with enabled hardware monitoring
         If computer Is Nothing Then
-            computer = New Computer() ' Create a new Computer object if it doesn't exist
+            computer = New Computer()
         End If
-        computer.Hardware.Clear() ' Clear any existing hardware to ensure fresh data
-        computer.Open(True) ' Open the computer object to access hardware
-        computer.IsCpuEnabled = True ' Enable CPU monitoring
-        computer.IsGpuEnabled = True ' Enable GPU monitoring if needed
-
-
+        computer.Hardware.Clear()
+        computer.Open(True)
+        computer.IsCpuEnabled = True
+        computer.IsGpuEnabled = True
         LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
         LblStatusMessage.ForeColor = Color.Firebrick
         InitializePerCoreCounters()
         InitializeCoreTemperatureSensors()
-        ' Read and display system information asynchronously
-        Await ReadAndDisplaySystemInfoAsync()
-        refreshTimer.Start()
+        Using ReadAndDisplaySystemInfoAsync()
+            refreshTimer.Start()
+        End Using
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -242,36 +215,46 @@ Public Class Form1
             Next
 
             If numberOfLogicalProcessors > 0 Then
+
                 If cpu IsNot Nothing Then
                     Debug.WriteLine($"CPU-Hardware erkannt: {cpu.Name}")
                     coreTemperatures.Clear()
                     For Each sensor As ISensor In cpu.Sensors
                         Debug.WriteLine($"  Gefundener Sensor: {sensor.Name}, Typ: {sensor.SensorType}, Wert: {sensor.Value}")
-                        If sensor.SensorType = SensorType.Temperature AndAlso sensor.Name.StartsWith("Core") Then
+                        If sensor.SensorType = SensorType.Temperature Then
                             coreTemperatures.Add(sensor)
+                            Dim coreIndex As Integer = numberOfLogicalProcessors - 1
+                            If coreIndex > 0 Then
+                                If Not CoreTempBoxes.ContainsKey(coreIndex) Then
+                                    Dim tempBox As New TextBox With {
+                                        .Name = $"CoreTemp{coreIndex}",
+                                        .Text = $"{sensor.Value:F1}°C",
+                                        .Location = New Point(10, 30 + coreIndex * 30),
+                                        .Size = New Size(100, 20)
+                                    }
+                                    CoreTempBoxes.Add(coreIndex, tempBox)
+                                    Me.Controls.Add(tempBox)
+                                End If
+                            End If
+
+                            Debug.WriteLine($"Core-Temperatursensor gefunden: {sensor.Name}, Wert: {sensor.Value}")
                         End If
                     Next
-                    Debug.WriteLine($"Anzahl gefundener Core-Temperatursensoren: {coreTemperatures.Count}")
-                    ' Nach Namen sortieren, damit die Reihenfolge zu den Indizes passt
                     coreTemperatures = coreTemperatures.OrderBy(Function(s) s.Name).ToList()
 
-                    'MessageBox.Show($"Anzahl gefundener Core-Temperatursensoren nach Sortierung: {coreTemperatures.Count}")
+                    MessageBox.Show($"Anzahl gefundener Core-Temperatursensoren nach Sortierung: {coreTemperatures.Count}")
                 Else
-                    Debug.WriteLine("CPU-Hardware wurde von OpenHardwareMonitor nicht gefunden.")
+
                 End If
             End If
         Catch ex As Exception
-            'MessageBox.Show($"Fehler beim Initialisieren der Temperatursensoren: {ex.Message}", "Initialisierungsfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Fehler beim Initialisieren der Temperatursensoren: {ex.Message}")
+
         End Try
     End Sub
 
     Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs)
         Try
-            ' Update all hardware (including sensors)
             cpu?.Update()
-
-            ' Update CPU Load for each core
             For i As Integer = 0 To cpuLoadCounters.Count - 1
                 Dim currentCoreLoad As Single = cpuLoadCounters(i).NextValue()
                 If LoadBoxes.ContainsKey(i) Then
@@ -281,15 +264,15 @@ Public Class Form1
 
             Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
             If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
-                PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W" ' Display current package power
+                PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W"
             End If
-            ' Update Core Temperatures
-            For i As Integer = 0 To coreTemperatures.Count - 1
+            For i As Integer = 0 To cpuLoadCounters.Count - 1
                 Dim sensor As ISensor = coreTemperatures(i)
-                Dim coreIndex As Integer = i ' Assuming coreTemperatures list is sorted by core index
+                Dim coreIndex As Integer = i
 
                 If CoreTempBoxes.ContainsKey(coreIndex) Then
-                    CoreTempBoxes(coreIndex).Text = If(sensor.Value.HasValue, $"{sensor.Value.Value:F1}°C", "N/A") ' Current temp
+                    CoreTempBoxes(coreIndex).Text = If(sensor.Value.HasValue, $"{sensor.Value.Value:F1}°C", "N/A")
+
                 End If
                 If MinTempBoxes.ContainsKey(coreIndex) Then
                     MinTempBoxes(coreIndex).Text = If(sensor.Min.HasValue, $"{sensor.Min.Value:F1}°C", "N/A") ' Minimum observed
@@ -297,21 +280,10 @@ Public Class Form1
                 If MaxTempBoxes.ContainsKey(coreIndex) Then
                     MaxTempBoxes(coreIndex).Text = If(sensor.Max.HasValue, $"{sensor.Max.Value:F1}°C", "N/A") ' Maximum observed
                 End If
-                If coreTemperatures.Count = 2 Then                         ' Wenn nur 2 Kerne gefunden wurden, fügen Sie einen Dummy-Sensor für den dritten Kern hinzu
 
-                    MaxTemp2.Text = MaxTemp.Text  ' Dummy value for the second core
-                    MinTemp2.Text = MinTemp.Text  ' Dummy value for the second core
-                    CoreTemp2.Text = CoreTemp.Text ' Dummy value for the third core
-                    MaxTemp3.Text = MaxTemp1.Text
-                    MinTemp3.Text = MinTemp1.Text ' Dummy value for the third core
-                    CoreTemp3.Text = CoreTemp1.Text ' Dummy value for the third core
-
-                End If
             Next
 
         Catch ex As Exception
-            Debug.WriteLine($"Error during refresh: {ex.Message}")
-            ' Show error in all relevant boxes if an exception occurs
             For Each kvp In LoadBoxes : kvp.Value.Text = "Error" : Next
             For Each kvp In CoreTempBoxes : kvp.Value.Text = "Error" : Next
             For Each kvp In MinTempBoxes : kvp.Value.Text = "Error" : Next
@@ -343,7 +315,6 @@ Public Class Form1
             Dim numberOfLogicalProcessors As Integer = 0
             Dim currentClockSpeed As Integer = 0 ' MHz
             Dim architecture As String = "N/A"
-            'Dim load As String = "N/A"
             Dim searcher As New ManagementObjectSearcher("SELECT * FROM Win32_Processor")
             For Each queryObj As ManagementObject In searcher.Get()
                 cpuName = If(queryObj("Name"), "N/A").ToString()
@@ -370,7 +341,6 @@ Public Class Form1
             systemInfo.CurrentClockSpeedMHz = currentClockSpeed
             systemInfo.Architecture = architecture
             '#--------------------------------------------------------------------------------------------------------------------'
-            ' --- Retrieve BIOS Information (Example, adjust as needed) ---
             Dim biosVersion As String = "N/A"
             Dim biosSearcher As New ManagementObjectSearcher("SELECT Version FROM Win32_BIOS")
             For Each obj As ManagementObject In biosSearcher.Get()
@@ -384,17 +354,15 @@ Public Class Form1
                           PlatformBox.Text = systemInfo.Architecture
                           CoresBox.Text = systemInfo.NumberOfCores.ToString()
                           ThreadBox.Text = systemInfo.NumberOfLogicalProcessors.ToString()
-                          PowerBox.Text = "N/A" ' Placeholder, will be updated later
+                          PowerBox.Text = "N/A"
 
                           '#--------------------------------------------------------------------------------------------------------------------'
-                          ' Try to get more detailed info from OpenHardwareMonitor's CPU object
                           If cpu IsNot Nothing Then
-                              ' Display identifier for more info
-                              ModelBox.Text &= $" ({cpu.Identifier})" ' Append to existing model name or use a new box
-                              ' Search for specific sensors for power/voltage if they exist
+
+                              ModelBox.Text &= $" ({cpu.Identifier})"
                               Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
                               If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
-                                  PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W" ' Display current package power
+                                  PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W"
                               End If
 
                               Dim coreVoltageSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Voltage AndAlso s.Name.Contains("Core"))
@@ -403,11 +371,9 @@ Public Class Form1
                               Else
                                   PowerBox2.Text = "N/A"
                               End If
-
-                              ' Revision might be in cpu.Version or cpu.Identifier
-                              RevisionBox.Text = cpu.Identifier.ToString.LastIndexOf("/"c) ' Or try parsing cpu.Identifier
-                              CPUIDBox.Text = "N/A" ' Not directly exposed
-                              LitBox.Text = "N/A" ' Not directly exposed
+                              RevisionBox.Text = cpu.Identifier.ToString.LastIndexOf("/"c)
+                              CPUIDBox.Text = "N/A"
+                              LitBox.Text = "N/A"
                           Else
                               TDPBox.Text = "N/A"
                               VidBox.Text = "N/A"
@@ -417,7 +383,8 @@ Public Class Form1
                           End If
                       End Sub)
             '#--------------------------------------------------------------------------------------------------------------------'
-            Await systemInfoRepository.SaveSystemInfoAsync(systemInfo)
+            Dim expoItem As New InfoRepository
+            Await expoItem.SaveSystemInfoAsync(systemInfo)
             Me.Invoke(Sub()
                           LblStatusMessage.Text = "System information successfully read and saved to database!"
                           LblStatusMessage.ForeColor = Color.Green
@@ -432,7 +399,6 @@ Public Class Form1
         End Try
     End Function
     '#--------------------------------------------------------------------------------------------------------------------'
-    ' Helper method to clear display control
     Private Sub ClearCpuDisplayControls()
         ModelBox.Text = ""
         FrequencyBox.Text = ""
@@ -458,62 +424,42 @@ Public Class Form1
     Private Sub BtnToggleMonitor1_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitor1.Click
         If Not isMonitoringActive Then
             isMonitoringActive = True
-            BtnToggleMonitoring.Text = "Stop Temp. Monitoring"
-            ' LblStatusMessage.Text = "Background temperature monitoring started..." 
-            ' LblStatusMessage.ForeColor = Color.Orange
-
-            backgroundTempMeasurements.Clear() ' Vorherige Daten löschen
+            InfoMenuItem.Text = "Stop Temp. Monitoring"
+            backgroundTempMeasurements.Clear()
             cts = New CancellationTokenSource()
             loadingForm = New Form3()
             AddHandler loadingForm.StopRequested, AddressOf LoadingForm_StopRequested
             loadingForm.Show()
-
             monitoringTask = Task.Run(Sub() RecordTemperaturesInBackground(cts.Token))
-
             refreshTimer.Stop()
-
         Else
             Call StopMonitoringProcess()
         End If
     End Sub
     Private Function StartMonitoringAsync() As Task
         If Not isMonitoringActive Then
-            ' Monitoring starten
             isMonitoringActive = True
-            BtnToggleMonitoring.Text = "Stop Temp. Monitoring"
+            InfoMenuItem.Text = "Stop Temp. Monitoring"
             LblStatusMessage.Text = "Background temperature monitoring started..."
             LblStatusMessage.ForeColor = Color.Orange
 
-            backgroundTempMeasurements.Clear() ' Vorherige Daten löschen
+            backgroundTempMeasurements.Clear()
             cts = New CancellationTokenSource()
             monitoringTask = Task.Run(Sub() RecordTemperaturesInBackground(cts.Token))
-
-            ' Optional: Deaktivieren Sie den normalen RefreshTimer, um Konflikte zu vermeiden
             refreshTimer.Stop()
-            'Me.Invoke(Sub() ClearCpuDisplayControls()) ' Optional: UI leeren während der Hintergrundmessung
-
         Else
-
-
         End If
-
         Return Task.CompletedTask
     End Function
 
     Private Async Function StopmonitoringAsync() As Task
-        ' Diagramm anzeigen und Daten speichern
         If backgroundTempMeasurements.Any() Then
-            ' Daten in CSV speichern
             SaveTemperatureDataToCsv(backgroundTempMeasurements)
-
-            ' Neues Fenster mit Diagramm anzeigen
             Dim chartForm As New Form2(backgroundTempMeasurements)
             chartForm.Show()
         Else
             MessageBox.Show("No temperature data recorded.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-
-        ' Optional: Aktivieren Sie den normalen RefreshTimer wieder
         refreshTimer.Start()
         LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
         LblStatusMessage.ForeColor = Color.Green
@@ -522,39 +468,31 @@ Public Class Form1
         InitializeCoreTemperatureSensors()
     End Function
     Private Async Sub StopMonitoringProcess()
-        If Not isMonitoringActive Then Exit Sub ' Nur stoppen, wenn es aktiv ist
+        If Not isMonitoringActive Then Exit Sub
 
         isMonitoringActive = False
-        BtnToggleMonitoring.Text = "Start Temp. Monitoring"
+        InfoMenuItem.Text = "Start Temp. Monitoring"
         LblStatusMessage.Text = "Background temperature monitoring stopped. Preparing chart..."
         LblStatusMessage.ForeColor = Color.DarkOrange
-
-        ' Ladeformular schließen, falls es offen ist
         If loadingForm IsNot Nothing AndAlso Not loadingForm.IsDisposed Then
             loadingForm.Close()
-            loadingForm = Nothing ' Referenz löschen
+            loadingForm = Nothing
         End If
 
-        cts?.Cancel() ' Hintergrund-Task abbrechen
+        cts?.Cancel()
         Try
             If monitoringTask IsNot Nothing Then
-                Await monitoringTask ' Warten, bis der Task beendet ist
+                Await monitoringTask
             End If
         Catch ex As OperationCanceledException
-            ' Dies ist normal, wenn der Task abgebrochen wird.
         Catch ex As Exception
             Debug.WriteLine($"Error awaiting monitoring task: {ex.Message}")
         End Try
-
-        ' Diagramm anzeigen und Daten speichern
         If backgroundTempMeasurements.Any() Then
-            ' Daten in CSV speichern und Dateipfad erhalten
             Dim savedFilePath As String = SaveTemperatureDataToCsv(backgroundTempMeasurements)
 
             If Not String.IsNullOrEmpty(savedFilePath) Then
-                ' Neues Fenster mit Diagramm anzeigen und den Dateipfad übergeben
-                ' Form2 muss dafür einen Konstruktor bekommen, der einen Dateipfad akzeptiert
-                Dim chartForm As New Form2(savedFilePath) ' <-- Änderung hier
+                Dim chartForm As New Form2(savedFilePath)
                 chartForm.Show()
             Else
                 MessageBox.Show("Failed to save temperature data.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -562,11 +500,9 @@ Public Class Form1
         Else
             MessageBox.Show("No temperature data recorded.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-
-        ' Optional: Aktivieren Sie den normalen RefreshTimer wieder
         refreshTimer.Start()
-        Me.Invoke(Sub() ReadAndDisplaySystemInfoAsync().Wait()) ' Optional: UI sofort aktualisieren
-        Await ReadAndDisplaySystemInfoAsync() ' Async aufrufen
+        Me.Invoke(Sub() ReadAndDisplaySystemInfoAsync().Wait())
+        Await ReadAndDisplaySystemInfoAsync()
         InitializePerCoreCounters()
         InitializeCoreTemperatureSensors()
 
@@ -575,7 +511,6 @@ Public Class Form1
     End Sub
 
     Private Sub LoadingForm_StopRequested(sender As Object, e As EventArgs)
-        ' Dies wird aufgerufen, wenn der Benutzer auf den Stop-Button in Form3 klickt
         Call StopMonitoringProcess()
     End Sub
 
@@ -587,19 +522,14 @@ Public Class Form1
             MessageBox.Show("Keine archivierten Messungen gefunden. Der Ordner 'TemperatureLogs' existiert nicht.", "Archiv leer", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
-
-        ' Instanz von Form4 erstellen und den Archivordner übergeben
         Using archiveSelectionForm As New Form4(logDirectory)
-            ' Form4 als Dialog anzeigen
-            Dim dialogResult As DialogResult = archiveSelectionForm.ShowDialog(Me) ' 'Me' setzt Form1 als Parent
+            Dim dialogResult As DialogResult = archiveSelectionForm.ShowDialog(Me)
 
             If dialogResult = DialogResult.OK Then
-                ' Wenn der Benutzer auf "Auswählen" geklickt hat und eine Datei ausgewählt wurde
                 Dim selectedFilePath As String = archiveSelectionForm.SelectedFilePath
 
                 If Not String.IsNullOrEmpty(selectedFilePath) Then
                     Try
-                        ' Neues Fenster mit Diagramm anzeigen und den Dateipfad übergeben
                         Dim chartForm As New Form2(selectedFilePath)
                         chartForm.Show()
                         LblStatusMessage.Text = $"Archivierte Messung '{Path.GetFileName(selectedFilePath)}' geladen."
@@ -613,14 +543,188 @@ Public Class Form1
                     MessageBox.Show("Keine Datei ausgewählt.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 End If
             Else
-                ' Der Benutzer hat auf "Abbrechen" geklickt
                 LblStatusMessage.Text = "Auswahl abgebrochen."
                 LblStatusMessage.ForeColor = Color.Gray
             End If
         End Using
     End Sub
 
-    Private Sub BtnToggleMonitoring_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitoring.Click
-        AboutBox1.ShowDialog()
+    Private Sub InfoMenuItem_Click(sender As Object, e As EventArgs) Handles InfoMenuItem.Click
+        AboutBox1.ShowDialog(Me)
     End Sub
+
+
+    Private Sub ExportCPUInfoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportCPUInfoToolStripMenuItem.Click
+
+        Try
+            Me.Invoke(Sub()
+                          LblStatusMessage.Text = "Retrieving system information for export..."
+                          LblStatusMessage.ForeColor = Color.Blue
+                      End Sub)
+            Dim exportItem As New InfoRepository
+            Dim latestReadings As List(Of SystemInfoData) = exportItem.GetLastSystemInfoReadingsAsync(1).Result
+
+            If latestReadings Is Nothing OrElse latestReadings.Count = 0 Then
+                Me.Invoke(Sub()
+                              LblStatusMessage.Text = "No system information found to export."
+                              LblStatusMessage.ForeColor = Color.OrangeRed
+                          End Sub)
+                MessageBox.Show("No system information found to export.", "Export Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Return
+            End If
+
+            Dim systemInfo As SystemInfoData = latestReadings(0)
+            Dim htmlContent As String = GenerateSystemInfoHtml(systemInfo)
+
+            Using saveFileDialog As New SaveFileDialog()
+                saveFileDialog.Filter = "HTML Files (*.html)|*.html|All Files (*.*)|*.*"
+                saveFileDialog.Title = "Save System Information Report"
+                saveFileDialog.FileName = $"SystemInfoReport_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.html"
+
+                If saveFileDialog.ShowDialog() = DialogResult.OK Then
+                    Dim filePath As String = saveFileDialog.FileName
+                    File.OpenWrite(Path.GetFullPath(htmlContent))
+
+                    Me.Invoke(Sub()
+                                  LblStatusMessage.Text = $"System information successfully exported to: {filePath}"
+                                  LblStatusMessage.ForeColor = Color.Green
+                              End Sub)
+                    MessageBox.Show($"System information successfully exported to:{Environment.NewLine}{filePath}", "Export Successful", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Else
+                    Me.Invoke(Sub()
+                                  LblStatusMessage.Text = "System information export cancelled."
+                                  LblStatusMessage.ForeColor = Color.Gray
+                              End Sub)
+                End If
+            End Using
+
+        Catch ex As Exception
+            Me.Invoke(Sub()
+                          LblStatusMessage.Text = "Error during export: " & ex.Message
+                          LblStatusMessage.ForeColor = Color.Red
+                      End Sub)
+            MessageBox.Show("An error occurred during export: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    Private Function GenerateSystemInfoHtml(data As SystemInfoData) As String
+        Dim htmlBuilder As New StringBuilder()
+
+        htmlBuilder.AppendLine("<!DOCTYPE html>")
+        htmlBuilder.AppendLine("<html lang='en'>")
+        htmlBuilder.AppendLine("<head>")
+        htmlBuilder.AppendLine("    <meta charset='UTF-8'>")
+        htmlBuilder.AppendLine("    <meta name='viewport' content='width=device-width, initial-scale=1.0'>")
+        htmlBuilder.AppendLine("    <title>System Information Report</title>")
+        htmlBuilder.AppendLine("    <style>")
+        htmlBuilder.AppendLine("        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #f4f7f6; color: #333; }")
+        htmlBuilder.AppendLine("        .container { max-width: 900px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }")
+        htmlBuilder.AppendLine("        h1 { color: #2c3e50; text-align: center; margin-bottom: 30px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }")
+        htmlBuilder.AppendLine("        h2 { color: #34495e; border-bottom: 1px solid #e0e0e0; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }")
+        htmlBuilder.AppendLine("        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }")
+        htmlBuilder.AppendLine("        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }")
+        htmlBuilder.AppendLine("        th { background-color: #f2f2f2; color: #555; width: 30%; }")
+        htmlBuilder.AppendLine("        td { background-color: #fff; word-break: break-word; }") ' Added word-break
+        htmlBuilder.AppendLine("        .note { font-size: 0.9em; color: #777; margin-top: 30px; text-align: center; }")
+        htmlBuilder.AppendLine("        .value-list { list-style-type: none; padding: 0; margin: 0; }")
+        htmlBuilder.AppendLine("        .value-list li { margin-bottom: 5px; }")
+        htmlBuilder.AppendLine("    </style>")
+        htmlBuilder.AppendLine("</head>")
+        htmlBuilder.AppendLine("<body>")
+        htmlBuilder.AppendLine("    <div class='container'>")
+        htmlBuilder.AppendLine("        <h1>System Information Report</h1>")
+        htmlBuilder.AppendLine("        <p><strong>Report Generated:</strong> " & DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss") & "</p>")
+        htmlBuilder.AppendLine("        <p><strong>Data Timestamp:</strong> " & data.Timestamp.ToString("dd-MM-yyyy HH:mm:ss") & "</p>")
+
+        ' System Information
+        htmlBuilder.AppendLine("        <h2>General System Information</h2>")
+        htmlBuilder.AppendLine("        <table>")
+        htmlBuilder.AppendLine("            <tr><th>Operating System</th><td>" & If(String.IsNullOrEmpty(data.OSSystem), "N/A", data.OSSystem) & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>System Type</th><td>" & If(String.IsNullOrEmpty(data.SystemType), "N/A", data.SystemType) & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Computer Name</th><td>" & If(String.IsNullOrEmpty(data.ComputerName), "N/A", data.ComputerName) & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>User Name</th><td>" & If(String.IsNullOrEmpty(data.UserName), "N/A", data.UserName) & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Domain Name</th><td>" & If(String.IsNullOrEmpty(data.DomainName), "N/A", data.DomainName) & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Host Name</th><td>" & If(String.IsNullOrEmpty(data.HostName), "N/A", data.HostName) & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>System Directory</th><td>" & If(String.IsNullOrEmpty(data.SystemDirectory), "N/A", data.SystemDirectory) & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Program Files Directory</th><td>" & If(String.IsNullOrEmpty(data.ProgramDirectory), "N/A", data.ProgramDirectory) & "</td></tr>")
+        htmlBuilder.AppendLine("        </table>")
+
+        ' CPU Information
+        htmlBuilder.AppendLine("        <h2>Processor (CPU) Information</h2>")
+        htmlBuilder.AppendLine("        <table>")
+        htmlBuilder.AppendLine("            <tr><th>CPU Name</th><td>" & If(String.IsNullOrEmpty(data.CpuName), "N/A", data.CpuName) & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Processor Information</th><td>" & If(String.IsNullOrEmpty(data.ProcessorInformation), "N/A", data.ProcessorInformation) & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Total Processors</th><td>" & data.ProcessorCount.ToString() & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Number of Cores</th><td>" & data.NumberOfCores.ToString() & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Logical Processors</th><td>" & data.NumberOfLogicalProcessors.ToString() & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Current Clock Speed</th><td>" & If(data.CurrentClockSpeedMHz > 0, data.CurrentClockSpeedMHz.ToString() & " MHz", "N/A") & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Architecture</th><td>" & If(String.IsNullOrEmpty(data.Architecture), "N/A", data.Architecture) & "</td></tr>")
+        htmlBuilder.AppendLine("        </table>")
+
+        ' Memory Information
+        htmlBuilder.AppendLine("        <h2>Memory (RAM) Information</h2>")
+        htmlBuilder.AppendLine("        <table>")
+        htmlBuilder.AppendLine("            <tr><th>Total Physical Memory</th><td>" & If(String.IsNullOrEmpty(data.TotalPhysicalMemory), "N/A", data.TotalPhysicalMemory) & "</td></tr>")
+        htmlBuilder.AppendLine("            <tr><th>Available Physical Memory</th><td>" & If(String.IsNullOrEmpty(data.AvailablePhysicalMemory), "N/A", data.AvailablePhysicalMemory) & "</td></tr>")
+        htmlBuilder.AppendLine("        </table>")
+
+        ' Graphics Card Information
+        htmlBuilder.AppendLine("        <h2>Graphics Card Information</h2>")
+        htmlBuilder.AppendLine("        <table>")
+        htmlBuilder.AppendLine("            <tr><th>Graphics Card(s)</th><td>" & If(String.IsNullOrEmpty(data.GraphicsCardInformation), "N/A", data.GraphicsCardInformation.Replace(";", "<br>")) & "</td></tr>")
+        htmlBuilder.AppendLine("        </table>")
+
+        ' Network Information
+        htmlBuilder.AppendLine("        <h2>Network Information</h2>")
+        htmlBuilder.AppendLine("        <table>")
+        htmlBuilder.AppendLine("            <tr><th>IP Addresses</th><td>")
+        If Not String.IsNullOrEmpty(data.IPAddresses) Then
+            htmlBuilder.AppendLine("                <ul class='value-list'>")
+            For Each ip As String In data.IPAddresses.Split(";"c)
+                htmlBuilder.AppendLine($"                    <li>{ip.Trim()}</li>")
+            Next
+            htmlBuilder.AppendLine("                </ul>")
+        Else
+            htmlBuilder.AppendLine("                N/A")
+        End If
+        htmlBuilder.AppendLine("            </td></tr>")
+
+        htmlBuilder.AppendLine("            <tr><th>Network Adapters</th><td>")
+        If Not String.IsNullOrEmpty(data.NetworkAdapterNames) Then
+            htmlBuilder.AppendLine("                <ul class='value-list'>")
+            For Each adapterName As String In data.NetworkAdapterNames.Split(";"c)
+                htmlBuilder.AppendLine($"                    <li>{adapterName.Trim()}</li>")
+            Next
+            htmlBuilder.AppendLine("                </ul>")
+        Else
+            htmlBuilder.AppendLine("                N/A")
+        End If
+        htmlBuilder.AppendLine("            </td></tr>")
+
+        htmlBuilder.AppendLine("            <tr><th>MAC Addresses</th><td>")
+        If Not String.IsNullOrEmpty(data.NetworkAdapterMacAddresses) Then
+            htmlBuilder.AppendLine("                <ul class='value-list'>")
+            For Each macAddress As String In data.NetworkAdapterMacAddresses.Split(";"c)
+                htmlBuilder.AppendLine($"                    <li>{macAddress.Trim()}</li>")
+            Next
+            htmlBuilder.AppendLine("                </ul>")
+        Else
+            htmlBuilder.AppendLine("                N/A")
+        End If
+        htmlBuilder.AppendLine("            </td></tr>")
+        htmlBuilder.AppendLine("        </table>")
+
+        ' BIOS Information
+        htmlBuilder.AppendLine("        <h2>BIOS Information</h2>")
+        htmlBuilder.AppendLine("        <table>")
+        htmlBuilder.AppendLine("            <tr><th>BIOS Version</th><td>" & If(String.IsNullOrEmpty(data.BIOSVersion), "N/A", data.BIOSVersion) & "</td></tr>")
+        htmlBuilder.AppendLine("        </table>")
+
+
+        htmlBuilder.AppendLine("        <p class='note'>Report generated by System Information Tool.</p>")
+        htmlBuilder.AppendLine("    </div>")
+        htmlBuilder.AppendLine("</body>")
+        htmlBuilder.AppendLine("</html>")
+
+        Return htmlBuilder.ToString()
+    End Function
 End Class

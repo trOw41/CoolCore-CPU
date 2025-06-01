@@ -16,12 +16,6 @@ Public Class Form3
         LblLoadingText.Text = "Bitte warten, Monitoring erfasst die CPU Temperaturen..."
         LblLoadingText.AutoSize = True
         LblLoadingText.Location = New Point((Me.ClientSize.Width - LblLoadingText.Width) / 2, 20)
-
-        ProgressBar1.Location = New Point((Me.ClientSize.Width - ProgressBar1.Width) / 2, LblLoadingText.Bottom + 10)
-        ProgressBar1.Size = New Size(200, 20) ' Beispielgröße
-
-        BtnStopMonitoring.Text = "Stop Monitoring"
-        BtnStopMonitoring.Location = New Point((Me.ClientSize.Width - BtnStopMonitoring.Width) / 2, ProgressBar1.Bottom + 20)
         AddHandler BtnStopMonitoring.Click, AddressOf BtnStopMonitoring_Click
     End Sub
 
