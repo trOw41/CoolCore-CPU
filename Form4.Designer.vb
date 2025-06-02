@@ -34,24 +34,25 @@ Partial Class Form4
         '
         Me.LblInstructions.AutoSize = True
         Me.LblInstructions.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.LblInstructions.Font = New System.Drawing.Font("Bahnschrift SemiLight", 12.0!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LblInstructions.Font = New System.Drawing.Font("Bahnschrift Light SemiCondensed", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblInstructions.Location = New System.Drawing.Point(12, 9)
         Me.LblInstructions.Name = "LblInstructions"
-        Me.LblInstructions.Size = New System.Drawing.Size(281, 19)
+        Me.LblInstructions.Size = New System.Drawing.Size(32, 18)
         Me.LblInstructions.TabIndex = 0
-        Me.LblInstructions.Text = "Wählen Sie eine archivierte Messung:"
+        Me.LblInstructions.Text = "Titel"
         '
         'ListBoxArchives
         '
         Me.ListBoxArchives.FormattingEnabled = True
-        Me.ListBoxArchives.Location = New System.Drawing.Point(12, 49)
+        Me.ListBoxArchives.Location = New System.Drawing.Point(12, 30)
         Me.ListBoxArchives.Name = "ListBoxArchives"
         Me.ListBoxArchives.Size = New System.Drawing.Size(360, 173)
         Me.ListBoxArchives.TabIndex = 1
         '
         'BtnSelect
         '
-        Me.BtnSelect.Location = New System.Drawing.Point(12, 255)
+        Me.BtnSelect.Font = New System.Drawing.Font("Bahnschrift Light", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BtnSelect.Location = New System.Drawing.Point(195, 255)
         Me.BtnSelect.Name = "BtnSelect"
         Me.BtnSelect.Size = New System.Drawing.Size(75, 23)
         Me.BtnSelect.TabIndex = 2
@@ -60,6 +61,7 @@ Partial Class Form4
         '
         'BtnCancel
         '
+        Me.BtnCancel.Font = New System.Drawing.Font("Bahnschrift Light", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnCancel.Location = New System.Drawing.Point(297, 255)
         Me.BtnCancel.Name = "BtnCancel"
         Me.BtnCancel.Size = New System.Drawing.Size(75, 23)
@@ -71,11 +73,11 @@ Partial Class Form4
         '
         Me.ClearButton.AutoSize = True
         Me.ClearButton.Font = New System.Drawing.Font("Bahnschrift Light SemiCondensed", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ClearButton.Location = New System.Drawing.Point(152, 228)
+        Me.ClearButton.Location = New System.Drawing.Point(12, 222)
         Me.ClearButton.Name = "ClearButton"
-        Me.ClearButton.Size = New System.Drawing.Size(75, 23)
+        Me.ClearButton.Size = New System.Drawing.Size(87, 23)
         Me.ClearButton.TabIndex = 4
-        Me.ClearButton.Text = "ClearArchiv"
+        Me.ClearButton.Text = "Einträge löschen"
         Me.ClearButton.UseVisualStyleBackColor = True
         '
         'Form4
@@ -88,7 +90,7 @@ Partial Class Form4
         Me.Controls.Add(Me.BtnSelect)
         Me.Controls.Add(Me.ListBoxArchives)
         Me.Controls.Add(Me.LblInstructions)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False

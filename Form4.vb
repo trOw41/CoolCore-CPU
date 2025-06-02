@@ -97,7 +97,7 @@ Public Class Form4
 
     Private Sub ClearButton_Click(sender As Object, e As EventArgs) Handles ClearButton.Click
         Dim confirmResult As DialogResult
-        confirmResult = MessageBox.Show("Möchten Sie wirklich ALLE archivierten Messungen löschen? Dies kann NICHT rückgängig gemacht werden.", "Archiv löschen bestätigen", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2)
+        confirmResult = MessageBox.Show("ALLE archivierten Messungen löschen? Dies kann NICHT rückgängig gemacht werden.", "Archiv löschen bestätigen", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2)
 
         If confirmResult = DialogResult.Yes Then
             Try
@@ -113,6 +113,7 @@ Public Class Form4
                     MessageBox.Show($"{deletedCount} archivierte Messungen erfolgreich gelöscht.", "Löschvorgang abgeschlossen", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     LoadArchivedMeasurements()
                     SelectedFilePath = Nothing
+                    Me.Close()
                 Else
                     MessageBox.Show("Das Archivverzeichnis wurde nicht gefunden.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End If

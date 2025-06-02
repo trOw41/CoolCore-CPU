@@ -209,7 +209,7 @@ Public Class Form2
 
         For Each coreName In allCoreNames
             Dim series As New Series(coreName) With {
-            .ChartType = SeriesChartType.Stock.FastPoint,
+            .ChartType = SeriesChartType.Stock.FastLine,
             .XValueType = ChartValueType.DateTime,
             .YValueType = ChartValueType.Single,
             .BorderWidth = 2,

@@ -1,118 +1,89 @@
-﻿Imports System.Data.SQLite ' Ensure you have this NuGet package installed (System.Data.SQLite.Core)
-Imports System.IO
-Imports System.Diagnostics ' For Debug.WriteLine
+﻿' SystemInfoRepository.vb
+Imports System.Data.SqlClient ' Für Microsoft SQL Server
+Imports System.Diagnostics ' Für Debug.WriteLine
+Imports System.Management ' Für WMI-Abfragen
+Imports System.Net.NetworkInformation ' Für Netzwerkadapter-Informationen
+Imports System.Net ' Für Host Name/IP-Adressen
+Imports System.Linq ' Für LINQ-Erweiterungsmethoden wie .Join
 
 Public Class SystemInfoRepository
 
-    Private Const DB_FILE_NAME As String = "SystemInfo.db"
-    Private ReadOnly DB_PATH As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DB_FILE_NAME)
-    Private ReadOnly CONNECTION_STRING As String = $"Data Source={DB_PATH};Version=3;"
+    ' !! WICHTIG !!
+    ' Ersetzen Sie dies durch Ihre tatsächliche SQL Server Verbindungszeichenfolge.
+    ' Beispiele:
+    ' Lokaler SQL Server Express/LocalDB: "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SystemInfoDB;Integrated Security=True;"
+    ' Standard SQL Server Instanz: "Data Source=YOUR_SERVER_NAME;Initial Catalog=YourDatabaseName;Integrated Security=True;"
+    ' Mit SQL Server Authentifizierung: "Data Source=YOUR_SERVER_NAME;Initial Catalog=YourDatabaseName;User ID=YourUser;Password=YourPassword;"
+    Private Const CONNECTION_STRING As String = "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SystemInfoDB;Integrated Security=True;"
 
     Public Sub New()
         InitializeDatabase()
     End Sub
 
+    ''' <summary>
+    ''' Initialisiert die Datenbank, indem die Tabelle 'SystemInfoReadings' erstellt wird, falls sie noch nicht existiert.
+    ''' </summary>
     Private Sub InitializeDatabase()
         Try
-            If Not File.Exists(DB_PATH) Then
-                SQLiteConnection.CreateFile(DB_PATH)
-                Console.WriteLine($"Database file '{DB_FILE_NAME}' created.")
-            End If
-
-            Using connection As New SQLiteConnection(CONNECTION_STRING)
+            Using connection As New SqlConnection(CONNECTION_STRING)
                 connection.Open()
 
-                ' Create table if it doesn't exist (initial creation)
                 Dim createTableSql As String = "
-                CREATE TABLE IF NOT EXISTS SystemInfoReadings (
-                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Timestamp TEXT NOT NULL,
-                    OSSystem TEXT,
-                    SystemType TEXT,
-                    ComputerName TEXT,
-                    UserName TEXT,
-                    DomainName TEXT,
-                    ProcessorCount INTEGER,
-                    TotalPhysicalMemory TEXT,
-                    AvailablePhysicalMemory TEXT,
-                    HostName TEXT,
-                    IPAddresses TEXT,
-                    SystemDirectory TEXT,
-                    ProgramDirectory TEXT,
-                    NetworkAdapterNames TEXT,
-                    NetworkAdapterMacAddresses TEXT,
-                    BIOSVersion TEXT,
-                    ProcessorInformation TEXT,
-                    GraphicsCardInformation TEXT,
-                    -- New CPU columns
-                    CpuName TEXT,
-                    NumberOfCores INTEGER,
-                    NumberOfLogicalProcessors INTEGER,
-                    CurrentClockSpeedMHz INTEGER,
-                    Architecture TEXT
-                );"
+                IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'SystemInfoReadings')
+                BEGIN
+                    CREATE TABLE SystemInfoReadings (
+                        Id INT PRIMARY KEY IDENTITY(1,1),
+                        Timestamp DATETIME NOT NULL,
+                        OSSystem NVARCHAR(255),
+                        SystemType NVARCHAR(255),
+                        ComputerName NVARCHAR(255),
+                        UserName NVARCHAR(255),
+                        DomainName NVARCHAR(255),
+                        ProcessorCount INT,
+                        TotalPhysicalMemory BIGINT, -- ULong in VB.NET passt zu BIGINT in SQL
+                        AvailablePhysicalMemory BIGINT,
+                        HostName NVARCHAR(255),
+                        IPAddresses NVARCHAR(MAX), -- NVARCHAR(MAX) für potenziell lange Listen
+                        SystemDirectory NVARCHAR(MAX),
+                        ProgramDirectory NVARCHAR(MAX),
+                        NetworkAdapterNames NVARCHAR(MAX),
+                        NetworkAdapterMacAddresses NVARCHAR(MAX),
+                        BIOSVersion NVARCHAR(255),
+                        ProcessorInformation NVARCHAR(MAX),
+                        GraphicsCardInformation NVARCHAR(MAX),
+                        CpuName NVARCHAR(255),
+                        NumberOfCores INT,
+                        NumberOfLogicalProcessors INT,
+                        CurrentClockSpeedMHz INT,
+                        Architecture NVARCHAR(50)
+                    );
+                END"
 
-                Using command As New SQLiteCommand(createTableSql, connection)
+                Using command As New SqlCommand(createTableSql, connection)
                     command.ExecuteNonQuery()
+                    Debug.WriteLine("SystemInfoReadings table checked/created successfully.")
                 End Using
-                Console.WriteLine("Table 'SystemInfoReadings' checked/created.")
-
-                ' Add new columns if they don't exist (for existing databases)
-                AddNewColumns(connection)
-
             End Using
+        Catch ex As SqlException
+            ' Spezifische SQL-Fehler behandeln (z.B. Berechtigungsprobleme)
+            MessageBox.Show($"Datenbankinitialisierungsfehler: {ex.Message}", "Datenbankfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"SQL Datenbankinitialisierungsfehler: {ex.Message}")
         Catch ex As Exception
-            ' This catch block will now only be hit for actual initialization errors,
-            ' as duplicate column errors are handled and swallowed in AddNewColumns.
-            MessageBox.Show($"Error during database initialization: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Database initialization error: {ex.Message}")
+            ' Alle anderen allgemeinen Ausnahmen abfangen
+            MessageBox.Show($"Ein unerwarteter Fehler bei der Datenbankinitialisierung ist aufgetreten: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"Allgemeiner Datenbankinitialisierungsfehler: {ex.Message}")
         End Try
     End Sub
 
-    Private Sub AddNewColumns(connection As SQLiteConnection)
-        Dim columnsToAdd As New Dictionary(Of String, String) From {
-         {"CpuName", "TEXT"},
-         {"NumberOfCores", "INTEGER"},
-         {"NumberOfLogicalProcessors", "INTEGER"},
-         {"CurrentClockSpeedMHz", "INTEGER"},
-         {"Architecture", "TEXT"}
-     }
-
-        For Each column In columnsToAdd
-            Dim alterTableSql As String = $"ALTER TABLE SystemInfoReadings ADD COLUMN {column.Key} {column.Value};"
-            Try
-                Using command As New SQLiteCommand(alterTableSql, connection)
-                    command.ExecuteNonQuery()
-                    Console.WriteLine($"Column '{column.Key}' added to 'SystemInfoReadings'.")
-                End Using
-            Catch ex As SQLiteException
-                ' *** WICHTIGE ÄNDERUNG HIER ***
-                ' Prüfen Sie explizit auf den Fehler "duplicate column name"
-                If ex.ErrorCode = 1 AndAlso ex.Message.Contains("duplicate column name") Then
-                    Debug.WriteLine($"Column '{column.Key}' already exists. Ignoring. ({ex.Message})")
-                    ' Diese spezifische Ausnahme wird ignoriert und nicht weitergeworfen.
-                Else
-                    ' Alle anderen SQLite-Fehler werden weitergeworfen.
-                    Debug.WriteLine($"Error adding column {column.Key}: {ex.Message} (SQL Error Code: {ex.ErrorCode})")
-                    Throw ' Re-throw other SQLite exceptions
-                End If
-            Catch ex As Exception
-                ' Alle anderen generischen Ausnahmen werden weitergeworfen.
-                Debug.WriteLine($"Generic error adding column {column.Key}: {ex.Message}")
-                Throw ' Re-throw other generic exceptions
-            End Try
-        Next
-    End Sub
-
-
-    Public Async Function SaveSystemInfoAsync(ByVal data As SystemInfoData) As Task
-        If data Is Nothing Then
-            Throw New ArgumentNullException("data", "SystemInfoData object cannot be null.")
-        End If
-
+    ''' <summary>
+    ''' Speichert ein SystemInfoData-Objekt in der SQL Server-Datenbank.
+    ''' </summary>
+    ''' <param name="data">Das zu speichernde SystemInfoData-Objekt.</param>
+    ''' <returns>True, wenn das Speichern erfolgreich war, False sonst.</returns>
+    Public Function SaveSystemInfo(data As SystemInfoData) As Boolean
         Try
-            Using connection As New SQLiteConnection(CONNECTION_STRING)
-                Await connection.OpenAsync()
+            Using connection As New SqlConnection(CONNECTION_STRING)
+                connection.Open()
 
                 Dim insertSql As String = "
                 INSERT INTO SystemInfoReadings (
@@ -127,10 +98,10 @@ Public Class SystemInfoRepository
                     @IPAddresses, @SystemDirectory, @ProgramDirectory, @NetworkAdapterNames,
                     @NetworkAdapterMacAddresses, @BIOSVersion, @ProcessorInformation, @GraphicsCardInformation,
                     @CpuName, @NumberOfCores, @NumberOfLogicalProcessors, @CurrentClockSpeedMHz, @Architecture
-                );"
+                )"
 
-                Using command As New SQLiteCommand(insertSql, connection)
-                    command.Parameters.AddWithValue("@Timestamp", data.Timestamp.ToString("yyyy-MM-dd HH:mm:ss"))
+                Using command As New SqlCommand(insertSql, connection)
+                    command.Parameters.AddWithValue("@Timestamp", data.Timestamp)
                     command.Parameters.AddWithValue("@OSSystem", data.OSSystem)
                     command.Parameters.AddWithValue("@SystemType", data.SystemType)
                     command.Parameters.AddWithValue("@ComputerName", data.ComputerName)
@@ -148,45 +119,49 @@ Public Class SystemInfoRepository
                     command.Parameters.AddWithValue("@BIOSVersion", data.BIOSVersion)
                     command.Parameters.AddWithValue("@ProcessorInformation", data.ProcessorInformation)
                     command.Parameters.AddWithValue("@GraphicsCardInformation", data.GraphicsCardInformation)
-
-                    ' New CPU parameters
                     command.Parameters.AddWithValue("@CpuName", data.CpuName)
                     command.Parameters.AddWithValue("@NumberOfCores", data.NumberOfCores)
                     command.Parameters.AddWithValue("@NumberOfLogicalProcessors", data.NumberOfLogicalProcessors)
                     command.Parameters.AddWithValue("@CurrentClockSpeedMHz", data.CurrentClockSpeedMHz)
                     command.Parameters.AddWithValue("@Architecture", data.Architecture)
 
-                    Await command.ExecuteNonQueryAsync()
+                    command.ExecuteNonQuery()
+                    Debug.WriteLine("Systeminformationen erfolgreich gespeichert.")
+                    Return True
                 End Using
-                Console.WriteLine("System information successfully saved to the database.")
             End Using
         Catch ex As Exception
-            MessageBox.Show($"Error saving system information: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Save error in Repository: {ex.Message}")
-            Throw ' Re-throw the exception to allow calling code to handle it
+            MessageBox.Show($"Fehler beim Speichern der Systeminformationen: {ex.Message}", "Datenbank Speicherfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"System Info Speicherfehler: {ex.Message}")
+            Return False
         End Try
     End Function
 
-    Public Async Function GetLastSystemInfoReadingsAsync(count As Integer) As Task(Of List(Of SystemInfoData))
+    ''' <summary>
+    ''' Ruft alle SystemInfoData-Datensätze aus der SQL Server-Datenbank ab.
+    ''' </summary>
+    ''' <returns>Eine Liste von SystemInfoData-Objekten.</returns>
+    Public Function GetAllSystemInfoReadings() As List(Of SystemInfoData)
         Dim readings As New List(Of SystemInfoData)()
         Try
-            Using connection As New SQLiteConnection(CONNECTION_STRING)
-                Await connection.OpenAsync()
-                Dim selectSql As String = $"SELECT * FROM SystemInfoReadings ORDER BY Timestamp DESC LIMIT {count};"
-                Using command As New SQLiteCommand(selectSql, connection)
-                    Using reader As SQLiteDataReader = CType(Await command.ExecuteReaderAsync(), SQLiteDataReader)
+            Using connection As New SqlConnection(CONNECTION_STRING)
+                connection.Open()
+                Dim selectSql As String = "SELECT * FROM SystemInfoReadings ORDER BY Timestamp DESC" ' Neueste zuerst
+
+                Using command As New SqlCommand(selectSql, connection)
+                    Using reader As SqlDataReader = command.ExecuteReader()
                         While reader.Read()
                             Dim data As New SystemInfoData()
-                            data.Id = reader.GetInt32(reader.GetOrdinal("Id"))
-                            data.Timestamp = DateTime.Parse(reader.GetString(reader.GetOrdinal("Timestamp")))
+                            data.Timestamp = reader.GetDateTime(reader.GetOrdinal("Timestamp"))
                             data.OSSystem = reader.GetString(reader.GetOrdinal("OSSystem"))
                             data.SystemType = reader.GetString(reader.GetOrdinal("SystemType"))
                             data.ComputerName = reader.GetString(reader.GetOrdinal("ComputerName"))
                             data.UserName = reader.GetString(reader.GetOrdinal("UserName"))
                             data.DomainName = reader.GetString(reader.GetOrdinal("DomainName"))
                             data.ProcessorCount = reader.GetInt32(reader.GetOrdinal("ProcessorCount"))
-                            data.TotalPhysicalMemory = reader.GetString(reader.GetOrdinal("TotalPhysicalMemory"))
-                            data.AvailablePhysicalMemory = reader.GetString(reader.GetOrdinal("AvailablePhysicalMemory"))
+                            ' Verwenden Sie Convert.ToUInt64 für BIGINT-Spalten, da GetUInt64() nicht immer verfügbar ist
+                            data.TotalPhysicalMemory = Convert.ToUInt64(reader.GetValue(reader.GetOrdinal("TotalPhysicalMemory")))
+                            data.AvailablePhysicalMemory = Convert.ToUInt64(reader.GetValue(reader.GetOrdinal("AvailablePhysicalMemory")))
                             data.HostName = reader.GetString(reader.GetOrdinal("HostName"))
                             data.IPAddresses = reader.GetString(reader.GetOrdinal("IPAddresses"))
                             data.SystemDirectory = reader.GetString(reader.GetOrdinal("SystemDirectory"))
@@ -196,13 +171,11 @@ Public Class SystemInfoRepository
                             data.BIOSVersion = reader.GetString(reader.GetOrdinal("BIOSVersion"))
                             data.ProcessorInformation = reader.GetString(reader.GetOrdinal("ProcessorInformation"))
                             data.GraphicsCardInformation = reader.GetString(reader.GetOrdinal("GraphicsCardInformation"))
-
-                            ' Retrieve new CPU properties
-                            data.CpuName = If(Not reader.IsDBNull(reader.GetOrdinal("CpuName")), reader.GetString(reader.GetOrdinal("CpuName")), "N/A")
-                            data.NumberOfCores = If(Not reader.IsDBNull(reader.GetOrdinal("NumberOfCores")), reader.GetInt32(reader.GetOrdinal("NumberOfCores")), 0)
-                            data.NumberOfLogicalProcessors = If(Not reader.IsDBNull(reader.GetOrdinal("NumberOfLogicalProcessors")), reader.GetInt32(reader.GetOrdinal("NumberOfLogicalProcessors")), 0)
-                            data.CurrentClockSpeedMHz = If(Not reader.IsDBNull(reader.GetOrdinal("CurrentClockSpeedMHz")), reader.GetInt32(reader.GetOrdinal("CurrentClockSpeedMHz")), 0)
-                            data.Architecture = If(Not reader.IsDBNull(reader.GetOrdinal("Architecture")), reader.GetString(reader.GetOrdinal("Architecture")), "N/A")
+                            data.CpuName = reader.GetString(reader.GetOrdinal("CpuName"))
+                            data.NumberOfCores = reader.GetInt32(reader.GetOrdinal("NumberOfCores"))
+                            data.NumberOfLogicalProcessors = reader.GetInt32(reader.GetOrdinal("NumberOfLogicalProcessors"))
+                            data.CurrentClockSpeedMHz = reader.GetInt32(reader.GetOrdinal("CurrentClockSpeedMHz"))
+                            data.Architecture = reader.GetString(reader.GetOrdinal("Architecture"))
 
                             readings.Add(data)
                         End While
@@ -210,10 +183,108 @@ Public Class SystemInfoRepository
                 End Using
             End Using
         Catch ex As Exception
-            MessageBox.Show($"Error retrieving system information: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Retrieval error in Repository: {ex.Message}")
+            MessageBox.Show($"Fehler beim Abrufen der Systeminformationen aus der Datenbank: {ex.Message}", "Datenbank Abruffehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"SQL Abruffehler: {ex.Message}")
         End Try
         Return readings
+    End Function
+
+    ''' <summary>
+    ''' Sammelt aktuelle Systeminformationen über WMI und andere .NET-APIs.
+    ''' </summary>
+    ''' <returns>Ein SystemInfoData-Objekt mit aktuellen Systemdetails, oder Nothing, wenn ein Fehler auftritt.</returns>
+    Public Function FetchLiveSystemInfo() As SystemInfoData
+        Dim data As New SystemInfoData()
+        Try
+            data.Timestamp = DateTime.Now
+            data.HostName = Dns.GetHostName() ' Hostname abrufen
+            data.ProgramDirectory = AppDomain.CurrentDomain.BaseDirectory ' Programmverzeichnis
+
+            ' OS-Informationen (Caption, OSArchitecture, SystemDirectory, TotalPhysicalMemory, FreePhysicalMemory)
+            Using searcher As New ManagementObjectSearcher("SELECT Caption, OSArchitecture, SystemDirectory, TotalPhysicalMemory, FreePhysicalMemory FROM Win32_OperatingSystem")
+                For Each mo As ManagementObject In searcher.Get()
+                    data.OSSystem = mo("Caption")?.ToString()
+                    data.Architecture = mo("OSArchitecture")?.ToString()
+                    data.SystemDirectory = mo("SystemDirectory")?.ToString()
+                    If mo("TotalPhysicalMemory") IsNot Nothing Then ULong.TryParse(mo("TotalPhysicalMemory").ToString(), data.TotalPhysicalMemory)
+                    If mo("FreePhysicalMemory") IsNot Nothing Then ULong.TryParse(mo("FreePhysicalMemory").ToString(), data.AvailablePhysicalMemory)
+                    Exit For
+                Next
+            End Using
+
+            ' Computer System Informationen (Model, Manufacturer, UserName, Domain)
+            Using searcher As New ManagementObjectSearcher("SELECT Model, Manufacturer, UserName, Domain FROM Win32_ComputerSystem")
+                For Each mo As ManagementObject In searcher.Get()
+                    data.SystemType = mo("Model")?.ToString()  ' Modell als Systemtyp
+                    data.ComputerName = mo("Name")?.ToString()  ' Computername
+                    data.UserName = mo("UserName")?.ToString()
+                    data.DomainName = mo("Domain")?.ToString()
+                    Exit For
+                Next
+            End Using
+
+            ' Prozessor-Informationen (Name, NumberOfCores, NumberOfLogicalProcessors, MaxClockSpeed, Manufacturer, CurrentClockSpeed, Description)
+            Using searcher As New ManagementObjectSearcher("SELECT Name, NumberOfCores, NumberOfLogicalProcessors, MaxClockSpeed, Manufacturer, CurrentClockSpeed, Description FROM Win32_Processor")
+                For Each mo As ManagementObject In searcher.Get()
+                    data.CpuName = mo("Name")?.ToString()
+                    If mo("NumberOfCores") IsNot Nothing Then Integer.TryParse(mo("NumberOfCores").ToString(), data.NumberOfCores)
+                    If mo("NumberOfLogicalProcessors") IsNot Nothing Then Integer.TryParse(mo("NumberOfLogicalProcessors").ToString(), data.NumberOfLogicalProcessors)
+                    If mo("CurrentClockSpeed") IsNot Nothing Then Integer.TryParse(mo("CurrentClockSpeed").ToString(), data.CurrentClockSpeedMHz) ' In MHz
+                    data.ProcessorInformation = mo("Description")?.ToString()  ' Allgemeine Beschreibung
+                    Exit For
+                Next
+            End Using
+            data.ProcessorCount = Environment.ProcessorCount ' Verwendung von Environment.ProcessorCount für logische Prozessoren
+
+            ' Netzwerkadapter-Informationen
+            Dim ipAddressesList As New List(Of String)()
+            Dim networkAdapterNamesList As New List(Of String)()
+            Dim macAddressesList As New List(Of String)()
+
+            For Each ni As NetworkInterface In NetworkInterface.GetAllNetworkInterfaces()
+                If ni.OperationalStatus = OperationalStatus.Up AndAlso ni.NetworkInterfaceType <> NetworkInterfaceType.Loopback Then
+                    networkAdapterNamesList.Add(ni.Name)
+                    If ni.GetPhysicalAddress().ToString() <> String.Empty Then
+                        macAddressesList.Add(BitConverter.ToString(ni.GetPhysicalAddress().GetAddressBytes()).Replace("-", ":"))
+                    End If
+
+                    For Each ip In ni.GetIPProperties().UnicastAddresses
+                        If ip.Address.AddressFamily = Net.Sockets.AddressFamily.InterNetwork Then ' Nur IPv4
+                            ipAddressesList.Add(ip.Address.ToString())
+                        End If
+                    Next
+                End If
+            Next
+            data.IPAddresses = String.Join(";", ipAddressesList)
+            data.NetworkAdapterNames = String.Join(";", networkAdapterNamesList)
+            data.NetworkAdapterMacAddresses = String.Join(";", macAddressesList)
+
+            ' BIOS-Informationen
+            Using searcher As New ManagementObjectSearcher("SELECT SMBIOSBIOSVersion FROM Win32_BIOS")
+                For Each mo As ManagementObject In searcher.Get()
+                    data.BIOSVersion = mo("SMBIOSBIOSVersion")?.ToString()
+                    Exit For
+                Next
+            End Using
+
+            ' Grafikkarten-Informationen
+            Dim gpuInfoList As New List(Of String)()
+            Using searcher As New ManagementObjectSearcher("SELECT Name, AdapterRAM FROM Win32_VideoController")
+                For Each mo As ManagementObject In searcher.Get()
+                    Dim gpuName As String = mo("Name")?.ToString()
+                    Dim adapterRAM As ULong = 0
+                    If mo("AdapterRAM") IsNot Nothing Then ULong.TryParse(mo("AdapterRAM").ToString(), adapterRAM)
+                    gpuInfoList.Add($"{gpuName} ({(adapterRAM / (1024.0 * 1024 * 1024)):F2} GB)")
+                Next
+            End Using
+            data.GraphicsCardInformation = String.Join(";", gpuInfoList)
+
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Abrufen aktueller Systeminformationen: {ex.Message}", "System Info Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"Abruffehler der Live-Systeminformationen: {ex.Message}")
+            Return Nothing ' Bei Fehler Nothing zurückgeben
+        End Try
+        Return data
     End Function
 
 End Class

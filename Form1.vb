@@ -338,16 +338,14 @@ Public Class Form1
         If cpu IsNot Nothing Then
             For Each sensor In cpu.Sensors
                 If sensor.SensorType = SensorType.Voltage Then
-                    ' Versuchen Sie, einen Core-Index aus dem Sensornamen zu parsen
-                    ' Z.B. "CPU Core #0", "CPU Core #1"
                     If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) Then
                         Dim namePart As String = sensor.Name.Replace("CPU Core #", "").Trim()
                         Dim coreNum As Integer
                         If Integer.TryParse(namePart.Split(" "c)(0), coreNum) Then
-                            ' Wir mappen Core #0 auf VBox1, Core #1 auf VBox2, usw.
+
                             If coreNum <= VoltBoxes.Count Then
                                 cpuVoltageSensorMap.Add(coreNum, sensor)
-                                MessageBox.Show("Core Voltage Index: " & coreNum)
+
                             End If
                         End If
                     ElseIf sensor.Name.Equals("CPU VCore", StringComparison.OrdinalIgnoreCase) OrElse
@@ -553,8 +551,8 @@ Public Class Form1
                           End If
                       End Sub)
             '#--------------------------------------------------------------------------------------------------------------------'
-            Dim expoItem As New SysteminfoRepository
-            Await expoItem.SaveSystemInfoAsync(systemInfo)
+
+
             Me.Invoke(Sub()
                           LblStatusMessage.Text = "System information successfully read and saved to database!"
                           LblStatusMessage.ForeColor = Color.Green
@@ -719,177 +717,141 @@ Public Class Form1
 
     Private Sub ExportCPUInfoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportCPUInfoToolStripMenuItem.Click
 
-        Try
-            Me.Invoke(Sub()
-                          LblStatusMessage.Text = "Retrieving system information for export..."
-                          LblStatusMessage.ForeColor = Color.Blue
-                      End Sub)
-            Dim exportItem As New SysteminfoRepository
-            Dim latestReadings As List(Of SystemInfoData) = exportItem.GetLastSystemInfoReadingsAsync(1).Result
+        ' 1. Aktuelle Systeminformationen abrufen
+        Dim currentSystemInfo As SystemInfoData = systemInfoRepository.FetchLiveSystemInfo()
 
-            If latestReadings Is Nothing OrElse latestReadings.Count = 0 Then
-                Me.Invoke(Sub()
-                              LblStatusMessage.Text = "No system information found to export."
-                              LblStatusMessage.ForeColor = Color.OrangeRed
-                          End Sub)
-                MessageBox.Show("No system information found to export.", "Export Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Return
+        If currentSystemInfo Is Nothing Then
+            ' Die Fehlermeldung wurde bereits in FetchLiveSystemInfo angezeigt
+            Exit Sub ' Beenden, da keine Daten zum Exportieren vorhanden sind
+        End If
+
+        ' Optional: Speichern Sie die abgerufenen Informationen in der Datenbank
+        systemInfoRepository.SaveSystemInfo(currentSystemInfo) ' Speichert den aktuellen Datensatz in der SQL-DB
+
+        ' 2. HTML-Inhalt generieren (Ihre bestehende GenerateSystemInfoHtml-Methode)
+        Dim htmlContent As String = GenerateSystemInfoHtml(currentSystemInfo)
+
+        ' 3. Speichern der HTML-Datei über SaveFileDialog
+        Using saveFileDialog As New SaveFileDialog()
+            saveFileDialog.Filter = "HTML-Datei (*.html)|*.html|Alle Dateien (*.*)|*.*"
+            saveFileDialog.Title = "Systeminformationen exportieren"
+            saveFileDialog.FileName = $"SystemInfo_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.html"
+
+            If saveFileDialog.ShowDialog() = DialogResult.OK Then
+                Try
+                    File.WriteAllText(saveFileDialog.FileName, htmlContent, System.Text.Encoding.UTF8)
+                    MessageBox.Show("Systeminformationen erfolgreich exportiert.", "Export abgeschlossen", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Catch ex As Exception
+                    MessageBox.Show($"Fehler beim Speichern der HTML-Datei: {ex.Message}", "Exportfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
             End If
-
-            Dim systemInfo As SystemInfoData = latestReadings(0)
-            Dim htmlContent As String = GenerateSystemInfoHtml(systemInfo)
-
-            Using saveFileDialog As New SaveFileDialog()
-                saveFileDialog.Filter = "HTML Files (*.html)|*.html|All Files (*.*)|*.*"
-                saveFileDialog.Title = "Save System Information Report"
-                saveFileDialog.FileName = $"SystemInfoReport_{DateTime.Now:yyyyMMdd_HHmmss}.html"
-
-                If saveFileDialog.ShowDialog() = DialogResult.OK Then
-                    Dim filePath As String = saveFileDialog.FileName
-                    File.OpenWrite(Path.GetFullPath(htmlContent))
-
-                    Me.Invoke(Sub()
-                                  LblStatusMessage.Text = $"System information successfully exported to: {filePath}"
-                                  LblStatusMessage.ForeColor = Color.Green
-                              End Sub)
-                    MessageBox.Show($"System information successfully exported to:{Environment.NewLine}{filePath}", "Export Successful", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Else
-                    Me.Invoke(Sub()
-                                  LblStatusMessage.Text = "System information export cancelled."
-                                  LblStatusMessage.ForeColor = Color.Gray
-                              End Sub)
-                End If
-            End Using
-
-        Catch ex As Exception
-            Me.Invoke(Sub()
-                          LblStatusMessage.Text = "Error during export: " & ex.Message
-                          LblStatusMessage.ForeColor = Color.Red
-                      End Sub)
-            MessageBox.Show("An error occurred during export: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        End Using
     End Sub
     Private Function GenerateSystemInfoHtml(data As SystemInfoData) As String
-        Dim htmlBuilder As New StringBuilder()
+        Dim htmlBuilder As New System.Text.StringBuilder()
 
-        htmlBuilder.AppendLine("<!DOCTYPE html>")
-        htmlBuilder.AppendLine("<html lang='en'>")
-        htmlBuilder.AppendLine("<head>")
-        htmlBuilder.AppendLine("    <meta charset='UTF-8'>")
-        htmlBuilder.AppendLine("    <meta name='viewport' content='width=device-width, initial-scale=1.0'>")
-        htmlBuilder.AppendLine("    <title>System Information Report</title>")
-        htmlBuilder.AppendLine("    <style>")
-        htmlBuilder.AppendLine("        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #f4f7f6; color: #333; }")
-        htmlBuilder.AppendLine("        .container { max-width: 900px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }")
-        htmlBuilder.AppendLine("        h1 { color: #2c3e50; text-align: center; margin-bottom: 30px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }")
-        htmlBuilder.AppendLine("        h2 { color: #34495e; border-bottom: 1px solid #e0e0e0; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }")
-        htmlBuilder.AppendLine("        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }")
-        htmlBuilder.AppendLine("        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }")
-        htmlBuilder.AppendLine("        th { background-color: #f2f2f2; color: #555; width: 30%; }")
-        htmlBuilder.AppendLine("        td { background-color: #fff; word-break: break-word; }") ' Added word-break
-        htmlBuilder.AppendLine("        .note { font-size: 0.9em; color: #777; margin-top: 30px; text-align: center; }")
-        htmlBuilder.AppendLine("        .value-list { list-style-type: none; padding: 0; margin: 0; }")
-        htmlBuilder.AppendLine("        .value-list li { margin-bottom: 5px; }")
-        htmlBuilder.AppendLine("    </style>")
-        htmlBuilder.AppendLine("</head>")
-        htmlBuilder.AppendLine("<body>")
-        htmlBuilder.AppendLine("    <div class='container'>")
-        htmlBuilder.AppendLine("        <h1>System Information Report</h1>")
-        htmlBuilder.AppendLine("        <p><strong>Report Generated:</strong> " & DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss") & "</p>")
-        htmlBuilder.AppendLine("        <p><strong>Data Timestamp:</strong> " & data.Timestamp.ToString("dd-MM-yyyy HH:mm:ss") & "</p>")
+        Try
+            htmlBuilder.AppendLine("<!DOCTYPE html>")
+            htmlBuilder.AppendLine("<html lang='de'>")
+            htmlBuilder.AppendLine("<head>")
+            htmlBuilder.AppendLine("<meta charset='UTF-8'>")
+            htmlBuilder.AppendLine("<meta name='viewport' content='width=device-width, initial-scale=1.0'>")
+            htmlBuilder.AppendLine("<title>Systeminformationen Bericht</title>")
+            htmlBuilder.AppendLine("<style>")
+            htmlBuilder.AppendLine("  body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }")
+            htmlBuilder.AppendLine("  .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 900px; margin: auto; }")
+            htmlBuilder.AppendLine("  h1 { color: #0056b3; text-align: center; }")
+            htmlBuilder.AppendLine("  h2 { color: #007bff; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 20px; }")
+            htmlBuilder.AppendLine("  table { width: 100%; border-collapse: collapse; margin-top: 10px; }")
+            htmlBuilder.AppendLine("  th, td { padding: 8px; border: 1px solid #ddd; text-align: left; vertical-align: top; }")
+            htmlBuilder.AppendLine("  th { background-color: #f2f2f2; font-weight: bold; width: 30%; }")
+            htmlBuilder.AppendLine("  .note { margin-top: 30px; font-size: 0.9em; color: #777; text-align: center; }")
+            htmlBuilder.AppendLine("  .value-list { list-style-type: disc; margin: 0; padding-left: 20px; }")
+            htmlBuilder.AppendLine("  .value-list li { margin-bottom: 3px; }")
+            htmlBuilder.AppendLine("</style>")
+            htmlBuilder.AppendLine("</head>")
+            htmlBuilder.AppendLine("<body>")
+            htmlBuilder.AppendLine("  <div class='container'>")
+            htmlBuilder.AppendLine("    <h1>Systeminformationen Bericht</h1>")
+            htmlBuilder.AppendLine($"    <p class='note'>Bericht erstellt am: {data.Timestamp.ToString("dd.MM.yyyy HH:mm:ss")}</p>")
 
-        ' System Information
-        htmlBuilder.AppendLine("        <h2>General System Information</h2>")
-        htmlBuilder.AppendLine("        <table>")
-        htmlBuilder.AppendLine("            <tr><th>Operating System</th><td>" & If(String.IsNullOrEmpty(data.OSSystem), "N/A", data.OSSystem) & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>System Type</th><td>" & If(String.IsNullOrEmpty(data.SystemType), "N/A", data.SystemType) & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Computer Name</th><td>" & If(String.IsNullOrEmpty(data.ComputerName), "N/A", data.ComputerName) & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>User Name</th><td>" & If(String.IsNullOrEmpty(data.UserName), "N/A", data.UserName) & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Domain Name</th><td>" & If(String.IsNullOrEmpty(data.DomainName), "N/A", data.DomainName) & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Host Name</th><td>" & If(String.IsNullOrEmpty(data.HostName), "N/A", data.HostName) & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>System Directory</th><td>" & If(String.IsNullOrEmpty(data.SystemDirectory), "N/A", data.SystemDirectory) & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Program Files Directory</th><td>" & If(String.IsNullOrEmpty(data.ProgramDirectory), "N/A", data.ProgramDirectory) & "</td></tr>")
-        htmlBuilder.AppendLine("        </table>")
+            htmlBuilder.AppendLine("    <h2>Allgemeine Systeminformationen</h2>")
+            htmlBuilder.AppendLine("    <table>")
+            htmlBuilder.AppendLine($"      <tr><th>Computername</th><td>{data.ComputerName}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Hostname</th><td>{data.HostName}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Benutzername</th><td>{data.UserName}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Domain</th><td>{data.DomainName}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Betriebssystem</th><td>{data.OSSystem} ({data.Architecture})</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Systemtyp</th><td>{data.SystemType}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Systemverzeichnis</th><td>{data.SystemDirectory}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Programmverzeichnis</th><td>{data.ProgramDirectory}</td></tr>")
+            htmlBuilder.AppendLine("    </table>")
 
-        ' CPU Information
-        htmlBuilder.AppendLine("        <h2>Processor (CPU) Information</h2>")
-        htmlBuilder.AppendLine("        <table>")
-        htmlBuilder.AppendLine("            <tr><th>CPU Name</th><td>" & If(String.IsNullOrEmpty(data.CpuName), "N/A", data.CpuName) & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Processor Information</th><td>" & If(String.IsNullOrEmpty(data.ProcessorInformation), "N/A", data.ProcessorInformation) & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Total Processors</th><td>" & data.ProcessorCount.ToString() & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Number of Cores</th><td>" & data.NumberOfCores.ToString() & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Logical Processors</th><td>" & data.NumberOfLogicalProcessors.ToString() & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Current Clock Speed</th><td>" & If(data.CurrentClockSpeedMHz > 0, data.CurrentClockSpeedMHz.ToString() & " MHz", "N/A") & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Architecture</th><td>" & If(String.IsNullOrEmpty(data.Architecture), "N/A", data.Architecture) & "</td></tr>")
-        htmlBuilder.AppendLine("        </table>")
+            htmlBuilder.AppendLine("    <h2>Hardware Informationen</h2>")
+            htmlBuilder.AppendLine("    <table>")
+            htmlBuilder.AppendLine($"      <tr><th>CPU Name</th><td>{data.CpuName}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Anzahl Kerne</th><td>{data.NumberOfCores}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Anzahl logischer Prozessoren</th><td>{data.NumberOfLogicalProcessors}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Prozessorzähler (Threads)</th><td>{data.ProcessorCount}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Aktuelle Taktrate</th><td>{data.CurrentClockSpeedMHz} MHz</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Prozessorinformationen</th><td>{data.ProcessorInformation}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Gesamter physischer Speicher</th><td>{(data.TotalPhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Verfügbarer physischer Speicher</th><td>{(data.AvailablePhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Grafikkarten Informationen</th><td>{data.GraphicsCardInformation}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>BIOS Version</th><td>{data.BIOSVersion}</td></tr>")
+            htmlBuilder.AppendLine("    </table>")
 
-        ' Memory Information
-        htmlBuilder.AppendLine("        <h2>Memory (RAM) Information</h2>")
-        htmlBuilder.AppendLine("        <table>")
-        htmlBuilder.AppendLine("            <tr><th>Total Physical Memory</th><td>" & If(String.IsNullOrEmpty(data.TotalPhysicalMemory), "N/A", data.TotalPhysicalMemory) & "</td></tr>")
-        htmlBuilder.AppendLine("            <tr><th>Available Physical Memory</th><td>" & If(String.IsNullOrEmpty(data.AvailablePhysicalMemory), "N/A", data.AvailablePhysicalMemory) & "</td></tr>")
-        htmlBuilder.AppendLine("        </table>")
+            htmlBuilder.AppendLine("    <h2>Netzwerk Informationen</h2>")
+            htmlBuilder.AppendLine("    <table>")
+            htmlBuilder.AppendLine("      <tr><th>IP-Adressen</th><td>")
+            If Not String.IsNullOrEmpty(data.IPAddresses) Then
+                htmlBuilder.AppendLine("        <ul class='value-list'>")
+                For Each ipAddress As String In data.IPAddresses.Split(";"c)
+                    htmlBuilder.AppendLine($"          <li>{ipAddress.Trim()}</li>")
+                Next
+                htmlBuilder.AppendLine("        </ul>")
+            Else
+                htmlBuilder.AppendLine("        N/A")
+            End If
+            htmlBuilder.AppendLine("      </td></tr>")
 
-        ' Graphics Card Information
-        htmlBuilder.AppendLine("        <h2>Graphics Card Information</h2>")
-        htmlBuilder.AppendLine("        <table>")
-        htmlBuilder.AppendLine("            <tr><th>Graphics Card(s)</th><td>" & If(String.IsNullOrEmpty(data.GraphicsCardInformation), "N/A", data.GraphicsCardInformation.Replace(";", "<br>")) & "</td></tr>")
-        htmlBuilder.AppendLine("        </table>")
+            htmlBuilder.AppendLine("      <tr><th>Netzwerkadapter Namen</th><td>")
+            If Not String.IsNullOrEmpty(data.NetworkAdapterNames) Then
+                htmlBuilder.AppendLine("        <ul class='value-list'>")
+                For Each adapterName As String In data.NetworkAdapterNames.Split(";"c)
+                    htmlBuilder.AppendLine($"          <li>{adapterName.Trim()}</li>")
+                Next
+                htmlBuilder.AppendLine("        </ul>")
+            Else
+                htmlBuilder.AppendLine("        N/A")
+            End If
+            htmlBuilder.AppendLine("      </td></tr>")
 
-        ' Network Information
-        htmlBuilder.AppendLine("        <h2>Network Information</h2>")
-        htmlBuilder.AppendLine("        <table>")
-        htmlBuilder.AppendLine("            <tr><th>IP Addresses</th><td>")
-        If Not String.IsNullOrEmpty(data.IPAddresses) Then
-            htmlBuilder.AppendLine("                <ul class='value-list'>")
-            For Each ip As String In data.IPAddresses.Split(";"c)
-                htmlBuilder.AppendLine($"                    <li>{ip.Trim()}</li>")
-            Next
-            htmlBuilder.AppendLine("                </ul>")
-        Else
-            htmlBuilder.AppendLine("                N/A")
-        End If
-        htmlBuilder.AppendLine("            </td></tr>")
-
-        htmlBuilder.AppendLine("            <tr><th>Network Adapters</th><td>")
-        If Not String.IsNullOrEmpty(data.NetworkAdapterNames) Then
-            htmlBuilder.AppendLine("                <ul class='value-list'>")
-            For Each adapterName As String In data.NetworkAdapterNames.Split(";"c)
-                htmlBuilder.AppendLine($"                    <li>{adapterName.Trim()}</li>")
-            Next
-            htmlBuilder.AppendLine("                </ul>")
-        Else
-            htmlBuilder.AppendLine("                N/A")
-        End If
-        htmlBuilder.AppendLine("            </td></tr>")
-
-        htmlBuilder.AppendLine("            <tr><th>MAC Addresses</th><td>")
-        If Not String.IsNullOrEmpty(data.NetworkAdapterMacAddresses) Then
-            htmlBuilder.AppendLine("                <ul class='value-list'>")
-            For Each macAddress As String In data.NetworkAdapterMacAddresses.Split(";"c)
-                htmlBuilder.AppendLine($"                    <li>{macAddress.Trim()}</li>")
-            Next
-            htmlBuilder.AppendLine("                </ul>")
-        Else
-            htmlBuilder.AppendLine("                N/A")
-        End If
-        htmlBuilder.AppendLine("            </td></tr>")
-        htmlBuilder.AppendLine("        </table>")
-
-        ' BIOS Information
-        htmlBuilder.AppendLine("        <h2>BIOS Information</h2>")
-        htmlBuilder.AppendLine("        <table>")
-        htmlBuilder.AppendLine("            <tr><th>BIOS Version</th><td>" & If(String.IsNullOrEmpty(data.BIOSVersion), "N/A", data.BIOSVersion) & "</td></tr>")
-        htmlBuilder.AppendLine("        </table>")
+            htmlBuilder.AppendLine("      <tr><th>MAC-Adressen</th><td>")
+            If Not String.IsNullOrEmpty(data.NetworkAdapterMacAddresses) Then
+                htmlBuilder.AppendLine("        <ul class='value-list'>")
+                For Each macAddress As String In data.NetworkAdapterMacAddresses.Split(";"c)
+                    htmlBuilder.AppendLine($"          <li>{macAddress.Trim()}</li>")
+                Next
+                htmlBuilder.AppendLine("        </ul>")
+            Else
+                htmlBuilder.AppendLine("        N/A")
+            End If
+            htmlBuilder.AppendLine("      </td></tr>")
+            htmlBuilder.AppendLine("    </table>")
 
 
-        htmlBuilder.AppendLine("        <p class='note'>Report generated by System Information Tool.</p>")
-        htmlBuilder.AppendLine("    </div>")
-        htmlBuilder.AppendLine("</body>")
-        htmlBuilder.AppendLine("</html>")
+            htmlBuilder.AppendLine("    <p class='note'>Bericht erstellt von Ihrem System Information Tool.</p>")
+            htmlBuilder.AppendLine("  </div>")
+            htmlBuilder.AppendLine("</body>")
+            htmlBuilder.AppendLine("</html>")
 
-        Return htmlBuilder.ToString()
+            Return htmlBuilder.ToString()
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Generieren des HTML-Berichts: {ex.Message}", "HTML-Generierungsfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"HTML Generation Error: {ex.Message}")
+            Return "<h1>Fehler beim Generieren der Systeminformationen.</h1>"
+        End Try
     End Function
-
 
 End Class

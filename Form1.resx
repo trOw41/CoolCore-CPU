@@ -942,13 +942,13 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="PowerBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>124, 25</value>
+    <value>131, 25</value>
   </data>
   <data name="PowerBox2.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="PowerBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 21</value>
+    <value>47, 21</value>
   </data>
   <data name="PowerBox2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1278,7 +1278,7 @@
     <value>True</value>
   </data>
   <data name="TJBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 21</value>
+    <value>59, 21</value>
   </data>
   <data name="TJBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1305,10 +1305,13 @@
     <value>True</value>
   </data>
   <data name="PowerBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 21</value>
+    <value>58, 21</value>
   </data>
   <data name="PowerBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="PowerBox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
   <data name="&gt;&gt;PowerBox.Name" xml:space="preserve">
     <value>PowerBox</value>
@@ -1766,6 +1769,9 @@
   <data name="ThreadBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
+  <data name="ThreadBox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
   <data name="&gt;&gt;ThreadBox.Name" xml:space="preserve">
     <value>ThreadBox</value>
   </data>
@@ -1792,6 +1798,9 @@
   </data>
   <data name="CoresBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="CoresBox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
   <data name="&gt;&gt;CoresBox.Name" xml:space="preserve">
     <value>CoresBox</value>
