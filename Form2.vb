@@ -1,12 +1,8 @@
-﻿Imports System.Collections.Generic
-Imports System.Drawing
-Imports System.Drawing.Text
-Imports System.Globalization
+﻿Imports System.Globalization
 Imports System.IO
-Imports System.Linq
 Imports System.Text
-Imports System.Windows.Forms
 Imports System.Windows.Forms.DataVisualization.Charting
+Imports System.Data.SQLite
 
 Public Class Form2
     Private temperatureData As New List(Of CoreTempData)()
@@ -203,8 +199,16 @@ Public Class Form2
             Exit Sub
         End If
 
-        ' Alle bestehenden Serien entfernen
+        ' Alle bestehenden Serien entfernen, um Duplikate zu vermeiden
         Chart1.Series.Clear()
+
+        ' Eine Liste von Farben für die verschiedenen Kerne
+        Dim coreColors As New List(Of Color) From {
+        Color.Blue, Color.Red, Color.Green, Color.Purple,
+        Color.Orange, Color.DarkCyan, Color.HotPink, Color.Brown,
+        Color.DarkSlateGray, Color.Indigo, Color.Olive, Color.DarkGreen
+    }
+        Dim colorIndex As Integer = 0
 
         ' Alle Kernnamen aus den Daten sammeln und sortieren
         Dim allCoreNames As New SortedSet(Of String)()
@@ -222,12 +226,14 @@ Public Class Form2
         ' Für jeden Kern eine Serie erstellen
         For Each coreName In allCoreNames
             Dim series As New Series(coreName) With {
-                .ChartType = SeriesChartType.StackedArea.Bar, ' Stacked Area Spline für bessere Visualisierung
-                .XValueType = ChartValueType.DateTime, ' X-Achse ist Zeit
-                .YValueType = ChartValueType.Single, ' Y-Achse ist Single (Temperatur)
-                .BorderWidth = 1 ' Dickere Linie für bessere Sichtbarkeit
-                }
+            .ChartType = SeriesChartType.Line, ' Korrekter Chart-Typ für Linien
+            .XValueType = ChartValueType.DateTime, ' X-Achse ist Zeit
+            .YValueType = ChartValueType.Single, ' Y-Achse ist Single (Temperatur)
+            .BorderWidth = 2, ' Dickere Linie für bessere Sichtbarkeit
+            .Color = coreColors(colorIndex Mod coreColors.Count) ' Eine Farbe zuweisen
+        }
             Chart1.Series.Add(series)
+            colorIndex += 1
         Next
 
         ' Daten zu den Serien hinzufügen
@@ -243,23 +249,17 @@ Public Class Form2
             For Each kvp In entry.CoreTemperatures
                 Dim coreName As String = kvp.Key
                 Dim tempValue As Single = kvp.Value
-                Dim item As LegendItem = New LegendItem With {
-                    .Name = coreName,
-                    .Color = GetTemperatureColor(tempValue, 0, 100), ' Hier können Sie die Min/Max-Temperatur anpassen
-                    .BorderColor = Color.Black,
-                    .BorderWidth = 1,
-                    .SeriesPointIndex = 0 ' Platzhalter, da wir keine Punkte in der Legende benötigen
-                }
+
                 If Chart1.Series.Any(Function(s) s.Name.Equals(coreName, StringComparison.OrdinalIgnoreCase)) Then
                     Dim dataPoint As New DataPoint()
                     dataPoint.SetValueXY(entry.Timestamp, tempValue)
 
                     ' Tooltip Text
                     dataPoint.ToolTip = $"Zeit: {entry.Timestamp:HH:mm:ss.fff}{Environment.NewLine}" &
-                                       $"Kern: {coreName}{Environment.NewLine}" &
-                                       $"Temp: {tempValue:F1}°C"
+                                   $"Kern: {coreName}{Environment.NewLine}" &
+                                   $"Temp: {tempValue:F1}°C"
 
-                    Chart1.Legends.Add(tempValue)
+                    ' Füge den Datenpunkt zur richtigen Serie hinzu
                     Chart1.Series(coreName).Points.Add(dataPoint)
 
                     If tempValue < minChartTemp Then minChartTemp = tempValue
@@ -270,8 +270,9 @@ Public Class Form2
 
         ' Achsenbereich dynamisch anpassen
         If temperatureData.Any() Then
-            Chart1.ChartAreas("MainChartArea").AxisY.Minimum = CInt(Math.Floor(minChartTemp - 5)) ' Etwas Puffer unten
-            Chart1.ChartAreas("MainChartArea").AxisY.Maximum = CInt(Math.Ceiling(maxChartTemp + 5)) ' Etwas Puffer oben
+            ' Puffer für Y-Achse
+            Chart1.ChartAreas("MainChartArea").AxisY.Minimum = CInt(Math.Floor(minChartTemp - 5))
+            Chart1.ChartAreas("MainChartArea").AxisY.Maximum = CInt(Math.Ceiling(maxChartTemp + 5))
 
             ' X-Achsenbereich anpassen
             Chart1.ChartAreas("MainChartArea").AxisX.Minimum = firstTimestamp.ToOADate()
@@ -279,25 +280,22 @@ Public Class Form2
 
             ' Intervall der X-Achse anpassen basierend auf der Dauer der Messung
             Dim totalDuration As TimeSpan = lastTimestamp - firstTimestamp
+
             If totalDuration.TotalSeconds < 60 Then ' Kurze Messung: jede Sekunde anzeigen
                 Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Seconds
                 Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5 ' Jede 5 Sekunden
-                Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm:ss"
             ElseIf totalDuration.TotalMinutes < 30 Then ' Mittlere Messung: jede Minute anzeigen
                 Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Minutes
                 Chart1.ChartAreas("MainChartArea").AxisX.Interval = 1 ' Jede Minute
-                Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm"
             Else ' Lange Messung: alle 5 Minuten oder mehr
                 Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Minutes
                 Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5 ' Jede 5 Minuten
-                Chart1.ChartAreas("MainChartArea").AxisX.LabelStyle.Format = "HH:mm"
             End If
         End If
 
         ' Chart aktualisieren
         Chart1.Invalidate()
-        'PanelColorLegend.Invalidate() ' Legende neu zeichnen erzwingen (optional, da diese jetzt für ein Histogramm ist)
-        Debug.WriteLine("Chart data loaded and drawn for time series.")
+        Debug.WriteLine("Chart data loaded and invalidated.")
     End Sub
     Private Function GetTemperatureColor(temp As Single, minOverallTemp As Single, maxOverallTemp As Single) As Color
         ' Einfache lineare Farbskala von Blau nach Rot über Grün
@@ -350,9 +348,7 @@ Public Class Form2
     ' Optional: Wenn sich die Größe des Formulars ändert, die Legende neu zeichnen
     Private Sub Form2_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         ' PanelColorLegend.Invalidate()
-        If Chart1 IsNot Nothing Then
-            Chart1.Invalidate() ' Aktualisiert das Diagramm, wenn das Formular neu gezeichnet wird
-        End If
+        Chart1?.Invalidate() ' Aktualisiert das Diagramm, wenn das Formular neu gezeichnet wird
     End Sub
 
 End Class

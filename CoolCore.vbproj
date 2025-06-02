@@ -181,7 +181,7 @@
     <Compile Include="SystemInfoData.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="InfoRepository.vb">
+    <Compile Include="SysteminfoRepository.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
@@ -263,10 +263,7 @@
     <PackageReference Include="OpenHardwareMonitorLib">
       <Version>1.0.9270</Version>
     </PackageReference>
-    <PackageReference Include="System.Data.SQLite.Core">
-      <Version>1.0.119</Version>
-    </PackageReference>
-    <PackageReference Include="System.Data.SQLite.EF6">
+    <PackageReference Include="Stub.System.Data.SQLite.Core.NetStandard">
       <Version>1.0.119</Version>
     </PackageReference>
     <PackageReference Include="System.Drawing.Common">

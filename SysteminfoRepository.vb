@@ -2,7 +2,7 @@
 Imports System.IO
 Imports System.Diagnostics ' For Debug.WriteLine
 
-Public Class InfoRepository
+Public Class SystemInfoRepository
 
     Private Const DB_FILE_NAME As String = "SystemInfo.db"
     Private ReadOnly DB_PATH As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DB_FILE_NAME)
@@ -62,19 +62,21 @@ Public Class InfoRepository
 
             End Using
         Catch ex As Exception
+            ' This catch block will now only be hit for actual initialization errors,
+            ' as duplicate column errors are handled and swallowed in AddNewColumns.
             MessageBox.Show($"Error during database initialization: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Database initialization error: {ex.ToString()}")
+            Debug.WriteLine($"Database initialization error: {ex.Message}")
         End Try
     End Sub
 
     Private Sub AddNewColumns(connection As SQLiteConnection)
         Dim columnsToAdd As New Dictionary(Of String, String) From {
-            {"CpuName", "TEXT"},
-            {"NumberOfCores", "INTEGER"},
-            {"NumberOfLogicalProcessors", "INTEGER"},
-            {"CurrentClockSpeedMHz", "INTEGER"},
-            {"Architecture", "TEXT"}
-        }
+         {"CpuName", "TEXT"},
+         {"NumberOfCores", "INTEGER"},
+         {"NumberOfLogicalProcessors", "INTEGER"},
+         {"CurrentClockSpeedMHz", "INTEGER"},
+         {"Architecture", "TEXT"}
+     }
 
         For Each column In columnsToAdd
             Dim alterTableSql As String = $"ALTER TABLE SystemInfoReadings ADD COLUMN {column.Key} {column.Value};"
@@ -84,12 +86,20 @@ Public Class InfoRepository
                     Console.WriteLine($"Column '{column.Key}' added to 'SystemInfoReadings'.")
                 End Using
             Catch ex As SQLiteException
-                ' Ignore if column already exists (SQLITE_ERROR: duplicate column name)
-                If Not ex.Message.Contains("duplicate column name") Then
-                    Debug.WriteLine($"Error adding column {column.Key}: {ex.Message}")
+                ' *** WICHTIGE ÄNDERUNG HIER ***
+                ' Prüfen Sie explizit auf den Fehler "duplicate column name"
+                If ex.ErrorCode = 1 AndAlso ex.Message.Contains("duplicate column name") Then
+                    Debug.WriteLine($"Column '{column.Key}' already exists. Ignoring. ({ex.Message})")
+                    ' Diese spezifische Ausnahme wird ignoriert und nicht weitergeworfen.
+                Else
+                    ' Alle anderen SQLite-Fehler werden weitergeworfen.
+                    Debug.WriteLine($"Error adding column {column.Key}: {ex.Message} (SQL Error Code: {ex.ErrorCode})")
+                    Throw ' Re-throw other SQLite exceptions
                 End If
             Catch ex As Exception
+                ' Alle anderen generischen Ausnahmen werden weitergeworfen.
                 Debug.WriteLine($"Generic error adding column {column.Key}: {ex.Message}")
+                Throw ' Re-throw other generic exceptions
             End Try
         Next
     End Sub
@@ -152,7 +162,7 @@ Public Class InfoRepository
             End Using
         Catch ex As Exception
             MessageBox.Show($"Error saving system information: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Save error in Repository: {ex.ToString()}")
+            Debug.WriteLine($"Save error in Repository: {ex.Message}")
             Throw ' Re-throw the exception to allow calling code to handle it
         End Try
     End Function

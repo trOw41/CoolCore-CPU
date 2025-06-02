@@ -12,7 +12,7 @@ Public Structure CoreTempData
 End Structure
 
 Public Class Form1
-    Private systemInfoRepository As InfoRepository
+    Private systemInfoRepository As SysteminfoRepository
     Private cpuLoadCounter As PerformanceCounter
     Private refreshTimer As Timer
     Private cpuLoadCounters As New List(Of PerformanceCounter)()
@@ -32,7 +32,7 @@ Public Class Form1
 
     Public Sub New()
         InitializeComponent()
-        systemInfoRepository = New InfoRepository()
+        systemInfoRepository = New SysteminfoRepository()
         cpuLoadCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
         refreshTimer = New Timer With {
             .Interval = 1000
@@ -72,10 +72,10 @@ Public Class Form1
                     End If
                 Next
                 If currentCoreTemps.Any() Then
-                    Dim newEntry As New CoreTempData With {
-                    .Timestamp = DateTime.Now,
-                    .CoreTemperatures = currentCoreTemps
                     SyncLock backgroundTempMeasurements
+                        Dim newEntry As New CoreTempData With {
+                        .Timestamp = Date.Now,
+                        .CoreTemperatures = currentCoreTemps}
                         backgroundTempMeasurements.Add(newEntry)
                     End SyncLock
                 End If
@@ -383,7 +383,7 @@ Public Class Form1
                           End If
                       End Sub)
             '#--------------------------------------------------------------------------------------------------------------------'
-            Dim expoItem As New InfoRepository
+            Dim expoItem As New SysteminfoRepository
             Await expoItem.SaveSystemInfoAsync(systemInfo)
             Me.Invoke(Sub()
                           LblStatusMessage.Text = "System information successfully read and saved to database!"
@@ -561,7 +561,7 @@ Public Class Form1
                           LblStatusMessage.Text = "Retrieving system information for export..."
                           LblStatusMessage.ForeColor = Color.Blue
                       End Sub)
-            Dim exportItem As New InfoRepository
+            Dim exportItem As New SysteminfoRepository
             Dim latestReadings As List(Of SystemInfoData) = exportItem.GetLastSystemInfoReadingsAsync(1).Result
 
             If latestReadings Is Nothing OrElse latestReadings.Count = 0 Then
@@ -579,7 +579,7 @@ Public Class Form1
             Using saveFileDialog As New SaveFileDialog()
                 saveFileDialog.Filter = "HTML Files (*.html)|*.html|All Files (*.*)|*.*"
                 saveFileDialog.Title = "Save System Information Report"
-                saveFileDialog.FileName = $"SystemInfoReport_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.html"
+                saveFileDialog.FileName = $"SystemInfoReport_{DateTime.Now:yyyyMMdd_HHmmss}.html"
 
                 If saveFileDialog.ShowDialog() = DialogResult.OK Then
                     Dim filePath As String = saveFileDialog.FileName

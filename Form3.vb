@@ -6,21 +6,34 @@ Public Class Form3
     Public Sub New()
         InitializeComponent()
         Me.Text = "CPU Monitoring"
-        Me.ControlBox = False ' Keine Schließen-Box
-        Me.FormBorderStyle = FormBorderStyle.FixedDialog ' Nicht in der Größe änderbar
-        Me.StartPosition = FormStartPosition.CenterScreen ' In der Mitte des Bildschirms
-
-        ProgressBar1.Style = ProgressBarStyle.Marquee ' Ladekreis-Animation
-
-        ' Positionieren Sie die Controls im Designer oder hier programmatisch
+        Me.ControlBox = False
+        Me.FormBorderStyle = FormBorderStyle.FixedDialog
+        Me.StartPosition = FormStartPosition.CenterParent
+        ProgressBar1.Style = ProgressBarStyle.Marquee
         LblLoadingText.Text = "Bitte warten, Monitoring erfasst die CPU Temperaturen..."
         LblLoadingText.AutoSize = True
         LblLoadingText.Location = New Point((Me.ClientSize.Width - LblLoadingText.Width) / 2, 20)
         AddHandler BtnStopMonitoring.Click, AddressOf BtnStopMonitoring_Click
+
+        If TimeLabel IsNot Nothing Then
+            TimeLabel.Text = "00:00:00"
+            TimeLabel.AutoSize = True
+            TimeLabel.Location = New Point((Me.ClientSize.Width - TimeLabel.Width) / 2, LblLoadingText.Bottom + 10)
+        End If
+    End Sub
+    Public Sub UpdateElapsedTime(elapsedTime As TimeSpan)
+        If Me.InvokeRequired Then
+            Me.Invoke(Sub() UpdateElapsedTime(elapsedTime))
+        Else
+            If TimeLabel IsNot Nothing Then
+                TimeLabel.Text = $"Verstrichene Zeit: {elapsedTime:hh\:mm\:ss}"
+
+                TimeLabel.Location = New Point((Me.ClientSize.Width - TimeLabel.Width) / 2, LblLoadingText.Bottom + 10)
+            End If
+        End If
     End Sub
 
     Private Sub BtnStopMonitoring_Click(sender As Object, e As EventArgs) Handles BtnStopMonitoring.Click
-        RaiseEvent StopRequested(Me, EventArgs.Empty) ' Informiert das Parent-Formular
-        ' Das Formular wird von Form1 geschlossen, nicht von hier aus
+        RaiseEvent StopRequested(Me, EventArgs.Empty)
     End Sub
 End Class

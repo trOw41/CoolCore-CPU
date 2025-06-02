@@ -35,7 +35,7 @@ Public Class Form4
         AddHandler BtnSelect.Click, AddressOf BtnSelect_Click
         AddHandler BtnCancel.Click, AddressOf BtnCancel_Click
         AddHandler ListBoxArchives.DoubleClick, AddressOf ListBoxArchives_DoubleClick ' Doppelklick zum Auswählen
-
+        LoadArchivedMeasurements()
         LoadArchiveFiles()
     End Sub
 
@@ -95,5 +95,62 @@ Public Class Form4
         BtnCancel.Location = New Point(BtnSelect.Left - BtnCancel.Width - 10, Me.ClientSize.Height - BtnCancel.Height - 10)
     End Sub
 
+    Private Sub ClearButton_Click(sender As Object, e As EventArgs) Handles ClearButton.Click
+        Dim confirmResult As DialogResult
+        confirmResult = MessageBox.Show("Möchten Sie wirklich ALLE archivierten Messungen löschen? Dies kann NICHT rückgängig gemacht werden.", "Archiv löschen bestätigen", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2)
 
+        If confirmResult = DialogResult.Yes Then
+            Try
+                If Directory.Exists(logDirectoryPath) Then
+                    Dim csvFiles() As String = Directory.GetFiles(logDirectoryPath, "*.csv")
+                    Dim deletedCount As Integer = 0
+
+                    For Each file As String In csvFiles
+                        file.Delete(file)
+                        deletedCount += 1
+                    Next
+
+                    MessageBox.Show($"{deletedCount} archivierte Messungen erfolgreich gelöscht.", "Löschvorgang abgeschlossen", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                    ' Aktualisieren Sie die ListBox nach dem Löschen
+                    LoadArchivedMeasurements()
+
+                    ' Setzen Sie SelectedFilePath zurück, falls eine gelöschte Datei ausgewählt war
+                    SelectedFilePath = Nothing
+                Else
+                    MessageBox.Show("Das Archivverzeichnis wurde nicht gefunden.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+            Catch ex As Exception
+                MessageBox.Show($"Fehler beim Löschen der archivierten Messungen: {ex.Message}", "Löschfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
+    End Sub
+    Private Sub LoadArchivedMeasurements()
+        ListBoxArchives.Items.Clear()
+        Try
+            If Directory.Exists(logDirectoryPath) Then
+                Dim files As String() = Directory.GetFiles(logDirectoryPath, "*.csv")
+                Dim sortedFiles = files.Select(Function(f) New FileInfo(f)).OrderByDescending(Function(fi) fi.CreationTime).ToList()
+
+                For Each fileInfo In sortedFiles
+                    ListBoxArchives.Items.Add(fileInfo.Name)
+                Next
+
+                If Not ListBoxArchives.Items.Any() Then
+                    ListBoxArchives.Items.Add("Keine archivierten Messungen gefunden.")
+                    ListBoxArchives.Enabled = False ' Deaktiviert die Auswahl
+                Else
+                    ListBoxArchives.Enabled = True
+                End If
+            Else
+                ListBoxArchives.Items.Add("Archivverzeichnis nicht gefunden.")
+                ListBoxArchives.Enabled = False
+            End If
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Laden der Archivdaten: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ListBoxArchives.Items.Clear()
+            ListBoxArchives.Items.Add("Fehler beim Laden der Daten.")
+            ListBoxArchives.Enabled = False
+        End Try
+    End Sub
 End Class

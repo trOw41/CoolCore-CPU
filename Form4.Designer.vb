@@ -27,6 +27,7 @@ Partial Class Form4
         Me.ListBoxArchives = New System.Windows.Forms.ListBox()
         Me.BtnSelect = New System.Windows.Forms.Button()
         Me.BtnCancel = New System.Windows.Forms.Button()
+        Me.ClearButton = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'LblInstructions
@@ -66,11 +67,22 @@ Partial Class Form4
         Me.BtnCancel.Text = "Button2"
         Me.BtnCancel.UseVisualStyleBackColor = True
         '
+        'ClearButton
+        '
+        Me.ClearButton.Font = New System.Drawing.Font("Bahnschrift Light SemiCondensed", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ClearButton.Location = New System.Drawing.Point(152, 228)
+        Me.ClearButton.Name = "ClearButton"
+        Me.ClearButton.Size = New System.Drawing.Size(75, 23)
+        Me.ClearButton.TabIndex = 4
+        Me.ClearButton.Text = "ClearArchiv"
+        Me.ClearButton.UseVisualStyleBackColor = True
+        '
         'Form4
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(384, 271)
+        Me.Controls.Add(Me.ClearButton)
         Me.Controls.Add(Me.BtnCancel)
         Me.Controls.Add(Me.BtnSelect)
         Me.Controls.Add(Me.ListBoxArchives)
@@ -92,4 +104,5 @@ Partial Class Form4
     Friend WithEvents ListBoxArchives As ListBox
     Friend WithEvents BtnSelect As Button
     Friend WithEvents BtnCancel As Button
+    Friend WithEvents ClearButton As Button
 End Class
