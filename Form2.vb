@@ -27,19 +27,14 @@ Public Class Form2
     Private Sub SetupFormAndChart()
         Me.Width = 800
         Me.Height = 600
-
-        ' Diagramm initialisieren (sicherstellen, dass Chart1 im Designer platziert wurde)
         If Chart1 IsNot Nothing Then
             InitializeChart()
 
         End If
 
-        ' Farblegende zeichnen
-
     End Sub
 
     Private Sub InitializeChart()
-        ' Sicherstellen, dass das Chart existiert
         If Chart1 Is Nothing Then
             Chart1 = New Chart()
             Me.Controls.Add(Chart1)
@@ -49,46 +44,42 @@ Public Class Form2
         Chart1.Series.Clear()
         Chart1.ChartAreas.Clear()
         Chart1.Legends.Clear()
-
-        ' ChartArea hinzufügen
         Dim chartArea As New ChartArea("MainChartArea")
         Chart1.ChartAreas.Add(chartArea)
 
-        ' Achsen konfigurieren
         chartArea.AxisX.Title = "Zeit"
-        chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds ' Intervalle in Sekunden
-        chartArea.AxisX.LabelStyle.Format = "HH:mm:ss" ' Anzeigeformat für Zeit
+        chartArea.AxisX.IntervalType = DateTimeIntervalType.Seconds
+        chartArea.AxisX.LabelStyle.Format = "HH:mm:ss"
         chartArea.AxisX.MajorGrid.LineColor = Color.LightGray
         chartArea.AxisX.MinorGrid.LineColor = Color.LightGray
         chartArea.AxisX.MinorGrid.Enabled = True
-        chartArea.AxisX.LabelStyle.Angle = -45 ' Schräge Beschriftung
-        chartArea.AxisX.LabelStyle.IsStaggered = True ' Gestaffelte Labels
+        chartArea.AxisX.LabelStyle.Angle = -45
+        chartArea.AxisX.LabelStyle.IsStaggered = True
 
         chartArea.AxisY.Title = "Temperatur (°C)"
         chartArea.AxisY.MajorGrid.LineColor = Color.LightGray
         chartArea.AxisY.MinorGrid.LineColor = Color.LightGray
         chartArea.AxisY.MinorGrid.Enabled = True
-        chartArea.AxisY.Minimum = 0 ' Oder ein sinnvollerer Minimalwert, z.B. 20
-        chartArea.AxisY.Maximum = 100 ' Oder ein sinnvollerer Maximalwert, z.B. 100 oder 105
+        chartArea.AxisY.Minimum = 0
+        chartArea.AxisY.Maximum = 100
 
-        ' Legende hinzufügen
+
         Dim legend As New Legend("CoreLegend")
         Chart1.Legends.Add(legend)
-        legend.Docking = Docking.Bottom ' Legende unten platzieren
-        legend.Alignment = StringAlignment.Center ' Zentrieren
+        legend.Docking = Docking.Bottom
+        legend.Alignment = StringAlignment.Center
         legend.IsTextAutoFit = True
-        legend.LegendStyle = LegendStyle.Column
-        legend.MaximumAutoSize = 80 ' Platz für Legende
+        legend.LegendStyle = LegendStyle.Row
+        legend.MaximumAutoSize = 80
 
         ' Chart Titel
         Chart1.Titles.Clear()
-        ' Erstellen Sie ein neues Title-Objekt
         Dim mainTitle As New Title With {
             .Name = "MainTitle",
-            .Text = Me.Text, ' Der Text des Titels ist der Text des Formulars (Me.Text)
+            .Text = Me.Text,
             .Font = New Font("Bahnschrift", 11, FontStyle.Regular)
         }
-        Chart1.Titles.Add(mainTitle) ' Fügen Sie das Title-Objekt hinzu
+        Chart1.Titles.Add(mainTitle)
     End Sub
 
     Private Sub LoadDataFromCsv(filePath As String)
@@ -176,7 +167,7 @@ Public Class Form2
                 End While
             End Using
 
-            Debug.WriteLine($"Finished reading CSV. Total data points collected: {temperatureData.Count}")
+            'Debug.WriteLine($"Finished reading CSV. Total data points collected: {temperatureData.Count}")
             If temperatureData.Any() Then
                 LoadChartData()
             Else
@@ -194,23 +185,17 @@ Public Class Form2
     Private Sub LoadChartData()
         Debug.WriteLine($"LoadChartData called. Data points available in internal list: {temperatureData.Count}")
         If temperatureData Is Nothing OrElse Not temperatureData.Any() Then
-            Chart1.Series.Clear() ' Alle Serien entfernen
+            Chart1.Series.Clear()
             Debug.WriteLine("No data in temperatureData list, chart cleared.")
             Exit Sub
         End If
-
-        ' Alle bestehenden Serien entfernen, um Duplikate zu vermeiden
         Chart1.Series.Clear()
-
-        ' Eine Liste von Farben für die verschiedenen Kerne
         Dim coreColors As New List(Of Color) From {
         Color.Blue, Color.Red, Color.Green, Color.Purple,
-        Color.Orange, Color.DarkCyan, Color.HotPink, Color.Brown,
-        Color.DarkSlateGray, Color.Indigo, Color.Olive, Color.DarkGreen
+        Color.Orange, Color.DarkCyan, Color.HotPink, Color.AliceBlue,
+        Color.DarkSlateGray, Color.Indigo, Color.Azure, Color.DarkGreen
     }
         Dim colorIndex As Integer = 0
-
-        ' Alle Kernnamen aus den Daten sammeln und sortieren
         Dim allCoreNames As New SortedSet(Of String)()
         For Each entry In temperatureData
             For Each kvp In entry.CoreTemperatures
@@ -223,14 +208,13 @@ Public Class Form2
             Exit Sub
         End If
 
-        ' Für jeden Kern eine Serie erstellen
         For Each coreName In allCoreNames
             Dim series As New Series(coreName) With {
-            .ChartType = SeriesChartType.Line, ' Korrekter Chart-Typ für Linien
-            .XValueType = ChartValueType.DateTime, ' X-Achse ist Zeit
-            .YValueType = ChartValueType.Single, ' Y-Achse ist Single (Temperatur)
-            .BorderWidth = 2, ' Dickere Linie für bessere Sichtbarkeit
-            .Color = coreColors(colorIndex Mod coreColors.Count) ' Eine Farbe zuweisen
+            .ChartType = SeriesChartType.Stock.Column,
+            .XValueType = ChartValueType.DateTime,
+            .YValueType = ChartValueType.Single,
+            .BorderWidth = 2,
+            .Color = coreColors(colorIndex Mod coreColors.Count)
         }
             Chart1.Series.Add(series)
             colorIndex += 1

@@ -5,6 +5,9 @@ Imports System.Threading
 Imports Timer = System.Windows.Forms.Timer
 Imports System.Globalization
 Imports System.Drawing.Text
+Imports Azure
+Imports System.CodeDom.Compiler
+Imports System.IdentityModel.Metadata
 
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
@@ -12,7 +15,7 @@ Public Structure CoreTempData
 End Structure
 
 Public Class Form1
-    Private systemInfoRepository As SysteminfoRepository
+    Private systemInfoRepository As SystemInfoRepository
     Private cpuLoadCounter As PerformanceCounter
     Private refreshTimer As Timer
     Private cpuLoadCounters As New List(Of PerformanceCounter)()
@@ -29,10 +32,15 @@ Public Class Form1
     Private cts As CancellationTokenSource
     Private ReadOnly CoreTempBoxes As New Dictionary(Of Integer, TextBox)()
     Private ReadOnly coreIndex As Integer
-
+    Private monitoringStopwatch As New Stopwatch()
+    Private monitoringTimer As Timer
+    Private monitoringForm As Form3
+    Private ReadOnly VoltBoxes As New Dictionary(Of Integer, TextBox)
+    Private cpuVoltageSensorMap As New Dictionary(Of Integer, ISensor)
+    Private genericVcoreSensor As ISensor = Nothing
     Public Sub New()
         InitializeComponent()
-        systemInfoRepository = New SysteminfoRepository()
+        systemInfoRepository = New SystemInfoRepository()
         cpuLoadCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
         refreshTimer = New Timer With {
             .Interval = 1000
@@ -42,7 +50,7 @@ Public Class Form1
         If LoadBox1 IsNot Nothing Then LoadBoxes.Add(1, LoadBox1)
         If LoadBox2 IsNot Nothing Then LoadBoxes.Add(2, LoadBox2)
         If LoadBox3 IsNot Nothing Then LoadBoxes.Add(3, LoadBox3)
-        ' Map Temperature Boxes to core indices
+
         If CoreTemp IsNot Nothing Then CoreTempBoxes.Add(0, CoreTemp)
         If CoreTemp1 IsNot Nothing Then CoreTempBoxes.Add(1, CoreTemp1)
         If CoreTemp2 IsNot Nothing Then CoreTempBoxes.Add(2, CoreTemp2)
@@ -56,10 +64,17 @@ Public Class Form1
         If MaxTemp IsNot Nothing Then MaxTempBoxes.Add(0, MaxTemp)
         If MaxTemp1 IsNot Nothing Then MaxTempBoxes.Add(1, MaxTemp1)
         'AddHandler BtnToggleMonitoring.Click, AddressOf BtnToggleMonitoring_Click
-        refreshTimer.Start()
+
         If MaxTemp2 IsNot Nothing Then MaxTempBoxes.Add(2, MaxTemp2)
         If MaxTemp3 IsNot Nothing Then MaxTempBoxes.Add(3, MaxTemp3)
+
+        If Vbox1 IsNot Nothing Then VoltBoxes.Add(1, Vbox1)
+        If VBox2 IsNot Nothing Then VoltBoxes.Add(2, VBox2)
+        If VBox3 IsNot Nothing Then VoltBoxes.Add(3, VBox3)
+        If VBox4 IsNot Nothing Then VoltBoxes.Add(4, VBox4)
+        refreshTimer.Start()
     End Sub
+
     Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
         Dim intervalMs As Integer = 1000
         Do While Not cancellationToken.IsCancellationRequested
@@ -154,6 +169,8 @@ Public Class Form1
         LblStatusMessage.ForeColor = Color.Firebrick
         InitializePerCoreCounters()
         InitializeCoreTemperatureSensors()
+        'InitializeOpenHardwareMonitor()
+        InitializeVoltageSensors()
         Using ReadAndDisplaySystemInfoAsync()
             refreshTimer.Start()
         End Using
@@ -162,6 +179,14 @@ Public Class Form1
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         refreshTimer.Stop()
         refreshTimer.Dispose()
+        If monitoringTimer IsNot Nothing Then
+            monitoringTimer.Dispose()
+            monitoringTimer = Nothing
+        End If
+        If monitoringForm IsNot Nothing Then
+            monitoringForm.Dispose()
+            monitoringForm = Nothing
+        End If
         For Each counter In cpuLoadCounters
             counter.Dispose()
         Next
@@ -198,7 +223,6 @@ Public Class Form1
         End Try
     End Sub
 
-
     Private Sub InitializeCoreTemperatureSensors()
         Try
             ' CPU-Hardwareobjekt finden
@@ -213,9 +237,7 @@ Public Class Form1
                 numberOfLogicalProcessors = CInt(If(queryObj("NumberOfLogicalProcessors"), 0))
                 Exit For
             Next
-
             If numberOfLogicalProcessors > 0 Then
-
                 If cpu IsNot Nothing Then
                     Debug.WriteLine($"CPU-Hardware erkannt: {cpu.Name}")
                     coreTemperatures.Clear()
@@ -242,13 +264,98 @@ Public Class Form1
                     Next
                     coreTemperatures = coreTemperatures.OrderBy(Function(s) s.Name).ToList()
 
-                    MessageBox.Show($"Anzahl gefundener Core-Temperatursensoren nach Sortierung: {coreTemperatures.Count}")
+                    'MessageBox.Show($"Anzahl gefundener Core-Temperatursensoren nach Sortierung: {coreTemperatures.Count}")
                 Else
 
                 End If
             End If
         Catch ex As Exception
 
+        End Try
+    End Sub
+
+    Private Sub InitializeVoltageSensors()
+        cpuVoltageSensorMap.Clear()
+        genericVcoreSensor = Nothing
+        If cpu IsNot Nothing Then
+            For Each sensor In cpu.Sensors
+                If sensor.SensorType = SensorType.Voltage Then
+                    ' Versuchen Sie, einen Core-Index aus dem Sensornamen zu parsen
+                    ' Z.B. "CPU Core #0", "CPU Core #1"
+                    If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) Then
+                        Dim namePart As String = sensor.Name.Replace("CPU Core #", "").Trim()
+                        Dim coreNum As Integer
+                        If Integer.TryParse(namePart.Split(" "c)(0), coreNum) Then
+                            ' Wir mappen Core #0 auf VBox1, Core #1 auf VBox2, usw.
+                            If coreNum <= VoltBoxes.Count Then
+                                cpuVoltageSensorMap.Add(coreNum, sensor)
+                                MessageBox.Show("Core Voltage Index: " & coreNum)
+                            End If
+                        End If
+                    ElseIf sensor.Name.Equals("CPU VCore", StringComparison.OrdinalIgnoreCase) OrElse
+                       sensor.Name.Equals("CPU VID", StringComparison.OrdinalIgnoreCase) Then
+                        genericVcoreSensor = sensor
+                    End If
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub UpdateVoltageDisplay()
+        Try
+            If cpu IsNot Nothing Then
+                cpu.Update()
+                For Each kvp In cpuVoltageSensorMap
+                    Dim boxIndex As Integer = kvp.Key
+                    Dim sensor As ISensor = kvp.Value
+
+                    If sensor.Value.HasValue AndAlso VoltBoxes.ContainsKey(boxIndex) Then
+                        Me.Invoke(Sub()
+                                      VoltBoxes(boxIndex).Text = $"{sensor.Value.Value:F3} V"
+                                  End Sub)
+                    ElseIf VoltBoxes.ContainsKey(boxIndex) Then
+                        Me.Invoke(Sub()
+                                      VoltBoxes(boxIndex).Text = "N/A"
+                                  End Sub)
+                    End If
+                Next
+
+                If genericVcoreSensor IsNot Nothing AndAlso genericVcoreSensor.Value.HasValue Then
+                    If Not cpuVoltageSensorMap.ContainsKey(1) AndAlso VoltBoxes.ContainsKey(1) Then
+                        Me.Invoke(Sub()
+                                      VoltBoxes(1).Text = $"{genericVcoreSensor.Value.Value:F3} V (VCore)"
+                                  End Sub)
+                    End If
+                End If
+            End If
+
+            For Each kvp In VoltBoxes
+                If Me.InvokeRequired Then
+                    Me.Invoke(Sub()
+                                  If String.IsNullOrEmpty(kvp.Value.Text) OrElse Not kvp.Value.Text.EndsWith(" V") Then
+                                      If Not (kvp.Value.Text.Contains("(VCore)") AndAlso Not String.IsNullOrEmpty(kvp.Value.Text)) Then
+                                          kvp.Value.Text = "N/A"
+                                      End If
+                                  End If
+                              End Sub)
+                Else
+                    If String.IsNullOrEmpty(kvp.Value.Text) OrElse Not kvp.Value.Text.EndsWith(" V") Then
+                        If Not (kvp.Value.Text.Contains("(VCore)") AndAlso Not String.IsNullOrEmpty(kvp.Value.Text)) Then
+                            kvp.Value.Text = "N/A"
+                        End If
+                    End If
+                End If
+            Next
+
+        Catch ex As Exception
+            Debug.WriteLine($"Error updating voltage display: {ex.Message}")
+            For Each kvp In VoltBoxes
+                If Me.InvokeRequired Then
+                    Me.Invoke(Sub() kvp.Value.Text = "Error")
+                Else
+                    kvp.Value.Text = "Error"
+                End If
+            Next
         End Try
     End Sub
 
@@ -368,6 +475,7 @@ Public Class Form1
                               Dim coreVoltageSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Voltage AndAlso s.Name.Contains("Core"))
                               If coreVoltageSensor IsNot Nothing AndAlso coreVoltageSensor.Value.HasValue Then
                                   PowerBox2.Text = $"{coreVoltageSensor.Value.Value:F3}V"
+                                  UpdateVoltageDisplay()
                               Else
                                   PowerBox2.Text = "N/A"
                               End If
@@ -424,52 +532,36 @@ Public Class Form1
     Private Sub BtnToggleMonitor1_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitor1.Click
         If Not isMonitoringActive Then
             isMonitoringActive = True
-            InfoMenuItem.Text = "Stop Temp. Monitoring"
             backgroundTempMeasurements.Clear()
             cts = New CancellationTokenSource()
-            loadingForm = New Form3()
-            AddHandler loadingForm.StopRequested, AddressOf LoadingForm_StopRequested
-            loadingForm.Show()
+            'loadingForm = New Form3()
+            'AddHandler loadingForm.StopRequested, AddressOf LoadingForm_StopRequested
+            'loadingForm.Show()
             monitoringTask = Task.Run(Sub() RecordTemperaturesInBackground(cts.Token))
-            refreshTimer.Stop()
+            ' refreshTimer.Stop()
+            If monitoringTimer Is Nothing Then
+                monitoringTimer = New Timer With {
+                    .Interval = 1000 ' Jede Sekunde aktualisieren
+                    }
+                AddHandler monitoringTimer.Tick, AddressOf MonitoringTimer_Tick
+            End If
+            If monitoringForm Is Nothing OrElse monitoringForm.IsDisposed Then
+                monitoringForm = New Form3()
+                AddHandler monitoringForm.StopRequested, AddressOf MonitoringForm_StopRequested
+            End If
+            monitoringForm.Show()
+            monitoringStopwatch.Restart() ' Startet oder setzt die Stopwatch zurück
+            monitoringTimer.Start() ' Startet den Timer
         Else
             Call StopMonitoringProcess()
         End If
     End Sub
-    Private Function StartMonitoringAsync() As Task
-        If Not isMonitoringActive Then
-            isMonitoringActive = True
-            InfoMenuItem.Text = "Stop Temp. Monitoring"
-            LblStatusMessage.Text = "Background temperature monitoring started..."
-            LblStatusMessage.ForeColor = Color.Orange
+    Private Sub MonitoringForm_StopRequested(sender As Object, e As EventArgs)
+        StopMonitoringProcess()
+    End Sub
 
-            backgroundTempMeasurements.Clear()
-            cts = New CancellationTokenSource()
-            monitoringTask = Task.Run(Sub() RecordTemperaturesInBackground(cts.Token))
-            refreshTimer.Stop()
-        Else
-        End If
-        Return Task.CompletedTask
-    End Function
-
-    Private Async Function StopmonitoringAsync() As Task
-        If backgroundTempMeasurements.Any() Then
-            SaveTemperatureDataToCsv(backgroundTempMeasurements)
-            Dim chartForm As New Form2(backgroundTempMeasurements)
-            chartForm.Show()
-        Else
-            MessageBox.Show("No temperature data recorded.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        End If
-        refreshTimer.Start()
-        LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
-        LblStatusMessage.ForeColor = Color.Green
-        Await ReadAndDisplaySystemInfoAsync()
-        InitializePerCoreCounters()
-        InitializeCoreTemperatureSensors()
-    End Function
     Private Async Sub StopMonitoringProcess()
         If Not isMonitoringActive Then Exit Sub
-
         isMonitoringActive = False
         InfoMenuItem.Text = "Start Temp. Monitoring"
         LblStatusMessage.Text = "Background temperature monitoring stopped. Preparing chart..."
@@ -478,7 +570,6 @@ Public Class Form1
             loadingForm.Close()
             loadingForm = Nothing
         End If
-
         cts?.Cancel()
         Try
             If monitoringTask IsNot Nothing Then
@@ -490,7 +581,6 @@ Public Class Form1
         End Try
         If backgroundTempMeasurements.Any() Then
             Dim savedFilePath As String = SaveTemperatureDataToCsv(backgroundTempMeasurements)
-
             If Not String.IsNullOrEmpty(savedFilePath) Then
                 Dim chartForm As New Form2(savedFilePath)
                 chartForm.Show()
@@ -500,7 +590,10 @@ Public Class Form1
         Else
             MessageBox.Show("No temperature data recorded.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-        refreshTimer.Start()
+        ' refreshTimer.Start()
+        monitoringTimer.Stop()
+        monitoringStopwatch.Stop()
+        monitoringForm.Close()
         Me.Invoke(Sub() ReadAndDisplaySystemInfoAsync().Wait())
         Await ReadAndDisplaySystemInfoAsync()
         InitializePerCoreCounters()
@@ -508,6 +601,16 @@ Public Class Form1
 
         LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
         LblStatusMessage.ForeColor = Color.Green
+    End Sub
+
+    Private Sub MonitoringTimer_Tick(sender As Object, e As EventArgs)
+        If monitoringForm IsNot Nothing AndAlso Not monitoringForm.IsDisposed Then
+            monitoringForm.UpdateElapsedTime(monitoringStopwatch.Elapsed)
+            If monitoringStopwatch.Elapsed.TotalSeconds >= 60 Then
+                StopMonitoringProcess()
+                Exit Sub
+            End If
+        End If
     End Sub
 
     Private Sub LoadingForm_StopRequested(sender As Object, e As EventArgs)
@@ -727,4 +830,6 @@ Public Class Form1
 
         Return htmlBuilder.ToString()
     End Function
+
+
 End Class

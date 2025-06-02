@@ -53,7 +53,6 @@ Partial Class Form2
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.Chart1)
-        Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Form2"
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()

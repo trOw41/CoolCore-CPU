@@ -51,7 +51,7 @@ Partial Class Form4
         '
         'BtnSelect
         '
-        Me.BtnSelect.Location = New System.Drawing.Point(12, 241)
+        Me.BtnSelect.Location = New System.Drawing.Point(12, 255)
         Me.BtnSelect.Name = "BtnSelect"
         Me.BtnSelect.Size = New System.Drawing.Size(75, 23)
         Me.BtnSelect.TabIndex = 2
@@ -60,7 +60,7 @@ Partial Class Form4
         '
         'BtnCancel
         '
-        Me.BtnCancel.Location = New System.Drawing.Point(297, 241)
+        Me.BtnCancel.Location = New System.Drawing.Point(297, 255)
         Me.BtnCancel.Name = "BtnCancel"
         Me.BtnCancel.Size = New System.Drawing.Size(75, 23)
         Me.BtnCancel.TabIndex = 3
@@ -69,6 +69,7 @@ Partial Class Form4
         '
         'ClearButton
         '
+        Me.ClearButton.AutoSize = True
         Me.ClearButton.Font = New System.Drawing.Font("Bahnschrift Light SemiCondensed", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ClearButton.Location = New System.Drawing.Point(152, 228)
         Me.ClearButton.Name = "ClearButton"
@@ -81,7 +82,7 @@ Partial Class Form4
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
-        Me.ClientSize = New System.Drawing.Size(384, 271)
+        Me.ClientSize = New System.Drawing.Size(384, 290)
         Me.Controls.Add(Me.ClearButton)
         Me.Controls.Add(Me.BtnCancel)
         Me.Controls.Add(Me.BtnSelect)

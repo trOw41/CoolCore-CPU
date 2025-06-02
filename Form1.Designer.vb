@@ -7,6 +7,7 @@ Partial Class Form1
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
+
                 components.Dispose()
             End If
         Finally
@@ -48,6 +49,7 @@ Partial Class Form1
         Me.Power = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.MaxTemplbl = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.MinTemplbl = New System.Windows.Forms.Label()
         Me.Core0 = New System.Windows.Forms.Label()
         Me.Core1 = New System.Windows.Forms.Label()
@@ -65,6 +67,10 @@ Partial Class Form1
         Me.MaxTemp3 = New System.Windows.Forms.TextBox()
         Me.MaxTemp = New System.Windows.Forms.TextBox()
         Me.LoadBox3 = New System.Windows.Forms.TextBox()
+        Me.VBox4 = New System.Windows.Forms.TextBox()
+        Me.VBox3 = New System.Windows.Forms.TextBox()
+        Me.VBox2 = New System.Windows.Forms.TextBox()
+        Me.Vbox1 = New System.Windows.Forms.TextBox()
         Me.MinTemp = New System.Windows.Forms.TextBox()
         Me.MinTemp3 = New System.Windows.Forms.TextBox()
         Me.TJBox = New System.Windows.Forms.TextBox()
@@ -226,6 +232,7 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.Power)
         Me.Panel2.Controls.Add(Me.Label5)
         Me.Panel2.Controls.Add(Me.MaxTemplbl)
+        Me.Panel2.Controls.Add(Me.Label6)
         Me.Panel2.Controls.Add(Me.MinTemplbl)
         Me.Panel2.Controls.Add(Me.Core0)
         Me.Panel2.Controls.Add(Me.Core1)
@@ -243,6 +250,10 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.MaxTemp3)
         Me.Panel2.Controls.Add(Me.MaxTemp)
         Me.Panel2.Controls.Add(Me.LoadBox3)
+        Me.Panel2.Controls.Add(Me.VBox4)
+        Me.Panel2.Controls.Add(Me.VBox3)
+        Me.Panel2.Controls.Add(Me.VBox2)
+        Me.Panel2.Controls.Add(Me.Vbox1)
         Me.Panel2.Controls.Add(Me.MinTemp)
         Me.Panel2.Controls.Add(Me.MinTemp3)
         Me.Panel2.Controls.Add(Me.TJBox)
@@ -318,6 +329,11 @@ Partial Class Form1
         resources.ApplyResources(Me.MaxTemplbl, "MaxTemplbl")
         Me.MaxTemplbl.Name = "MaxTemplbl"
         '
+        'Label6
+        '
+        resources.ApplyResources(Me.Label6, "Label6")
+        Me.Label6.Name = "Label6"
+        '
         'MinTemplbl
         '
         resources.ApplyResources(Me.MinTemplbl, "MinTemplbl")
@@ -366,7 +382,7 @@ Partial Class Form1
         Me.MaxTemp2.BackColor = System.Drawing.Color.AliceBlue
         Me.MaxTemp2.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MaxTemp2, "MaxTemp2")
-        Me.MaxTemp2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.MaxTemp2.ForeColor = System.Drawing.Color.OrangeRed
         Me.MaxTemp2.Name = "MaxTemp2"
         Me.MaxTemp2.ReadOnly = True
         '
@@ -384,7 +400,7 @@ Partial Class Form1
         Me.MaxTemp1.BackColor = System.Drawing.Color.AliceBlue
         Me.MaxTemp1.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MaxTemp1, "MaxTemp1")
-        Me.MaxTemp1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.MaxTemp1.ForeColor = System.Drawing.Color.OrangeRed
         Me.MaxTemp1.Name = "MaxTemp1"
         Me.MaxTemp1.ReadOnly = True
         '
@@ -393,7 +409,7 @@ Partial Class Form1
         Me.MinTemp2.BackColor = System.Drawing.Color.AliceBlue
         Me.MinTemp2.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MinTemp2, "MinTemp2")
-        Me.MinTemp2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.MinTemp2.ForeColor = System.Drawing.Color.DodgerBlue
         Me.MinTemp2.Name = "MinTemp2"
         Me.MinTemp2.ReadOnly = True
         '
@@ -402,7 +418,7 @@ Partial Class Form1
         Me.MinTemp1.BackColor = System.Drawing.Color.AliceBlue
         Me.MinTemp1.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MinTemp1, "MinTemp1")
-        Me.MinTemp1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.MinTemp1.ForeColor = System.Drawing.Color.DodgerBlue
         Me.MinTemp1.Name = "MinTemp1"
         Me.MinTemp1.ReadOnly = True
         '
@@ -430,7 +446,7 @@ Partial Class Form1
         Me.MaxTemp3.BackColor = System.Drawing.Color.AliceBlue
         Me.MaxTemp3.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MaxTemp3, "MaxTemp3")
-        Me.MaxTemp3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.MaxTemp3.ForeColor = System.Drawing.Color.OrangeRed
         Me.MaxTemp3.Name = "MaxTemp3"
         Me.MaxTemp3.ReadOnly = True
         '
@@ -439,7 +455,7 @@ Partial Class Form1
         Me.MaxTemp.BackColor = System.Drawing.Color.AliceBlue
         Me.MaxTemp.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MaxTemp, "MaxTemp")
-        Me.MaxTemp.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.MaxTemp.ForeColor = System.Drawing.Color.OrangeRed
         Me.MaxTemp.Name = "MaxTemp"
         Me.MaxTemp.ReadOnly = True
         '
@@ -452,12 +468,48 @@ Partial Class Form1
         Me.LoadBox3.Name = "LoadBox3"
         Me.LoadBox3.ReadOnly = True
         '
+        'VBox4
+        '
+        Me.VBox4.BackColor = System.Drawing.Color.AliceBlue
+        Me.VBox4.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.VBox4, "VBox4")
+        Me.VBox4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.VBox4.Name = "VBox4"
+        Me.VBox4.ReadOnly = True
+        '
+        'VBox3
+        '
+        Me.VBox3.BackColor = System.Drawing.Color.AliceBlue
+        Me.VBox3.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.VBox3, "VBox3")
+        Me.VBox3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.VBox3.Name = "VBox3"
+        Me.VBox3.ReadOnly = True
+        '
+        'VBox2
+        '
+        Me.VBox2.BackColor = System.Drawing.Color.AliceBlue
+        Me.VBox2.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.VBox2, "VBox2")
+        Me.VBox2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.VBox2.Name = "VBox2"
+        Me.VBox2.ReadOnly = True
+        '
+        'Vbox1
+        '
+        Me.Vbox1.BackColor = System.Drawing.Color.AliceBlue
+        Me.Vbox1.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.Vbox1, "Vbox1")
+        Me.Vbox1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.Vbox1.Name = "Vbox1"
+        Me.Vbox1.ReadOnly = True
+        '
         'MinTemp
         '
         Me.MinTemp.BackColor = System.Drawing.Color.AliceBlue
         Me.MinTemp.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MinTemp, "MinTemp")
-        Me.MinTemp.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.MinTemp.ForeColor = System.Drawing.Color.DodgerBlue
         Me.MinTemp.Name = "MinTemp"
         Me.MinTemp.ReadOnly = True
         '
@@ -466,7 +518,7 @@ Partial Class Form1
         Me.MinTemp3.BackColor = System.Drawing.Color.AliceBlue
         Me.MinTemp3.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.MinTemp3, "MinTemp3")
-        Me.MinTemp3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.MinTemp3.ForeColor = System.Drawing.Color.DodgerBlue
         Me.MinTemp3.Name = "MinTemp3"
         Me.MinTemp3.ReadOnly = True
         '
@@ -766,4 +818,9 @@ Partial Class Form1
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Label1 As Label
     Friend WithEvents LoadArchivedMeasurementsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents Label6 As Label
+    Friend WithEvents VBox4 As TextBox
+    Friend WithEvents VBox3 As TextBox
+    Friend WithEvents VBox2 As TextBox
+    Friend WithEvents Vbox1 As TextBox
 End Class

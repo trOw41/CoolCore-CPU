@@ -106,16 +106,12 @@ Public Class Form4
                     Dim deletedCount As Integer = 0
 
                     For Each file As String In csvFiles
-                        file.Delete(file)
+                        System.IO.File.Delete(file)
                         deletedCount += 1
                     Next
 
                     MessageBox.Show($"{deletedCount} archivierte Messungen erfolgreich gelöscht.", "Löschvorgang abgeschlossen", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-                    ' Aktualisieren Sie die ListBox nach dem Löschen
                     LoadArchivedMeasurements()
-
-                    ' Setzen Sie SelectedFilePath zurück, falls eine gelöschte Datei ausgewählt war
                     SelectedFilePath = Nothing
                 Else
                     MessageBox.Show("Das Archivverzeichnis wurde nicht gefunden.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -136,12 +132,13 @@ Public Class Form4
                     ListBoxArchives.Items.Add(fileInfo.Name)
                 Next
 
-                If Not ListBoxArchives.Items.Any() Then
-                    ListBoxArchives.Items.Add("Keine archivierten Messungen gefunden.")
-                    ListBoxArchives.Enabled = False ' Deaktiviert die Auswahl
-                Else
-                    ListBoxArchives.Enabled = True
-                End If
+                Select Case ListBoxArchives.Items.Count
+                    Case 0
+                        ListBoxArchives.Items.Add("Keine archivierten Messungen gefunden.")
+                        ListBoxArchives.Enabled = False ' Deaktiviert die Auswahl
+                    Case Else
+                        ListBoxArchives.Enabled = True
+                End Select
             Else
                 ListBoxArchives.Items.Add("Archivverzeichnis nicht gefunden.")
                 ListBoxArchives.Enabled = False

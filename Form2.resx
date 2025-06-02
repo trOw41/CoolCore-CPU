@@ -126,7 +126,7 @@
     <value>0, 0</value>
   </data>
   <data name="Chart1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>800, 540</value>
+    <value>1342, 750</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Chart1.TabIndex" type="System.Int32, mscorlib">
@@ -154,7 +154,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>800, 540</value>
+    <value>1342, 750</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -195,6 +195,9 @@
         TeliPvv2SStvVCQIoG1/Ap9XwUorb1QkCKBpfwKv598FljcqEgRQ3Z8AeD//LrC8UZEgABD6nUW5lzca
         UgRgRMIEoBwTgHJMAMoxASjHBKAcE4By/gN7URgkcGdhVwAAAABJRU5ErkJggg==
 </value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>1024, 768</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Chart</value>
