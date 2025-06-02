@@ -2,7 +2,6 @@
 Imports System.IO
 Imports System.Text
 Imports System.Windows.Forms.DataVisualization.Charting
-Imports System.Data.SQLite
 
 Public Class Form2
     Private temperatureData As New List(Of CoreTempData)()
@@ -210,7 +209,7 @@ Public Class Form2
 
         For Each coreName In allCoreNames
             Dim series As New Series(coreName) With {
-            .ChartType = SeriesChartType.Stock.Column,
+            .ChartType = SeriesChartType.Stock.FastPoint,
             .XValueType = ChartValueType.DateTime,
             .YValueType = ChartValueType.Single,
             .BorderWidth = 2,
@@ -238,12 +237,10 @@ Public Class Form2
                     Dim dataPoint As New DataPoint()
                     dataPoint.SetValueXY(entry.Timestamp, tempValue)
 
-                    ' Tooltip Text
                     dataPoint.ToolTip = $"Zeit: {entry.Timestamp:HH:mm:ss.fff}{Environment.NewLine}" &
                                    $"Kern: {coreName}{Environment.NewLine}" &
                                    $"Temp: {tempValue:F1}°C"
 
-                    ' Füge den Datenpunkt zur richtigen Serie hinzu
                     Chart1.Series(coreName).Points.Add(dataPoint)
 
                     If tempValue < minChartTemp Then minChartTemp = tempValue
@@ -252,52 +249,48 @@ Public Class Form2
             Next
         Next
 
-        ' Achsenbereich dynamisch anpassen
         If temperatureData.Any() Then
-            ' Puffer für Y-Achse
+
             Chart1.ChartAreas("MainChartArea").AxisY.Minimum = CInt(Math.Floor(minChartTemp - 5))
             Chart1.ChartAreas("MainChartArea").AxisY.Maximum = CInt(Math.Ceiling(maxChartTemp + 5))
 
-            ' X-Achsenbereich anpassen
             Chart1.ChartAreas("MainChartArea").AxisX.Minimum = firstTimestamp.ToOADate()
             Chart1.ChartAreas("MainChartArea").AxisX.Maximum = lastTimestamp.ToOADate()
 
-            ' Intervall der X-Achse anpassen basierend auf der Dauer der Messung
             Dim totalDuration As TimeSpan = lastTimestamp - firstTimestamp
 
-            If totalDuration.TotalSeconds < 60 Then ' Kurze Messung: jede Sekunde anzeigen
+            If totalDuration.TotalSeconds < 60 Then
                 Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Seconds
-                Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5 ' Jede 5 Sekunden
-            ElseIf totalDuration.TotalMinutes < 30 Then ' Mittlere Messung: jede Minute anzeigen
+                Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5
+            ElseIf totalDuration.TotalMinutes < 30 Then
                 Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Minutes
-                Chart1.ChartAreas("MainChartArea").AxisX.Interval = 1 ' Jede Minute
-            Else ' Lange Messung: alle 5 Minuten oder mehr
+                Chart1.ChartAreas("MainChartArea").AxisX.Interval = 1
+            Else
                 Chart1.ChartAreas("MainChartArea").AxisX.IntervalType = DateTimeIntervalType.Minutes
-                Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5 ' Jede 5 Minuten
+                Chart1.ChartAreas("MainChartArea").AxisX.Interval = 5
             End If
         End If
 
-        ' Chart aktualisieren
         Chart1.Invalidate()
         Debug.WriteLine("Chart data loaded and invalidated.")
     End Sub
     Private Function GetTemperatureColor(temp As Single, minOverallTemp As Single, maxOverallTemp As Single) As Color
-        ' Einfache lineare Farbskala von Blau nach Rot über Grün
-        If maxOverallTemp <= minOverallTemp Then Return Color.Gray ' Vermeidet Division durch Null
+
+        If maxOverallTemp <= minOverallTemp Then Return Color.Gray
         Dim normalizedTemp As Single = (temp - minOverallTemp) / (maxOverallTemp - minOverallTemp)
-        normalizedTemp = Math.Max(0, Math.Min(1, normalizedTemp)) ' Sicherstellen, dass es zwischen 0 und 1 liegt
+        normalizedTemp = Math.Max(0, Math.Min(1, normalizedTemp))
         Dim red As Integer
         Dim green As Integer
         Dim blue As Integer
         If normalizedTemp < 0.5 Then
-            ' Von Blau zu Grün (0.0 bis 0.5)
-            blue = CInt(255 * (1 - normalizedTemp * 2)) ' Von 255 (Blau) nach 0
-            green = CInt(255 * (normalizedTemp * 2))   ' Von 0 nach 255 (Grün)
+
+            blue = CInt(255 * (1 - normalizedTemp * 2))
+            green = CInt(255 * (normalizedTemp * 2))
             red = 0
         Else
-            ' Von Grün zu Rot (0.5 bis 1.0)
-            red = CInt(255 * (normalizedTemp - 0.5) * 2)   ' Von 0 nach 255 (Rot)
-            green = CInt(255 * (1 - (normalizedTemp - 0.5) * 2)) ' Von 255 (Grün) nach 0
+
+            red = CInt(255 * (normalizedTemp - 0.5) * 2)
+            green = CInt(255 * (1 - (normalizedTemp - 0.5) * 2))
             blue = 0
         End If
 
@@ -306,18 +299,17 @@ Public Class Form2
 
     Private Sub PanelColorLegend_Paint(sender As Object, e As PaintEventArgs)
         Dim g As Graphics = e.Graphics
-        Dim numSteps As Integer = 100 ' Für einen glatten Farbverlauf
+        Dim numSteps As Integer = 100
 
-        Dim minOverallTemp As Single = 0 ' Standardwerte
+        Dim minOverallTemp As Single = 0
         Dim maxOverallTemp As Single = 100
 
-        ' Wenn tatsächlich Daten vorhanden sind, die Min/Max-Temperatur verwenden
         If temperatureData IsNot Nothing AndAlso temperatureData.Any() Then
             Dim allTemps = temperatureData.SelectMany(Function(x) x.CoreTemperatures.Values).ToList()
             If allTemps.Any() Then
                 minOverallTemp = CInt(Math.Floor(allTemps.Min()))
                 maxOverallTemp = CInt(Math.Ceiling(allTemps.Max()))
-                If maxOverallTemp = minOverallTemp Then maxOverallTemp = minOverallTemp + 10 ' Vermeidet Division durch Null/problematische Skala
+                If maxOverallTemp = minOverallTemp Then maxOverallTemp = minOverallTemp + 10
             End If
         End If
 
@@ -329,10 +321,9 @@ Public Class Form2
         Next
     End Sub
 
-    ' Optional: Wenn sich die Größe des Formulars ändert, die Legende neu zeichnen
+
     Private Sub Form2_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        ' PanelColorLegend.Invalidate()
-        Chart1?.Invalidate() ' Aktualisiert das Diagramm, wenn das Formular neu gezeichnet wird
+        Chart1?.Invalidate()
     End Sub
 
 End Class

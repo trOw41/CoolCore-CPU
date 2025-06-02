@@ -38,6 +38,9 @@ Public Class Form1
     Private ReadOnly VoltBoxes As New Dictionary(Of Integer, TextBox)
     Private cpuVoltageSensorMap As New Dictionary(Of Integer, ISensor)
     Private genericVcoreSensor As ISensor = Nothing
+    Private stressTasks As New List(Of Task)()
+    Private cancellationTokenSource As CancellationTokenSource
+
     Public Sub New()
         InitializeComponent()
         systemInfoRepository = New SystemInfoRepository()
@@ -73,6 +76,61 @@ Public Class Form1
         If VBox3 IsNot Nothing Then VoltBoxes.Add(3, VBox3)
         If VBox4 IsNot Nothing Then VoltBoxes.Add(4, VBox4)
         refreshTimer.Start()
+    End Sub
+
+    Private Sub StartCpuStressTest()
+        ' Stoppt und bereinigt eventuell noch laufende frühere Stress-Tasks
+        StopCpuStressTest()
+
+        cancellationTokenSource = New CancellationTokenSource()
+        Dim cancellationToken = cancellationTokenSource.Token
+
+        Dim processorCount As Integer = Environment.ProcessorCount ' Ermittelt die Anzahl der logischen Prozessoren (Kerne/Threads)
+
+        ' Startet für jeden logischen Prozessor eine eigene Task
+        For i As Integer = 0 To processorCount - 1
+            Dim cpuStressTask = Task.Run(Sub()
+                                             While Not cancellationToken.IsCancellationRequested
+
+                                                 Dim result As Double = 1.0
+                                                 For j As Integer = 0 To 1000000
+                                                     result = Math.Sqrt(result + Math.Sin(j) * Math.Cos(j))
+                                                 Next
+                                             End While
+                                         End Sub, cancellationToken)
+            stressTasks.Add(cpuStressTask)
+        Next
+
+        Me.Invoke(Sub()
+                      LblStatusMessage.Text = "CPU-Stresstest läuft..."
+                      LblStatusMessage.ForeColor = Color.DarkOrange
+                  End Sub)
+    End Sub
+
+    Private Sub StopCpuStressTest()
+        If cancellationTokenSource IsNot Nothing Then
+            cancellationTokenSource.Cancel() ' Signalisiert allen Tasks, dass sie beendet werden sollen
+            Try
+                ' Warten Sie bis zu 5 Sekunden, bis alle Tasks beendet sind
+                Task.WaitAll(stressTasks.ToArray(), 5000)
+            Catch ex As AggregateException
+                ' Behandelt Ausnahmen, die während des Wartens auf die Tasks auftreten könnten
+                For Each innerEx In ex.InnerExceptions
+                    Debug.WriteLine($"Fehler beim Beenden der Stress-Task: {innerEx.Message}")
+                Next
+            Catch ex As Exception
+                Debug.WriteLine($"Fehler beim Warten auf Stress-Tasks: {ex.Message}")
+            End Try
+            cancellationTokenSource.Dispose() ' Gibt das Cancellation Token Source Objekt frei
+            cancellationTokenSource = Nothing
+        End If
+        stressTasks.Clear() ' Leert die Liste der Tasks
+
+        ' Optional: Aktualisieren Sie einen Status-Label in der Benutzeroberfläche
+        Me.Invoke(Sub()
+                      LblStatusMessage.Text = "CPU-Stresstest beendet."
+                      LblStatusMessage.ForeColor = Color.Green
+                  End Sub)
     End Sub
 
     Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
@@ -389,7 +447,11 @@ Public Class Form1
                 End If
 
             Next
-
+            If monitoringStopwatch.Elapsed.TotalSeconds >= 30 Then
+                StopMonitoringProcess()
+                StopCpuStressTest()
+                Exit Sub
+            End If
         Catch ex As Exception
             For Each kvp In LoadBoxes : kvp.Value.Text = "Error" : Next
             For Each kvp In CoreTempBoxes : kvp.Value.Text = "Error" : Next
@@ -552,11 +614,13 @@ Public Class Form1
             monitoringForm.Show()
             monitoringStopwatch.Restart() ' Startet oder setzt die Stopwatch zurück
             monitoringTimer.Start() ' Startet den Timer
+            StartCpuStressTest()
         Else
             Call StopMonitoringProcess()
         End If
     End Sub
     Private Sub MonitoringForm_StopRequested(sender As Object, e As EventArgs)
+        StopCpuStressTest()
         StopMonitoringProcess()
     End Sub
 
@@ -566,9 +630,9 @@ Public Class Form1
         InfoMenuItem.Text = "Start Temp. Monitoring"
         LblStatusMessage.Text = "Background temperature monitoring stopped. Preparing chart..."
         LblStatusMessage.ForeColor = Color.DarkOrange
-        If loadingForm IsNot Nothing AndAlso Not loadingForm.IsDisposed Then
-            loadingForm.Close()
-            loadingForm = Nothing
+        If monitoringForm IsNot Nothing AndAlso Not monitoringForm.IsDisposed Then
+            monitoringForm.Close()
+            monitoringForm = Nothing
         End If
         cts?.Cancel()
         Try
@@ -593,7 +657,6 @@ Public Class Form1
         ' refreshTimer.Start()
         monitoringTimer.Stop()
         monitoringStopwatch.Stop()
-        monitoringForm.Close()
         Me.Invoke(Sub() ReadAndDisplaySystemInfoAsync().Wait())
         Await ReadAndDisplaySystemInfoAsync()
         InitializePerCoreCounters()
@@ -606,10 +669,7 @@ Public Class Form1
     Private Sub MonitoringTimer_Tick(sender As Object, e As EventArgs)
         If monitoringForm IsNot Nothing AndAlso Not monitoringForm.IsDisposed Then
             monitoringForm.UpdateElapsedTime(monitoringStopwatch.Elapsed)
-            If monitoringStopwatch.Elapsed.TotalSeconds >= 60 Then
-                StopMonitoringProcess()
-                Exit Sub
-            End If
+
         End If
     End Sub
 
