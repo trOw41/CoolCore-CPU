@@ -27,12 +27,14 @@ Partial Class Form1
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CloseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogOnOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.LoadArchivedMeasurementsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InfoMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -112,15 +114,16 @@ Partial Class Form1
         'MenuStrip1
         '
         Me.MenuStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
         resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.MdiWindowListItem = Me.OptionsToolStripMenuItem
         Me.MenuStrip1.Name = "MenuStrip1"
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CloseToolStripMenuItem})
-        Me.FileToolStripMenuItem.ForeColor = System.Drawing.SystemColors.AppWorkspace
+        Me.FileToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CloseToolStripMenuItem, Me.ToolStripSeparator3})
+        Me.FileToolStripMenuItem.ForeColor = System.Drawing.Color.CornflowerBlue
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         resources.ApplyResources(Me.FileToolStripMenuItem, "FileToolStripMenuItem")
         '
@@ -131,11 +134,16 @@ Partial Class Form1
         Me.CloseToolStripMenuItem.Name = "CloseToolStripMenuItem"
         resources.ApplyResources(Me.CloseToolStripMenuItem, "CloseToolStripMenuItem")
         '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        resources.ApplyResources(Me.ToolStripSeparator3, "ToolStripSeparator3")
+        '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.BackColor = System.Drawing.SystemColors.Window
         Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.ToolStripSeparator1, Me.ExportCPUInfoToolStripMenuItem})
-        Me.OptionsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.AppWorkspace
+        Me.OptionsToolStripMenuItem.ForeColor = System.Drawing.Color.CornflowerBlue
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
         resources.ApplyResources(Me.OptionsToolStripMenuItem, "OptionsToolStripMenuItem")
         '
@@ -158,8 +166,8 @@ Partial Class Form1
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogOnOffToolStripMenuItem, Me.LoadArchivedMeasurementsToolStripMenuItem})
-        Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.AppWorkspace
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogOnOffToolStripMenuItem, Me.ToolStripSeparator2, Me.LoadArchivedMeasurementsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.Color.CornflowerBlue
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
         '
@@ -168,6 +176,11 @@ Partial Class Form1
         Me.LogOnOffToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._034_signature
         Me.LogOnOffToolStripMenuItem.Name = "LogOnOffToolStripMenuItem"
         resources.ApplyResources(Me.LogOnOffToolStripMenuItem, "LogOnOffToolStripMenuItem")
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        resources.ApplyResources(Me.ToolStripSeparator2, "ToolStripSeparator2")
         '
         'LoadArchivedMeasurementsToolStripMenuItem
         '
@@ -178,7 +191,7 @@ Partial Class Form1
         '
         Me.HelpToolStripMenuItem.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InfoMenuItem})
-        Me.HelpToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaption
+        Me.HelpToolStripMenuItem.ForeColor = System.Drawing.Color.CornflowerBlue
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         resources.ApplyResources(Me.HelpToolStripMenuItem, "HelpToolStripMenuItem")
         '
@@ -823,4 +836,6 @@ Partial Class Form1
     Friend WithEvents VBox3 As TextBox
     Friend WithEvents VBox2 As TextBox
     Friend WithEvents Vbox1 As TextBox
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
 End Class

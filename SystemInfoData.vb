@@ -30,6 +30,22 @@ Public Class SystemInfoData
     Public Property NumberOfLogicalProcessors As Integer
     Public Property CurrentClockSpeedMHz As Integer
     Public Property Architecture As String ' z.B. "x64", "x86"
+    Public Property FirewallStatus As String
+    Public Property AntivirusStatus As String
+    Public Property InstalledSoftware As String
+    Public Property NetworkTrafficSentMB As Double
+    Public Property NetworkTrafficReceivedMB As Double
+    Public Property ServicesRunning As Integer
+    Public Property ProcessesRunning As Integer
+    Public Property Uptime As String
+    Public Property DiskSpaceInformation As String
+    Public Property AvailablePhysicalMemoryGB As Double
+    Public Property TotalPhysicalMemoryGB As Double
+    Public Property OperatingSystem As String
+    Public Property IPAddress As String
+    Public Property GPUCoreTemperatures As String
+    Public Property CPUCoreTemperatures As String
+    Public Property CpuLoad As Double
 
     ' Standardkonstruktor zur Initialisierung von Eigenschaften mit Standardwerten
     Public Sub New()

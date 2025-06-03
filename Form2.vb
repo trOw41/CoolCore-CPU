@@ -191,8 +191,8 @@ Public Class Form2
         Chart1.Series.Clear()
         Dim coreColors As New List(Of Color) From {
         Color.Blue, Color.Red, Color.Green, Color.Purple,
-        Color.Orange, Color.DarkCyan, Color.HotPink, Color.AliceBlue,
-        Color.DarkSlateGray, Color.Indigo, Color.Azure, Color.DarkGreen
+        Color.OrangeRed, Color.DarkCyan, Color.HotPink,
+        Color.DarkGray, Color.Indigo, Color.Crimson, Color.DarkGreen
     }
         Dim colorIndex As Integer = 0
         Dim allCoreNames As New SortedSet(Of String)()
@@ -209,10 +209,10 @@ Public Class Form2
 
         For Each coreName In allCoreNames
             Dim series As New Series(coreName) With {
-            .ChartType = SeriesChartType.Stock.FastLine,
+            .ChartType = SeriesChartType.PointAndFigure.Bar.Spline,
             .XValueType = ChartValueType.DateTime,
             .YValueType = ChartValueType.Single,
-            .BorderWidth = 2,
+            .BorderWidth = 3,
             .Color = coreColors(colorIndex Mod coreColors.Count)
         }
             Chart1.Series.Add(series)

@@ -121,6 +121,9 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="MenuStrip1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Bahnschrift, 9pt</value>
+  </data>
   <data name="CloseToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>103, 22</value>
   </data>
@@ -130,8 +133,11 @@
   <data name="CloseToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>Exit Programm</value>
   </data>
+  <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 6</value>
+  </data>
   <data name="FileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 20</value>
+    <value>38, 20</value>
   </data>
   <data name="FileToolStripMenuItem.Text" xml:space="preserve">
     <value>File</value>
@@ -144,16 +150,16 @@
     <value>ImageAboveText</value>
   </data>
   <data name="SettingsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>158, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="SettingsToolStripMenuItem.Text" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 6</value>
+    <value>177, 6</value>
   </data>
   <data name="ExportCPUInfoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>158, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="ExportCPUInfoToolStripMenuItem.Text" xml:space="preserve">
     <value>Export CPU Info</value>
@@ -169,6 +175,9 @@
   </data>
   <data name="LogOnOffToolStripMenuItem.Text" xml:space="preserve">
     <value>Log On/Off</value>
+  </data>
+  <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 6</value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -206,7 +215,7 @@
     <value>Temp. Archiv</value>
   </data>
   <data name="ToolsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 20</value>
+    <value>47, 20</value>
   </data>
   <data name="ToolsToolStripMenuItem.Text" xml:space="preserve">
     <value>Tools</value>
@@ -218,7 +227,7 @@
     <value>Info</value>
   </data>
   <data name="HelpToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
+    <value>43, 20</value>
   </data>
   <data name="HelpToolStripMenuItem.Text" xml:space="preserve">
     <value>Help</value>
@@ -882,7 +891,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>189, 133</value>
+    <value>190, 133</value>
   </data>
   <data name="MinTemp2.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -912,7 +921,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>189, 106</value>
+    <value>190, 106</value>
   </data>
   <data name="MinTemp1.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1212,7 +1221,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>189, 79</value>
+    <value>190, 79</value>
   </data>
   <data name="MinTemp.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1242,7 +1251,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>189, 162</value>
+    <value>190, 162</value>
   </data>
   <data name="MinTemp3.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1305,7 +1314,7 @@
     <value>True</value>
   </data>
   <data name="PowerBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 21</value>
+    <value>59, 21</value>
   </data>
   <data name="PowerBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1377,7 +1386,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>31, 152</value>
+    <value>28, 152</value>
   </data>
   <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>48, 14</value>
@@ -1404,10 +1413,10 @@
     <value>NoControl</value>
   </data>
   <data name="Threads.Location" type="System.Drawing.Point, System.Drawing">
-    <value>253, 43</value>
+    <value>258, 43</value>
   </data>
   <data name="Threads.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 14</value>
+    <value>49, 14</value>
   </data>
   <data name="Threads.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1431,7 +1440,7 @@
     <value>NoControl</value>
   </data>
   <data name="AllCores.Location" type="System.Drawing.Point, System.Drawing">
-    <value>176, 42</value>
+    <value>180, 42</value>
   </data>
   <data name="AllCores.Size" type="System.Drawing.Size, System.Drawing">
     <value>37, 14</value>
@@ -1488,7 +1497,7 @@
     <value>NoControl</value>
   </data>
   <data name="Revision.Location" type="System.Drawing.Point, System.Drawing">
-    <value>44, 124</value>
+    <value>41, 124</value>
   </data>
   <data name="Revision.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 14</value>
@@ -1515,7 +1524,7 @@
     <value>NoControl</value>
   </data>
   <data name="VID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>45, 96</value>
+    <value>42, 96</value>
   </data>
   <data name="VID.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 14</value>
@@ -1542,7 +1551,7 @@
     <value>NoControl</value>
   </data>
   <data name="Frequency.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 68</value>
+    <value>5, 68</value>
   </data>
   <data name="Frequency.Size" type="System.Drawing.Size, System.Drawing">
     <value>73, 14</value>
@@ -1569,7 +1578,7 @@
     <value>NoControl</value>
   </data>
   <data name="Platform.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 42</value>
+    <value>13, 42</value>
   </data>
   <data name="Platform.Size" type="System.Drawing.Size, System.Drawing">
     <value>65, 19</value>
@@ -1650,13 +1659,13 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="RevisionBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 121</value>
+    <value>85, 121</value>
   </data>
   <data name="RevisionBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="RevisionBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 21</value>
+    <value>93, 21</value>
   </data>
   <data name="RevisionBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1677,13 +1686,13 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="CPUIDBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 148</value>
+    <value>85, 148</value>
   </data>
   <data name="CPUIDBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="CPUIDBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 21</value>
+    <value>93, 21</value>
   </data>
   <data name="CPUIDBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1704,13 +1713,13 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="VidBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 92</value>
+    <value>85, 92</value>
   </data>
   <data name="VidBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="VidBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 22</value>
+    <value>93, 22</value>
   </data>
   <data name="VidBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1731,13 +1740,13 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="FrequencyBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>78, 65</value>
+    <value>85, 65</value>
   </data>
   <data name="FrequencyBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="FrequencyBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 22</value>
+    <value>266, 22</value>
   </data>
   <data name="FrequencyBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1788,13 +1797,13 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="CoresBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>210, 39</value>
+    <value>219, 39</value>
   </data>
   <data name="CoresBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="CoresBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>43, 22</value>
+    <value>34, 22</value>
   </data>
   <data name="CoresBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1818,13 +1827,13 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="PlatformBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>78, 39</value>
+    <value>85, 39</value>
   </data>
   <data name="PlatformBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="PlatformBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 22</value>
+    <value>92, 22</value>
   </data>
   <data name="PlatformBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1845,13 +1854,13 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="ModelBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>78, 11</value>
+    <value>85, 13</value>
   </data>
   <data name="ModelBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="ModelBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 22</value>
+    <value>266, 20</value>
   </data>
   <data name="ModelBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1875,7 +1884,7 @@
     <value>NoControl</value>
   </data>
   <data name="Model.Location" type="System.Drawing.Point, System.Drawing">
-    <value>31, 17</value>
+    <value>28, 17</value>
   </data>
   <data name="Model.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 13</value>
@@ -2113,6 +2122,12 @@
   <data name="&gt;&gt;CloseToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;ToolStripSeparator3.Name" xml:space="preserve">
+    <value>ToolStripSeparator3</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;OptionsToolStripMenuItem.Name" xml:space="preserve">
     <value>OptionsToolStripMenuItem</value>
   </data>
@@ -2148,6 +2163,12 @@
   </data>
   <data name="&gt;&gt;LogOnOffToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator2.Name" xml:space="preserve">
+    <value>ToolStripSeparator2</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Name" xml:space="preserve">
     <value>LoadArchivedMeasurementsToolStripMenuItem</value>

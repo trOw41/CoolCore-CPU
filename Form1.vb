@@ -4,10 +4,7 @@ Imports System.Text
 Imports System.Threading
 Imports Timer = System.Windows.Forms.Timer
 Imports System.Globalization
-Imports System.Drawing.Text
-Imports Azure
-Imports System.CodeDom.Compiler
-Imports System.IdentityModel.Metadata
+Imports System.Reflection
 
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
@@ -79,15 +76,11 @@ Public Class Form1
     End Sub
 
     Private Sub StartCpuStressTest()
-        ' Stoppt und bereinigt eventuell noch laufende frühere Stress-Tasks
-        StopCpuStressTest()
 
+        StopCpuStressTest()
         cancellationTokenSource = New CancellationTokenSource()
         Dim cancellationToken = cancellationTokenSource.Token
-
-        Dim processorCount As Integer = Environment.ProcessorCount ' Ermittelt die Anzahl der logischen Prozessoren (Kerne/Threads)
-
-        ' Startet für jeden logischen Prozessor eine eigene Task
+        Dim processorCount As Integer = Environment.ProcessorCount
         For i As Integer = 0 To processorCount - 1
             Dim cpuStressTask = Task.Run(Sub()
                                              While Not cancellationToken.IsCancellationRequested
@@ -109,24 +102,20 @@ Public Class Form1
 
     Private Sub StopCpuStressTest()
         If cancellationTokenSource IsNot Nothing Then
-            cancellationTokenSource.Cancel() ' Signalisiert allen Tasks, dass sie beendet werden sollen
+            cancellationTokenSource.Cancel()
             Try
-                ' Warten Sie bis zu 5 Sekunden, bis alle Tasks beendet sind
                 Task.WaitAll(stressTasks.ToArray(), 5000)
             Catch ex As AggregateException
-                ' Behandelt Ausnahmen, die während des Wartens auf die Tasks auftreten könnten
                 For Each innerEx In ex.InnerExceptions
                     Debug.WriteLine($"Fehler beim Beenden der Stress-Task: {innerEx.Message}")
                 Next
             Catch ex As Exception
                 Debug.WriteLine($"Fehler beim Warten auf Stress-Tasks: {ex.Message}")
             End Try
-            cancellationTokenSource.Dispose() ' Gibt das Cancellation Token Source Objekt frei
+            cancellationTokenSource.Dispose() '
             cancellationTokenSource = Nothing
         End If
-        stressTasks.Clear() ' Leert die Liste der Tasks
-
-        ' Optional: Aktualisieren Sie einen Status-Label in der Benutzeroberfläche
+        stressTasks.Clear()
         Me.Invoke(Sub()
                       LblStatusMessage.Text = "CPU-Stresstest beendet."
                       LblStatusMessage.ForeColor = Color.Green
@@ -224,7 +213,10 @@ Public Class Form1
         computer.IsCpuEnabled = True
         computer.IsGpuEnabled = True
         LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
-        LblStatusMessage.ForeColor = Color.Firebrick
+        LblStatusMessage.ForeColor = Color.Black
+        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", True)
+        Me.Text = "CoolCore - Monitoring Tool" & " - " & FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion
+        ApplyTheme(My.Settings.ApplicationTheme)
         InitializePerCoreCounters()
         InitializeCoreTemperatureSensors()
         'InitializeOpenHardwareMonitor()
@@ -283,10 +275,9 @@ Public Class Form1
 
     Private Sub InitializeCoreTemperatureSensors()
         Try
-            ' CPU-Hardwareobjekt finden
             If computer Is Nothing Then
                 computer = New Computer()
-                computer.Open(True) ' Open the computer object to access hardware
+                computer.Open(True)
             End If
             cpu = computer.Hardware.FirstOrDefault(Function(h) h.HardwareType = HardwareType.Cpu)
             Dim numberOfLogicalProcessors As Integer = 0
@@ -433,17 +424,35 @@ Public Class Form1
                 Dim sensor As ISensor = coreTemperatures(i)
                 Dim coreIndex As Integer = i
 
-                If CoreTempBoxes.ContainsKey(coreIndex) Then
-                    CoreTempBoxes(coreIndex).Text = If(sensor.Value.HasValue, $"{sensor.Value.Value:F1}°C", "N/A")
 
-                End If
                 If MinTempBoxes.ContainsKey(coreIndex) Then
-                    MinTempBoxes(coreIndex).Text = If(sensor.Min.HasValue, $"{sensor.Min.Value:F1}°C", "N/A") ' Minimum observed
-                End If
-                If MaxTempBoxes.ContainsKey(coreIndex) Then
-                    MaxTempBoxes(coreIndex).Text = If(sensor.Max.HasValue, $"{sensor.Max.Value:F1}°C", "N/A") ' Maximum observed
+                    MinTempBoxes(coreIndex).Text = $"{sensor.Min:F1}°C"
+                    MinTempBoxes(coreIndex).ForeColor = Color.Green
                 End If
 
+                If MaxTempBoxes.ContainsKey(coreIndex) Then
+                    MaxTempBoxes(coreIndex).Text = $"{sensor.Max:F1}°C"
+                    MaxTempBoxes(coreIndex).ForeColor = Color.OrangeRed
+                End If
+
+                If CoreTempBoxes.ContainsKey(coreIndex) Then
+                    CoreTempBoxes(coreIndex).Text = $"{sensor.Value:F1}°C"
+                    CoreTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Value)
+                End If
+                Me.Invoke(Sub()
+                              If MinTempBoxes.ContainsKey(coreIndex) Then
+                                  MinTempBoxes(coreIndex).Text = $"{sensor.Min:F1}°C"
+                                  MinTempBoxes(coreIndex).ForeColor = Color.Green
+                              End If
+                              If MaxTempBoxes.ContainsKey(coreIndex) Then
+                                  MaxTempBoxes(coreIndex).Text = $"{sensor.Max:F1}°C"
+                                  MaxTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Max)
+                              End If
+                              If CoreTempBoxes.ContainsKey(coreIndex) Then
+                                  CoreTempBoxes(coreIndex).Text = $"{sensor.Value:F1}°C"
+                                  CoreTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Value)
+                              End If
+                          End Sub)
             Next
             If monitoringStopwatch.Elapsed.TotalSeconds >= 30 Then
                 StopMonitoringProcess()
@@ -458,7 +467,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Async Function ReadAndDisplaySystemInfoAsync() As Task
+    Private Function ReadAndDisplaySystemInfoAsync() As Task
         LblStatusMessage.Text = "Reading system information and saving to database..."
         LblStatusMessage.ForeColor = Color.CadetBlue
         Dim systemInfo As New SystemInfoData With {
@@ -549,10 +558,9 @@ Public Class Form1
                               CPUIDBox.Text = "N/A"
                               LitBox.Text = "N/A"
                           End If
+
                       End Sub)
             '#--------------------------------------------------------------------------------------------------------------------'
-
-
             Me.Invoke(Sub()
                           LblStatusMessage.Text = "System information successfully read and saved to database!"
                           LblStatusMessage.ForeColor = Color.Green
@@ -565,6 +573,8 @@ Public Class Form1
                       End Sub)
             MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
+        Return Task.CompletedTask
     End Function
     '#--------------------------------------------------------------------------------------------------------------------'
     Private Sub ClearCpuDisplayControls()
@@ -601,7 +611,7 @@ Public Class Form1
             ' refreshTimer.Stop()
             If monitoringTimer Is Nothing Then
                 monitoringTimer = New Timer With {
-                    .Interval = 1000 ' Jede Sekunde aktualisieren
+                    .Interval = 1000
                     }
                 AddHandler monitoringTimer.Tick, AddressOf MonitoringTimer_Tick
             End If
@@ -610,8 +620,8 @@ Public Class Form1
                 AddHandler monitoringForm.StopRequested, AddressOf MonitoringForm_StopRequested
             End If
             monitoringForm.Show()
-            monitoringStopwatch.Restart() ' Startet oder setzt die Stopwatch zurück
-            monitoringTimer.Start() ' Startet den Timer
+            monitoringStopwatch.Restart()
+            monitoringTimer.Start()
             StartCpuStressTest()
         Else
             Call StopMonitoringProcess()
@@ -716,27 +726,16 @@ Public Class Form1
 
 
     Private Sub ExportCPUInfoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportCPUInfoToolStripMenuItem.Click
-
-        ' 1. Aktuelle Systeminformationen abrufen
-        Dim currentSystemInfo As SystemInfoData = systemInfoRepository.FetchLiveSystemInfo()
-
+        Dim currentSystemInfo As SystemInfoData = systemInfoRepository.GetCurrentSystemInfo()
         If currentSystemInfo Is Nothing Then
-            ' Die Fehlermeldung wurde bereits in FetchLiveSystemInfo angezeigt
-            Exit Sub ' Beenden, da keine Daten zum Exportieren vorhanden sind
+            Exit Sub
         End If
-
-        ' Optional: Speichern Sie die abgerufenen Informationen in der Datenbank
-        systemInfoRepository.SaveSystemInfo(currentSystemInfo) ' Speichert den aktuellen Datensatz in der SQL-DB
-
-        ' 2. HTML-Inhalt generieren (Ihre bestehende GenerateSystemInfoHtml-Methode)
+        systemInfoRepository.SaveSystemInfo(currentSystemInfo)
         Dim htmlContent As String = GenerateSystemInfoHtml(currentSystemInfo)
-
-        ' 3. Speichern der HTML-Datei über SaveFileDialog
         Using saveFileDialog As New SaveFileDialog()
             saveFileDialog.Filter = "HTML-Datei (*.html)|*.html|Alle Dateien (*.*)|*.*"
             saveFileDialog.Title = "Systeminformationen exportieren"
-            saveFileDialog.FileName = $"SystemInfo_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.html"
-
+            saveFileDialog.FileName = $"SystemInfo_{DateTime.Now:yyyyMMdd_HHmmss}.html"
             If saveFileDialog.ShowDialog() = DialogResult.OK Then
                 Try
                     File.WriteAllText(saveFileDialog.FileName, htmlContent, System.Text.Encoding.UTF8)
@@ -749,14 +748,13 @@ Public Class Form1
     End Sub
     Private Function GenerateSystemInfoHtml(data As SystemInfoData) As String
         Dim htmlBuilder As New System.Text.StringBuilder()
-
         Try
             htmlBuilder.AppendLine("<!DOCTYPE html>")
             htmlBuilder.AppendLine("<html lang='de'>")
             htmlBuilder.AppendLine("<head>")
             htmlBuilder.AppendLine("<meta charset='UTF-8'>")
             htmlBuilder.AppendLine("<meta name='viewport' content='width=device-width, initial-scale=1.0'>")
-            htmlBuilder.AppendLine("<title>Systeminformationen Bericht</title>")
+            htmlBuilder.AppendLine("<title>CPU Info Bericht</title>")
             htmlBuilder.AppendLine("<style>")
             htmlBuilder.AppendLine("  body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }")
             htmlBuilder.AppendLine("  .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 900px; margin: auto; }")
@@ -773,21 +771,21 @@ Public Class Form1
             htmlBuilder.AppendLine("<body>")
             htmlBuilder.AppendLine("  <div class='container'>")
             htmlBuilder.AppendLine("    <h1>Systeminformationen Bericht</h1>")
-            htmlBuilder.AppendLine($"    <p class='note'>Bericht erstellt am: {data.Timestamp.ToString("dd.MM.yyyy HH:mm:ss")}</p>")
+            htmlBuilder.AppendLine($"    <p class='note'>Bericht erstellt am: {data.Timestamp:dd.MM.yyyy HH:mm:ss}</p>")
 
-            htmlBuilder.AppendLine("    <h2>Allgemeine Systeminformationen</h2>")
+            htmlBuilder.AppendLine("    <h2>Host Info</h2>")
             htmlBuilder.AppendLine("    <table>")
-            htmlBuilder.AppendLine($"      <tr><th>Computername</th><td>{data.ComputerName}</td></tr>")
+            'htmlBuilder.AppendLine($"      <tr><th>Computername</th><td>{data.ComputerName}</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Hostname</th><td>{data.HostName}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Benutzername</th><td>{data.UserName}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Domain</th><td>{data.DomainName}</td></tr>")
+            'htmlBuilder.AppendLine($"      <tr><th>Benutzername</th><td>{data.UserName}</td></tr>")
+            'htmlBuilder.AppendLine($"      <tr><th>Domain</th><td>{data.DomainName}</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Betriebssystem</th><td>{data.OSSystem} ({data.Architecture})</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Systemtyp</th><td>{data.SystemType}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Systemverzeichnis</th><td>{data.SystemDirectory}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Programmverzeichnis</th><td>{data.ProgramDirectory}</td></tr>")
+            'htmlBuilder.AppendLine($"      <tr><th>Systemtyp</th><td>{data.SystemType}</td></tr>")
+            'htmlBuilder.AppendLine($"      <tr><th>Systemverzeichnis</th><td>{data.SystemDirectory}</td></tr>")
+            'htmlBuilder.AppendLine($"      <tr><th>Programmverzeichnis</th><td>{data.ProgramDirectory}</td></tr>")
             htmlBuilder.AppendLine("    </table>")
 
-            htmlBuilder.AppendLine("    <h2>Hardware Informationen</h2>")
+            htmlBuilder.AppendLine("    <h2>CPU Informationen</h2>")
             htmlBuilder.AppendLine("    <table>")
             htmlBuilder.AppendLine($"      <tr><th>CPU Name</th><td>{data.CpuName}</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Anzahl Kerne</th><td>{data.NumberOfCores}</td></tr>")
@@ -795,8 +793,8 @@ Public Class Form1
             htmlBuilder.AppendLine($"      <tr><th>Prozessorzähler (Threads)</th><td>{data.ProcessorCount}</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Aktuelle Taktrate</th><td>{data.CurrentClockSpeedMHz} MHz</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Prozessorinformationen</th><td>{data.ProcessorInformation}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Gesamter physischer Speicher</th><td>{(data.TotalPhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Verfügbarer physischer Speicher</th><td>{(data.AvailablePhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
+            'htmlBuilder.AppendLine($"      <tr><th>Gesamter physischer Speicher</th><td>{(data.TotalPhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
+            'htmlBuilder.AppendLine($"      <tr><th>Verfügbarer physischer Speicher</th><td>{(data.AvailablePhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Grafikkarten Informationen</th><td>{data.GraphicsCardInformation}</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>BIOS Version</th><td>{data.BIOSVersion}</td></tr>")
             htmlBuilder.AppendLine("    </table>")
@@ -841,7 +839,7 @@ Public Class Form1
             htmlBuilder.AppendLine("    </table>")
 
 
-            htmlBuilder.AppendLine("    <p class='note'>Bericht erstellt von Ihrem System Information Tool.</p>")
+            htmlBuilder.AppendLine("    <p class='note'>Bericht erstellt von CoolCore Tool.</p>")
             htmlBuilder.AppendLine("  </div>")
             htmlBuilder.AppendLine("</body>")
             htmlBuilder.AppendLine("</html>")
@@ -851,6 +849,178 @@ Public Class Form1
             MessageBox.Show($"Fehler beim Generieren des HTML-Berichts: {ex.Message}", "HTML-Generierungsfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Debug.WriteLine($"HTML Generation Error: {ex.Message}")
             Return "<h1>Fehler beim Generieren der Systeminformationen.</h1>"
+        End Try
+    End Function
+
+
+    Private Sub ApplyTheme(theme As String)
+        Select Case theme
+            Case "Dark"
+                ' Apply Dark Theme
+                Me.BackColor = Color.FromArgb(45, 45, 48) ' Dark grey background
+                Me.ForeColor = Color.White ' White text
+
+                ' Example for specific controls (you'll need to expand this)
+                ' If you have a Panel, change its BackColor
+                ' If you have TextBoxes, change their BackColor and ForeColor
+                ' For example:
+                ' Me.pnlMain.BackColor = Color.FromArgb(60, 60, 63)
+                ' Me.txtOutput.BackColor = Color.FromArgb(70, 70, 73)
+                ' Me.txtOutput.ForeColor = Color.White
+                ' Me.lblHostName.ForeColor = Color.White
+                ' etc. Iterate through Controls if you have many
+                For Each ctrl As Control In Me.Controls
+                    ApplyThemeToControl(ctrl, theme)
+                Next
+
+                ' Apply to menu strip if you have one
+                If Me.MainMenuStrip IsNot Nothing Then
+                    Me.MainMenuStrip.BackColor = Color.FromArgb(50, 50, 53)
+                    Me.MainMenuStrip.ForeColor = Color.White
+                    For Each item As ToolStripItem In Me.MainMenuStrip.Items
+                        ApplyThemeToToolStripItem(item, theme)
+                    Next
+                End If
+
+            Case "Standard"
+                ' Apply Standard/Light Theme
+                Me.BackColor = SystemColors.Control ' Default system background
+                Me.ForeColor = SystemColors.ControlText ' Default system text color
+
+                For Each ctrl As Control In Me.Controls
+                    ApplyThemeToControl(ctrl, theme)
+                Next
+
+                If Me.MainMenuStrip IsNot Nothing Then
+                    Me.MainMenuStrip.BackColor = SystemColors.Control
+                    Me.MainMenuStrip.ForeColor = SystemColors.ControlText
+                    For Each item As ToolStripItem In Me.MainMenuStrip.Items
+                        ApplyThemeToToolStripItem(item, theme)
+                    Next
+                End If
+
+        End Select
+    End Sub
+
+    Private Sub ApplyThemeToControl(ctrl As Control, theme As String)
+        Select Case theme
+            Case "Dark"
+                ctrl.BackColor = Color.FromArgb(60, 60, 63) ' Slightly lighter dark for controls
+                ctrl.ForeColor = Color.White
+                If TypeOf ctrl Is TextBox Then
+                    CType(ctrl, TextBox).BackColor = Color.FromArgb(70, 70, 73)
+                    'CType(ctrl, TextBox).ForeColor = Color.White
+                ElseIf TypeOf ctrl Is Button Then
+                    CType(ctrl, Button).BackColor = Color.FromArgb(70, 70, 73)
+                    CType(ctrl, Button).ForeColor = Color.White
+                ElseIf TypeOf ctrl Is GroupBox Then
+                    CType(ctrl, GroupBox).BackColor = Color.FromArgb(50, 50, 53)
+                    CType(ctrl, GroupBox).ForeColor = Color.White
+                    For Each innerCtrl As Control In ctrl.Controls
+                        ApplyThemeToControl(innerCtrl, theme)
+                    Next
+                ElseIf TypeOf ctrl Is Panel Then
+                    CType(ctrl, Panel).BackColor = Color.FromArgb(50, 50, 53)
+                    CType(ctrl, Panel).ForeColor = Color.White
+                    For Each innerCtrl As Control In ctrl.Controls
+                        ApplyThemeToControl(innerCtrl, theme)
+                    Next
+                End If
+            Case "Standard"
+                ctrl.BackColor = Color.AliceBlue ' Default system background
+                ctrl.ForeColor = SystemColors.ControlText
+                If TypeOf ctrl Is TextBox Then
+                    CType(ctrl, TextBox).BackColor = Color.AliceBlue
+                    'CType(ctrl, TextBox).ForeColor = SystemColors.WindowText
+                ElseIf TypeOf ctrl Is Button Then
+                    CType(ctrl, Button).BackColor = SystemColors.Control
+                    CType(ctrl, Button).ForeColor = SystemColors.ControlText
+                ElseIf TypeOf ctrl Is GroupBox Then
+                    CType(ctrl, GroupBox).BackColor = Color.AliceBlue
+                    CType(ctrl, GroupBox).ForeColor = SystemColors.ControlText
+                    For Each innerCtrl As Control In ctrl.Controls
+                        ApplyThemeToControl(innerCtrl, theme)
+                    Next
+                ElseIf TypeOf ctrl Is Panel Then
+                    CType(ctrl, Panel).BackColor = SystemColors.Control
+                    CType(ctrl, Panel).ForeColor = SystemColors.ControlText
+                    For Each innerCtrl As Control In ctrl.Controls
+                        ApplyThemeToControl(innerCtrl, theme)
+                    Next
+                End If
+        End Select
+    End Sub
+
+    Private Sub ApplyThemeToToolStripItem(item As ToolStripItem, theme As String)
+        Select Case theme
+            Case "Dark"
+                item.BackColor = Color.FromArgb(50, 50, 53)
+                item.ForeColor = Color.White
+                If TypeOf item Is ToolStripDropDownItem Then
+                    Dim dropDownItem As ToolStripDropDownItem = CType(item, ToolStripDropDownItem)
+                    For Each subItem As ToolStripItem In dropDownItem.DropDownItems
+                        ApplyThemeToToolStripItem(subItem, theme)
+                    Next
+                End If
+            Case "Standard"
+                item.BackColor = SystemColors.Control
+                item.ForeColor = SystemColors.ControlText
+                If TypeOf item Is ToolStripDropDownItem Then
+                    Dim dropDownItem As ToolStripDropDownItem = CType(item, ToolStripDropDownItem)
+                    For Each subItem As ToolStripItem In dropDownItem.DropDownItems
+                        ApplyThemeToToolStripItem(subItem, theme)
+                    Next
+                End If
+        End Select
+    End Sub
+
+    Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
+        Using optionsForm As New OptionsForm()
+            AddHandler optionsForm.ThemeChanged, AddressOf OptionsForm_ThemeChanged
+            If optionsForm.ShowDialog() = DialogResult.OK Then
+
+            End If
+        End Using
+    End Sub
+    Private Sub OptionsForm_ThemeChanged(sender As Object, newTheme As String)
+        ApplyTheme(newTheme)
+    End Sub
+
+    Private Function GetTemperatureColor(temperature As Single) As Color
+        ' Define temperature thresholds for color changes
+        Const YELLOW_THRESHOLD As Single = 45.0F
+        Const ORANGE_THRESHOLD As Single = 70.0F
+        Const RED_THRESHOLD As Single = 90.0F
+        Try
+            If temperature <= YELLOW_THRESHOLD Then
+                Return Color.Green
+            Else
+                If temperature > YELLOW_THRESHOLD AndAlso temperature <= ORANGE_THRESHOLD Then
+                    Dim ratio As Single = (temperature - YELLOW_THRESHOLD) / (ORANGE_THRESHOLD - YELLOW_THRESHOLD)
+                    ' Clamp the calculated values to the valid Byte range (0-255)
+                    Return Color.FromArgb(
+                CInt(Math.Max(0, Math.Min(255, Color.Yellow.R + (Color.Orange.R - Color.Yellow.R) * ratio))),
+                CInt(Math.Max(0, Math.Min(255, Color.Yellow.G + (Color.Orange.G - Color.Yellow.G) * ratio))),
+                CInt(Math.Max(0, Math.Min(255, Color.Yellow.B + (Color.Orange.B - Color.Yellow.B) * ratio)))
+            )
+                End If
+                If temperature > ORANGE_THRESHOLD AndAlso temperature <= RED_THRESHOLD Then
+                    Dim ratio As Single = (temperature - ORANGE_THRESHOLD) / (RED_THRESHOLD - ORANGE_THRESHOLD)
+                    ' Clamp the calculated values to the valid Byte range (0-255)
+                    Return Color.FromArgb(
+                CInt(Math.Max(0, Math.Min(255, Color.Orange.R + (Color.Red.R - Color.Orange.R) * ratio))),
+                CInt(Math.Max(0, Math.Min(255, Color.Orange.G + (Color.Red.G - Color.Orange.G) * ratio))),
+                CInt(Math.Max(0, Math.Min(255, Color.Orange.B + (Color.Red.B - Color.Orange.B) * ratio)))
+            )
+
+                Else ' Above RED_THRESHOLD
+                    Return Color.Red
+
+                End If
+            End If
+        Catch ex As Exception
+            Debug.WriteLine($"Error in GetTemperatureColor: {ex.Message}")
+            Return Color.Black ' Fallback color in case of error
         End Try
     End Function
 
