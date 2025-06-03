@@ -209,7 +209,7 @@ Public Class Form2
 
         For Each coreName In allCoreNames
             Dim series As New Series(coreName) With {
-            .ChartType = SeriesChartType.PointAndFigure.Bar.Spline,
+            .ChartType = SeriesChartType.PointAndFigure.FastPoint.Spline,
             .XValueType = ChartValueType.DateTime,
             .YValueType = ChartValueType.Single,
             .BorderWidth = 3,

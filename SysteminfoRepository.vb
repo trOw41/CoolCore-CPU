@@ -19,7 +19,7 @@ Public Class SystemInfoRepository
     End Sub
 
     ''' <summary>
-    ''' Initialisiert die Datenbank, indem die Tabelle 'SystemInfoReadings' erstellt wird, falls sie noch nicht existiert.
+    '''
     ''' </summary>
     Private Sub InitializeDatabase()
         Try

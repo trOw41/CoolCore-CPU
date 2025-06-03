@@ -18,6 +18,7 @@ Public Class OptionsForm
                 chkStandardTheme.Checked = True
                 My.Settings.ApplicationTheme = "Standard"
         End Select
+        Label1.Text = "CPU Stresstest Intervall (in Sekunden): " & My.Settings.MonitorTime
     End Sub
 
     Private Sub ChkDarkTheme_CheckedChanged(sender As Object, e As EventArgs) Handles chkDarkTheme.CheckedChanged
@@ -58,7 +59,8 @@ Public Class OptionsForm
     Private Sub CheckedListBox1_SelectedValueChanged(sender As Object, e As EventArgs) Handles CheckedListBox1.SelectedValueChanged
         If e.ToString() = "System.EventArgs" Then
             My.Settings.MonitorTime = CheckedListBox1.SelectedItem.ToString()
-            MessageBox.Show(My.Settings.MonitorTime)
+            Label1.Text = "CPU Stresstest Intervall (in Sekunden): " & My.Settings.MonitorTime
         End If
+
     End Sub
 End Class

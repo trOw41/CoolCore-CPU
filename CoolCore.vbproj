@@ -198,12 +198,8 @@
     <Compile Include="OptionsForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SystemInfoData.vb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="SysteminfoRepository.vb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
+    <Compile Include="SystemInfoData.vb" />
+    <Compile Include="SysteminfoRepository.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AboutBox1.resx">
@@ -277,17 +273,29 @@
     <AdditionalFiles Include="SystemInfoExport.xslt" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Azure.Core">
+      <Version>1.46.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Chart.Controls">
       <Version>4.7.2046</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Data.SqlClient">
       <Version>6.0.2</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory">
+      <Version>9.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Win32.Registry">
+      <Version>5.0.0</Version>
+    </PackageReference>
     <PackageReference Include="OpenHardwareMonitorLib">
       <Version>1.0.9270</Version>
     </PackageReference>
     <PackageReference Include="Stub.System.Data.SQLite.Core.NetStandard">
       <Version>1.0.119</Version>
+    </PackageReference>
+    <PackageReference Include="System.Buffers">
+      <Version>4.6.1</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SqlClient">
       <Version>4.9.0</Version>
@@ -299,6 +307,9 @@
       <Version>9.0.5</Version>
     </PackageReference>
     <PackageReference Include="System.Management">
+      <Version>9.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="System.Memory.Data">
       <Version>9.0.5</Version>
     </PackageReference>
   </ItemGroup>

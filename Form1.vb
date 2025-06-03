@@ -124,12 +124,13 @@ Public Class Form1
 
     Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
         Dim intervalMs As Integer = 1000
+
         Do While Not cancellationToken.IsCancellationRequested
             Try
                 cpu?.Update()
                 Dim currentCoreTemps As New Dictionary(Of String, Single)()
                 For Each sensor As ISensor In coreTemperatures
-                    If sensor.Value.HasValue Then
+                    If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) AndAlso sensor.Value.HasValue Then
                         currentCoreTemps.Add(sensor.Name, sensor.Value.Value)
                     End If
                 Next
@@ -164,6 +165,7 @@ Public Class Form1
             Using writer As New StreamWriter(filePath, False, Encoding.UTF8)
                 Dim coreNames As New SortedSet(Of String)()
                 For Each entry In data
+
                     For Each kvp In entry.CoreTemperatures
                         coreNames.Add(kvp.Key)
                     Next
@@ -604,11 +606,8 @@ Public Class Form1
             isMonitoringActive = True
             backgroundTempMeasurements.Clear()
             cts = New CancellationTokenSource()
-            'loadingForm = New Form3()
-            'AddHandler loadingForm.StopRequested, AddressOf LoadingForm_StopRequested
-            'loadingForm.Show()
             monitoringTask = Task.Run(Sub() RecordTemperaturesInBackground(cts.Token))
-            ' refreshTimer.Stop()
+
             If monitoringTimer Is Nothing Then
                 monitoringTimer = New Timer With {
                     .Interval = 1000
@@ -927,31 +926,31 @@ Public Class Form1
                     Next
                 End If
             Case "Standard"
-                Me.BackColor = SystemColors.ControlLightLight ' Default system background
-                ctrl.BackColor = SystemColors.ControlLightLight
+                Me.BackColor = SystemColors.Control ' Default system background
+                ctrl.BackColor = SystemColors.Control
                 ctrl.ForeColor = SystemColors.ControlText
                 If TypeOf ctrl Is TextBox Then
-                    CType(ctrl, TextBox).BackColor = SystemColors.ControlLightLight
+                    CType(ctrl, TextBox).BackColor = SystemColors.Control
                     'CType(ctrl, TextBox).ForeColor = SystemColors.WindowText
                 ElseIf TypeOf ctrl Is Button Then
                     CType(ctrl, Button).BackColor = SystemColors.Control
                     CType(ctrl, Button).ForeColor = SystemColors.ControlText
                 ElseIf TypeOf ctrl Is GroupBox Then
-                    CType(ctrl, GroupBox).BackColor = SystemColors.ControlLightLight
+                    CType(ctrl, GroupBox).BackColor = SystemColors.Control
                     CType(ctrl, GroupBox).ForeColor = SystemColors.ControlText
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
                 ElseIf TypeOf ctrl Is Panel Then
-                    CType(ctrl, Panel).BackColor = SystemColors.ControlLightLight
+                    CType(ctrl, Panel).BackColor = SystemColors.Control
                     CType(ctrl, Panel).ForeColor = SystemColors.ControlText
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
                 ElseIf TypeOf ctrl Is ToolStrip Then
-                    CType(ctrl, ToolStrip).BackColor = SystemColors.ControlLightLight
+                    CType(ctrl, MenuStrip).BackColor = SystemColors.Control
                     CType(ctrl, ToolStrip).ForeColor = SystemColors.ControlText
-                    MenuStrip1.BackColor = SystemColors.ControlLightLight
+                    MenuStrip1.BackColor = SystemColors.Control
                     For Each item As ToolStripItem In CType(ctrl, MenuStrip).Items
                         ApplyThemeToToolStripItem(item, theme)
                     Next
@@ -971,7 +970,7 @@ Public Class Form1
                     Next
                 End If
             Case "Standard"
-                item.BackColor = SystemColors.ControlLightLight
+                item.BackColor = SystemColors.Control
                 item.ForeColor = SystemColors.ControlText
                 If TypeOf item Is ToolStripDropDownItem Then
                     Dim dropDownItem As ToolStripDropDownItem = CType(item, ToolStripDropDownItem)
