@@ -65,6 +65,18 @@ Namespace My
                 Me("ApplicationTheme") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("30")>  _
+        Public Property MonitorTime() As Double
+            Get
+                Return CType(Me("MonitorTime"),Double)
+            End Get
+            Set
+                Me("MonitorTime") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

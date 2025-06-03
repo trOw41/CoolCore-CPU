@@ -27,14 +27,8 @@ Partial Class Form1
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CloseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogOnOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.LoadArchivedMeasurementsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InfoMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -103,6 +97,9 @@ Partial Class Form1
         Me.DataColumn1 = New System.Data.DataColumn()
         Me.DataColumn2 = New System.Data.DataColumn()
         Me.LblStatusMessage = New System.Windows.Forms.Label()
+        Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -122,7 +119,7 @@ Partial Class Form1
         'FileToolStripMenuItem
         '
         Me.FileToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CloseToolStripMenuItem, Me.ToolStripSeparator3})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CloseToolStripMenuItem})
         Me.FileToolStripMenuItem.ForeColor = System.Drawing.Color.CornflowerBlue
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         resources.ApplyResources(Me.FileToolStripMenuItem, "FileToolStripMenuItem")
@@ -134,39 +131,9 @@ Partial Class Form1
         Me.CloseToolStripMenuItem.Name = "CloseToolStripMenuItem"
         resources.ApplyResources(Me.CloseToolStripMenuItem, "CloseToolStripMenuItem")
         '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        resources.ApplyResources(Me.ToolStripSeparator3, "ToolStripSeparator3")
-        '
-        'OptionsToolStripMenuItem
-        '
-        Me.OptionsToolStripMenuItem.BackColor = System.Drawing.SystemColors.Window
-        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.ToolStripSeparator1, Me.ExportCPUInfoToolStripMenuItem})
-        Me.OptionsToolStripMenuItem.ForeColor = System.Drawing.Color.CornflowerBlue
-        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        resources.ApplyResources(Me.OptionsToolStripMenuItem, "OptionsToolStripMenuItem")
-        '
-        'SettingsToolStripMenuItem
-        '
-        Me.SettingsToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._038_system_1
-        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        resources.ApplyResources(Me.SettingsToolStripMenuItem, "SettingsToolStripMenuItem")
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        resources.ApplyResources(Me.ToolStripSeparator1, "ToolStripSeparator1")
-        '
-        'ExportCPUInfoToolStripMenuItem
-        '
-        Me.ExportCPUInfoToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._036_folder
-        Me.ExportCPUInfoToolStripMenuItem.Name = "ExportCPUInfoToolStripMenuItem"
-        resources.ApplyResources(Me.ExportCPUInfoToolStripMenuItem, "ExportCPUInfoToolStripMenuItem")
-        '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogOnOffToolStripMenuItem, Me.ToolStripSeparator2, Me.LoadArchivedMeasurementsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogOnOffToolStripMenuItem, Me.LoadArchivedMeasurementsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.Color.CornflowerBlue
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
@@ -176,11 +143,6 @@ Partial Class Form1
         Me.LogOnOffToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._034_signature
         Me.LogOnOffToolStripMenuItem.Name = "LogOnOffToolStripMenuItem"
         resources.ApplyResources(Me.LogOnOffToolStripMenuItem, "LogOnOffToolStripMenuItem")
-        '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        resources.ApplyResources(Me.ToolStripSeparator2, "ToolStripSeparator2")
         '
         'LoadArchivedMeasurementsToolStripMenuItem
         '
@@ -729,6 +691,26 @@ Partial Class Form1
         resources.ApplyResources(Me.LblStatusMessage, "LblStatusMessage")
         Me.LblStatusMessage.Name = "LblStatusMessage"
         '
+        'SettingsToolStripMenuItem
+        '
+        Me.SettingsToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._038_system_1
+        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
+        resources.ApplyResources(Me.SettingsToolStripMenuItem, "SettingsToolStripMenuItem")
+        '
+        'ExportCPUInfoToolStripMenuItem
+        '
+        Me.ExportCPUInfoToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._036_folder
+        Me.ExportCPUInfoToolStripMenuItem.Name = "ExportCPUInfoToolStripMenuItem"
+        resources.ApplyResources(Me.ExportCPUInfoToolStripMenuItem, "ExportCPUInfoToolStripMenuItem")
+        '
+        'OptionsToolStripMenuItem
+        '
+        Me.OptionsToolStripMenuItem.BackColor = System.Drawing.SystemColors.Window
+        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.ExportCPUInfoToolStripMenuItem})
+        Me.OptionsToolStripMenuItem.ForeColor = System.Drawing.Color.CornflowerBlue
+        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
+        resources.ApplyResources(Me.OptionsToolStripMenuItem, "OptionsToolStripMenuItem")
+        '
         'Form1
         '
         resources.ApplyResources(Me, "$this")
@@ -761,9 +743,6 @@ Partial Class Form1
 
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents LogOnOffToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Panel1 As Panel
@@ -824,7 +803,6 @@ Partial Class Form1
     Friend WithEvents AllCores As Label
     Friend WithEvents ThreadBox As TextBox
     Friend WithEvents CoresBox As TextBox
-    Friend WithEvents ExportCPUInfoToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents InfoMenuItem As ToolStripMenuItem
     Friend WithEvents BtnToggleMonitor1 As Button
@@ -836,6 +814,7 @@ Partial Class Form1
     Friend WithEvents VBox3 As TextBox
     Friend WithEvents VBox2 As TextBox
     Friend WithEvents Vbox1 As TextBox
-    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
-    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ExportCPUInfoToolStripMenuItem As ToolStripMenuItem
 End Class

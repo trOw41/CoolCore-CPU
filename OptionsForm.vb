@@ -23,6 +23,7 @@ Public Class OptionsForm
     Private Sub ChkDarkTheme_CheckedChanged(sender As Object, e As EventArgs) Handles chkDarkTheme.CheckedChanged
         If chkDarkTheme.Checked Then
             chkStandardTheme.Checked = False
+
         End If
     End Sub
 
@@ -54,4 +55,10 @@ Public Class OptionsForm
         Me.Close() ' Form schließen ohne Änderungen zu speichern
     End Sub
 
+    Private Sub CheckedListBox1_SelectedValueChanged(sender As Object, e As EventArgs) Handles CheckedListBox1.SelectedValueChanged
+        If e.ToString() = "System.EventArgs" Then
+            My.Settings.MonitorTime = CheckedListBox1.SelectedItem.ToString()
+            MessageBox.Show(My.Settings.MonitorTime)
+        End If
+    End Sub
 End Class

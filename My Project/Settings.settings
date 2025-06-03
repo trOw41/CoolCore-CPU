@@ -5,5 +5,8 @@
     <Setting Name="ApplicationTheme" Type="System.String" Scope="User">
       <Value Profile="(Default)">Standard</Value>
     </Setting>
+    <Setting Name="MonitorTime" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -454,7 +454,7 @@ Public Class Form1
                               End If
                           End Sub)
             Next
-            If monitoringStopwatch.Elapsed.TotalSeconds >= 30 Then
+            If monitoringStopwatch.Elapsed.TotalSeconds >= My.Settings.MonitorTime Then
                 StopMonitoringProcess()
                 StopCpuStressTest()
                 Exit Sub
@@ -927,25 +927,33 @@ Public Class Form1
                     Next
                 End If
             Case "Standard"
-                ctrl.BackColor = Color.AliceBlue ' Default system background
+                Me.BackColor = SystemColors.ControlLightLight ' Default system background
+                ctrl.BackColor = SystemColors.ControlLightLight
                 ctrl.ForeColor = SystemColors.ControlText
                 If TypeOf ctrl Is TextBox Then
-                    CType(ctrl, TextBox).BackColor = Color.AliceBlue
+                    CType(ctrl, TextBox).BackColor = SystemColors.ControlLightLight
                     'CType(ctrl, TextBox).ForeColor = SystemColors.WindowText
                 ElseIf TypeOf ctrl Is Button Then
                     CType(ctrl, Button).BackColor = SystemColors.Control
                     CType(ctrl, Button).ForeColor = SystemColors.ControlText
                 ElseIf TypeOf ctrl Is GroupBox Then
-                    CType(ctrl, GroupBox).BackColor = Color.AliceBlue
+                    CType(ctrl, GroupBox).BackColor = SystemColors.ControlLightLight
                     CType(ctrl, GroupBox).ForeColor = SystemColors.ControlText
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
                 ElseIf TypeOf ctrl Is Panel Then
-                    CType(ctrl, Panel).BackColor = SystemColors.Control
+                    CType(ctrl, Panel).BackColor = SystemColors.ControlLightLight
                     CType(ctrl, Panel).ForeColor = SystemColors.ControlText
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
+                    Next
+                ElseIf TypeOf ctrl Is ToolStrip Then
+                    CType(ctrl, ToolStrip).BackColor = SystemColors.ControlLightLight
+                    CType(ctrl, ToolStrip).ForeColor = SystemColors.ControlText
+                    MenuStrip1.BackColor = SystemColors.ControlLightLight
+                    For Each item As ToolStripItem In CType(ctrl, MenuStrip).Items
+                        ApplyThemeToToolStripItem(item, theme)
                     Next
                 End If
         End Select
@@ -954,8 +962,8 @@ Public Class Form1
     Private Sub ApplyThemeToToolStripItem(item As ToolStripItem, theme As String)
         Select Case theme
             Case "Dark"
-                item.BackColor = Color.FromArgb(50, 50, 53)
-                item.ForeColor = Color.White
+                item.BackColor = Color.DarkGray
+                item.ForeColor = SystemColors.WindowText
                 If TypeOf item Is ToolStripDropDownItem Then
                     Dim dropDownItem As ToolStripDropDownItem = CType(item, ToolStripDropDownItem)
                     For Each subItem As ToolStripItem In dropDownItem.DropDownItems
@@ -963,7 +971,7 @@ Public Class Form1
                     Next
                 End If
             Case "Standard"
-                item.BackColor = SystemColors.Control
+                item.BackColor = SystemColors.ControlLightLight
                 item.ForeColor = SystemColors.ControlText
                 If TypeOf item Is ToolStripDropDownItem Then
                     Dim dropDownItem As ToolStripDropDownItem = CType(item, ToolStripDropDownItem)
@@ -988,35 +996,18 @@ Public Class Form1
 
     Private Function GetTemperatureColor(temperature As Single) As Color
         ' Define temperature thresholds for color changes
-        Const YELLOW_THRESHOLD As Single = 45.0F
+        Const YELLOW_THRESHOLD As Single = 55.0F
         Const ORANGE_THRESHOLD As Single = 70.0F
         Const RED_THRESHOLD As Single = 90.0F
         Try
             If temperature <= YELLOW_THRESHOLD Then
                 Return Color.Green
-            Else
-                If temperature > YELLOW_THRESHOLD AndAlso temperature <= ORANGE_THRESHOLD Then
-                    Dim ratio As Single = (temperature - YELLOW_THRESHOLD) / (ORANGE_THRESHOLD - YELLOW_THRESHOLD)
-                    ' Clamp the calculated values to the valid Byte range (0-255)
-                    Return Color.FromArgb(
-                CInt(Math.Max(0, Math.Min(255, Color.Yellow.R + (Color.Orange.R - Color.Yellow.R) * ratio))),
-                CInt(Math.Max(0, Math.Min(255, Color.Yellow.G + (Color.Orange.G - Color.Yellow.G) * ratio))),
-                CInt(Math.Max(0, Math.Min(255, Color.Yellow.B + (Color.Orange.B - Color.Yellow.B) * ratio)))
-            )
-                End If
-                If temperature > ORANGE_THRESHOLD AndAlso temperature <= RED_THRESHOLD Then
-                    Dim ratio As Single = (temperature - ORANGE_THRESHOLD) / (RED_THRESHOLD - ORANGE_THRESHOLD)
-                    ' Clamp the calculated values to the valid Byte range (0-255)
-                    Return Color.FromArgb(
-                CInt(Math.Max(0, Math.Min(255, Color.Orange.R + (Color.Red.R - Color.Orange.R) * ratio))),
-                CInt(Math.Max(0, Math.Min(255, Color.Orange.G + (Color.Red.G - Color.Orange.G) * ratio))),
-                CInt(Math.Max(0, Math.Min(255, Color.Orange.B + (Color.Red.B - Color.Orange.B) * ratio)))
-            )
-
-                Else ' Above RED_THRESHOLD
-                    Return Color.Red
-
-                End If
+            ElseIf temperature > YELLOW_THRESHOLD Then
+                Return Color.Orange
+            ElseIf temperature > ORANGE_THRESHOLD Then
+                Return Color.OrangeRed
+            ElseIf temperature > RED_THRESHOLD Then
+                Return Color.Red
             End If
         Catch ex As Exception
             Debug.WriteLine($"Error in GetTemperatureColor: {ex.Message}")
