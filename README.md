@@ -26,12 +26,17 @@
 + MAIN WINDOW
 ![main_window](screenshots/main_window.png)
 
++MONITOR TEMP / STRESS CPU
+![monitoring](screenshots/monitoring_window)
+
 + CHART SCREEN
 ![chart_window](screenshots/chart_window.png)
 
 + ARCHIVE BOX
   ![archive box](screenshots/archive_dialog.png)
 
++ SETTINGS DIALOG
+  ![option_dialog](screenshots/option_dialog.png)
 
 
 ➡️ Erste Schritte
