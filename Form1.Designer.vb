@@ -31,11 +31,12 @@ Partial Class Form1
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LogOnOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LogMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LoadArchivedMeasurementsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InfoMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FAQToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SupportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -103,7 +104,8 @@ Partial Class Form1
         Me.DataColumn1 = New System.Data.DataColumn()
         Me.DataColumn2 = New System.Data.DataColumn()
         Me.LblStatusMessage = New System.Windows.Forms.Label()
-        Me.SupportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExportLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LogOnOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -159,16 +161,18 @@ Partial Class Form1
         'ToolsToolStripMenuItem
         '
         Me.ToolsToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogOnOffToolStripMenuItem, Me.LoadArchivedMeasurementsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.LoadArchivedMeasurementsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
         '
-        'LogOnOffToolStripMenuItem
+        'LogMenuItem
         '
-        Me.LogOnOffToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._034_signature
-        Me.LogOnOffToolStripMenuItem.Name = "LogOnOffToolStripMenuItem"
-        resources.ApplyResources(Me.LogOnOffToolStripMenuItem, "LogOnOffToolStripMenuItem")
+        Me.LogMenuItem.AutoToolTip = True
+        Me.LogMenuItem.CheckOnClick = True
+        Me.LogMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportLogToolStripMenuItem, Me.LogOnOffToolStripMenuItem})
+        Me.LogMenuItem.Name = "LogMenuItem"
+        resources.ApplyResources(Me.LogMenuItem, "LogMenuItem")
         '
         'LoadArchivedMeasurementsToolStripMenuItem
         '
@@ -194,6 +198,12 @@ Partial Class Form1
         Me.FAQToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._032_faq_3
         Me.FAQToolStripMenuItem.Name = "FAQToolStripMenuItem"
         resources.ApplyResources(Me.FAQToolStripMenuItem, "FAQToolStripMenuItem")
+        '
+        'SupportToolStripMenuItem
+        '
+        Me.SupportToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._031_faq_2
+        Me.SupportToolStripMenuItem.Name = "SupportToolStripMenuItem"
+        resources.ApplyResources(Me.SupportToolStripMenuItem, "SupportToolStripMenuItem")
         '
         'Panel1
         '
@@ -743,11 +753,16 @@ Partial Class Form1
         resources.ApplyResources(Me.LblStatusMessage, "LblStatusMessage")
         Me.LblStatusMessage.Name = "LblStatusMessage"
         '
-        'SupportToolStripMenuItem
+        'ExportLogToolStripMenuItem
         '
-        Me.SupportToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._031_faq_2
-        Me.SupportToolStripMenuItem.Name = "SupportToolStripMenuItem"
-        resources.ApplyResources(Me.SupportToolStripMenuItem, "SupportToolStripMenuItem")
+        Me.ExportLogToolStripMenuItem.Name = "ExportLogToolStripMenuItem"
+        resources.ApplyResources(Me.ExportLogToolStripMenuItem, "ExportLogToolStripMenuItem")
+        '
+        'LogOnOffToolStripMenuItem
+        '
+        Me.LogOnOffToolStripMenuItem.CheckOnClick = True
+        Me.LogOnOffToolStripMenuItem.Name = "LogOnOffToolStripMenuItem"
+        resources.ApplyResources(Me.LogOnOffToolStripMenuItem, "LogOnOffToolStripMenuItem")
         '
         'Form1
         '
@@ -783,7 +798,7 @@ Partial Class Form1
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents LogOnOffToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents LogMenuItem As ToolStripMenuItem
     Friend WithEvents Panel1 As Panel
     Friend WithEvents CloseToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Label2 As Label
@@ -860,4 +875,6 @@ Partial Class Form1
     Friend WithEvents Label7 As Label
     Friend WithEvents FAQToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SupportToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ExportLogToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents LogOnOffToolStripMenuItem As ToolStripMenuItem
 End Class

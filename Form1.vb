@@ -5,6 +5,9 @@ Imports System.Threading
 Imports Timer = System.Windows.Forms.Timer
 Imports System.Globalization
 Imports System.Reflection
+Imports Microsoft.VisualBasic.Logging
+Imports OpenHardwareMonitor.Hardware
+Imports Newtonsoft.Json
 
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
@@ -37,7 +40,9 @@ Public Class Form1
     Private genericVcoreSensor As ISensor = Nothing
     Private stressTasks As New List(Of Task)()
     Private cancellationTokenSource As CancellationTokenSource
-
+    Private ReadOnly LogFilePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CoolCore_TemperatureLog.txt")
+    Private temperatureLogWriter As StreamWriter
+    Private isLoggingActive As Boolean = False
     Public Sub New()
         InitializeComponent()
         systemInfoRepository = New SystemInfoRepository()
@@ -226,7 +231,7 @@ Public Class Form1
         End Using
     End Sub
 
-    Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+    Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         refreshTimer.Stop()
         refreshTimer.Dispose()
         If monitoringTimer IsNot Nothing Then
@@ -241,6 +246,17 @@ Public Class Form1
             counter.Dispose()
         Next
         cpuLoadCounters.Clear()
+        If isLoggingActive AndAlso temperatureLogWriter IsNot Nothing Then
+            Try
+                temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log beendet: {DateTime.Now} (Anwendung geschlossen) ---")
+                temperatureLogWriter.Close()
+                temperatureLogWriter.Dispose()
+                temperatureLogWriter = Nothing
+                Debug.WriteLine("Temperatur-Logging beim Beenden der Anwendung beendet.")
+            Catch ex As Exception
+                Debug.WriteLine($"Fehler beim Beenden des Loggings während des Form-Schließens: {ex.Message}")
+            End Try
+        End If
     End Sub
 
 
@@ -452,6 +468,19 @@ Public Class Form1
                                   CoreTempBoxes(coreIndex).Text = $"{sensor.Value:F1}°C"
                                   CoreTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Value)
                               End If
+                              If isLoggingActive AndAlso temperatureLogWriter IsNot Nothing Then
+                                  Try
+                                      temperatureLogWriter.WriteLine(
+                                          $"{DateTime.Now:yyyy-MM-dd HH:mm:ss};" &
+                                          $"Core {coreIndex};" &
+                                          $"{sensor.Min:F1};" &
+                                          $"{sensor.Max:F1};" &
+                                          $"{sensor.Value:F1}")
+                                      temperatureLogWriter.Flush()
+                                  Catch ex As Exception
+                                      Debug.WriteLine($"Fehler beim Schreiben ins Temperatur-Log: {ex.Message}")
+                                  End Try
+                              End If
                           End Sub)
             Next
             If monitoringStopwatch.Elapsed.TotalSeconds >= My.Settings.MonitorTime Then
@@ -459,6 +488,7 @@ Public Class Form1
                 StopCpuStressTest()
                 Exit Sub
             End If
+
         Catch ex As Exception
             For Each kvp In LoadBoxes : kvp.Value.Text = "Error" : Next
             For Each kvp In CoreTempBoxes : kvp.Value.Text = "Error" : Next
@@ -981,7 +1011,6 @@ Public Class Form1
     End Sub
 
     Private Function GetTemperatureColor(temperature As Single) As Color
-        ' Define temperature thresholds for color changes
         Const YELLOW_THRESHOLD As Single = 55.0F
         Const ORANGE_THRESHOLD As Single = 70.0F
         Const RED_THRESHOLD As Single = 90.0F
@@ -997,13 +1026,12 @@ Public Class Form1
             End If
         Catch ex As Exception
             Debug.WriteLine($"Error in GetTemperatureColor: {ex.Message}")
-            Return Color.Black ' Fallback color in case of error
+            Return Color.Black
         End Try
     End Function
 
     Private Sub FAQToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FAQToolStripMenuItem.Click
         FAQForm.Show()
-
     End Sub
 
     Private Sub SupportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SupportToolStripMenuItem.Click
@@ -1017,6 +1045,155 @@ Public Class Form1
             End If
         Catch ex As Exception
             MessageBox.Show($"Fehler beim Öffnen der Supportseite: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LogOnOffToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LogOnOffToolStripMenuItem.Click
+        LogOnOffToolStripMenuItem.Checked = Not LogOnOffToolStripMenuItem.Checked
+
+        If LogOnOffToolStripMenuItem.Checked = False Then
+            LogOnOffToolStripMenuItem.Checked = True
+            ' Logging starten
+            Try
+
+                If temperatureLogWriter IsNot Nothing Then
+                    temperatureLogWriter.Close()
+                    temperatureLogWriter.Dispose()
+                    temperatureLogWriter = Nothing
+                End If
+                temperatureLogWriter = New StreamWriter(LogFilePath, append:=True)
+
+                temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log gestartet: {DateTime.Now} ---")
+                temperatureLogWriter.WriteLine("Zeitpunkt ; CPU-Core ; MinTemp ;MaxTemp ; CurrentTemp")
+
+                isLoggingActive = True
+                LblStatusMessage.Text = "Temperatur-Logging wurde gestartet. Daten werden in 'CoolCore_TemperatureLog.txt' geschrieben."
+                Debug.WriteLine("Temperatur-Logging gestartet.")
+
+            Catch ex As Exception
+                MessageBox.Show($"Fehler beim Starten des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Debug.WriteLine($"Logging Start Error: {ex.Message}")
+                LogOnOffToolStripMenuItem.Checked = False
+                isLoggingActive = False
+            End Try
+        ElseIf LogOnOffToolStripMenuItem.Checked = True Then
+            LogOnOffToolStripMenuItem.Checked = False
+            Try
+                If temperatureLogWriter IsNot Nothing Then
+                    temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log beendet: {DateTime.Now} ---")
+                    temperatureLogWriter.Close()
+                    temperatureLogWriter.Dispose()
+                    temperatureLogWriter = Nothing
+                End If
+                isLoggingActive = False
+                LblStatusMessage.Text = "Temperatur-Logging wurde beendet."
+                Debug.WriteLine("Temperatur-Logging beendet.")
+
+            Catch ex As Exception
+                MessageBox.Show($"Fehler beim Beenden des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Debug.WriteLine($"Logging Stop Error: {ex.Message}")
+                isLoggingActive = False
+            End Try
+        End If
+    End Sub
+    Private Structure LogEntry
+        Public Property Timestamp As DateTime
+        Public Property Core As String ' e.g., "Core 0", "CPU Package"
+        Public Property MinTemp As Single
+        Public Property MaxTemp As Single
+        Public Property CurrentTemp As Single
+        Public Property CpuName As String ' Add CPU Name for better reporting
+    End Structure
+    Private Sub ExportLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportLogToolStripMenuItem.Click
+        If Not File.Exists(LogFilePath) Then
+            MessageBox.Show("Die Temperatur-Logdatei wurde nicht gefunden. Bitte starten Sie das Logging zuerst.", "Export Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Try
+            ' 1. Logdatei lesen und Daten parsen
+            Dim logLines As List(Of String) = File.ReadAllLines(LogFilePath).ToList()
+            Dim parsedLogEntries As New List(Of LogEntry)()
+            Dim currentCpuName As String = "Unbekannt" ' Temporär für den Fall, dass CPU Name nicht in jeder Zeile ist
+
+            ' CPU-Namen aus den Systeminfos abrufen (einmalig)
+            Try
+                Using searcher As New ManagementObjectSearcher("SELECT Name FROM Win32_Processor")
+                    For Each mo As ManagementObject In searcher.Get()
+                        currentCpuName = mo("Name")?.ToString()
+                        Exit For
+                    Next
+                End Using
+            Catch ex As Exception
+                Debug.WriteLine($"Could not get CPU Name for report: {ex.Message}")
+                currentCpuName = "Unbekannt"
+            End Try
+
+
+            For Each line As String In logLines
+                ' Überspringe Header- und Footer-Zeilen
+                If line.StartsWith("--- CoolCore Temperatur-Log") OrElse line.StartsWith("Zeitpunkt;CPU-Core") Then
+                    Continue For
+                End If
+
+                Dim parts() As String = line.Split(";"c)
+                If parts.Length = 5 Then ' Zeit;CPU-Core;MinTemp;MaxTemp;CurrentTemp
+                    Dim timestamp As DateTime
+                    Dim core As String = parts(1).Trim()
+                    Dim minTemp As Single
+                    Dim maxTemp As Single
+                    Dim currentTemp As Single
+
+                    If Date.TryParseExact(parts(0).Trim(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, timestamp) Then
+                        Dim style = NumberStyles.Float
+                        If Not (Single.TryParse(parts(2).Trim(), style, CultureInfo.InvariantCulture, minTemp) OrElse
+                                Single.TryParse(parts(2).Trim(), style, CultureInfo.GetCultureInfo("de-DE"), minTemp)) Then
+                            ' Fehlerbehandlung
+                        End If
+                        If Not (Single.TryParse(parts(3).Trim(), style, CultureInfo.InvariantCulture, maxTemp) OrElse
+                                Single.TryParse(parts(3).Trim(), style, CultureInfo.GetCultureInfo("de-DE"), maxTemp)) Then
+                            ' Fehlerbehandlung
+                        End If
+                        If Not (Single.TryParse(parts(4).Trim(), style, CultureInfo.InvariantCulture, currentTemp) OrElse
+                                Single.TryParse(parts(4).Trim(), style, CultureInfo.GetCultureInfo("de-DE"), currentTemp)) Then
+                            ' Fehlerbehandlung
+                        End If
+
+                        parsedLogEntries.Add(New LogEntry With {
+                            .timestamp = timestamp,
+                            .core = core,
+                            .minTemp = minTemp,
+                            .maxTemp = maxTemp,
+                            .currentTemp = currentTemp,
+                            .CpuName = currentCpuName
+                        })
+                    End If
+                End If
+            Next
+
+            ' 2. Daten in JSON umwandeln
+            Dim jsonData As String = JsonConvert.SerializeObject(parsedLogEntries)
+
+            Dim templatePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TemperatureReportTemplate.html")
+            If Not File.Exists(templatePath) Then
+                MessageBox.Show("Die HTML-Vorlagendatei 'TemperatureReportTemplate.html' wurde nicht gefunden. Bitte stellen Sie sicher, dass sie im Anwendungsverzeichnis liegt.", "Export Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+
+            Dim htmlContent As String = File.ReadAllText(templatePath)
+            htmlContent = htmlContent.Replace("{{LOG_DATA_PLACEHOLDER}}", jsonData)
+
+            Dim reportFileName As String = $"CoolCore_TemperatureReport_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.html"
+            Dim reportPath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, reportFileName)
+            File.WriteAllText(reportPath, htmlContent, Encoding.UTF8)
+
+            Process.Start(reportPath)
+
+            MessageBox.Show($"Temperaturbericht erfolgreich erstellt und geöffnet: {reportFileName}", "Export erfolgreich", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Exportieren des Temperatur-Logs: {ex.Message}", "Export Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"Temperature Log Export Error: {ex.Message}")
         End Try
     End Sub
 End Class

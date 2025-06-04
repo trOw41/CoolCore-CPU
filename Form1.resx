@@ -164,10 +164,22 @@
   <data name="OptionsToolStripMenuItem.Text" xml:space="preserve">
     <value>Options</value>
   </data>
+  <data name="ExportLogToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="ExportLogToolStripMenuItem.Text" xml:space="preserve">
+    <value>Export Log</value>
+  </data>
   <data name="LogOnOffToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>180, 22</value>
   </data>
   <data name="LogOnOffToolStripMenuItem.Text" xml:space="preserve">
+    <value>Log On / Off</value>
+  </data>
+  <data name="LogMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="LogMenuItem.Text" xml:space="preserve">
     <value>Log On/Off</value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -212,19 +224,19 @@
     <value>Tools</value>
   </data>
   <data name="InfoMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>118, 22</value>
   </data>
   <data name="InfoMenuItem.Text" xml:space="preserve">
     <value>Info</value>
   </data>
   <data name="FAQToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>118, 22</value>
   </data>
   <data name="FAQToolStripMenuItem.Text" xml:space="preserve">
     <value>FAQ</value>
   </data>
   <data name="SupportToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>118, 22</value>
   </data>
   <data name="SupportToolStripMenuItem.Text" xml:space="preserve">
     <value>Support</value>
@@ -2278,10 +2290,10 @@
   <data name="&gt;&gt;ToolsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Name" xml:space="preserve">
-    <value>LogOnOffToolStripMenuItem</value>
+  <data name="&gt;&gt;LogMenuItem.Name" xml:space="preserve">
+    <value>LogMenuItem</value>
   </data>
-  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Type" xml:space="preserve">
+  <data name="&gt;&gt;LogMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Name" xml:space="preserve">
@@ -2308,6 +2320,12 @@
   <data name="&gt;&gt;FAQToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;SupportToolStripMenuItem.Name" xml:space="preserve">
+    <value>SupportToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;SupportToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;DataSet1.Name" xml:space="preserve">
     <value>DataSet1</value>
   </data>
@@ -2332,10 +2350,16 @@
   <data name="&gt;&gt;DataColumn2.Type" xml:space="preserve">
     <value>System.Data.DataColumn, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;SupportToolStripMenuItem.Name" xml:space="preserve">
-    <value>SupportToolStripMenuItem</value>
+  <data name="&gt;&gt;ExportLogToolStripMenuItem.Name" xml:space="preserve">
+    <value>ExportLogToolStripMenuItem</value>
   </data>
-  <data name="&gt;&gt;SupportToolStripMenuItem.Type" xml:space="preserve">
+  <data name="&gt;&gt;ExportLogToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Name" xml:space="preserve">
+    <value>LogOnOffToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

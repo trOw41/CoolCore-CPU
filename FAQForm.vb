@@ -74,9 +74,17 @@ Public Class FAQForm
         performanceNode.Nodes.Add(CreateFAQNode(
             "Wie kann ich das Erscheinungsbild (Theme) der Anwendung ändern?",
             "Sie können das Erscheinungsbild zwischen 'Dunkel' und 'Standard' über das Menü 'Einstellungen' -> 'Optionen' ändern und speichern."))
+        performanceNode.Nodes.Add(CreateFAQNode(
+            "Wie kann ich die CPU-Stresstest-Funktion nutzen?",
+            "Die CPU-Stresstest-Funktion ist derzeit in Entwicklung. Sie wird es Ihnen ermöglichen, die Leistung Ihrer CPU unter Last zu testen und zu überwachen."))
+        performanceNode.Nodes.Add(CreateFAQNode(
+            "Wie kann ich die Anwendung beenden?",
+            "Sie können CoolCore über das Menü 'Datei' -> 'Beenden' oder durch Klicken auf das Schließen-Symbol in der oberen rechten Ecke des Fensters beenden."))
+        performanceNode.Nodes.Add(CreateFAQNode(
+            "Was bedeutet'Logging'?",
+            "'Logging' ermöglicht es CoolCore, die CPU Temperatur im hintergrund aufzuzeichnen (logging) um diese dann später wenn gewünscht als Ereigniss Tabell zu jedem Core auf der CPU anzuzeigen und bei Bedarf zu exportieren."))
         TrvFAQ.Nodes.Add(performanceNode)
 
-        ' Erweitert alle Hauptknoten zur besseren Übersicht
         generalNode.Expand()
         systemInfoNode.Expand()
         tempSensorNode.Expand()

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoolCore Temperatur-Log Bericht</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px; /* Adjust height as needed */
+            width: 100%;
+            margin-bottom: 40px;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .chart-item {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 30px;
+            text-align: center;
+        }
+        /* Color legend for chart lines */
+        .color-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .color-legend-item {
+            display: flex;
+            align-items: center;
+        }
+        .color-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CoolCore Temperatur-Log Bericht</h1>
+        <p class="note">Generiert am: <span id="reportGenerationDate"></span></p>
+
+        <div class="color-legend">
+            <div class="color-legend-item"><span class="color-box" style="background-color: #4CAF50;"></span> Aktuelle Temperatur</div>
+            <div class="color-legend-item"><span class="color-box" style="background-color: #FFC107;"></span> Maximale Temperatur</div>
+            <div class="color-legend-item"><span class="color-box" style="background-color: #8BC34A;"></span> Minimale Temperatur</div>
+            <div class="color-legend-item"><span class="color-box" style="background-color: #F44336;"></span> Durchschnittstemperatur (alle Cores)</div>
+        </div>
+
+        <h2>Temperaturverlauf pro CPU-Kern</h2>
+        <div class="chart-grid" id="cpuCoreCharts">
+            </div>
+
+        <h2>Zusammenfassende Temperaturtabelle</h2>
+        <table id="summaryTable">
+            <thead>
+                <tr>
+                    <th>Zeitpunkt</th>
+                    <th>CPU Name</th>
+                    <th>Core 0</th>
+                    <th>Core 1</th>
+                    <th>Core 2</th>
+                    <th>Core 3</th>
+                    <th>Core 4</th>
+                    <th>Core 5</th>
+                    <th>Core 6</th>
+                    <th>Core 7</th>
+                    <th>Durchschnitt (°C)</th>
+                    <th>Max Temp (°C)</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+
+        <p class="note">Daten stammen aus "CoolCore_TemperatureLog.txt".</p>
+    </div>
+
+    <script>
+        // Placeholder for the temperature data. VB.NET will inject this.
+        // It will be a string representation of a JSON array of objects.
+        const logDataString = `{{LOG_DATA_PLACEHOLDER}}`;
+        const logData = JSON.parse(logDataString);
+
+        document.getElementById('reportGenerationDate').innerText = new Date().toLocaleString('de-DE');
+
+        // --- Data Preprocessing ---
+        // Group data by core and prepare for charts
+        const coreData = {};
+        const timeLabels = []; // Unique sorted timestamps for x-axis
+        const cpuNames = {}; // To store CPU name for each time entry
+        let uniqueCores = new Set(); // To find all core indices present
+
+        logData.forEach(entry => {
+            if (!timeLabels.includes(entry.Timestamp)) {
+                timeLabels.push(entry.Timestamp);
+            }
+            if (!coreData[entry.Core]) {
+                coreData[entry.Core] = {
+                    current: [],
+                    min: [],
+                    max: []
+                };
+            }
+            coreData[entry.Core].current.push({ x: entry.Timestamp, y: entry.CurrentTemp });
+            coreData[entry.Core].min.push({ x: entry.Timestamp, y: entry.MinTemp });
+            coreData[entry.Core].max.push({ x: entry.Timestamp, y: entry.MaxTemp });
+            uniqueCores.add(entry.Core);
+            // Assuming CPU name is consistent, or we pick the first one from logs
+            if (!cpuNames[entry.Timestamp] && entry.CpuName) {
+                cpuNames[entry.Timestamp] = entry.CpuName;
+            }
+        });
+
+        // Sort time labels chronologically
+        timeLabels.sort((a, b) => new Date(a) - new Date(b));
+
+        // --- Generate Charts ---
+        const cpuCoreChartsContainer = document.getElementById('cpuCoreCharts');
+        const coreColors = [
+            '#4CAF50', // Current Temp
+            '#FFC107', // Max Temp (Yellow)
+            '#8BC34A'  // Min Temp (Light Green)
+        ];
+
+        // Ensure data points align with sorted time labels for all cores
+        const preparedCoreData = {};
+        uniqueCores = Array.from(uniqueCores).sort(); // Sort cores for consistent order
+
+        uniqueCores.forEach(core => {
+            preparedCoreData[core] = {
+                current: [],
+                min: [],
+                max: []
+            };
+            timeLabels.forEach(time => {
+                const entry = logData.find(d => d.Timestamp === time && d.Core === core);
+                preparedCoreData[core].current.push(entry ? entry.CurrentTemp : NaN);
+                preparedCoreData[core].min.push(entry ? entry.MinTemp : NaN);
+                preparedCoreData[core].max.push(entry ? entry.MaxTemp : NaN);
+            });
+        });
+
+        uniqueCores.forEach(core => {
+            const chartDiv = document.createElement('div');
+            chartDiv.className = 'chart-item';
+            chartDiv.innerHTML = `<h3>${core} Temperaturverlauf</h3><canvas id="chart-${core}"></canvas>`;
+            cpuCoreChartsContainer.appendChild(chartDiv);
+
+            const ctx = document.getElementById(`chart-${core}`).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timeLabels.map(t => new Date(t).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })),
+                    datasets: [
+                        {
+                            label: 'Aktuell (°C)',
+                            data: preparedCoreData[core].current,
+                            borderColor: coreColors[0],
+                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            fill: false,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Max (°C)',
+                            data: preparedCoreData[core].max,
+                            borderColor: coreColors[1],
+                            backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                            fill: false,
+                            tension: 0.1,
+                            borderDash: [5, 5]
+                        },
+                        {
+                            label: 'Min (°C)',
+                            data: preparedCoreData[core].min,
+                            borderColor: coreColors[2],
+                            backgroundColor: 'rgba(139, 195, 74, 0.2)',
+                            fill: false,
+                            tension: 0.1,
+                            borderDash: [2, 2]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'category', // Use 'category' for discrete time labels
+                            title: {
+                                display: true,
+                                text: 'Zeitpunkt'
+                            }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Temperatur (°C)'
+                            },
+                            min: 0, // Ensure temperature starts from 0 for clarity
+                            max: 100 // Cap at a reasonable max temperature
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        title: {
+                            display: true,
+                            text: `${core} Temperaturverlauf`
+                        }
+                    }
+                }
+            });
+        });
+
+
+        // --- Generate Summary Table ---
+        const summaryTableBody = document.querySelector('#summaryTable tbody');
+
+        // Group data by timestamp for table rows
+        const dataByTimestamp = {};
+        logData.forEach(entry => {
+            if (!dataByTimestamp[entry.Timestamp]) {
+                dataByTimestamp[entry.Timestamp] = {
+                    cores: {},
+                    totalTemp: 0,
+                    coreCount: 0,
+                    maxOverallTemp: 0,
+                    cpuName: entry.CpuName // Store CPU name for this timestamp
+                };
+            }
+            dataByTimestamp[entry.Timestamp].cores[entry.Core] = entry.CurrentTemp;
+            dataByTimestamp[entry.Timestamp].totalTemp += entry.CurrentTemp;
+            dataByTimestamp[entry.Timestamp].coreCount++;
+            dataByTimestamp[entry.Timestamp].maxOverallTemp = Math.max(dataByTimestamp[entry.Timestamp].maxOverallTemp, entry.CurrentTemp);
+        });
+
+        // Sort timestamps for table display
+        const sortedTimestamps = Object.keys(dataByTimestamp).sort((a, b) => new Date(a) - new Date(b));
+
+        sortedTimestamps.forEach(timestamp => {
+            const rowData = dataByTimestamp[timestamp];
+            const avgTemp = rowData.totalTemp / rowData.coreCount;
+            const row = summaryTableBody.insertRow();
+
+            row.insertCell().innerText = new Date(timestamp).toLocaleString('de-DE'); // Formatted time
+            row.insertCell().innerText = rowData.cpuName || 'Unbekannt'; // CPU Name
+
+            // Populate core temperature cells based on discovered uniqueCores
+            uniqueCores.forEach(core => {
+                const cell = row.insertCell();
+                cell.innerText = rowData.cores[core] !== undefined ? rowData.cores[core].toFixed(1) + '°C' : 'N/A';
+            });
+
+            row.insertCell().innerText = avgTemp.toFixed(1) + '°C'; // Average Temp
+            row.insertCell().innerText = rowData.maxOverallTemp.toFixed(1) + '°C'; // Max Temp
+        });
+    </script>
+</body>
+</html>
