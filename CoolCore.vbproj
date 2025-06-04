@@ -151,6 +151,12 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="CoreTemp.vb" />
+    <Compile Include="FAQForm.Designer.vb">
+      <DependentUpon>FAQForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FAQForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -204,6 +210,9 @@
   <ItemGroup>
     <EmbeddedResource Include="AboutBox1.resx">
       <DependentUpon>AboutBox1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FAQForm.resx">
+      <DependentUpon>FAQForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>

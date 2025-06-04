@@ -1014,4 +1014,8 @@ Public Class Form1
         End Try
     End Function
 
+    Private Sub FAQToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FAQToolStripMenuItem.Click
+        FAQForm.Show()
+
+    End Sub
 End Class
