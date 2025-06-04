@@ -29,8 +29,8 @@
     <PublisherName>Daniel Trojan</PublisherName>
     <SuiteName>CoolCore</SuiteName>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>12</ApplicationRevision>
-    <ApplicationVersion>1.7.1.%2a</ApplicationVersion>
+    <ApplicationRevision>14</ApplicationRevision>
+    <ApplicationVersion>1.7.2.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -265,6 +265,9 @@
     <Content Include="Resources\014-close.png" />
     <Content Include="Resources\018-close-button.png" />
     <Content Include="Resources\019-person.png" />
+    <Content Include="Support\support.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

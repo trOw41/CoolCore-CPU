@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoolCore Support</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .contact-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .contact-form input[type="email"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Include padding in width */
+            font-size: 1rem;
+        }
+        .contact-form textarea {
+            resize: vertical; /* Allow vertical resizing */
+            min-height: 150px;
+        }
+        .contact-form button {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+        }
+        .contact-form button:hover {
+            background-color: #0056b3;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CoolCore CPU Monitoring Tool Support:</h1>
+
+        <p class="note">
+            Bitte füllen Sie das folgende Formular aus, um uns eine E-Mail zu senden.
+            Ihr Standard-E-Mail-Programm wird sich öffnen, um die Nachricht sulomusic@protonmail.com zu senden.
+            Für allgemeinen Support, besuchen Sie auch unsere FAQ-Seite in der CoolCore Anwendung.
+        </p>
+
+        <form id="supportForm" class="contact-form">
+            <label for="userEmail">Ihre E-Mail-Adresse:</label>
+            <input type="email" id="userEmail" name="userEmail" placeholder="max.mustermann@example.com" required>
+
+            <label for="messageText">Ihre Nachricht:</label>
+            <textarea id="messageText" name="messageText" placeholder="Beschreiben Sie Ihr Anliegen hier..." required></textarea>
+
+            <button type="button" id="sendEmailButton">E-Mail senden</button>
+        </form>
+
+        <p class="note">
+            © 2025 Daniel Trojan
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('sendEmailButton').addEventListener('click', function() {
+            var userEmail = document.getElementById('userEmail').value;
+            var messageText = document.getElementById('messageText').value;
+
+            // Betreff soll die E-Mail-Adresse des Benutzers enthalten
+            var subject = encodeURIComponent("Support-Anfrage von " + userEmail); 
+            
+            // Text des E-Mails
+            var body = encodeURIComponent("Absender E-Mail: " + userEmail + "\n\n" + messageText); 
+
+            if (userEmail && messageText) {
+                // Öffnet das Standard-E-Mail-Programm mit vorausgefüllten Details
+                // Empfänger ist "sulomusic@protonmail.com"
+                window.location.href = "mailto:sulomusic@protonmail.com?subject=" + subject + "&body=" + body;
+            } else {
+                alert("Bitte füllen Sie sowohl Ihre E-Mail-Adresse als auch die Nachricht aus.");
+            }
+        });
+    </script>
+</body>
+</html>

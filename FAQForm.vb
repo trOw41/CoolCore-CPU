@@ -84,12 +84,13 @@ Public Class FAQForm
     End Sub
 
     Private Function CreateFAQNode(question As String, answer As String) As TreeNode
-        Dim node As New TreeNode(question)
-        node.Tag = answer
+        Dim node As New TreeNode(question) With {
+            .Tag = answer
+        }
         Return node
     End Function
 
-    Private Sub trvFAQ_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles TrvFAQ.AfterSelect
+    Private Sub TrvFAQ_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles TrvFAQ.AfterSelect
         If e.Node IsNot Nothing AndAlso e.Node.Tag IsNot Nothing AndAlso e.Node.Nodes.Count = 0 Then
             TxtAnswer.Text = e.Node.Tag.ToString()
         Else

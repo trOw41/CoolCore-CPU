@@ -215,7 +215,7 @@ Public Class Form1
         computer.IsCpuEnabled = True
         computer.IsGpuEnabled = True
         LblStatusMessage.ForeColor = Color.Black
-        Me.Text = "CoolCore - Monitoring Tool" & " - " & My.Application.Info.Version.ToString(3)
+        Me.Text = "CoolCore - Monitoring Tool" & " - " & My.Application.Info.Version.ToString(4)
         ApplyTheme(My.Settings.ApplicationTheme)
         InitializePerCoreCounters()
         InitializeCoreTemperatureSensors()
@@ -854,17 +854,7 @@ Public Class Form1
             Case "Dark"
                 ' Apply Dark Theme
                 Me.BackColor = Color.FromArgb(45, 45, 48) ' Dark grey background
-                Me.ForeColor = Color.White ' White text
-
-                ' Example for specific controls (you'll need to expand this)
-                ' If you have a Panel, change its BackColor
-                ' If you have TextBoxes, change their BackColor and ForeColor
-                ' For example:
-                ' Me.pnlMain.BackColor = Color.FromArgb(60, 60, 63)
-                ' Me.txtOutput.BackColor = Color.FromArgb(70, 70, 73)
-                ' Me.txtOutput.ForeColor = Color.White
-                ' Me.lblHostName.ForeColor = Color.White
-                ' etc. Iterate through Controls if you have many
+                Me.ForeColor = Color.White
                 For Each ctrl As Control In Me.Controls
                     ApplyThemeToControl(ctrl, theme)
                 Next
@@ -1014,5 +1004,19 @@ Public Class Form1
     Private Sub FAQToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FAQToolStripMenuItem.Click
         FAQForm.Show()
 
+    End Sub
+
+    Private Sub SupportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SupportToolStripMenuItem.Click
+        Try
+            Dim supportPagePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Support\support.html")
+
+            If File.Exists(supportPagePath) Then
+                Process.Start(supportPagePath)
+            Else
+                MessageBox.Show("Die Supportseite konnte nicht gefunden werden: " & supportPagePath, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Öffnen der Supportseite: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 End Class
