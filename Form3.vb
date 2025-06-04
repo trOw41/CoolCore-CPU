@@ -13,13 +13,9 @@ Public Class Form3
         ProgressBar1.Style = ProgressBarStyle.Marquee
         LblLoadingText.Text = "Monitoring CPU Temperatur:"
         LblLoadingText.AutoSize = True
-        ' LblLoadingText.Location = New Point((Me.ClientSize.Width - LblLoadingText.Width) / 2, 20)
-        AddHandler BtnStopMonitoring.Click, AddressOf BtnStopMonitoring_Click
-
         If TimeLabel IsNot Nothing Then
             TimeLabel.Text = "Wird geladen.."
             TimeLabel.AutoSize = True
-            'TimeLabel.Location = New Point((Me.ClientSize.Width - TimeLabel.Width) / 2, LblLoadingText.Bottom + 10)
         End If
     End Sub
     Public Sub UpdateElapsedTime(elapsedTime As TimeSpan)
@@ -34,8 +30,6 @@ Public Class Form3
         End If
     End Sub
 
-    Private Sub BtnStopMonitoring_Click(sender As Object, e As EventArgs) Handles BtnStopMonitoring.Click
-        RaiseEvent StopRequested(Me, EventArgs.Empty)
-    End Sub
+
 
 End Class

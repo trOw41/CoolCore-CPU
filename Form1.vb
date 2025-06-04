@@ -214,10 +214,8 @@ Public Class Form1
         computer.Open(True)
         computer.IsCpuEnabled = True
         computer.IsGpuEnabled = True
-        LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
         LblStatusMessage.ForeColor = Color.Black
-        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", True)
-        Me.Text = "CoolCore - Monitoring Tool" & " - " & FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion
+        Me.Text = "CoolCore - Monitoring Tool" & " - " & My.Application.Info.Version.ToString(3)
         ApplyTheme(My.Settings.ApplicationTheme)
         InitializePerCoreCounters()
         InitializeCoreTemperatureSensors()
@@ -623,7 +621,7 @@ Public Class Form1
             monitoringTimer.Start()
             StartCpuStressTest()
         Else
-            Call StopMonitoringProcess()
+
         End If
     End Sub
     Private Sub MonitoringForm_StopRequested(sender As Object, e As EventArgs)
@@ -634,7 +632,6 @@ Public Class Form1
     Private Async Sub StopMonitoringProcess()
         If Not isMonitoringActive Then Exit Sub
         isMonitoringActive = False
-        InfoMenuItem.Text = "Start Temp. Monitoring"
         LblStatusMessage.Text = "Background temperature monitoring stopped. Preparing chart..."
         LblStatusMessage.ForeColor = Color.DarkOrange
         If monitoringForm IsNot Nothing AndAlso Not monitoringForm.IsDisposed Then
