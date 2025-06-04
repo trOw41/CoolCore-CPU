@@ -27,7 +27,7 @@
 ![main_window](screenshots/main_window.png)
 
 +MONITOR TEMP / STRESS CPU
-![monitoring](screenshots/monitoring_window)
+![monitoring](screenshots/monitoring_window.png)
 
 + CHART SCREEN
 ![chart_window](screenshots/chart_window.png)
