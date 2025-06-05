@@ -30,7 +30,7 @@
     <SuiteName>CoolCore</SuiteName>
     <TrustUrlParameters>true</TrustUrlParameters>
     <ApplicationRevision>14</ApplicationRevision>
-    <ApplicationVersion>1.7.2.%2a</ApplicationVersion>
+    <ApplicationVersion>1.8.1.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -265,6 +265,10 @@
     <Content Include="Resources\014-close.png" />
     <Content Include="Resources\018-close-button.png" />
     <Content Include="Resources\019-person.png" />
+    <Content Include="Resources\023-cpu.png" />
+    <None Include="Resources\023-cpu1.png" />
+    <None Include="Resources\024-cpu-1.png" />
+    <None Include="Resources\024-cpu-1.ico" />
     <Content Include="Support\support.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

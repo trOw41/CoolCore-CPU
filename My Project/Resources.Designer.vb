@@ -133,6 +133,46 @@ Namespace My.Resources
         '''<summary>
         '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         '''</summary>
+        Public ReadOnly Property _023_cpu() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("023-cpu", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
+        '''</summary>
+        Public ReadOnly Property _023_cpu_1() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("023_cpu_1", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property _024_cpu() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("024-cpu", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
+        '''</summary>
+        Public ReadOnly Property _024_cpu_1() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("_024_cpu_1", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        '''</summary>
         Public ReadOnly Property _025_help() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("025-help", resourceCulture)

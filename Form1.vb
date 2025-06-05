@@ -890,15 +890,15 @@ Public Class Form1
         End Try
     End Function
 
-
     Private Sub ApplyTheme(theme As String)
         Select Case theme
             Case "Dark"
                 ' Apply Dark Theme
                 Me.BackColor = Color.FromArgb(45, 45, 48) ' Dark grey background
                 Me.ForeColor = Color.White
+                ' Me.ApplyThemeToControl(, Color.FromArgb(45, 45, 48)) ' Slightly lighter dark for controls
                 For Each ctrl As Control In Me.Controls
-                    ApplyThemeToControl(ctrl, theme)
+                    Me.ApplyThemeToControl(ctrl, theme)
                 Next
 
                 ' Apply to menu strip if you have one
@@ -909,11 +909,12 @@ Public Class Form1
                         ApplyThemeToToolStripItem(item, theme)
                     Next
                 End If
-
+                PictureBox1.Image = My.Resources._024_cpu
+                Me.Icon = My.Resources._024_cpu_1
             Case "Standard"
                 ' Apply Standard/Light Theme
-                Me.BackColor = SystemColors.Control ' Default system background
-                Me.ForeColor = SystemColors.ControlText ' Default system text color
+                Me.BackColor = SystemColors.ControlLightLight
+                Me.ForeColor = SystemColors.ControlText
 
                 For Each ctrl As Control In Me.Controls
                     ApplyThemeToControl(ctrl, theme)
@@ -926,10 +927,10 @@ Public Class Form1
                         ApplyThemeToToolStripItem(item, theme)
                     Next
                 End If
-
+                PictureBox1.Image = My.Resources._023_cpu
+                Me.Icon = My.Resources._023_cpu_1
         End Select
     End Sub
-
     Private Sub ApplyThemeToControl(ctrl As Control, theme As String)
         Select Case theme
             Case "Dark"
@@ -983,6 +984,7 @@ Public Class Form1
                     For Each item As ToolStripItem In CType(ctrl, MenuStrip).Items
                         ApplyThemeToToolStripItem(item, theme)
                     Next
+
                 End If
         End Select
     End Sub
@@ -1172,24 +1174,16 @@ Public Class Form1
             Next
 
             Dim filteredLogEntries As New List(Of LogEntry)()
-            ' Dictionary speichert jetzt den letzten *Zeitstempel* pro Core, der in einem 10-Sekunden-Intervall gefiltert wurde.
             Dim lastFilteredTimestampPerCore As New Dictionary(Of String, DateTime)()
-
             For Each entry As LogEntry In parsedLogEntries
                 Dim coreKey As String = entry.Core
-
-                ' Runden des Zeitstempels auf das nächste volle 10-Sekunden-Intervall
-                ' Beispiel: 10:23:04 -> 10:23:00, 10:23:17 -> 10:23:10, 10:23:59 -> 10:23:50
                 Dim roundedTimestamp As DateTime = entry.Timestamp
                 roundedTimestamp = New DateTime(roundedTimestamp.Year, roundedTimestamp.Month, roundedTimestamp.Day,
                                             roundedTimestamp.Hour, roundedTimestamp.Minute, (roundedTimestamp.Second \ 10) * 10,
-                                            roundedTimestamp.Kind) ' Wichtig: Sekunden auf Vielfaches von 10 runden. Millisekunden auf 0.
-
+                                            roundedTimestamp.Kind)
                 If Not lastFilteredTimestampPerCore.ContainsKey(coreKey) OrElse (roundedTimestamp - lastFilteredTimestampPerCore(coreKey)).TotalSeconds >= 10 Then
-                    ' Dies ist der erste Eintrag für diesen Core in diesem 10-Sekunden-Intervall
-                    ' ODER der letzte gefilterte Zeitstempel ist älter als 10 Sekunden
                     filteredLogEntries.Add(entry)
-                    lastFilteredTimestampPerCore(coreKey) = roundedTimestamp ' Speichere den gerundeten Zeitstempel
+                    lastFilteredTimestampPerCore(coreKey) = roundedTimestamp
                     Debug.WriteLine($"Added entry to filtered (10s interval): {entry.Timestamp} - {entry.Core}")
                 Else
                     Debug.WriteLine($"Skipped entry (already logged this 10s interval for core {coreKey}): {entry.Timestamp} - {entry.Core}")
