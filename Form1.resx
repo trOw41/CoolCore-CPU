@@ -147,13 +147,13 @@
     <value>ImageAboveText</value>
   </data>
   <data name="SettingsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>159, 22</value>
   </data>
   <data name="SettingsToolStripMenuItem.Text" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="ExportCPUInfoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>159, 22</value>
   </data>
   <data name="ExportCPUInfoToolStripMenuItem.Text" xml:space="preserve">
     <value>Export CPU Info</value>
@@ -2296,6 +2296,18 @@
   <data name="&gt;&gt;LogMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;ExportLogToolStripMenuItem.Name" xml:space="preserve">
+    <value>ExportLogToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;ExportLogToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Name" xml:space="preserve">
+    <value>LogOnOffToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Name" xml:space="preserve">
     <value>LoadArchivedMeasurementsToolStripMenuItem</value>
   </data>
@@ -2349,18 +2361,6 @@
   </data>
   <data name="&gt;&gt;DataColumn2.Type" xml:space="preserve">
     <value>System.Data.DataColumn, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ExportLogToolStripMenuItem.Name" xml:space="preserve">
-    <value>ExportLogToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;ExportLogToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Name" xml:space="preserve">
-    <value>LogOnOffToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Form1</value>

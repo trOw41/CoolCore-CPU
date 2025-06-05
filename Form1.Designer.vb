@@ -32,6 +32,8 @@ Partial Class Form1
         Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExportLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LogOnOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LoadArchivedMeasurementsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InfoMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -104,8 +106,6 @@ Partial Class Form1
         Me.DataColumn1 = New System.Data.DataColumn()
         Me.DataColumn2 = New System.Data.DataColumn()
         Me.LblStatusMessage = New System.Windows.Forms.Label()
-        Me.ExportLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LogOnOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -173,6 +173,17 @@ Partial Class Form1
         Me.LogMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportLogToolStripMenuItem, Me.LogOnOffToolStripMenuItem})
         Me.LogMenuItem.Name = "LogMenuItem"
         resources.ApplyResources(Me.LogMenuItem, "LogMenuItem")
+        '
+        'ExportLogToolStripMenuItem
+        '
+        Me.ExportLogToolStripMenuItem.Name = "ExportLogToolStripMenuItem"
+        resources.ApplyResources(Me.ExportLogToolStripMenuItem, "ExportLogToolStripMenuItem")
+        '
+        'LogOnOffToolStripMenuItem
+        '
+        Me.LogOnOffToolStripMenuItem.CheckOnClick = True
+        Me.LogOnOffToolStripMenuItem.Name = "LogOnOffToolStripMenuItem"
+        resources.ApplyResources(Me.LogOnOffToolStripMenuItem, "LogOnOffToolStripMenuItem")
         '
         'LoadArchivedMeasurementsToolStripMenuItem
         '
@@ -752,17 +763,6 @@ Partial Class Form1
         '
         resources.ApplyResources(Me.LblStatusMessage, "LblStatusMessage")
         Me.LblStatusMessage.Name = "LblStatusMessage"
-        '
-        'ExportLogToolStripMenuItem
-        '
-        Me.ExportLogToolStripMenuItem.Name = "ExportLogToolStripMenuItem"
-        resources.ApplyResources(Me.ExportLogToolStripMenuItem, "ExportLogToolStripMenuItem")
-        '
-        'LogOnOffToolStripMenuItem
-        '
-        Me.LogOnOffToolStripMenuItem.CheckOnClick = True
-        Me.LogOnOffToolStripMenuItem.Name = "LogOnOffToolStripMenuItem"
-        resources.ApplyResources(Me.LogOnOffToolStripMenuItem, "LogOnOffToolStripMenuItem")
         '
         'Form1
         '

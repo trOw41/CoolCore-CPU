@@ -8,6 +8,8 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.Logging
 Imports OpenHardwareMonitor.Hardware
 Imports Newtonsoft.Json
+Imports System.Collections.Generic
+Imports System.Linq
 
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
@@ -43,6 +45,9 @@ Public Class Form1
     Private ReadOnly LogFilePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CoolCore_TemperatureLog.txt")
     Private temperatureLogWriter As StreamWriter
     Private isLoggingActive As Boolean = False
+    Private allParsedLogEntries As Object
+    Private Const MAX_LOG_SIZE_MB As Long = 1
+
     Public Sub New()
         InitializeComponent()
         systemInfoRepository = New SystemInfoRepository()
@@ -229,6 +234,8 @@ Public Class Form1
         Using ReadAndDisplaySystemInfoAsync()
             refreshTimer.Start()
         End Using
+        CheckAndManageLogFile()
+        StartLog()
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -468,27 +475,30 @@ Public Class Form1
                                   CoreTempBoxes(coreIndex).Text = $"{sensor.Value:F1}°C"
                                   CoreTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Value)
                               End If
-                              If isLoggingActive AndAlso temperatureLogWriter IsNot Nothing Then
-                                  Try
-                                      temperatureLogWriter.WriteLine(
-                                          $"{DateTime.Now:yyyy-MM-dd HH:mm:ss};" &
-                                          $"Core {coreIndex};" &
-                                          $"{sensor.Min:F1};" &
-                                          $"{sensor.Max:F1};" &
-                                          $"{sensor.Value:F1}")
-                                      temperatureLogWriter.Flush()
-                                  Catch ex As Exception
-                                      Debug.WriteLine($"Fehler beim Schreiben ins Temperatur-Log: {ex.Message}")
-                                  End Try
-                              End If
                           End Sub)
+                If isLoggingActive AndAlso temperatureLogWriter IsNot Nothing Then
+                    Try
+                        ' Daten in CSV-Format schreiben
+                        temperatureLogWriter.WriteLine(
+                            $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")};" &
+                            $"Core {coreIndex};" &
+                            $"{sensor.Min:F1};" &
+                            $"{sensor.Max:F1};" &
+                            $"{sensor.Value:F1}")
+
+                        temperatureLogWriter.Flush()
+                    Catch ex As Exception
+                        Debug.WriteLine($"Fehler beim Schreiben ins Temperatur-Log: {ex.Message}")
+
+                    End Try
+                End If
             Next
             If monitoringStopwatch.Elapsed.TotalSeconds >= My.Settings.MonitorTime Then
                 StopMonitoringProcess()
                 StopCpuStressTest()
                 Exit Sub
             End If
-
+            CheckAndManageLogFile()
         Catch ex As Exception
             For Each kvp In LoadBoxes : kvp.Value.Text = "Error" : Next
             For Each kvp In CoreTempBoxes : kvp.Value.Text = "Error" : Next
@@ -650,6 +660,7 @@ Public Class Form1
             monitoringStopwatch.Restart()
             monitoringTimer.Start()
             StartCpuStressTest()
+            LblStatusMessage.Text = "Background temperature monitoring started. CPU stress test running..."
         Else
 
         End If
@@ -709,6 +720,7 @@ Public Class Form1
 
     Private Sub LoadingForm_StopRequested(sender As Object, e As EventArgs)
         Call StopMonitoringProcess()
+
     End Sub
 
     Private Sub LoadArchivedMeasurementsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoadArchivedMeasurementsToolStripMenuItem.Click
@@ -1048,75 +1060,73 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub LogOnOffToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LogOnOffToolStripMenuItem.Click
-        LogOnOffToolStripMenuItem.Checked = Not LogOnOffToolStripMenuItem.Checked
+    Private Sub StartLog()
+        ' Logging starten
+        Try
+            If temperatureLogWriter IsNot Nothing Then
+                temperatureLogWriter.Close()
+                temperatureLogWriter.Dispose()
+                temperatureLogWriter = Nothing
+            End If
+            temperatureLogWriter = New StreamWriter(LogFilePath, append:=True)
 
-        If LogOnOffToolStripMenuItem.Checked = False Then
-            LogOnOffToolStripMenuItem.Checked = True
-            ' Logging starten
-            Try
+            temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log gestartet: {DateTime.Now} ---")
+            temperatureLogWriter.WriteLine("Zeitpunkt ; CPU-Core ; MinTemp ;MaxTemp ; CurrentTemp")
 
-                If temperatureLogWriter IsNot Nothing Then
-                    temperatureLogWriter.Close()
-                    temperatureLogWriter.Dispose()
-                    temperatureLogWriter = Nothing
-                End If
-                temperatureLogWriter = New StreamWriter(LogFilePath, append:=True)
+            isLoggingActive = True
+            LblStatusMessage.Text = "Temperatur-Logging wurde gestartet. Daten werden in 'CoolCore_TemperatureLog.txt' geschrieben."
+            Debug.WriteLine("Temperatur-Logging gestartet.")
 
-                temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log gestartet: {DateTime.Now} ---")
-                temperatureLogWriter.WriteLine("Zeitpunkt ; CPU-Core ; MinTemp ;MaxTemp ; CurrentTemp")
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Starten des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"Logging Start Error: {ex.Message}")
 
-                isLoggingActive = True
-                LblStatusMessage.Text = "Temperatur-Logging wurde gestartet. Daten werden in 'CoolCore_TemperatureLog.txt' geschrieben."
-                Debug.WriteLine("Temperatur-Logging gestartet.")
+            isLoggingActive = False
 
-            Catch ex As Exception
-                MessageBox.Show($"Fehler beim Starten des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Debug.WriteLine($"Logging Start Error: {ex.Message}")
-                LogOnOffToolStripMenuItem.Checked = False
-                isLoggingActive = False
-            End Try
-        ElseIf LogOnOffToolStripMenuItem.Checked = True Then
-            LogOnOffToolStripMenuItem.Checked = False
-            Try
-                If temperatureLogWriter IsNot Nothing Then
-                    temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log beendet: {DateTime.Now} ---")
-                    temperatureLogWriter.Close()
-                    temperatureLogWriter.Dispose()
-                    temperatureLogWriter = Nothing
-                End If
-                isLoggingActive = False
-                LblStatusMessage.Text = "Temperatur-Logging wurde beendet."
-                Debug.WriteLine("Temperatur-Logging beendet.")
+        End Try
+    End Sub
 
-            Catch ex As Exception
-                MessageBox.Show($"Fehler beim Beenden des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    Private Sub StopLog()
+
+        Try
+            If temperatureLogWriter IsNot Nothing Then
+                temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log beendet: {DateTime.Now} ---")
+                temperatureLogWriter.Close()
+                temperatureLogWriter.Dispose()
+                temperatureLogWriter = Nothing
+            End If
+            isLoggingActive = False
+            LblStatusMessage.Text = "Temperatur-Logging wurde beendet."
+            Debug.WriteLine("Temperatur-Logging beendet.")
+            ExportLogToolStripMenuItem.Enabled = True
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Beenden des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Debug.WriteLine($"Logging Stop Error: {ex.Message}")
                 isLoggingActive = False
             End Try
-        End If
+
     End Sub
     Private Structure LogEntry
         Public Property Timestamp As DateTime
-        Public Property Core As String ' e.g., "Core 0", "CPU Package"
+        Public Property Core As String
         Public Property MinTemp As Single
         Public Property MaxTemp As Single
         Public Property CurrentTemp As Single
-        Public Property CpuName As String ' Add CPU Name for better reporting
+        Public Property CpuName As String
     End Structure
     Private Sub ExportLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportLogToolStripMenuItem.Click
         If Not File.Exists(LogFilePath) Then
             MessageBox.Show("Die Temperatur-Logdatei wurde nicht gefunden. Bitte starten Sie das Logging zuerst.", "Export Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
-
+        StopLog()
         Try
-            ' 1. Logdatei lesen und Daten parsen
+
             Dim logLines As List(Of String) = File.ReadAllLines(LogFilePath).ToList()
             Dim parsedLogEntries As New List(Of LogEntry)()
-            Dim currentCpuName As String = "Unbekannt" ' Temporär für den Fall, dass CPU Name nicht in jeder Zeile ist
+            Dim currentCpuName As String = "Unbekannt"
 
-            ' CPU-Namen aus den Systeminfos abrufen (einmalig)
+
             Try
                 Using searcher As New ManagementObjectSearcher("SELECT Name FROM Win32_Processor")
                     For Each mo As ManagementObject In searcher.Get()
@@ -1131,48 +1141,80 @@ Public Class Form1
 
 
             For Each line As String In logLines
-                ' Überspringe Header- und Footer-Zeilen
+
                 If line.StartsWith("--- CoolCore Temperatur-Log") OrElse line.StartsWith("Zeitpunkt;CPU-Core") Then
                     Continue For
                 End If
 
                 Dim parts() As String = line.Split(";"c)
-                If parts.Length = 5 Then ' Zeit;CPU-Core;MinTemp;MaxTemp;CurrentTemp
+                If parts.Length = 5 Then
                     Dim timestamp As DateTime
                     Dim core As String = parts(1).Trim()
                     Dim minTemp As Single
                     Dim maxTemp As Single
                     Dim currentTemp As Single
 
-                    If Date.TryParseExact(parts(0).Trim(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, timestamp) Then
-                        Dim style = NumberStyles.Float
-                        If Not (Single.TryParse(parts(2).Trim(), style, CultureInfo.InvariantCulture, minTemp) OrElse
-                                Single.TryParse(parts(2).Trim(), style, CultureInfo.GetCultureInfo("de-DE"), minTemp)) Then
-                            ' Fehlerbehandlung
-                        End If
-                        If Not (Single.TryParse(parts(3).Trim(), style, CultureInfo.InvariantCulture, maxTemp) OrElse
-                                Single.TryParse(parts(3).Trim(), style, CultureInfo.GetCultureInfo("de-DE"), maxTemp)) Then
-                            ' Fehlerbehandlung
-                        End If
-                        If Not (Single.TryParse(parts(4).Trim(), style, CultureInfo.InvariantCulture, currentTemp) OrElse
-                                Single.TryParse(parts(4).Trim(), style, CultureInfo.GetCultureInfo("de-DE"), currentTemp)) Then
-                            ' Fehlerbehandlung
-                        End If
+                    If DateTime.TryParseExact(parts(0).Trim(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, timestamp) AndAlso
+                   Single.TryParse(parts(2).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, minTemp) AndAlso
+                   Single.TryParse(parts(3).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, maxTemp) AndAlso
+                   Single.TryParse(parts(4).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, currentTemp) Then
 
                         parsedLogEntries.Add(New LogEntry With {
-                            .timestamp = timestamp,
-                            .core = core,
-                            .minTemp = minTemp,
-                            .maxTemp = maxTemp,
-                            .currentTemp = currentTemp,
-                            .CpuName = currentCpuName
-                        })
+                        .Timestamp = timestamp,
+                        .Core = core,
+                        .MinTemp = minTemp,
+                        .MaxTemp = maxTemp,
+                        .CurrentTemp = currentTemp,
+                        .CpuName = currentCpuName
+                    })
                     End If
                 End If
             Next
 
-            ' 2. Daten in JSON umwandeln
-            Dim jsonData As String = JsonConvert.SerializeObject(parsedLogEntries)
+            Dim filteredLogEntries As New List(Of LogEntry)()
+            ' Dictionary speichert jetzt den letzten *Zeitstempel* pro Core, der in einem 10-Sekunden-Intervall gefiltert wurde.
+            Dim lastFilteredTimestampPerCore As New Dictionary(Of String, DateTime)()
+
+            For Each entry As LogEntry In parsedLogEntries
+                Dim coreKey As String = entry.Core
+
+                ' Runden des Zeitstempels auf das nächste volle 10-Sekunden-Intervall
+                ' Beispiel: 10:23:04 -> 10:23:00, 10:23:17 -> 10:23:10, 10:23:59 -> 10:23:50
+                Dim roundedTimestamp As DateTime = entry.Timestamp
+                roundedTimestamp = New DateTime(roundedTimestamp.Year, roundedTimestamp.Month, roundedTimestamp.Day,
+                                            roundedTimestamp.Hour, roundedTimestamp.Minute, (roundedTimestamp.Second \ 10) * 10,
+                                            roundedTimestamp.Kind) ' Wichtig: Sekunden auf Vielfaches von 10 runden. Millisekunden auf 0.
+
+                If Not lastFilteredTimestampPerCore.ContainsKey(coreKey) OrElse (roundedTimestamp - lastFilteredTimestampPerCore(coreKey)).TotalSeconds >= 10 Then
+                    ' Dies ist der erste Eintrag für diesen Core in diesem 10-Sekunden-Intervall
+                    ' ODER der letzte gefilterte Zeitstempel ist älter als 10 Sekunden
+                    filteredLogEntries.Add(entry)
+                    lastFilteredTimestampPerCore(coreKey) = roundedTimestamp ' Speichere den gerundeten Zeitstempel
+                    Debug.WriteLine($"Added entry to filtered (10s interval): {entry.Timestamp} - {entry.Core}")
+                Else
+                    Debug.WriteLine($"Skipped entry (already logged this 10s interval for core {coreKey}): {entry.Timestamp} - {entry.Core}")
+                End If
+            Next
+            Debug.WriteLine($"Filtered down to {filteredLogEntries.Count} entries.")
+            Dim jsonBuilder As New StringBuilder()
+            jsonBuilder.Append("[")
+            For i As Integer = 0 To parsedLogEntries.Count - 1
+                Dim entry = parsedLogEntries(i)
+                jsonBuilder.Append("{")
+                jsonBuilder.Append(String.Format("""Timestamp"": ""{0}"",", entry.Timestamp.ToString("o")))
+                jsonBuilder.Append(String.Format("""Core"": ""{0}"",", entry.Core))
+                jsonBuilder.Append(String.Format("""MinTemp"": {0},", entry.MinTemp.ToString(CultureInfo.InvariantCulture)))
+                jsonBuilder.Append(String.Format("""MaxTemp"": {0},", entry.MaxTemp.ToString(CultureInfo.InvariantCulture)))
+                jsonBuilder.Append(String.Format("""CurrentTemp"": {0},", entry.CurrentTemp.ToString(CultureInfo.InvariantCulture)))
+                jsonBuilder.Append(String.Format("""CpuName"": ""{0}""", entry.CpuName))
+                jsonBuilder.Append("}")
+                If i < parsedLogEntries.Count - 1 Then
+                    jsonBuilder.Append(",")
+                End If
+            Next
+            jsonBuilder.Append("]")
+
+            Dim jsonData As String = jsonBuilder.ToString()
 
             Dim templatePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TemperatureReportTemplate.html")
             If Not File.Exists(templatePath) Then
@@ -1183,17 +1225,56 @@ Public Class Form1
             Dim htmlContent As String = File.ReadAllText(templatePath)
             htmlContent = htmlContent.Replace("{{LOG_DATA_PLACEHOLDER}}", jsonData)
 
-            Dim reportFileName As String = $"CoolCore_TemperatureReport_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.html"
+            Dim reportFileName As String = "CoolCore_TemperatureReport.html"
             Dim reportPath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, reportFileName)
             File.WriteAllText(reportPath, htmlContent, Encoding.UTF8)
-
+            If File.Exists(reportPath) Then
+                Debug.WriteLine($"Temperature report successfully created at: {reportPath}")
+                StartLog()
+            Else
+                Debug.WriteLine("Failed to create temperature report.")
+            End If
             Process.Start(reportPath)
 
-            MessageBox.Show($"Temperaturbericht erfolgreich erstellt und geöffnet: {reportFileName}", "Export erfolgreich", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            LblStatusMessage.Text = $"Temperaturbericht erfolgreich erstellt und geöffnet: {reportFileName}"
 
         Catch ex As Exception
             MessageBox.Show($"Fehler beim Exportieren des Temperatur-Logs: {ex.Message}", "Export Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Debug.WriteLine($"Temperature Log Export Error: {ex.Message}")
         End Try
     End Sub
+
+
+    Private Sub CheckAndManageLogFile()
+        Try
+            If File.Exists(LogFilePath) Then
+                Dim fileInfo As New FileInfo(LogFilePath)
+                Dim fileSizeInBytes As Long = fileInfo.Length
+                Dim maxSizeBytes As Long = MAX_LOG_SIZE_MB * 1024 * 1024
+                If fileSizeInBytes >= maxSizeBytes Then
+                    Debug.WriteLine($"Log-Datei '{LogFilePath}' hat {MAX_LOG_SIZE_MB}MB ({fileSizeInBytes} Bytes) erreicht. Lösche und erstelle neu...")
+
+                    File.Delete(LogFilePath)
+                    Debug.WriteLine($"Log-Datei '{LogFilePath}' gelöscht.")
+                    Using writer As New StreamWriter(LogFilePath, False, Encoding.UTF8)
+                        writer.WriteLine("--- CoolCore Temperatur-Log ---")
+                        writer.WriteLine("Zeitpunkt;CPU-Core;MinTemp;MaxTemp;CurrentTemp")
+                    End Using
+                    Debug.WriteLine($"Neue leere Log-Datei '{LogFilePath}' mit Header erstellt.")
+                Else
+                    Debug.WriteLine($"Log-Datei '{LogFilePath}' ist in Ordnung. Größe: {fileSizeInBytes} Bytes.")
+                End If
+            Else
+                Debug.WriteLine($"Log-Datei '{LogFilePath}' nicht gefunden. Erstelle eine neue...")
+                Using writer As New StreamWriter(LogFilePath, False, Encoding.UTF8)
+                    writer.WriteLine("--- CoolCore Temperatur-Log ---")
+                    writer.WriteLine("Zeitpunkt;CPU-Core;MinTemp;MaxTemp;CurrentTemp")
+                End Using
+            End If
+        Catch ex As Exception
+            Debug.WriteLine($"Fehler beim Verwalten der Log-Datei: {ex.Message}")
+            MessageBox.Show($"Fehler beim Verwalten der Log-Datei: {ex.Message}", "Log-Datei Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
 End Class
