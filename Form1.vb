@@ -1246,20 +1246,20 @@ Public Class Form1
                 Dim fileSizeInBytes As Long = fileInfo.Length
                 Dim maxSizeBytes As Long = MAX_LOG_SIZE_MB * 1024 * 1024
                 If fileSizeInBytes >= maxSizeBytes Then
-                    Debug.WriteLine($"Log-Datei '{LogFilePath}' hat {MAX_LOG_SIZE_MB}MB ({fileSizeInBytes} Bytes) erreicht. Lösche und erstelle neu...")
+                    LblStatusMessage.Text = $"Log-Datei {LogFilePath} hat {MAX_LOG_SIZE_MB}MB ({fileSizeInBytes} Bytes) erreicht. Lösche und erstelle neu..."
 
                     File.Delete(LogFilePath)
-                    Debug.WriteLine($"Log-Datei '{LogFilePath}' gelöscht.")
+                    LblStatusMessage.Text = $"Log-Datei '{LogFilePath}' gelöscht."
                     Using writer As New StreamWriter(LogFilePath, False, Encoding.UTF8)
                         writer.WriteLine("--- CoolCore Temperatur-Log ---")
                         writer.WriteLine("Zeitpunkt;CPU-Core;MinTemp;MaxTemp;CurrentTemp")
                     End Using
-                    Debug.WriteLine($"Neue leere Log-Datei '{LogFilePath}' mit Header erstellt.")
+                    LblStatusMessage.Text = $"Neue leere Log-Datei '{LogFilePath}' mit Header erstellt."
                 Else
-                    Debug.WriteLine($"Log-Datei '{LogFilePath}' ist in Ordnung. Größe: {fileSizeInBytes} Bytes.")
+                    LblStatusMessage.Text = $"Log-Datei Größe: {fileSizeInBytes} Bytes."
                 End If
             Else
-                Debug.WriteLine($"Log-Datei '{LogFilePath}' nicht gefunden. Erstelle eine neue...")
+                LblStatusMessage.Text = $"Log-Datei '{LogFilePath}' nicht gefunden. Erstelle eine neue..."
                 Using writer As New StreamWriter(LogFilePath, False, Encoding.UTF8)
                     writer.WriteLine("--- CoolCore Temperatur-Log ---")
                     writer.WriteLine("Zeitpunkt;CPU-Core;MinTemp;MaxTemp;CurrentTemp")

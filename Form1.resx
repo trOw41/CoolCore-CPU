@@ -2118,7 +2118,7 @@
     <value>True</value>
   </data>
   <data name="LblStatusMessage.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift SemiLight, 9pt, style=Italic</value>
+    <value>Bahnschrift, 8.25pt</value>
   </data>
   <data name="LblStatusMessage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -2127,7 +2127,7 @@
     <value>5, 436</value>
   </data>
   <data name="LblStatusMessage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>41, 14</value>
+    <value>40, 13</value>
   </data>
   <data name="LblStatusMessage.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -2266,52 +2266,16 @@
   <data name="&gt;&gt;FileToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;OptionsToolStripMenuItem.Name" xml:space="preserve">
-    <value>OptionsToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;OptionsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ToolsToolStripMenuItem.Name" xml:space="preserve">
-    <value>ToolsToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;ToolsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;HelpToolStripMenuItem.Name" xml:space="preserve">
-    <value>HelpToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;HelpToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;DataSet1.Name" xml:space="preserve">
-    <value>DataSet1</value>
-  </data>
-  <data name="&gt;&gt;DataSet1.Type" xml:space="preserve">
-    <value>System.Data.DataSet, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;DataTable1.Name" xml:space="preserve">
-    <value>DataTable1</value>
-  </data>
-  <data name="&gt;&gt;DataTable1.Type" xml:space="preserve">
-    <value>System.Data.DataTable, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;DataColumn1.Name" xml:space="preserve">
-    <value>DataColumn1</value>
-  </data>
-  <data name="&gt;&gt;DataColumn1.Type" xml:space="preserve">
-    <value>System.Data.DataColumn, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;DataColumn2.Name" xml:space="preserve">
-    <value>DataColumn2</value>
-  </data>
-  <data name="&gt;&gt;DataColumn2.Type" xml:space="preserve">
-    <value>System.Data.DataColumn, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;CloseToolStripMenuItem.Name" xml:space="preserve">
     <value>CloseToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;CloseToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;OptionsToolStripMenuItem.Name" xml:space="preserve">
+    <value>OptionsToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;OptionsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;SettingsToolStripMenuItem.Name" xml:space="preserve">
@@ -2324,6 +2288,12 @@
     <value>ExportCPUInfoToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;ExportCPUInfoToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ToolsToolStripMenuItem.Name" xml:space="preserve">
+    <value>ToolsToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;ToolsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LogMenuItem.Name" xml:space="preserve">
@@ -2350,6 +2320,12 @@
   <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;HelpToolStripMenuItem.Name" xml:space="preserve">
+    <value>HelpToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;HelpToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;InfoMenuItem.Name" xml:space="preserve">
     <value>InfoMenuItem</value>
   </data>
@@ -2367,6 +2343,30 @@
   </data>
   <data name="&gt;&gt;SupportToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DataSet1.Name" xml:space="preserve">
+    <value>DataSet1</value>
+  </data>
+  <data name="&gt;&gt;DataSet1.Type" xml:space="preserve">
+    <value>System.Data.DataSet, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DataTable1.Name" xml:space="preserve">
+    <value>DataTable1</value>
+  </data>
+  <data name="&gt;&gt;DataTable1.Type" xml:space="preserve">
+    <value>System.Data.DataTable, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DataColumn1.Name" xml:space="preserve">
+    <value>DataColumn1</value>
+  </data>
+  <data name="&gt;&gt;DataColumn1.Type" xml:space="preserve">
+    <value>System.Data.DataColumn, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DataColumn2.Name" xml:space="preserve">
+    <value>DataColumn2</value>
+  </data>
+  <data name="&gt;&gt;DataColumn2.Type" xml:space="preserve">
+    <value>System.Data.DataColumn, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Form1</value>
