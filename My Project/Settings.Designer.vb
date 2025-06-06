@@ -77,6 +77,30 @@ Namespace My
                 Me("MonitorTime") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+        Public Property MAX_LOG_SIZE_KB() As Long
+            Get
+                Return CType(Me("MAX_LOG_SIZE_KB"),Long)
+            End Get
+            Set
+                Me("MAX_LOG_SIZE_KB") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property LogStartStop() As Boolean
+            Get
+                Return CType(Me("LogStartStop"),Boolean)
+            End Get
+            Set
+                Me("LogStartStop") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

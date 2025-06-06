@@ -46,7 +46,7 @@ Public Class Form1
     Private temperatureLogWriter As StreamWriter
     Private isLoggingActive As Boolean = False
     Private allParsedLogEntries As Object
-    Private Const MAX_LOG_SIZE_KB As Long = 500 ' Geändert auf 500 KB
+    Private LogSize As Long = Settings.MAX_LOG_SIZE_KB
     Public Sub New()
         InitializeComponent()
         systemInfoRepository = New SystemInfoRepository()
@@ -234,10 +234,27 @@ Public Class Form1
             refreshTimer.Start()
         End Using
 
-        StartLog()
-        CheckAndManageLogFile()
+        StartStopLog()
+
     End Sub
 
+    Public Sub StartStopLog()
+        Dim Start As Boolean = Settings.LogStartStop
+        If Start = True Then
+            StartLog()
+            CheckAndManageLogFile()
+        ElseIf Start = False Then
+            If isLoggingActive Then
+                StopLog()
+                LblStatusMessage.Text = "Logging stopped."
+            End If
+        End If
+    End Sub
+    Public Sub UpdateLogSize()
+        Dim logSizeKB As Integer = My.Settings.MAX_LOG_SIZE_KB
+        LogSize = logSizeKB
+        LblStatusMessage.Text = $"Max. Loggröße: {logSizeKB} KB"
+    End Sub
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         refreshTimer.Stop()
         refreshTimer.Dispose()
@@ -1244,26 +1261,32 @@ Public Class Form1
 
 
     Private Sub CheckAndManageLogFile()
+        Dim fileInfo As New FileInfo(LogFilePath)
+        Dim fileSizeInBytes As Long = fileInfo.Length
+        ' Konvertiere KB in Bytes
+        Dim maxSizeBytes As Long = LogSize * 1024
         Try
             If File.Exists(LogFilePath) Then
-                Dim fileInfo As New FileInfo(LogFilePath)
-                Dim fileSizeInBytes As Long = fileInfo.Length
-                ' Konvertiere KB in Bytes
-                Dim maxSizeBytes As Long = MAX_LOG_SIZE_KB * 1024
+
                 LblStatusMessage.Text = $"Überprüfe Log-Datei '{LogFilePath}'..."
                 Debug.WriteLine($"Log file size: {fileSizeInBytes} bytes, Max size: {maxSizeBytes} bytes")
+                LblStatusMessage.Text = $"Log: {fileSizeInBytes} Bytes. Max: {maxSizeBytes} bytes"
                 If fileSizeInBytes >= maxSizeBytes Then
-                    LblStatusMessage.Text = $"Log-Datei {LogFilePath} hat {MAX_LOG_SIZE_KB}KB ({fileSizeInBytes} Bytes) erreicht. Lösche und erstelle neu..." ' Anzeige in KB
-
+                    LblStatusMessage.Text = $"{LogSize}KB ({fileSizeInBytes} Bytes) erreicht. Lösche und erstelle neu..."
+                    StopLog()
                     File.Delete(LogFilePath)
                     LblStatusMessage.Text = $"Log-Datei '{LogFilePath}' gelöscht."
-                    Using writer As New StreamWriter(LogFilePath, False, Encoding.UTF8)
+                    Using writer As New StreamWriter(LogFilePath, True, Encoding.UTF8)
                         writer.WriteLine("--- CoolCore Temperatur-Log ---")
                         writer.WriteLine("Zeitpunkt;CPU-Core;MinTemp;MaxTemp;CurrentTemp")
                     End Using
                     LblStatusMessage.Text = $"Neue leere Log-Datei '{LogFilePath}' mit Header erstellt."
+                    If fileSizeInBytes > 0 Then
+                        StartLog()
+                    End If
                 Else
-                    LblStatusMessage.Text = $"Log-Datei Größe: {fileSizeInBytes} Bytes."
+                    'LblStatusMessage.Text = $"{Path.GetFileName(LogFilePath)} Größe: {fileSizeInBytes} Bytes."
+
                 End If
             Else
                 LblStatusMessage.Text = $"Log-Datei '{LogFilePath}' nicht gefunden. Erstelle eine neue..."
@@ -1272,6 +1295,7 @@ Public Class Form1
                     writer.WriteLine("Zeitpunkt;CPU-Core;MinTemp;MaxTemp;CurrentTemp")
                 End Using
             End If
+            LblStatusMessage.Text = $"Log: {fileSizeInBytes} Bytes. Max: {maxSizeBytes} bytes"
         Catch ex As Exception
             Debug.WriteLine($"Fehler beim Verwalten der Log-Datei: {ex.Message}")
             'MessageBox.Show($"Fehler beim Verwalten der Log-Datei: {ex.Message}", "Log-Datei Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)

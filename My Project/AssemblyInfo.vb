@@ -29,6 +29,6 @@ Imports System.Runtime.InteropServices
 '      Revision
 '
 
-<Assembly: AssemblyVersion("1.8.1.14")>
-<Assembly: AssemblyFileVersion("1.8.1.0")>
+<Assembly: AssemblyVersion("1.8.2.0")>
+<Assembly: AssemblyFileVersion("1.8.2.0")>
 <Assembly: NeutralResourcesLanguage("de-DE")>

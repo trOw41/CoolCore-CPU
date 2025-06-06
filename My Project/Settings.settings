@@ -8,5 +8,11 @@
     <Setting Name="MonitorTime" Type="System.Double" Scope="User">
       <Value Profile="(Default)">30</Value>
     </Setting>
+    <Setting Name="MAX_LOG_SIZE_KB" Type="System.Int64" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="LogStartStop" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -16,6 +16,16 @@ Public Class OptionsForm
                 My.Settings.ApplicationTheme = "Standard"
         End Select
         Label1.Text = "CPU Stresstest Intervall (in Sekunden): " & My.Settings.MonitorTime
+        LogTimeLabel.Text = "Loggröße: " & My.Settings.MAX_LOG_SIZE_KB & " KB"
+        For i = 0 To LogSizeBox.Items.Count - 1
+            Dim items = i
+            LogSizeBox.Items(i) = Settings.MAX_LOG_SIZE_KB
+            If My.Settings.MAX_LOG_SIZE_KB = LogSizeBox.Items(i).ToString() Then
+                LogSizeBox.SelectedIndex = i
+                Exit For
+            End If
+        Next
+        LogStartStopBox.Checked = My.Settings.LogStartStop
     End Sub
 
     Private Sub ChkDarkTheme_CheckedChanged(sender As Object, e As EventArgs) Handles chkDarkTheme.CheckedChanged
@@ -154,5 +164,27 @@ Public Class OptionsForm
 
     Private Sub OptionsForm_ThemeChanged(sender As Object, newTheme As String)
         ApplyTheme(newTheme)
+    End Sub
+
+    Private Sub LogSizeBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LogSizeBox.SelectedIndexChanged
+
+        If LogSizeBox.SelectedItem IsNot Nothing Then
+            My.Settings.MAX_LOG_SIZE_KB = LogSizeBox.SelectedItem.ToString()
+        End If
+        LogTimeLabel.Text = "Loggröße: " & My.Settings.MAX_LOG_SIZE_KB & " KB"
+        Form1.Invoke(Sub()
+                         Form1.UpdateLogSize()
+                     End Sub)
+    End Sub
+
+    Private Sub LogStartStopBox_CheckedChanged(sender As Object, e As EventArgs) Handles LogStartStopBox.CheckedChanged
+        If LogStartStopBox.Checked = False Then
+            My.Settings.LogStartStop = False
+            Form1.Invoke(Sub()
+                             Form1.StartStopLog()
+                         End Sub)
+        ElseIf LogStartStopBox.Checked = True Then
+            My.Settings.LogStartStop = True
+        End If
     End Sub
 End Class
