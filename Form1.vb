@@ -42,12 +42,11 @@ Public Class Form1
     Private genericVcoreSensor As ISensor = Nothing
     Private stressTasks As New List(Of Task)()
     Private cancellationTokenSource As CancellationTokenSource
-    Private ReadOnly LogFilePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CoolCore_TemperatureLog.txt")
+    Private ReadOnly LogFilePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CoolCore_TemperatureLog1.txt")
     Private temperatureLogWriter As StreamWriter
     Private isLoggingActive As Boolean = False
     Private allParsedLogEntries As Object
-    Private Const MAX_LOG_SIZE_MB As Long = 1
-
+    Private Const MAX_LOG_SIZE_KB As Long = 500 ' Geändert auf 500 KB
     Public Sub New()
         InitializeComponent()
         systemInfoRepository = New SystemInfoRepository()
@@ -128,7 +127,7 @@ Public Class Form1
         stressTasks.Clear()
         Me.Invoke(Sub()
                       LblStatusMessage.Text = "CPU-Stresstest beendet."
-                      LblStatusMessage.ForeColor = Color.Green
+                      'LblStatusMessage.ForeColor = Color.Green
                   End Sub)
     End Sub
 
@@ -200,13 +199,13 @@ Public Class Form1
             End Using
             Me.Invoke(Sub()
                           LblStatusMessage.Text = $"Temperature data saved to {filePath}"
-                          LblStatusMessage.ForeColor = Color.Blue
+                          'LblStatusMessage.ForeColor = Color.Blue
                       End Sub)
             Return filePath
         Catch ex As Exception
             Me.Invoke(Sub()
                           LblStatusMessage.Text = $"Error saving data: {ex.Message}"
-                          LblStatusMessage.ForeColor = Color.Red
+                          'LblStatusMessage.ForeColor = Color.Red
                       End Sub)
             Return Nothing
         End Try
@@ -234,8 +233,9 @@ Public Class Form1
         Using ReadAndDisplaySystemInfoAsync()
             refreshTimer.Start()
         End Using
-        CheckAndManageLogFile()
+
         StartLog()
+        CheckAndManageLogFile()
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -496,7 +496,7 @@ Public Class Form1
             If monitoringStopwatch.Elapsed.TotalSeconds >= My.Settings.MonitorTime Then
                 StopMonitoringProcess()
                 StopCpuStressTest()
-                Exit Sub
+                'Exit Sub
             End If
             CheckAndManageLogFile()
         Catch ex As Exception
@@ -509,7 +509,7 @@ Public Class Form1
 
     Private Function ReadAndDisplaySystemInfoAsync() As Task
         LblStatusMessage.Text = "Reading system information and saving to database..."
-        LblStatusMessage.ForeColor = Color.CadetBlue
+        'LblStatusMessage.ForeColor = Color.CadetBlue
         Dim systemInfo As New SystemInfoData With {
             .Timestamp = DateTime.Now
         }
@@ -603,13 +603,13 @@ Public Class Form1
             '#--------------------------------------------------------------------------------------------------------------------'
             Me.Invoke(Sub()
                           LblStatusMessage.Text = "System information successfully read and saved to database!"
-                          LblStatusMessage.ForeColor = Color.Green
+                          'LblStatusMessage.ForeColor = Color.Green
                       End Sub)
 
         Catch ex As Exception
             Me.Invoke(Sub()
                           LblStatusMessage.Text = "Error: " & ex.Message
-                          LblStatusMessage.ForeColor = Color.Red
+                          'LblStatusMessage.ForeColor = Color.Red
                       End Sub)
             MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -674,7 +674,7 @@ Public Class Form1
         If Not isMonitoringActive Then Exit Sub
         isMonitoringActive = False
         LblStatusMessage.Text = "Background temperature monitoring stopped. Preparing chart..."
-        LblStatusMessage.ForeColor = Color.DarkOrange
+        'LblStatusMessage.ForeColor = Color.DarkOrange
         If monitoringForm IsNot Nothing AndAlso Not monitoringForm.IsDisposed Then
             monitoringForm.Close()
             monitoringForm = Nothing
@@ -708,7 +708,7 @@ Public Class Form1
         InitializeCoreTemperatureSensors()
 
         LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
-        LblStatusMessage.ForeColor = Color.Green
+        'LblStatusMessage.ForeColor = Color.Green
     End Sub
 
     Private Sub MonitoringTimer_Tick(sender As Object, e As EventArgs)
@@ -742,7 +742,7 @@ Public Class Form1
                         Dim chartForm As New Form2(selectedFilePath)
                         chartForm.Show()
                         LblStatusMessage.Text = $"Archivierte Messung '{Path.GetFileName(selectedFilePath)}' geladen."
-                        LblStatusMessage.ForeColor = Color.DarkGreen
+                        'LblStatusMessage.ForeColor = Color.DarkGreen
                     Catch ex As Exception
                         MessageBox.Show($"Fehler beim Laden der Messung: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         LblStatusMessage.Text = $"Fehler beim Laden der Messung: {ex.Message}"
@@ -753,7 +753,7 @@ Public Class Form1
                 End If
             Else
                 LblStatusMessage.Text = "Auswahl abgebrochen."
-                LblStatusMessage.ForeColor = Color.Gray
+                'LblStatusMessage.ForeColor = Color.Gray
             End If
         End Using
     End Sub
@@ -894,11 +894,11 @@ Public Class Form1
         Select Case theme
             Case "Dark"
                 ' Apply Dark Theme
-                Me.BackColor = Color.FromArgb(45, 45, 48) ' Dark grey background
-                Me.ForeColor = Color.White
-                ' Me.ApplyThemeToControl(, Color.FromArgb(45, 45, 48)) ' Slightly lighter dark for controls
+                ' Apply Dark Theme
+                Me.BackColor = ColorTranslator.FromHtml("#282C34")
+                Me.ForeColor = ColorTranslator.FromHtml("#ABB2BF")
                 For Each ctrl As Control In Me.Controls
-                    Me.ApplyThemeToControl(ctrl, theme)
+                    ApplyThemeToControl(ctrl, theme)
                 Next
 
                 ' Apply to menu strip if you have one
@@ -913,9 +913,8 @@ Public Class Form1
                 Me.Icon = My.Resources._024_cpu_1
             Case "Standard"
                 ' Apply Standard/Light Theme
-                Me.BackColor = SystemColors.ControlLightLight
-                Me.ForeColor = SystemColors.ControlText
-
+                Me.BackColor = ColorTranslator.FromHtml("#F0F0F0") ' Sehr helles Grau
+                Me.ForeColor = ColorTranslator.FromHtml("#333333") ' Dunkles Grau
                 For Each ctrl As Control In Me.Controls
                     ApplyThemeToControl(ctrl, theme)
                 Next
@@ -934,57 +933,62 @@ Public Class Form1
     Private Sub ApplyThemeToControl(ctrl As Control, theme As String)
         Select Case theme
             Case "Dark"
-                ctrl.BackColor = Color.FromArgb(60, 60, 63) ' Slightly lighter dark for controls
-                ctrl.ForeColor = Color.White
-                If TypeOf ctrl Is TextBox Then
-                    CType(ctrl, TextBox).BackColor = Color.FromArgb(70, 70, 73)
-                    'CType(ctrl, TextBox).ForeColor = Color.White
-                ElseIf TypeOf ctrl Is Button Then
-                    CType(ctrl, Button).BackColor = Color.FromArgb(70, 70, 73)
-                    CType(ctrl, Button).ForeColor = Color.White
+                If TypeOf ctrl Is Button Then
+                    CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#3B4048")
+                    CType(ctrl, Button).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+                    CType(ctrl, Button).FlatStyle = FlatStyle.Flat
+                    CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#4A5059")
+                    CType(ctrl, Button).FlatAppearance.BorderSize = 1
+                    ' Optional: Add MouseHover/MouseLeave events for hover effect
+                ElseIf TypeOf ctrl Is TextBox Then
+                    CType(ctrl, TextBox).BackColor = ColorTranslator.FromHtml("#3B4048")
+                    CType(ctrl, TextBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+                    CType(ctrl, TextBox).BorderStyle = BorderStyle.FixedSingle
+                ElseIf TypeOf ctrl Is Label Then
+                    CType(ctrl, Label).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+                ElseIf TypeOf ctrl Is CheckBox Then
+                    CType(ctrl, CheckBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
                 ElseIf TypeOf ctrl Is GroupBox Then
-                    CType(ctrl, GroupBox).BackColor = Color.FromArgb(50, 50, 53)
-                    CType(ctrl, GroupBox).ForeColor = Color.White
+                    CType(ctrl, GroupBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+                    CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#282C34")
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
                 ElseIf TypeOf ctrl Is Panel Then
-                    CType(ctrl, Panel).BackColor = Color.FromArgb(50, 50, 53)
-                    CType(ctrl, Panel).ForeColor = Color.White
+                    CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#282C34")
+                    CType(ctrl, Panel).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
                 End If
             Case "Standard"
-                Me.BackColor = SystemColors.Control ' Default system background
-                ctrl.BackColor = SystemColors.Control
-                ctrl.ForeColor = SystemColors.ControlText
-                If TypeOf ctrl Is TextBox Then
-                    CType(ctrl, TextBox).BackColor = SystemColors.Control
-                    'CType(ctrl, TextBox).ForeColor = SystemColors.WindowText
-                ElseIf TypeOf ctrl Is Button Then
-                    CType(ctrl, Button).BackColor = SystemColors.Control
-                    CType(ctrl, Button).ForeColor = SystemColors.ControlText
+                If TypeOf ctrl Is Button Then
+                    CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#E1E1E1")
+                    CType(ctrl, Button).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, Button).FlatStyle = FlatStyle.Flat
+                    CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#CCCCCC")
+                    CType(ctrl, Button).FlatAppearance.BorderSize = 1
+                    ' Optional: Add MouseHover/MouseLeave events for hover effect
+                ElseIf TypeOf ctrl Is TextBox Then
+                    CType(ctrl, TextBox).BackColor = Color.White
+                    CType(ctrl, TextBox).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, TextBox).BorderStyle = BorderStyle.FixedSingle
+                ElseIf TypeOf ctrl Is Label Then
+                    CType(ctrl, Label).ForeColor = ColorTranslator.FromHtml("#333333")
+                ElseIf TypeOf ctrl Is CheckBox Then
+                    CType(ctrl, CheckBox).ForeColor = ColorTranslator.FromHtml("#333333")
                 ElseIf TypeOf ctrl Is GroupBox Then
-                    CType(ctrl, GroupBox).BackColor = SystemColors.Control
-                    CType(ctrl, GroupBox).ForeColor = SystemColors.ControlText
+                    CType(ctrl, GroupBox).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#F0F0F0") ' Hintergrund wie Form
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
                 ElseIf TypeOf ctrl Is Panel Then
-                    CType(ctrl, Panel).BackColor = SystemColors.Control
-                    CType(ctrl, Panel).ForeColor = SystemColors.ControlText
+                    CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#F0F0F0") ' Hintergrund wie Form
+                    CType(ctrl, Panel).ForeColor = ColorTranslator.FromHtml("#333333")
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
-                ElseIf TypeOf ctrl Is ToolStrip Then
-                    CType(ctrl, MenuStrip).BackColor = SystemColors.Control
-                    CType(ctrl, ToolStrip).ForeColor = SystemColors.ControlText
-                    MenuStrip1.BackColor = SystemColors.Control
-                    For Each item As ToolStripItem In CType(ctrl, MenuStrip).Items
-                        ApplyThemeToToolStripItem(item, theme)
-                    Next
-
                 End If
         End Select
     End Sub
@@ -1244,9 +1248,12 @@ Public Class Form1
             If File.Exists(LogFilePath) Then
                 Dim fileInfo As New FileInfo(LogFilePath)
                 Dim fileSizeInBytes As Long = fileInfo.Length
-                Dim maxSizeBytes As Long = MAX_LOG_SIZE_MB * 1024 * 1024
+                ' Konvertiere KB in Bytes
+                Dim maxSizeBytes As Long = MAX_LOG_SIZE_KB * 1024
+                LblStatusMessage.Text = $"Überprüfe Log-Datei '{LogFilePath}'..."
+                Debug.WriteLine($"Log file size: {fileSizeInBytes} bytes, Max size: {maxSizeBytes} bytes")
                 If fileSizeInBytes >= maxSizeBytes Then
-                    LblStatusMessage.Text = $"Log-Datei {LogFilePath} hat {MAX_LOG_SIZE_MB}MB ({fileSizeInBytes} Bytes) erreicht. Lösche und erstelle neu..."
+                    LblStatusMessage.Text = $"Log-Datei {LogFilePath} hat {MAX_LOG_SIZE_KB}KB ({fileSizeInBytes} Bytes) erreicht. Lösche und erstelle neu..." ' Anzeige in KB
 
                     File.Delete(LogFilePath)
                     LblStatusMessage.Text = $"Log-Datei '{LogFilePath}' gelöscht."
@@ -1267,7 +1274,7 @@ Public Class Form1
             End If
         Catch ex As Exception
             Debug.WriteLine($"Fehler beim Verwalten der Log-Datei: {ex.Message}")
-            MessageBox.Show($"Fehler beim Verwalten der Log-Datei: {ex.Message}", "Log-Datei Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            'MessageBox.Show($"Fehler beim Verwalten der Log-Datei: {ex.Message}", "Log-Datei Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
