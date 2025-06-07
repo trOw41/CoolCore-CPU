@@ -18,11 +18,9 @@ The Licensor expressly reserves the right to offer the Software or future versio
 
 4. Restrictions
 You may not:
-a. Modify, edit, translate, adapt, reverse engineer, decompile, disassemble, or create derivative works from the Software or any part thereof. The provisions of Section 69e of the German Copyright Act (UrhG) remain unaffected.
-b. Rent, lease, lend, sell, redistribute, license, or sublicense the Software or any part thereof, unless expressly permitted in writing by the Licensor.
-c. Use the Software in a manner that violates applicable law (including, without limitation, German law).
-d. Remove or obscure any copyright, trademark, or other proprietary notices from the Software or its accompanying materials.
-e. Use the Software for commercial purposes, unless a separate, written license is granted by the Licensor.
+a. Use the Software in a manner that violates applicable law (including, without limitation, German law).
+b. Remove or obscure any copyright, trademark, or other proprietary notices from the Software or its accompanying materials.
+c. Use the Software for commercial purposes, unless a separate, written license is granted by the Licensor.
 
 5. Data Protection
 a. Collection and Processing of Data by the Software:
