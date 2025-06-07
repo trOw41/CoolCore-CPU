@@ -165,19 +165,19 @@
     <value>Options</value>
   </data>
   <data name="ExportLogToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>139, 22</value>
   </data>
   <data name="ExportLogToolStripMenuItem.Text" xml:space="preserve">
     <value>Export Log</value>
   </data>
   <data name="LogOnOffToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>139, 22</value>
   </data>
   <data name="LogOnOffToolStripMenuItem.Text" xml:space="preserve">
     <value>Log On / Off</value>
   </data>
   <data name="LogMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>143, 22</value>
   </data>
   <data name="LogMenuItem.Text" xml:space="preserve">
     <value>Log -&gt;</value>
@@ -212,7 +212,7 @@
 </value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>143, 22</value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Text" xml:space="preserve">
     <value>Temp. Archiv</value>
@@ -1112,6 +1112,9 @@
   <data name="PowerBox2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
+  <data name="PowerBox2.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
   <data name="&gt;&gt;PowerBox2.Name" xml:space="preserve">
     <value>PowerBox2</value>
   </data>
@@ -1442,6 +1445,9 @@
   <data name="TJBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
+  <data name="TJBox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
   <data name="&gt;&gt;TJBox.Name" xml:space="preserve">
     <value>TJBox</value>
   </data>
@@ -1674,16 +1680,16 @@
     <value>NoControl</value>
   </data>
   <data name="VID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>37, 96</value>
+    <value>33, 96</value>
   </data>
   <data name="VID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>31, 14</value>
+    <value>37, 14</value>
   </data>
   <data name="VID.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="VID.Text" xml:space="preserve">
-    <value>VID:</value>
+    <value>FSB:</value>
   </data>
   <data name="&gt;&gt;VID.Name" xml:space="preserve">
     <value>VID</value>

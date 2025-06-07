@@ -146,7 +146,7 @@ Public Class Form1
                 cpu?.Update()
                 Dim currentCoreTemps As New Dictionary(Of String, Single)()
                 For Each sensor As ISensor In coreTemperatures
-                    If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) AndAlso sensor.Value.HasValue Then
+                    If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) And Not sensor.Name.Contains("Distance to TjMax") AndAlso sensor.Value.HasValue Then
                         currentCoreTemps.Add(sensor.Name, sensor.Value.Value)
                     End If
                 Next
@@ -624,7 +624,31 @@ Public Class Form1
                               CPUIDBox.Text = "N/A"
                               LitBox.Text = "N/A"
                           End If
-
+                          Dim tjmax = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Temperature AndAlso s.Name.Contains("Distance to TjMax"))
+                          If tjmax IsNot Nothing AndAlso tjmax.Value.HasValue Then
+                              Dim maxtj As Single = 15.0F
+                              TJBox.Text = $"{tjmax.Value.Value + maxtj}°C"
+                          Else
+                              TJBox.Text = "N/A"
+                          End If
+                          Dim vid = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Clock AndAlso s.Name.Contains("Bus Speed"))
+                          If vid IsNot Nothing AndAlso vid.Value.HasValue Then
+                              VidBox.Text = $"{vid.Value.Value:F3} Mhz"
+                          Else
+                              VidBox.Text = "N/A"
+                          End If
+                          Dim lit = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Data.Clock.Conductivity)
+                          If lit IsNot Nothing AndAlso lit.Value.HasValue Then
+                              LitBox.Text = $"{lit.Value.Value:F3} V"
+                          Else
+                              LitBox.Text = "N/A"
+                          End If
+                          Dim tdp = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("TDP"))
+                          If tdp IsNot Nothing AndAlso tdp.Value.HasValue Then
+                              TDPBox.Text = $"{tdp.Value.Value:F1} W"
+                          Else
+                              TDPBox.Text = "N/A"
+                          End If
                       End Sub)
             '#--------------------------------------------------------------------------------------------------------------------'
             Me.Invoke(Sub()
@@ -699,8 +723,6 @@ Public Class Form1
     Private Async Sub StopMonitoringProcess()
         If Not isMonitoringActive Then Exit Sub
         isMonitoringActive = False
-        LblStatusMessage.Text = "Background temperature monitoring stopped. Preparing chart..."
-        'LblStatusMessage.ForeColor = Color.DarkOrange
         If monitoringForm IsNot Nothing AndAlso Not monitoringForm.IsDisposed Then
             monitoringForm.Close()
             monitoringForm = Nothing
@@ -718,7 +740,9 @@ Public Class Form1
             Dim savedFilePath As String = SaveTemperatureDataToCsv(backgroundTempMeasurements)
             If Not String.IsNullOrEmpty(savedFilePath) Then
                 Dim chartForm As New Form2(savedFilePath)
-                chartForm.Show()
+                chartForm.Show
+                ' MessageBox.Show($"Temperature data saved to {savedFilePath}", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                'ExportLog(savedFilePath)
             Else
                 MessageBox.Show("Failed to save temperature data.", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
@@ -779,7 +803,6 @@ Public Class Form1
                 End If
             Else
                 LblStatusMessage.Text = "Auswahl abgebrochen."
-                'LblStatusMessage.ForeColor = Color.Gray
             End If
         End Using
     End Sub
@@ -1284,10 +1307,11 @@ Public Class Form1
         Try
             If File.Exists(LogFilePath) Then
                 LblStatusMessage.Text = $"Überprüfe Log-Datei '{LogFilePath}'..."
+                Debug.WriteLine($"Log: {fileSizeInBytes} Bytes (max: {maxSizeBytes} bytes")
+                LblStatusMessage.Text = $"Log-Datei Größe: {Math.Round(fileSizeInBytes / 1024)} KB (Max:{Math.Round(maxSizeBytes / 1024)} KB)"
                 If fileSizeInBytes >= maxSizeBytes Then
                     LblStatusMessage.Text = $"{LogSize}KB ({fileSizeInBytes} Bytes) erreicht. Lösche und erstelle neu..."
                     StopLog()
-                    ' File.Copy(LogFilePath, $"CoolCore_TempeLog_{timestamp}.txt", True)
                     Dim archiveDir As String = Path.GetDirectoryName(LogFilePath)
                     Dim archiveFileName As String = $"CoolCore_TempeLog_{timestamp}.txt"
                     Dim archivePath As String = Path.Combine(archiveDir, archiveFileName)

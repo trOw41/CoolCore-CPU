@@ -48,7 +48,7 @@ Public Class Form4
 
         Try
             ' Nur Dateien laden, die dem Muster CoolCore_Temp_Log_*.csv entsprechen
-            Dim files = Directory.GetFiles(logDirectoryPath, "CoolCore_Temp_Log_*.csv") _
+            Dim files = Directory.GetFiles(logDirectoryPath, "CoolCore_Temp_Log_*.cvs") _
                                  .OrderByDescending(Function(f) File.GetCreationTime(f)) ' Neueste zuerst
 
             If files.Any() Then

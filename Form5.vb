@@ -99,10 +99,10 @@ Public Class Form5
         If confirmResult = DialogResult.Yes Then
             Try
                 If Directory.Exists(logDirectoryPath) Then
-                    Dim csvFiles() As String = Directory.GetFiles(logDirectoryPath, "*.csv")
+                    Dim logFiles() As String = Directory.GetFiles(logDirectoryPath, "CoolCore_TempeLog_*.txt")
                     Dim deletedCount As Integer = 0
 
-                    For Each file As String In csvFiles
+                    For Each file As String In logFiles
                         System.IO.File.Delete(file)
                         deletedCount += 1
                     Next
