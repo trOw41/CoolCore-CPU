@@ -1,21 +1,54 @@
-MIT License
+END USER LICENSE AGREEMENT (EULA) FOR COOLCORE-CPU
 
-Copyright (c) 2025 Daniel Trojan (trOw41)
+Version: 1.8.2
+Date: [June 8, 2025]
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This End User License Agreement ("EULA") is a legally binding agreement between you, the end user (hereinafter referred to as the "User"), and Daniel Trojan (trOw41) (hereinafter referred to as the "Licensor") regarding the software application "CoolCore-CPU" (hereinafter referred to as the "Software"), including all associated media, documentation, and online materials.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+By installing, copying, accessing, or otherwise using the Software, you agree to the terms of this EULA. If you do not agree to the terms of this EULA, do not install or use the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+1. Subject of the Agreement
+The subject of this EULA is the granting by the Licensor to the User of a non-exclusive right to use the CoolCore-CPU Software.
+
+2. Grant of License
+The Licensor hereby grants you a personal, non-exclusive, non-transferable, revocable right to install and use the Software on a single computer solely for private, non-commercial purposes. This right of use is limited to the terms and conditions set forth in this EULA.
+
+3. Future Commercial Use
+The Licensor expressly reserves the right to offer the Software or future versions of the Software for commercial purposes at a later date or to permit commercial use under separate license terms. Such commercial use is not permitted under this EULA. A separate license agreement is required if the User wishes to use the Software commercially.
+
+4. Restrictions
+You may not:
+a. Modify, edit, translate, adapt, reverse engineer, decompile, disassemble, or create derivative works from the Software or any part thereof. The provisions of Section 69e of the German Copyright Act (UrhG) remain unaffected.
+b. Rent, lease, lend, sell, redistribute, license, or sublicense the Software or any part thereof, unless expressly permitted in writing by the Licensor.
+c. Use the Software in a manner that violates applicable law (including, without limitation, German law).
+d. Remove or obscure any copyright, trademark, or other proprietary notices from the Software or its accompanying materials.
+e. Use the Software for commercial purposes, unless a separate, written license is granted by the Licensor.
+
+5. Data Protection
+a. Collection and Processing of Data by the Software:
+The CoolCore-CPU software is primarily designed to monitor and display your computer's performance and health data, particularly the temperature and utilization of your CPU.
+The Software does not collect or transmit any personal data, system information, or performance data (such as CPU temperatures, utilization, or model) from your device to external servers, the Licensor, or third parties.
+All data collected by the Software (e.g., CPU temperatures, timestamps) remains exclusively local on your device and is stored in local log files (.txt) and/or used for display in the user interface. These log files are managed by you and are not automatically transmitted to the Licensor. The creation and storage of this data serves solely to facilitate the functionality of the Software and to provide information to the user.
+
+b. Responsibility:
+Because the Software does not transmit any data to the Licensor, the Licensor is not a "controller" within the meaning of the General Data Protection Regulation (GDPR) with regard to the performance data collected on your device. Control over this local data and its use rests solely with you as the user.
+
+6. Disclaimer
+THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES. THIS INCLUDES, BUT IS NOT LIMITED TO, THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. LICENSOR MAKES NO WARRANTY THAT THE FUNCTIONS OF THE SOFTWARE WILL MEET YOUR REQUIREMENTS OR THAT THE OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED, ERROR-FREE, OR SECURE. LICENSOR ASSUMES NO LIABILITY FOR ANY DIRECT OR INDIRECT DAMAGES THAT MAY RESULT FROM THE USE OF THE SOFTWARE, INCLUDING, BUT NOT LIMITED TO, LOSS OF DATA, SYSTEM STABILITY, OR HARDWARE DAMAGE. USE IS AT THE USER'S OWN RISK.
+
+7. Limitation of Liability
+The Licensor is only liable for damages resulting from intent or gross negligence. In the case of simple negligence, the Licensor is only liable for damages resulting from injury to life, body, or health, or for damages resulting from the breach of a material contractual obligation (cardinal obligation). A cardinal obligation is an obligation whose fulfillment makes the proper performance of the contract possible in the first place and on whose compliance the contractual partner regularly relies and may rely. In the event of a breach of a cardinal obligation, the Licensor's liability is limited to the foreseeable, typically occurring damage. Further liability is excluded. Liability under the Product Liability Act remains unaffected.
+
+8. Governing Law and Jurisdiction
+This EULA is governed exclusively by the laws of the Federal Republic of Germany, excluding the UN Convention on Contracts for the International Sale of Goods (CISG) and international private law.
+The exclusive place of jurisdiction for all disputes arising from or in connection with this EULA is [YOUR CITY IN GERMANY, e.g., Cologne], provided the user is a merchant, a legal entity under public law, a special fund under public law, or has no general place of jurisdiction in Germany.
+
+9. Severability Clause
+Should individual provisions of this EULA be or become invalid in whole or in part, this shall not affect the validity of the remaining provisions. The invalid provision shall be replaced by a provision that most closely approximates the economic purpose of the invalid provision and is valid. The same applies to any gaps in this EULA.
+
+10. Amendments to this EULA
+The Licensor reserves the right to amend this EULA at any time and without prior notice. Continued use of the Software after such amendment shall constitute your acceptance of the amended terms. The Licensor will notify you of any material changes in an appropriate manner.
+
+11. Contact Information
+If you have any questions about this EULA or would like to contact the Licensor, please use the following address:
+sikcore@protonmail.com or Support E-mail to sulomusic@protonmail.com
