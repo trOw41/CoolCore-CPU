@@ -10,6 +10,7 @@ Imports OpenHardwareMonitor.Hardware
 Imports Newtonsoft.Json
 Imports System.Collections.Generic
 Imports System.Linq
+Imports System.Runtime.InteropServices
 
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
@@ -42,7 +43,8 @@ Public Class Form1
     Private genericVcoreSensor As ISensor = Nothing
     Private stressTasks As New List(Of Task)()
     Private cancellationTokenSource As CancellationTokenSource
-    Private ReadOnly LogFilePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CoolCore_TemperatureLog1.txt")
+    Private logDir As String = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory & "log")
+    Private ReadOnly LogFilePath As String = Path.Combine(logDir, "CoolCore_TemperatureLog1.txt")
     Private temperatureLogWriter As StreamWriter
     Private isLoggingActive As Boolean = False
     Private allParsedLogEntries As Object
@@ -54,6 +56,11 @@ Public Class Form1
         refreshTimer = New Timer With {
             .Interval = 1000
             }
+        If Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log")) = False Then
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log"))
+            File.OpenWrite(Path.Combine(logDir, "CoolCore_TemperatureLog1.txt")).Close()
+            MessageBox.Show("Log-Verzeichnis wurde erstellt." & logDir, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
         AddHandler refreshTimer.Tick, AddressOf RefreshTimer_Tick
         If LoadBox IsNot Nothing Then LoadBoxes.Add(0, LoadBox)
         If LoadBox1 IsNot Nothing Then LoadBoxes.Add(1, LoadBox1)
@@ -241,8 +248,10 @@ Public Class Form1
     Public Sub StartStopLog()
         Dim Start As Boolean = Settings.LogStartStop
         If Start = True Then
-            StartLog()
-            CheckAndManageLogFile()
+            Me.Invoke(Sub()
+                          StartLog()
+                          CheckAndManageLogFile()
+                      End Sub)
         ElseIf Start = False Then
             If isLoggingActive Then
                 StopLog()
@@ -1084,7 +1093,6 @@ Public Class Form1
     End Sub
 
     Private Sub StartLog()
-        ' Logging starten
         Try
             If temperatureLogWriter IsNot Nothing Then
                 temperatureLogWriter.Close()
@@ -1092,25 +1100,19 @@ Public Class Form1
                 temperatureLogWriter = Nothing
             End If
             temperatureLogWriter = New StreamWriter(LogFilePath, append:=True)
-
             temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log gestartet: {DateTime.Now} ---")
             temperatureLogWriter.WriteLine("Zeitpunkt ; CPU-Core ; MinTemp ;MaxTemp ; CurrentTemp")
-
             isLoggingActive = True
             LblStatusMessage.Text = "Temperatur-Logging wurde gestartet. Daten werden in 'CoolCore_TemperatureLog.txt' geschrieben."
             Debug.WriteLine("Temperatur-Logging gestartet.")
-
         Catch ex As Exception
             MessageBox.Show($"Fehler beim Starten des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Debug.WriteLine($"Logging Start Error: {ex.Message}")
-
             isLoggingActive = False
-
         End Try
     End Sub
 
     Private Sub StopLog()
-
         Try
             If temperatureLogWriter IsNot Nothing Then
                 temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log beendet: {DateTime.Now} ---")
@@ -1124,10 +1126,9 @@ Public Class Form1
             ExportLogToolStripMenuItem.Enabled = True
         Catch ex As Exception
             MessageBox.Show($"Fehler beim Beenden des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Debug.WriteLine($"Logging Stop Error: {ex.Message}")
-                isLoggingActive = False
-            End Try
-
+            Debug.WriteLine($"Logging Stop Error: {ex.Message}")
+            isLoggingActive = False
+        End Try
     End Sub
     Private Structure LogEntry
         Public Property Timestamp As DateTime
@@ -1138,18 +1139,47 @@ Public Class Form1
         Public Property CpuName As String
     End Structure
     Private Sub ExportLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportLogToolStripMenuItem.Click
+        Dim programDirectory As String = AppDomain.CurrentDomain.BaseDirectory
+        Dim logDirectory As String = logDir
+
+        If Not Directory.Exists(logDirectory) Then
+            MessageBox.Show("Keine archivierten Messungen gefunden. Der Ordner 'TemperatureLogs' existiert nicht.", "Archiv leer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Exit Sub
+        End If
+        Using archiveSelectionForm As New Form5(logDirectory)
+            Dim dialogResult As DialogResult = archiveSelectionForm.ShowDialog(Me)
+
+            If dialogResult = DialogResult.OK Then
+                Dim selectedFilePath As String = archiveSelectionForm.SelectedFilePath
+
+                If Not String.IsNullOrEmpty(selectedFilePath) Then
+                    Try
+                        ExportLog(selectedFilePath)
+                        LblStatusMessage.Text = $"Archivierte Messung '{Path.GetFileName(selectedFilePath)}' geladen."
+                    Catch ex As Exception
+                        MessageBox.Show($"Fehler beim Laden der Messung: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        LblStatusMessage.Text = $"Fehler beim Laden der Messung: {ex.Message}"
+                        LblStatusMessage.ForeColor = Color.Red
+                    End Try
+                Else
+                    MessageBox.Show("Keine Datei ausgewählt.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                End If
+            Else
+                LblStatusMessage.Text = "Auswahl abgebrochen."
+            End If
+        End Using
+    End Sub
+
+    Private Sub ExportLog(LogFilePath As String)
         If Not File.Exists(LogFilePath) Then
             MessageBox.Show("Die Temperatur-Logdatei wurde nicht gefunden. Bitte starten Sie das Logging zuerst.", "Export Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
         StopLog()
         Try
-
             Dim logLines As List(Of String) = File.ReadAllLines(LogFilePath).ToList()
             Dim parsedLogEntries As New List(Of LogEntry)()
             Dim currentCpuName As String = "Unbekannt"
-
-
             Try
                 Using searcher As New ManagementObjectSearcher("SELECT Name FROM Win32_Processor")
                     For Each mo As ManagementObject In searcher.Get()
@@ -1161,14 +1191,11 @@ Public Class Form1
                 Debug.WriteLine($"Could not get CPU Name for report: {ex.Message}")
                 currentCpuName = "Unbekannt"
             End Try
-
-
             For Each line As String In logLines
 
                 If line.StartsWith("--- CoolCore Temperatur-Log") OrElse line.StartsWith("Zeitpunkt;CPU-Core") Then
                     Continue For
                 End If
-
                 Dim parts() As String = line.Split(";"c)
                 If parts.Length = 5 Then
                     Dim timestamp As DateTime
@@ -1176,12 +1203,10 @@ Public Class Form1
                     Dim minTemp As Single
                     Dim maxTemp As Single
                     Dim currentTemp As Single
-
                     If DateTime.TryParseExact(parts(0).Trim(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, timestamp) AndAlso
                    Single.TryParse(parts(2).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, minTemp) AndAlso
                    Single.TryParse(parts(3).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, maxTemp) AndAlso
                    Single.TryParse(parts(4).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, currentTemp) Then
-
                         parsedLogEntries.Add(New LogEntry With {
                         .Timestamp = timestamp,
                         .Core = core,
@@ -1193,7 +1218,6 @@ Public Class Form1
                     End If
                 End If
             Next
-
             Dim filteredLogEntries As New List(Of LogEntry)()
             Dim lastFilteredTimestampPerCore As New Dictionary(Of String, DateTime)()
             For Each entry As LogEntry In parsedLogEntries
@@ -1228,18 +1252,14 @@ Public Class Form1
                 End If
             Next
             jsonBuilder.Append("]")
-
             Dim jsonData As String = jsonBuilder.ToString()
-
             Dim templatePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TemperatureReportTemplate.html")
             If Not File.Exists(templatePath) Then
                 MessageBox.Show("Die HTML-Vorlagendatei 'TemperatureReportTemplate.html' wurde nicht gefunden. Bitte stellen Sie sicher, dass sie im Anwendungsverzeichnis liegt.", "Export Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
-
             Dim htmlContent As String = File.ReadAllText(templatePath)
             htmlContent = htmlContent.Replace("{{LOG_DATA_PLACEHOLDER}}", jsonData)
-
             Dim reportFileName As String = "CoolCore_TemperatureReport.html"
             Dim reportPath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, reportFileName)
             File.WriteAllText(reportPath, htmlContent, Encoding.UTF8)
@@ -1250,30 +1270,35 @@ Public Class Form1
                 Debug.WriteLine("Failed to create temperature report.")
             End If
             Process.Start(reportPath)
-
             LblStatusMessage.Text = $"Temperaturbericht erfolgreich erstellt und geöffnet: {reportFileName}"
-
         Catch ex As Exception
             MessageBox.Show($"Fehler beim Exportieren des Temperatur-Logs: {ex.Message}", "Export Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Debug.WriteLine($"Temperature Log Export Error: {ex.Message}")
         End Try
     End Sub
-
-
     Private Sub CheckAndManageLogFile()
         Dim fileInfo As New FileInfo(LogFilePath)
         Dim fileSizeInBytes As Long = fileInfo.Length
-        ' Konvertiere KB in Bytes
         Dim maxSizeBytes As Long = LogSize * 1024
+        Dim timestamp As String = DateTime.Now.ToString("yyyyMMdd_HHmmss")
         Try
             If File.Exists(LogFilePath) Then
-
                 LblStatusMessage.Text = $"Überprüfe Log-Datei '{LogFilePath}'..."
-                Debug.WriteLine($"Log file size: {fileSizeInBytes} bytes, Max size: {maxSizeBytes} bytes")
-                LblStatusMessage.Text = $"Log: {fileSizeInBytes} Bytes. Max: {maxSizeBytes} bytes"
                 If fileSizeInBytes >= maxSizeBytes Then
                     LblStatusMessage.Text = $"{LogSize}KB ({fileSizeInBytes} Bytes) erreicht. Lösche und erstelle neu..."
                     StopLog()
+                    ' File.Copy(LogFilePath, $"CoolCore_TempeLog_{timestamp}.txt", True)
+                    Dim archiveDir As String = Path.GetDirectoryName(LogFilePath)
+                    Dim archiveFileName As String = $"CoolCore_TempeLog_{timestamp}.txt"
+                    Dim archivePath As String = Path.Combine(archiveDir, archiveFileName)
+                    Try
+                        File.Copy(LogFilePath, archivePath, True)
+                        Debug.WriteLine($"Log-Datei erfolgreich archiviert: {archivePath}")
+                    Catch ex As Exception
+                        MessageBox.Show($"Fehler beim Archivieren der Log-Datei: {ex.Message}", "Archivierungsfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Debug.WriteLine($"Fehler beim Kopieren der Log-Datei: {ex.Message}")
+                    End Try
+                    LblStatusMessage.Text = $"Log-Datei '{LogFilePath}' archiviert."
                     File.Delete(LogFilePath)
                     LblStatusMessage.Text = $"Log-Datei '{LogFilePath}' gelöscht."
                     Using writer As New StreamWriter(LogFilePath, True, Encoding.UTF8)
@@ -1285,8 +1310,6 @@ Public Class Form1
                         StartLog()
                     End If
                 Else
-                    'LblStatusMessage.Text = $"{Path.GetFileName(LogFilePath)} Größe: {fileSizeInBytes} Bytes."
-
                 End If
             Else
                 LblStatusMessage.Text = $"Log-Datei '{LogFilePath}' nicht gefunden. Erstelle eine neue..."
@@ -1295,10 +1318,11 @@ Public Class Form1
                     writer.WriteLine("Zeitpunkt;CPU-Core;MinTemp;MaxTemp;CurrentTemp")
                 End Using
             End If
-            LblStatusMessage.Text = $"Log: {fileSizeInBytes} Bytes. Max: {maxSizeBytes} bytes"
+            If isLoggingActive = False Then
+                LblStatusMessage.Text = $"Log: Stop!"
+            End If
         Catch ex As Exception
             Debug.WriteLine($"Fehler beim Verwalten der Log-Datei: {ex.Message}")
-            'MessageBox.Show($"Fehler beim Verwalten der Log-Datei: {ex.Message}", "Log-Datei Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 

@@ -185,6 +185,9 @@ Public Class OptionsForm
                          End Sub)
         ElseIf LogStartStopBox.Checked = True Then
             My.Settings.LogStartStop = True
+            Form1.Invoke(Sub()
+                             Form1.StartStopLog()
+                         End Sub)
         End If
     End Sub
 End Class
