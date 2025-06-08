@@ -133,14 +133,8 @@
   <data name="019-person" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\019-person.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="042-mergers-and-acquisitions" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\042-mergers-and-acquisitions.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="021-about" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\021-about.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="046-cpu-2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\046-cpu-2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="033-monitor-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\033-monitor-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -186,5 +180,29 @@
   </data>
   <data name="_024_cpu_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\024-cpu-1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fan1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\001-computer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fan2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\003-computer-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="temp1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tools-and-utensils.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="temp2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\temp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AMDLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AMDLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AMDLogo_Dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AMDLogo_Dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IntelLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IntelLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IntelLogo_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IntelLogo-white.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

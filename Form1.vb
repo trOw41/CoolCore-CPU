@@ -11,7 +11,8 @@ Imports Newtonsoft.Json
 Imports System.Collections.Generic
 Imports System.Linq
 Imports System.Runtime.InteropServices
-
+Imports System.Runtime.Versioning
+Imports System.Drawing
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
     Public Property CoreTemperatures As Dictionary(Of String, Single)
@@ -240,7 +241,28 @@ Public Class Form1
         Using ReadAndDisplaySystemInfoAsync()
             refreshTimer.Start()
         End Using
+        Dim sysinfo = systemInfoRepository.GetCurrentSystemInfo.CpuName
+        Dim cpuName As String = sysinfo
+        MessageBox.Show(cpuName)
+        Dim cpuNameLower As String = cpuName.ToLowerInvariant()
+        If cpuNameLower.Contains("intel") Then
+            If cpuNameLower.Contains("intel") AndAlso Settings.ApplicationTheme = "Standard" Then
+                PicBox2.Image = Resources.IntelLogo
+                Settings.CpuLogoName = "intel"
+            ElseIf cpuNameLower.Contains("intel") AndAlso Settings.ApplicationTheme = "Dark" Then
+                PicBox2.Image = Resources.IntelLogo_white
 
+            End If
+        ElseIf cpuNameLower.Contains("amd") Then
+            If cpuNameLower.Contains("amd") AndAlso Settings.ApplicationTheme = "Standard" Then
+                PicBox2.Image = Resources.AMDLogo
+                Settings.CpuLogoName = "amd"
+            ElseIf cpuNameLower.Contains("amd") AndAlso Settings.ApplicationTheme = "Dark" Then
+                PicBox2.Image = Resources.AMDLogo_Dark
+            End If
+        Else
+            PicBox2.Image = Nothing
+        End If
         StartStopLog()
 
     End Sub
@@ -407,7 +429,7 @@ Public Class Form1
 
                     If sensor.Value.HasValue AndAlso VoltBoxes.ContainsKey(boxIndex) Then
                         Me.Invoke(Sub()
-                                      VoltBoxes(boxIndex).Text = $"{sensor.Value.Value:F3} V"
+                                      VoltBoxes(boxIndex).Text = $"{sensor.Value.Value:F3}V"
                                   End Sub)
                     ElseIf VoltBoxes.ContainsKey(boxIndex) Then
                         Me.Invoke(Sub()
@@ -419,7 +441,7 @@ Public Class Form1
                 If genericVcoreSensor IsNot Nothing AndAlso genericVcoreSensor.Value.HasValue Then
                     If Not cpuVoltageSensorMap.ContainsKey(1) AndAlso VoltBoxes.ContainsKey(1) Then
                         Me.Invoke(Sub()
-                                      VoltBoxes(1).Text = $"{genericVcoreSensor.Value.Value:F3} V (VCore)"
+                                      VoltBoxes(1).Text = $"{genericVcoreSensor.Value.Value:F3}V (VCore)"
                                   End Sub)
                     End If
                 End If
@@ -428,14 +450,14 @@ Public Class Form1
             For Each kvp In VoltBoxes
                 If Me.InvokeRequired Then
                     Me.Invoke(Sub()
-                                  If String.IsNullOrEmpty(kvp.Value.Text) OrElse Not kvp.Value.Text.EndsWith(" V") Then
+                                  If String.IsNullOrEmpty(kvp.Value.Text) OrElse Not kvp.Value.Text.EndsWith("V") Then
                                       If Not (kvp.Value.Text.Contains("(VCore)") AndAlso Not String.IsNullOrEmpty(kvp.Value.Text)) Then
                                           kvp.Value.Text = "N/A"
                                       End If
                                   End If
                               End Sub)
                 Else
-                    If String.IsNullOrEmpty(kvp.Value.Text) OrElse Not kvp.Value.Text.EndsWith(" V") Then
+                    If String.IsNullOrEmpty(kvp.Value.Text) OrElse Not kvp.Value.Text.EndsWith("V") Then
                         If Not (kvp.Value.Text.Contains("(VCore)") AndAlso Not String.IsNullOrEmpty(kvp.Value.Text)) Then
                             kvp.Value.Text = "N/A"
                         End If
@@ -473,22 +495,22 @@ Public Class Form1
                 Dim sensor As ISensor = coreTemperatures(i)
                 Dim coreIndex As Integer = i
 
-
-                If MinTempBoxes.ContainsKey(coreIndex) Then
-                    MinTempBoxes(coreIndex).Text = $"{sensor.Min:F1}°C"
-                    MinTempBoxes(coreIndex).ForeColor = Color.Green
-                End If
-
-                If MaxTempBoxes.ContainsKey(coreIndex) Then
-                    MaxTempBoxes(coreIndex).Text = $"{sensor.Max:F1}°C"
-                    MaxTempBoxes(coreIndex).ForeColor = Color.OrangeRed
-                End If
-
-                If CoreTempBoxes.ContainsKey(coreIndex) Then
-                    CoreTempBoxes(coreIndex).Text = $"{sensor.Value:F1}°C"
-                    CoreTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Value)
-                End If
                 Me.Invoke(Sub()
+                              If MinTempBoxes.ContainsKey(coreIndex) Then
+                                  MinTempBoxes(coreIndex).Text = $"{sensor.Min:F1}°C"
+                                  MinTempBoxes(coreIndex).ForeColor = Color.Green
+                              End If
+
+                              If MaxTempBoxes.ContainsKey(coreIndex) Then
+                                  MaxTempBoxes(coreIndex).Text = $"{sensor.Max:F1}°C"
+                                  MaxTempBoxes(coreIndex).ForeColor = Color.OrangeRed
+                              End If
+
+                              If CoreTempBoxes.ContainsKey(coreIndex) Then
+                                  CoreTempBoxes(coreIndex).Text = $"{sensor.Value:F1}°C"
+                                  CoreTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Value)
+                              End If
+
                               If MinTempBoxes.ContainsKey(coreIndex) Then
                                   MinTempBoxes(coreIndex).Text = $"{sensor.Min:F1}°C"
                                   MinTempBoxes(coreIndex).ForeColor = Color.Green
@@ -504,9 +526,8 @@ Public Class Form1
                           End Sub)
                 If isLoggingActive AndAlso temperatureLogWriter IsNot Nothing Then
                     Try
-                        ' Daten in CSV-Format schreiben
                         temperatureLogWriter.WriteLine(
-                            $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")};" &
+                            $"{DateTime.Now:yyyy-MM-dd HH:mm:ss};" &
                             $"Core {coreIndex};" &
                             $"{sensor.Min:F1};" &
                             $"{sensor.Max:F1};" &
@@ -515,7 +536,6 @@ Public Class Form1
                         temperatureLogWriter.Flush()
                     Catch ex As Exception
                         Debug.WriteLine($"Fehler beim Schreiben ins Temperatur-Log: {ex.Message}")
-
                     End Try
                 End If
             Next
@@ -598,6 +618,7 @@ Public Class Form1
                           ThreadBox.Text = systemInfo.NumberOfLogicalProcessors.ToString()
                           PowerBox.Text = "N/A"
 
+
                           '#--------------------------------------------------------------------------------------------------------------------'
                           If cpu IsNot Nothing Then
 
@@ -609,7 +630,7 @@ Public Class Form1
 
                               Dim coreVoltageSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Voltage AndAlso s.Name.Contains("Core"))
                               If coreVoltageSensor IsNot Nothing AndAlso coreVoltageSensor.Value.HasValue Then
-                                  PowerBox2.Text = $"{coreVoltageSensor.Value.Value:F3}V"
+                                  'PowerBox2.Text = $"{coreVoltageSensor.Value.Value:F3}V"
                                   UpdateVoltageDisplay()
                               Else
                                   PowerBox2.Text = "N/A"
@@ -637,9 +658,9 @@ Public Class Form1
                           Else
                               VidBox.Text = "N/A"
                           End If
-                          Dim lit = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Data.Clock.Conductivity)
-                          If lit IsNot Nothing AndAlso lit.Value.HasValue Then
-                              LitBox.Text = $"{lit.Value.Value:F3} V"
+                          Dim PowerAllCores = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Cores"))
+                          If PowerAllCores IsNot Nothing AndAlso PowerAllCores.Value.HasValue Then
+                              PowerBox2.Text = $"{PowerAllCores.Value.Value:F3}V"
                           Else
                               LitBox.Text = "N/A"
                           End If
@@ -649,6 +670,7 @@ Public Class Form1
                           Else
                               TDPBox.Text = "N/A"
                           End If
+
                       End Sub)
             '#--------------------------------------------------------------------------------------------------------------------'
             Me.Invoke(Sub()
@@ -706,6 +728,7 @@ Public Class Form1
                 monitoringForm = New Form3()
                 AddHandler monitoringForm.StopRequested, AddressOf MonitoringForm_StopRequested
             End If
+            monitoringForm.StartAnimation()
             monitoringForm.Show()
             monitoringStopwatch.Restart()
             monitoringTimer.Start()
@@ -724,6 +747,7 @@ Public Class Form1
         If Not isMonitoringActive Then Exit Sub
         isMonitoringActive = False
         If monitoringForm IsNot Nothing AndAlso Not monitoringForm.IsDisposed Then
+            monitoringForm.StopAnimation()
             monitoringForm.Close()
             monitoringForm = Nothing
         End If
@@ -774,24 +798,24 @@ Public Class Form1
     End Sub
 
     Private Sub LoadArchivedMeasurementsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoadArchivedMeasurementsToolStripMenuItem.Click
-        Dim programDirectory As String = AppDomain.CurrentDomain.BaseDirectory
-        Dim logDirectory As String = Path.Combine(programDirectory, "TemperatureLogs")
+        Dim programDirectory1 As String = AppDomain.CurrentDomain.BaseDirectory
+        Dim logDirectory1 As String = Path.Combine(programDirectory1, "TemperatureLogs")
 
-        If Not Directory.Exists(logDirectory) Then
+        If Not Directory.Exists(logDirectory1) Then
             MessageBox.Show("Keine archivierten Messungen gefunden. Der Ordner 'TemperatureLogs' existiert nicht.", "Archiv leer", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
-        Using archiveSelectionForm As New Form4(logDirectory)
-            Dim dialogResult As DialogResult = archiveSelectionForm.ShowDialog(Me)
+        Using archiveSelectionForm1 As New Form4(logDirectory1)
+            Dim dialogResult1 As DialogResult = archiveSelectionForm1.ShowDialog(Me)
 
-            If dialogResult = DialogResult.OK Then
-                Dim selectedFilePath As String = archiveSelectionForm.SelectedFilePath
+            If dialogResult1 = DialogResult.OK Then
+                Dim selectedFilePath1 As String = archiveSelectionForm1.SelectedFilePath
 
-                If Not String.IsNullOrEmpty(selectedFilePath) Then
+                If Not String.IsNullOrEmpty(selectedFilePath1) Then
                     Try
-                        Dim chartForm As New Form2(selectedFilePath)
+                        Dim chartForm As New Form2(selectedFilePath1)
                         chartForm.Show()
-                        LblStatusMessage.Text = $"Archivierte Messung '{Path.GetFileName(selectedFilePath)}' geladen."
+                        LblStatusMessage.Text = $"Archivierte Messung '{Path.GetFileName(selectedFilePath1)}' geladen."
                         'LblStatusMessage.ForeColor = Color.DarkGreen
                     Catch ex As Exception
                         MessageBox.Show($"Fehler beim Laden der Messung: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -862,14 +886,14 @@ Public Class Form1
 
             htmlBuilder.AppendLine("    <h2>Host Info</h2>")
             htmlBuilder.AppendLine("    <table>")
-            'htmlBuilder.AppendLine($"      <tr><th>Computername</th><td>{data.ComputerName}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Computername</th><td>{data.ComputerName}</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Hostname</th><td>{data.HostName}</td></tr>")
-            'htmlBuilder.AppendLine($"      <tr><th>Benutzername</th><td>{data.UserName}</td></tr>")
-            'htmlBuilder.AppendLine($"      <tr><th>Domain</th><td>{data.DomainName}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Benutzername</th><td>{data.UserName}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Domain</th><td>{data.DomainName}</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Betriebssystem</th><td>{data.OSSystem} ({data.Architecture})</td></tr>")
-            'htmlBuilder.AppendLine($"      <tr><th>Systemtyp</th><td>{data.SystemType}</td></tr>")
-            'htmlBuilder.AppendLine($"      <tr><th>Systemverzeichnis</th><td>{data.SystemDirectory}</td></tr>")
-            'htmlBuilder.AppendLine($"      <tr><th>Programmverzeichnis</th><td>{data.ProgramDirectory}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Systemtyp</th><td>{data.SystemType}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Systemverzeichnis</th><td>{data.SystemDirectory}</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Programmverzeichnis</th><td>{data.ProgramDirectory}</td></tr>")
             htmlBuilder.AppendLine("    </table>")
 
             htmlBuilder.AppendLine("    <h2>CPU Informationen</h2>")
@@ -880,8 +904,8 @@ Public Class Form1
             htmlBuilder.AppendLine($"      <tr><th>Prozessorzähler (Threads)</th><td>{data.ProcessorCount}</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Aktuelle Taktrate</th><td>{data.CurrentClockSpeedMHz} MHz</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Prozessorinformationen</th><td>{data.ProcessorInformation}</td></tr>")
-            'htmlBuilder.AppendLine($"      <tr><th>Gesamter physischer Speicher</th><td>{(data.TotalPhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
-            'htmlBuilder.AppendLine($"      <tr><th>Verfügbarer physischer Speicher</th><td>{(data.AvailablePhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Gesamter physischer Speicher</th><td>{(data.TotalPhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
+            htmlBuilder.AppendLine($"      <tr><th>Verfügbarer physischer Speicher</th><td>{(data.AvailablePhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>Grafikkarten Informationen</th><td>{data.GraphicsCardInformation}</td></tr>")
             htmlBuilder.AppendLine($"      <tr><th>BIOS Version</th><td>{data.BIOSVersion}</td></tr>")
             htmlBuilder.AppendLine("    </table>")
@@ -942,15 +966,12 @@ Public Class Form1
     Private Sub ApplyTheme(theme As String)
         Select Case theme
             Case "Dark"
-                ' Apply Dark Theme
-                ' Apply Dark Theme
                 Me.BackColor = ColorTranslator.FromHtml("#282C34")
                 Me.ForeColor = ColorTranslator.FromHtml("#ABB2BF")
                 For Each ctrl As Control In Me.Controls
                     ApplyThemeToControl(ctrl, theme)
                 Next
 
-                ' Apply to menu strip if you have one
                 If Me.MainMenuStrip IsNot Nothing Then
                     Me.MainMenuStrip.BackColor = Color.FromArgb(50, 50, 53)
                     Me.MainMenuStrip.ForeColor = Color.White
@@ -962,8 +983,8 @@ Public Class Form1
                 Me.Icon = My.Resources._024_cpu_1
             Case "Standard"
                 ' Apply Standard/Light Theme
-                Me.BackColor = ColorTranslator.FromHtml("#F0F0F0") ' Sehr helles Grau
-                Me.ForeColor = ColorTranslator.FromHtml("#333333") ' Dunkles Grau
+                Me.BackColor = ColorTranslator.FromHtml("#F0F0F0")
+                Me.ForeColor = ColorTranslator.FromHtml("#333333")
                 For Each ctrl As Control In Me.Controls
                     ApplyThemeToControl(ctrl, theme)
                 Next
@@ -988,7 +1009,6 @@ Public Class Form1
                     CType(ctrl, Button).FlatStyle = FlatStyle.Flat
                     CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#4A5059")
                     CType(ctrl, Button).FlatAppearance.BorderSize = 1
-                    ' Optional: Add MouseHover/MouseLeave events for hover effect
                 ElseIf TypeOf ctrl Is TextBox Then
                     CType(ctrl, TextBox).BackColor = ColorTranslator.FromHtml("#3B4048")
                     CType(ctrl, TextBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
@@ -1010,6 +1030,11 @@ Public Class Form1
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
                 End If
+                If Settings.CpuLogoName = "intel" Then
+                    PicBox2.Image = Resources.IntelLogo_white
+                ElseIf Settings.CpuLogoName = "amd" Then
+                    PicBox2.Image = Resources.AMDLogo_Dark
+                End If
             Case "Standard"
                 If TypeOf ctrl Is Button Then
                     CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#E1E1E1")
@@ -1017,7 +1042,6 @@ Public Class Form1
                     CType(ctrl, Button).FlatStyle = FlatStyle.Flat
                     CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#CCCCCC")
                     CType(ctrl, Button).FlatAppearance.BorderSize = 1
-                    ' Optional: Add MouseHover/MouseLeave events for hover effect
                 ElseIf TypeOf ctrl Is TextBox Then
                     CType(ctrl, TextBox).BackColor = Color.White
                     CType(ctrl, TextBox).ForeColor = ColorTranslator.FromHtml("#333333")
@@ -1028,16 +1052,21 @@ Public Class Form1
                     CType(ctrl, CheckBox).ForeColor = ColorTranslator.FromHtml("#333333")
                 ElseIf TypeOf ctrl Is GroupBox Then
                     CType(ctrl, GroupBox).ForeColor = ColorTranslator.FromHtml("#333333")
-                    CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#F0F0F0") ' Hintergrund wie Form
+                    CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#F0F0F0")
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
                 ElseIf TypeOf ctrl Is Panel Then
-                    CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#F0F0F0") ' Hintergrund wie Form
+                    CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#F0F0F0")
                     CType(ctrl, Panel).ForeColor = ColorTranslator.FromHtml("#333333")
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
+                End If
+                If Settings.CpuLogoName = "intel" Then
+                    PicBox2.Image = Resources.IntelLogo
+                ElseIf Settings.CpuLogoName = "amd" Then
+                    PicBox2.Image = Resources.AMDLogo
                 End If
         End Select
     End Sub
@@ -1164,17 +1193,14 @@ Public Class Form1
     Private Sub ExportLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportLogToolStripMenuItem.Click
         Dim programDirectory As String = AppDomain.CurrentDomain.BaseDirectory
         Dim logDirectory As String = logDir
-
         If Not Directory.Exists(logDirectory) Then
             MessageBox.Show("Keine archivierten Messungen gefunden. Der Ordner 'TemperatureLogs' existiert nicht.", "Archiv leer", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
         Using archiveSelectionForm As New Form5(logDirectory)
             Dim dialogResult As DialogResult = archiveSelectionForm.ShowDialog(Me)
-
             If dialogResult = DialogResult.OK Then
                 Dim selectedFilePath As String = archiveSelectionForm.SelectedFilePath
-
                 If Not String.IsNullOrEmpty(selectedFilePath) Then
                     Try
                         ExportLog(selectedFilePath)
@@ -1307,8 +1333,8 @@ Public Class Form1
         Try
             If File.Exists(LogFilePath) Then
                 LblStatusMessage.Text = $"Überprüfe Log-Datei '{LogFilePath}'..."
-                Debug.WriteLine($"Log: {fileSizeInBytes} Bytes (max: {maxSizeBytes} bytes")
-                LblStatusMessage.Text = $"Log-Datei Größe: {Math.Round(fileSizeInBytes / 1024)} KB (Max:{Math.Round(maxSizeBytes / 1024)} KB)"
+                'Debug.WriteLine($"Log: {fileSizeInBytes} Bytes (max: {maxSizeBytes} bytes")
+                LblStatusMessage.Text = $"Log-Datei Größe: {Math.Round(fileSizeInBytes / 1024)} KB (Max: {Math.Round(maxSizeBytes / 1024)} KB)"
                 If fileSizeInBytes >= maxSizeBytes Then
                     LblStatusMessage.Text = $"{LogSize}KB ({fileSizeInBytes} Bytes) erreicht. Lösche und erstelle neu..."
                     StopLog()
@@ -1350,4 +1376,7 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub Core3_Click(sender As Object, e As EventArgs) Handles Core3.Click
+
+    End Sub
 End Class

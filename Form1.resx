@@ -152,6 +152,9 @@
   <data name="SettingsToolStripMenuItem.Text" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 6</value>
+  </data>
   <data name="ExportCPUInfoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>159, 22</value>
   </data>
@@ -165,22 +168,19 @@
     <value>Options</value>
   </data>
   <data name="ExportLogToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>139, 22</value>
+    <value>133, 22</value>
   </data>
   <data name="ExportLogToolStripMenuItem.Text" xml:space="preserve">
     <value>Export Log</value>
-  </data>
-  <data name="LogOnOffToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>139, 22</value>
-  </data>
-  <data name="LogOnOffToolStripMenuItem.Text" xml:space="preserve">
-    <value>Log On / Off</value>
   </data>
   <data name="LogMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>143, 22</value>
   </data>
   <data name="LogMenuItem.Text" xml:space="preserve">
     <value>Log -&gt;</value>
+  </data>
+  <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 6</value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -229,11 +229,17 @@
   <data name="InfoMenuItem.Text" xml:space="preserve">
     <value>Info</value>
   </data>
+  <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>115, 6</value>
+  </data>
   <data name="FAQToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>118, 22</value>
   </data>
   <data name="FAQToolStripMenuItem.Text" xml:space="preserve">
     <value>FAQ</value>
+  </data>
+  <data name="ToolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>115, 6</value>
   </data>
   <data name="SupportToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>118, 22</value>
@@ -274,6 +280,96 @@
   </data>
   <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
     <value>3</value>
+  </data>
+  <data name="PicBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>116, 30</value>
+  </data>
+  <data name="PicBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>38, 34</value>
+  </data>
+  <data name="PicBox2.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>StretchImage</value>
+  </data>
+  <data name="PicBox2.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;PicBox2.Name" xml:space="preserve">
+    <value>PicBox2</value>
+  </data>
+  <data name="&gt;&gt;PicBox2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;PicBox2.Parent" xml:space="preserve">
+    <value>Panel1</value>
+  </data>
+  <data name="&gt;&gt;PicBox2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="Label8.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Impact, 11.25pt</value>
+  </data>
+  <data name="Label8.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Label8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>233, 145</value>
+  </data>
+  <data name="Label8.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="Label8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>42, 19</value>
+  </data>
+  <data name="Label8.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="Label8.Text" xml:space="preserve">
+    <value>Core</value>
+  </data>
+  <data name="&gt;&gt;Label8.Name" xml:space="preserve">
+    <value>Label8</value>
+  </data>
+  <data name="&gt;&gt;Label8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label8.Parent" xml:space="preserve">
+    <value>Panel1</value>
+  </data>
+  <data name="&gt;&gt;Label8.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="Label7.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Impact, 11.25pt</value>
+  </data>
+  <data name="Label7.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Label7.Location" type="System.Drawing.Point, System.Drawing">
+    <value>157, 97</value>
+  </data>
+  <data name="Label7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="Label7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>39, 18</value>
+  </data>
+  <data name="Label7.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="Label7.Text" xml:space="preserve">
+    <value>Cool</value>
+  </data>
+  <data name="&gt;&gt;Label7.Name" xml:space="preserve">
+    <value>Label7</value>
+  </data>
+  <data name="&gt;&gt;Label7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label7.Parent" xml:space="preserve">
+    <value>Panel1</value>
+  </data>
+  <data name="&gt;&gt;Label7.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="PictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -354,13 +450,13 @@
     <value>NoControl</value>
   </data>
   <data name="PictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>206, 104</value>
+    <value>187, 107</value>
   </data>
   <data name="PictureBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 49</value>
+    <value>51, 49</value>
   </data>
   <data name="PictureBox1.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
+    <value>StretchImage</value>
   </data>
   <data name="PictureBox1.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -375,40 +471,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;PictureBox1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="Label7.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Impact, 9.75pt</value>
-  </data>
-  <data name="Label7.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="Label7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>145, 124</value>
-  </data>
-  <data name="Label7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="Label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 18</value>
-  </data>
-  <data name="Label7.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="Label7.Text" xml:space="preserve">
-    <value>CoolCore</value>
-  </data>
-  <data name="&gt;&gt;Label7.Name" xml:space="preserve">
-    <value>Label7</value>
-  </data>
-  <data name="&gt;&gt;Label7.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label7.Parent" xml:space="preserve">
-    <value>Panel1</value>
-  </data>
-  <data name="&gt;&gt;Label7.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="Label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -417,16 +480,16 @@
     <value>NoControl</value>
   </data>
   <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>229, 164</value>
+    <value>116, 168</value>
   </data>
   <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>125, 14</value>
+    <value>102, 14</value>
   </data>
   <data name="Label3.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
   <data name="Label3.Text" xml:space="preserve">
-    <value>Temperature Readings</value>
+    <value>Core Temperature</value>
   </data>
   <data name="&gt;&gt;Label3.Name" xml:space="preserve">
     <value>Label3</value>
@@ -438,7 +501,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Label3.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="BtnToggleMonitor1.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Zoom</value>
@@ -447,7 +510,7 @@
     <value>NoControl</value>
   </data>
   <data name="BtnToggleMonitor1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>129, 0</value>
+    <value>116, 0</value>
   </data>
   <data name="BtnToggleMonitor1.Size" type="System.Drawing.Size, System.Drawing">
     <value>41, 36</value>
@@ -495,10 +558,10 @@
     <value>1</value>
   </data>
   <data name="Panel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>192, 8</value>
+    <value>208, 8</value>
   </data>
   <data name="Panel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 38</value>
+    <value>159, 38</value>
   </data>
   <data name="Panel3.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -521,11 +584,8 @@
   <data name="CoreTemp3.Location" type="System.Drawing.Point, System.Drawing">
     <value>64, 162</value>
   </data>
-  <data name="CoreTemp3.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="CoreTemp3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 21</value>
+    <value>58, 21</value>
   </data>
   <data name="CoreTemp3.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -551,11 +611,8 @@
   <data name="CoreTemp2.Location" type="System.Drawing.Point, System.Drawing">
     <value>64, 135</value>
   </data>
-  <data name="CoreTemp2.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="CoreTemp2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 21</value>
+    <value>58, 21</value>
   </data>
   <data name="CoreTemp2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -579,13 +636,10 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="CoreTemp1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>64, 107</value>
-  </data>
-  <data name="CoreTemp1.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>64, 106</value>
   </data>
   <data name="CoreTemp1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 21</value>
+    <value>58, 21</value>
   </data>
   <data name="CoreTemp1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -609,16 +663,19 @@
     <value>NoControl</value>
   </data>
   <data name="TjMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 56</value>
+    <value>2, 53</value>
   </data>
   <data name="TjMax.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 14</value>
+    <value>56, 20</value>
   </data>
   <data name="TjMax.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="TjMax.Text" xml:space="preserve">
-    <value>Tj. Max:</value>
+    <value>Tj. Max :</value>
+  </data>
+  <data name="TjMax.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
   </data>
   <data name="&gt;&gt;TjMax.Name" xml:space="preserve">
     <value>TjMax</value>
@@ -636,16 +693,19 @@
     <value>NoControl</value>
   </data>
   <data name="Power.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 32</value>
+    <value>2, 25</value>
   </data>
   <data name="Power.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 14</value>
+    <value>58, 21</value>
   </data>
   <data name="Power.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="Power.Text" xml:space="preserve">
-    <value>Power V:</value>
+    <value>CPU V :</value>
+  </data>
+  <data name="Power.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
   </data>
   <data name="&gt;&gt;Power.Name" xml:space="preserve">
     <value>Power</value>
@@ -663,7 +723,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>302, 57</value>
+    <value>302, 53</value>
   </data>
   <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>50, 21</value>
@@ -693,7 +753,7 @@
     <value>NoControl</value>
   </data>
   <data name="MaxTemplbl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>248, 58</value>
+    <value>245, 54</value>
   </data>
   <data name="MaxTemplbl.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 19</value>
@@ -723,7 +783,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>136, 58</value>
+    <value>128, 54</value>
   </data>
   <data name="Label6.Size" type="System.Drawing.Size, System.Drawing">
     <value>50, 21</value>
@@ -753,7 +813,7 @@
     <value>NoControl</value>
   </data>
   <data name="MinTemplbl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>192, 58</value>
+    <value>187, 54</value>
   </data>
   <data name="MinTemplbl.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
@@ -783,16 +843,22 @@
     <value>NoControl</value>
   </data>
   <data name="Core0.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 85</value>
+    <value>-1, 78</value>
+  </data>
+  <data name="Core0.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="Core0.Size" type="System.Drawing.Size, System.Drawing">
-    <value>49, 14</value>
+    <value>63, 20</value>
   </data>
   <data name="Core0.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="Core0.Text" xml:space="preserve">
-    <value>Core#0:</value>
+    <value>Core 0 :</value>
+  </data>
+  <data name="Core0.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>BottomCenter</value>
   </data>
   <data name="&gt;&gt;Core0.Name" xml:space="preserve">
     <value>Core0</value>
@@ -810,16 +876,23 @@
     <value>NoControl</value>
   </data>
   <data name="Core1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 111</value>
+    <value>0, 109</value>
+  </data>
+  <data name="Core1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="Core1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 14</value>
+    <value>62, 19</value>
   </data>
   <data name="Core1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="Core1.Text" xml:space="preserve">
-    <value>Core#1:</value>
+    <value>
+Core 1 :</value>
+  </data>
+  <data name="Core1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>BottomCenter</value>
   </data>
   <data name="&gt;&gt;Core1.Name" xml:space="preserve">
     <value>Core1</value>
@@ -837,16 +910,22 @@
     <value>NoControl</value>
   </data>
   <data name="Core2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 139</value>
+    <value>-1, 133</value>
+  </data>
+  <data name="Core2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="Core2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 14</value>
+    <value>63, 21</value>
   </data>
   <data name="Core2.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="Core2.Text" xml:space="preserve">
-    <value>Core#2:</value>
+    <value>Core 2 :</value>
+  </data>
+  <data name="Core2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>BottomCenter</value>
   </data>
   <data name="&gt;&gt;Core2.Name" xml:space="preserve">
     <value>Core2</value>
@@ -864,16 +943,22 @@
     <value>NoControl</value>
   </data>
   <data name="Core3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 166</value>
+    <value>0, 162</value>
+  </data>
+  <data name="Core3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="Core3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 14</value>
+    <value>60, 21</value>
   </data>
   <data name="Core3.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="Core3.Text" xml:space="preserve">
-    <value>Core#3:</value>
+    <value>Core 3 :</value>
+  </data>
+  <data name="Core3.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>BottomCenter</value>
   </data>
   <data name="&gt;&gt;Core3.Name" xml:space="preserve">
     <value>Core3</value>
@@ -893,11 +978,8 @@
   <data name="CoreTemp.Location" type="System.Drawing.Point, System.Drawing">
     <value>64, 79</value>
   </data>
-  <data name="CoreTemp.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="CoreTemp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 21</value>
+    <value>58, 21</value>
   </data>
   <data name="CoreTemp.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -922,9 +1004,6 @@
   </data>
   <data name="LoadBox2.Location" type="System.Drawing.Point, System.Drawing">
     <value>303, 135</value>
-  </data>
-  <data name="LoadBox2.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
   </data>
   <data name="LoadBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>54, 21</value>
@@ -951,10 +1030,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MaxTemp2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>248, 135</value>
-  </data>
-  <data name="MaxTemp2.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>245, 135</value>
   </data>
   <data name="MaxTemp2.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 21</value>
@@ -983,9 +1059,6 @@
   <data name="LoadBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>303, 107</value>
   </data>
-  <data name="LoadBox1.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="LoadBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>54, 21</value>
   </data>
@@ -1011,10 +1084,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MaxTemp1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>248, 107</value>
-  </data>
-  <data name="MaxTemp1.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>245, 107</value>
   </data>
   <data name="MaxTemp1.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 21</value>
@@ -1041,10 +1111,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>192, 135</value>
-  </data>
-  <data name="MinTemp2.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>187, 135</value>
   </data>
   <data name="MinTemp2.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
@@ -1071,10 +1138,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>192, 107</value>
-  </data>
-  <data name="MinTemp1.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>187, 107</value>
   </data>
   <data name="MinTemp1.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
@@ -1101,19 +1165,13 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="PowerBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>136, 25</value>
-  </data>
-  <data name="PowerBox2.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>128, 25</value>
   </data>
   <data name="PowerBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
   </data>
   <data name="PowerBox2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
-  </data>
-  <data name="PowerBox2.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
   </data>
   <data name="&gt;&gt;PowerBox2.Name" xml:space="preserve">
     <value>PowerBox2</value>
@@ -1135,9 +1193,6 @@
   </data>
   <data name="LoadBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>303, 79</value>
-  </data>
-  <data name="LoadBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
   </data>
   <data name="LoadBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>54, 21</value>
@@ -1164,10 +1219,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MaxTemp3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>248, 162</value>
-  </data>
-  <data name="MaxTemp3.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>245, 162</value>
   </data>
   <data name="MaxTemp3.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 21</value>
@@ -1194,10 +1246,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MaxTemp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>248, 79</value>
-  </data>
-  <data name="MaxTemp.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>245, 79</value>
   </data>
   <data name="MaxTemp.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 21</value>
@@ -1226,9 +1275,6 @@
   <data name="LoadBox3.Location" type="System.Drawing.Point, System.Drawing">
     <value>303, 162</value>
   </data>
-  <data name="LoadBox3.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="LoadBox3.Size" type="System.Drawing.Size, System.Drawing">
     <value>54, 21</value>
   </data>
@@ -1254,10 +1300,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="VBox4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>136, 162</value>
-  </data>
-  <data name="VBox4.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>128, 162</value>
   </data>
   <data name="VBox4.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
@@ -1284,10 +1327,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="VBox3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>136, 135</value>
-  </data>
-  <data name="VBox3.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>128, 135</value>
   </data>
   <data name="VBox3.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
@@ -1314,10 +1354,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="VBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>136, 107</value>
-  </data>
-  <data name="VBox2.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>128, 107</value>
   </data>
   <data name="VBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
@@ -1344,10 +1381,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="Vbox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>136, 79</value>
-  </data>
-  <data name="Vbox1.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>128, 79</value>
   </data>
   <data name="Vbox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
@@ -1374,10 +1408,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>192, 79</value>
-  </data>
-  <data name="MinTemp.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>187, 79</value>
   </data>
   <data name="MinTemp.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
@@ -1404,10 +1435,7 @@
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="MinTemp3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>192, 162</value>
-  </data>
-  <data name="MinTemp3.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>187, 162</value>
   </data>
   <data name="MinTemp3.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
@@ -1436,11 +1464,8 @@
   <data name="TJBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>64, 52</value>
   </data>
-  <data name="TJBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="TJBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 21</value>
+    <value>58, 21</value>
   </data>
   <data name="TJBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1466,11 +1491,8 @@
   <data name="PowerBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>64, 25</value>
   </data>
-  <data name="PowerBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="PowerBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 21</value>
+    <value>58, 21</value>
   </data>
   <data name="PowerBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1491,7 +1513,7 @@
     <value>33</value>
   </data>
   <data name="Panel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 175</value>
+    <value>7, 178</value>
   </data>
   <data name="Panel2.Size" type="System.Drawing.Size, System.Drawing">
     <value>368, 209</value>
@@ -1509,7 +1531,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Panel2.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="Lithography.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1536,7 +1558,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Lithography.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>6</value>
   </data>
   <data name="Label4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1563,13 +1585,13 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Label4.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="Threads.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="Threads.Location" type="System.Drawing.Point, System.Drawing">
-    <value>272, 43</value>
+    <value>277, 43</value>
   </data>
   <data name="Threads.Size" type="System.Drawing.Size, System.Drawing">
     <value>49, 14</value>
@@ -1590,7 +1612,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Threads.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>8</value>
   </data>
   <data name="AllCores.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1617,7 +1639,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;AllCores.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>9</value>
   </data>
   <data name="TDP.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1644,7 +1666,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;TDP.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>10</value>
   </data>
   <data name="Revision.Font" type="System.Drawing.Font, System.Drawing">
     <value>Bahnschrift SemiLight, 9pt</value>
@@ -1674,7 +1696,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Revision.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>11</value>
   </data>
   <data name="VID.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1701,7 +1723,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;VID.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>12</value>
   </data>
   <data name="Frequency.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1728,7 +1750,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Frequency.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>13</value>
   </data>
   <data name="Platform.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1755,16 +1777,13 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Platform.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>14</value>
   </data>
   <data name="TDPBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="TDPBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>301, 122</value>
-  </data>
-  <data name="TDPBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
   </data>
   <data name="TDPBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>64, 21</value>
@@ -1782,16 +1801,13 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;TDPBox.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>15</value>
   </data>
   <data name="LitBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="LitBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>301, 93</value>
-  </data>
-  <data name="LitBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
   </data>
   <data name="LitBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>64, 21</value>
@@ -1809,7 +1825,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;LitBox.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>16</value>
   </data>
   <data name="RevisionBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1817,11 +1833,8 @@
   <data name="RevisionBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>72, 121</value>
   </data>
-  <data name="RevisionBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="RevisionBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 21</value>
+    <value>39, 21</value>
   </data>
   <data name="RevisionBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1836,7 +1849,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;RevisionBox.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>17</value>
   </data>
   <data name="CPUIDBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1844,11 +1857,8 @@
   <data name="CPUIDBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>72, 148</value>
   </data>
-  <data name="CPUIDBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="CPUIDBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 21</value>
+    <value>39, 21</value>
   </data>
   <data name="CPUIDBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1863,7 +1873,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;CPUIDBox.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>18</value>
   </data>
   <data name="VidBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1871,11 +1881,8 @@
   <data name="VidBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>72, 92</value>
   </data>
-  <data name="VidBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="VidBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 22</value>
+    <value>82, 21</value>
   </data>
   <data name="VidBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1890,7 +1897,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;VidBox.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>19</value>
   </data>
   <data name="FrequencyBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1898,11 +1905,8 @@
   <data name="FrequencyBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>72, 65</value>
   </data>
-  <data name="FrequencyBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="FrequencyBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>293, 22</value>
+    <value>293, 21</value>
   </data>
   <data name="FrequencyBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1917,19 +1921,16 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;FrequencyBox.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>20</value>
   </data>
   <data name="ThreadBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
   <data name="ThreadBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>324, 39</value>
-  </data>
-  <data name="ThreadBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>329, 39</value>
   </data>
   <data name="ThreadBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 22</value>
+    <value>36, 21</value>
   </data>
   <data name="ThreadBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1947,7 +1948,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;ThreadBox.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>21</value>
   </data>
   <data name="CoresBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1955,11 +1956,8 @@
   <data name="CoresBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>233, 39</value>
   </data>
-  <data name="CoresBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="CoresBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>33, 22</value>
+    <value>38, 21</value>
   </data>
   <data name="CoresBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1977,7 +1975,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;CoresBox.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>22</value>
   </data>
   <data name="PlatformBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
@@ -1985,11 +1983,8 @@
   <data name="PlatformBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>72, 39</value>
   </data>
-  <data name="PlatformBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="PlatformBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>116, 22</value>
+    <value>39, 21</value>
   </data>
   <data name="PlatformBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2004,16 +1999,13 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;PlatformBox.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>23</value>
   </data>
   <data name="ModelBox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
+    <value>Cascadia Code SemiBold, 8.25pt, style=Bold</value>
   </data>
   <data name="ModelBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>72, 13</value>
-  </data>
-  <data name="ModelBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
+    <value>72, 9</value>
   </data>
   <data name="ModelBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>293, 20</value>
@@ -2031,7 +2023,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;ModelBox.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>24</value>
   </data>
   <data name="Model.AccessibleDescription" xml:space="preserve">
     <value />
@@ -2061,7 +2053,7 @@
     <value>Panel1</value>
   </data>
   <data name="&gt;&gt;Model.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>25</value>
   </data>
   <data name="Panel1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Bahnschrift SemiLight, 9pt</value>
@@ -2070,7 +2062,7 @@
     <value>4, 36</value>
   </data>
   <data name="Panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 393</value>
+    <value>376, 397</value>
   </data>
   <data name="Panel1.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2293,6 +2285,12 @@
   <data name="&gt;&gt;SettingsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;ToolStripSeparator2.Name" xml:space="preserve">
+    <value>ToolStripSeparator2</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;ExportCPUInfoToolStripMenuItem.Name" xml:space="preserve">
     <value>ExportCPUInfoToolStripMenuItem</value>
   </data>
@@ -2317,11 +2315,11 @@
   <data name="&gt;&gt;ExportLogToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Name" xml:space="preserve">
-    <value>LogOnOffToolStripMenuItem</value>
+  <data name="&gt;&gt;ToolStripSeparator1.Name" xml:space="preserve">
+    <value>ToolStripSeparator1</value>
   </data>
-  <data name="&gt;&gt;LogOnOffToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;ToolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LoadArchivedMeasurementsToolStripMenuItem.Name" xml:space="preserve">
     <value>LoadArchivedMeasurementsToolStripMenuItem</value>
@@ -2341,11 +2339,23 @@
   <data name="&gt;&gt;InfoMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;ToolStripSeparator3.Name" xml:space="preserve">
+    <value>ToolStripSeparator3</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;FAQToolStripMenuItem.Name" xml:space="preserve">
     <value>FAQToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;FAQToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator4.Name" xml:space="preserve">
+    <value>ToolStripSeparator4</value>
+  </data>
+  <data name="&gt;&gt;ToolStripSeparator4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;SupportToolStripMenuItem.Name" xml:space="preserve">
     <value>SupportToolStripMenuItem</value>

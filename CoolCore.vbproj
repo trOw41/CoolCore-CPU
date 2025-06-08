@@ -269,7 +269,9 @@
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\001-computer.png" />
     <Content Include="Resources\002-app-1.png" />
+    <None Include="Resources\003-computer-1.png" />
     <Content Include="Resources\004-computer-science.png" />
     <Content Include="Resources\014-close.png" />
     <Content Include="Resources\018-close-button.png" />
@@ -278,6 +280,12 @@
     <None Include="Resources\023-cpu1.png" />
     <None Include="Resources\024-cpu-1.png" />
     <None Include="Resources\024-cpu-1.ico" />
+    <None Include="Resources\tools-and-utensils.png" />
+    <None Include="Resources\temp.png" />
+    <None Include="Resources\IntelLogo.png" />
+    <None Include="Resources\IntelLogo-white.png" />
+    <None Include="Resources\AMDLogo_Dark.png" />
+    <None Include="Resources\AMDLogo.png" />
     <Content Include="Support\support.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

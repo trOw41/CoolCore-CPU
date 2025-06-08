@@ -29,19 +29,24 @@ Partial Class Form1
         Me.CloseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LogOnOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.LoadArchivedMeasurementsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InfoMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.FAQToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.SupportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.PicBox2 = New System.Windows.Forms.PictureBox()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
@@ -108,6 +113,7 @@ Partial Class Form1
         Me.LblStatusMessage = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -141,7 +147,7 @@ Partial Class Form1
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
-        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.ExportCPUInfoToolStripMenuItem})
+        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.ToolStripSeparator2, Me.ExportCPUInfoToolStripMenuItem})
         Me.OptionsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
         resources.ApplyResources(Me.OptionsToolStripMenuItem, "OptionsToolStripMenuItem")
@@ -152,6 +158,11 @@ Partial Class Form1
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
         resources.ApplyResources(Me.SettingsToolStripMenuItem, "SettingsToolStripMenuItem")
         '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        resources.ApplyResources(Me.ToolStripSeparator2, "ToolStripSeparator2")
+        '
         'ExportCPUInfoToolStripMenuItem
         '
         Me.ExportCPUInfoToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._036_folder
@@ -161,7 +172,7 @@ Partial Class Form1
         'ToolsToolStripMenuItem
         '
         Me.ToolsToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.LoadArchivedMeasurementsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
@@ -170,7 +181,7 @@ Partial Class Form1
         '
         Me.LogMenuItem.AutoToolTip = True
         Me.LogMenuItem.CheckOnClick = True
-        Me.LogMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportLogToolStripMenuItem, Me.LogOnOffToolStripMenuItem})
+        Me.LogMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportLogToolStripMenuItem})
         Me.LogMenuItem.Image = Global.CoolCore.My.Resources.Resources._004_computer_science
         Me.LogMenuItem.Name = "LogMenuItem"
         resources.ApplyResources(Me.LogMenuItem, "LogMenuItem")
@@ -181,11 +192,10 @@ Partial Class Form1
         Me.ExportLogToolStripMenuItem.Name = "ExportLogToolStripMenuItem"
         resources.ApplyResources(Me.ExportLogToolStripMenuItem, "ExportLogToolStripMenuItem")
         '
-        'LogOnOffToolStripMenuItem
+        'ToolStripSeparator1
         '
-        Me.LogOnOffToolStripMenuItem.CheckOnClick = True
-        Me.LogOnOffToolStripMenuItem.Name = "LogOnOffToolStripMenuItem"
-        resources.ApplyResources(Me.LogOnOffToolStripMenuItem, "LogOnOffToolStripMenuItem")
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        resources.ApplyResources(Me.ToolStripSeparator1, "ToolStripSeparator1")
         '
         'LoadArchivedMeasurementsToolStripMenuItem
         '
@@ -195,7 +205,7 @@ Partial Class Form1
         'HelpToolStripMenuItem
         '
         Me.HelpToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InfoMenuItem, Me.FAQToolStripMenuItem, Me.SupportToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InfoMenuItem, Me.ToolStripSeparator3, Me.FAQToolStripMenuItem, Me.ToolStripSeparator4, Me.SupportToolStripMenuItem})
         Me.HelpToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         resources.ApplyResources(Me.HelpToolStripMenuItem, "HelpToolStripMenuItem")
@@ -206,11 +216,21 @@ Partial Class Form1
         Me.InfoMenuItem.Name = "InfoMenuItem"
         resources.ApplyResources(Me.InfoMenuItem, "InfoMenuItem")
         '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        resources.ApplyResources(Me.ToolStripSeparator3, "ToolStripSeparator3")
+        '
         'FAQToolStripMenuItem
         '
         Me.FAQToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._032_faq_3
         Me.FAQToolStripMenuItem.Name = "FAQToolStripMenuItem"
         resources.ApplyResources(Me.FAQToolStripMenuItem, "FAQToolStripMenuItem")
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        resources.ApplyResources(Me.ToolStripSeparator4, "ToolStripSeparator4")
         '
         'SupportToolStripMenuItem
         '
@@ -221,8 +241,10 @@ Partial Class Form1
         'Panel1
         '
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel1.Controls.Add(Me.PictureBox1)
+        Me.Panel1.Controls.Add(Me.PicBox2)
+        Me.Panel1.Controls.Add(Me.Label8)
         Me.Panel1.Controls.Add(Me.Label7)
+        Me.Panel1.Controls.Add(Me.PictureBox1)
         Me.Panel1.Controls.Add(Me.Label3)
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Controls.Add(Me.Lithography)
@@ -248,12 +270,23 @@ Partial Class Form1
         resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Name = "Panel1"
         '
-        'PictureBox1
+        'PicBox2
         '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        resources.ApplyResources(Me.PictureBox1, "PictureBox1")
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.TabStop = False
+        Me.PicBox2.Image = Global.CoolCore.My.Resources.Resources._002_app_1
+        resources.ApplyResources(Me.PicBox2, "PicBox2")
+        Me.PicBox2.Name = "PicBox2"
+        Me.PicBox2.TabStop = False
+        '
+        'Label8
+        '
+        Me.Label8.AutoEllipsis = True
+        Me.Label8.BackColor = System.Drawing.Color.Transparent
+        Me.Label8.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        resources.ApplyResources(Me.Label8, "Label8")
+        Me.Label8.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label8.Name = "Label8"
+        Me.Label8.UseCompatibleTextRendering = True
+        Me.Label8.UseMnemonic = False
         '
         'Label7
         '
@@ -265,6 +298,13 @@ Partial Class Form1
         Me.Label7.Name = "Label7"
         Me.Label7.UseCompatibleTextRendering = True
         Me.Label7.UseMnemonic = False
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        resources.ApplyResources(Me.PictureBox1, "PictureBox1")
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.TabStop = False
         '
         'Label3
         '
@@ -391,21 +431,26 @@ Partial Class Form1
         '
         'Core0
         '
+        Me.Core0.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Core0, "Core0")
         Me.Core0.Name = "Core0"
         '
         'Core1
         '
+        Me.Core1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Core1, "Core1")
         Me.Core1.Name = "Core1"
+        Me.Core1.UseCompatibleTextRendering = True
         '
         'Core2
         '
+        Me.Core2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Core2, "Core2")
         Me.Core2.Name = "Core2"
         '
         'Core3
         '
+        Me.Core3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Core3, "Core3")
         Me.Core3.Name = "Core3"
         '
@@ -579,6 +624,7 @@ Partial Class Form1
         resources.ApplyResources(Me.TJBox, "TJBox")
         Me.TJBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.TJBox.Name = "TJBox"
+        Me.TJBox.ReadOnly = True
         '
         'PowerBox
         '
@@ -786,6 +832,7 @@ Partial Class Form1
         Me.MenuStrip1.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
@@ -878,5 +925,10 @@ Partial Class Form1
     Friend WithEvents FAQToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SupportToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExportLogToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents LogOnOffToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents Label8 As Label
+    Friend WithEvents PicBox2 As PictureBox
 End Class

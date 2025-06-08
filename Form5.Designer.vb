@@ -45,9 +45,7 @@ Partial Class Form5
         '
         Me.ListBoxlogs.FormattingEnabled = True
         Me.ListBoxlogs.Location = New System.Drawing.Point(12, 30)
-        Me.ListBoxlogs.MultiColumn = True
         Me.ListBoxlogs.Name = "ListBoxlogs"
-        Me.ListBoxlogs.ScrollAlwaysVisible = True
         Me.ListBoxlogs.Size = New System.Drawing.Size(360, 173)
         Me.ListBoxlogs.Sorted = True
         Me.ListBoxlogs.TabIndex = 1

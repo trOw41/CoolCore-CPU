@@ -7,9 +7,13 @@ Public Class Form4
 
     Private logDirectoryPath As String
 
-    Public Sub New(archiveFolderPath As String)
+    Public Sub New(archiveFolderPath1 As String)
+        If String.IsNullOrWhiteSpace(archiveFolderPath1) Then
+            Throw New ArgumentException($"""{NameOf(archiveFolderPath1)}"" darf nicht NULL oder ein Leerraumzeichen sein.", NameOf(archiveFolderPath1))
+        End If
+
         InitializeComponent()
-        logDirectoryPath = archiveFolderPath
+        logDirectoryPath = archiveFolderPath1
         Me.Text = "Archivierte Messungen auswählen"
         Me.ControlBox = False
         Me.FormBorderStyle = FormBorderStyle.FixedDialog
@@ -48,7 +52,7 @@ Public Class Form4
 
         Try
             ' Nur Dateien laden, die dem Muster CoolCore_Temp_Log_*.csv entsprechen
-            Dim files = Directory.GetFiles(logDirectoryPath, "CoolCore_Temp_Log_*.cvs") _
+            Dim files = Directory.GetFiles(logDirectoryPath, "CoolCore_Temp_Log_*.csv") _
                                  .OrderByDescending(Function(f) File.GetCreationTime(f)) ' Neueste zuerst
 
             If files.Any() Then
