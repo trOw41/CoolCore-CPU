@@ -2258,6 +2258,9 @@ Core 1 :</value>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
     <value>395, 494</value>
   </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
+  </data>
   <data name="$this.Text" xml:space="preserve">
     <value>CoolCore CPU</value>
   </data>

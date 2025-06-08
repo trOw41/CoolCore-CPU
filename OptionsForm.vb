@@ -26,6 +26,16 @@ Public Class OptionsForm
             End If
         Next
         LogStartStopBox.Checked = My.Settings.LogStartStop
+        Dim monitorTime = Settings.MonitorTime
+        If monitorTime > 0 Then
+            For i = 0 To CheckedListBox1.Items.Count - 1
+                If CheckedListBox1.Items(i).ToString() = monitorTime.ToString() Then
+                    CheckedListBox1.SetItemChecked(i, True)
+                Else
+                    CheckedListBox1.SetItemChecked(i, False)
+                End If
+            Next
+        End If
     End Sub
 
     Private Sub ChkDarkTheme_CheckedChanged(sender As Object, e As EventArgs) Handles chkDarkTheme.CheckedChanged
@@ -191,4 +201,15 @@ Public Class OptionsForm
         End If
     End Sub
 
+    Private Sub CheckedListBox1_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CheckedListBox1.ItemCheck
+        If CheckedListBox1.SelectedItem IsNot Nothing Then
+            Dim selectedItem = CheckedListBox1.SelectedItem.ToString()
+            If e.NewValue = CheckState.Checked Then
+                My.Settings.MonitorTime = selectedItem
+                'Label1.Text = "CPU Stresstest Intervall (in Sekunden): " & My.Settings.MonitorTime
+            ElseIf e.NewValue = CheckState.Unchecked Then
+                ' Do nothing if unchecked, as we only want to change the interval when checked
+            End If
+        End If
+    End Sub
 End Class
