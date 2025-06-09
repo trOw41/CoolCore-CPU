@@ -1,0 +1,10 @@
+Wichtiger Hinweis: 
+-------------------------------------------------------------------------------
+Der Test Prozess kann nicht unterbrochen werden! Bitte warten Sie bis zum ende des Test Prozess und schließen Sie CoolCore nicht in der Test Phase, dies kann und wird zu unerwünschten Ergebnissen führen! 
+Stress-Messungen können die Systemstabilität vorübergehend beeinträchtigen (z.B. Überlastung, Einfrieren, Abstürze, etc.).
+Die Ergebnisse können von System zu System variieren und sind nicht repräsentativ für alle Systeme.
+
+ACHTUNG:
+-------------------------------------------------------------------------------
+Bei älteren oder defekten Systemen kann es zu einer automatischen Abschaltung bei Erreichen der maximalen Temperatur (TjMax) kommen. 
+Häufiges oder langes 'Stressen' der CPU kann zudem zu dauerhaften Schäden oder erhöhter Lüfterlautstärke führen. Die Nutzung erfolgt auf eigene Gefahr!!! jegliche Gewährleistung ist ausgeschlossen!"

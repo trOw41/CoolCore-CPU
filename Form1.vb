@@ -50,8 +50,13 @@ Public Class Form1
     Private isLoggingActive As Boolean = False
     Private allParsedLogEntries As Object
     Private LogSize As Long = Settings.MAX_LOG_SIZE_KB
+    Private ReadOnly FallbackFontFamilyName As String = "Segoe UI"
+    Private ReadOnly FallbackFontFamilyNameOld As String = "Microsoft Sans Serif"
+
+    'Programm initialization
     Public Sub New()
         InitializeComponent()
+        CheckAndSetSystemFonts()
         systemInfoRepository = New SystemInfoRepository()
         cpuLoadCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
         refreshTimer = New Timer With {
@@ -63,167 +68,45 @@ Public Class Form1
             MessageBox.Show("Log-Verzeichnis wurde erstellt." & logDir, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
         AddHandler refreshTimer.Tick, AddressOf RefreshTimer_Tick
+        computer = New Computer() With {
+            .IsMotherboardEnabled = True,
+            .IsCpuEnabled = True,
+            .IsMemoryEnabled = True,
+            .IsGpuEnabled = True,
+            .IsPsuEnabled = True,
+            .IsStorageEnabled = True
+        }
+        refreshTimer.Start()
+        Dim InitBoxes As Task = Task.Run(Function() CeckTempLoadBoxes())
+    End Sub
+    Private Function CeckTempLoadBoxes() As Task
         If LoadBox IsNot Nothing Then LoadBoxes.Add(0, LoadBox)
         If LoadBox1 IsNot Nothing Then LoadBoxes.Add(1, LoadBox1)
         If LoadBox2 IsNot Nothing Then LoadBoxes.Add(2, LoadBox2)
         If LoadBox3 IsNot Nothing Then LoadBoxes.Add(3, LoadBox3)
-
         If CoreTemp IsNot Nothing Then CoreTempBoxes.Add(0, CoreTemp)
         If CoreTemp1 IsNot Nothing Then CoreTempBoxes.Add(1, CoreTemp1)
         If CoreTemp2 IsNot Nothing Then CoreTempBoxes.Add(2, CoreTemp2)
         If CoreTemp3 IsNot Nothing Then CoreTempBoxes.Add(3, CoreTemp3)
-
         If MinTemp IsNot Nothing Then MinTempBoxes.Add(0, MinTemp)
         If MinTemp1 IsNot Nothing Then MinTempBoxes.Add(1, MinTemp1)
         If MinTemp2 IsNot Nothing Then MinTempBoxes.Add(2, MinTemp2)
         If MinTemp3 IsNot Nothing Then MinTempBoxes.Add(3, MinTemp3)
-
         If MaxTemp IsNot Nothing Then MaxTempBoxes.Add(0, MaxTemp)
         If MaxTemp1 IsNot Nothing Then MaxTempBoxes.Add(1, MaxTemp1)
-        'AddHandler BtnToggleMonitoring.Click, AddressOf BtnToggleMonitoring_Click
-
         If MaxTemp2 IsNot Nothing Then MaxTempBoxes.Add(2, MaxTemp2)
         If MaxTemp3 IsNot Nothing Then MaxTempBoxes.Add(3, MaxTemp3)
-
         If Vbox1 IsNot Nothing Then VoltBoxes.Add(1, Vbox1)
         If VBox2 IsNot Nothing Then VoltBoxes.Add(2, VBox2)
         If VBox3 IsNot Nothing Then VoltBoxes.Add(3, VBox3)
         If VBox4 IsNot Nothing Then VoltBoxes.Add(4, VBox4)
-        refreshTimer.Start()
-    End Sub
-
-    Private Sub StartCpuStressTest()
-
-        StopCpuStressTest()
-        cancellationTokenSource = New CancellationTokenSource()
-        Dim cancellationToken = cancellationTokenSource.Token
-        Dim processorCount As Integer = Environment.ProcessorCount
-        For i As Integer = 0 To processorCount - 1
-            Dim cpuStressTask = Task.Run(Sub()
-                                             While Not cancellationToken.IsCancellationRequested
-
-                                                 Dim result As Double = 1.0
-                                                 For j As Integer = 0 To 1000000
-                                                     result = Math.Sqrt(result + Math.Sin(j) * Math.Cos(j))
-                                                 Next
-                                             End While
-                                         End Sub, cancellationToken)
-            stressTasks.Add(cpuStressTask)
-        Next
-
-        Me.Invoke(Sub()
-                      LblStatusMessage.Text = "CPU-Stresstest läuft..."
-                      LblStatusMessage.ForeColor = Color.DarkOrange
-                  End Sub)
-    End Sub
-
-    Private Sub StopCpuStressTest()
-        If cancellationTokenSource IsNot Nothing Then
-            cancellationTokenSource.Cancel()
-            Try
-                Task.WaitAll(stressTasks.ToArray(), 5000)
-            Catch ex As AggregateException
-                For Each innerEx In ex.InnerExceptions
-                    Debug.WriteLine($"Fehler beim Beenden der Stress-Task: {innerEx.Message}")
-                Next
-            Catch ex As Exception
-                Debug.WriteLine($"Fehler beim Warten auf Stress-Tasks: {ex.Message}")
-            End Try
-            cancellationTokenSource.Dispose() '
-            cancellationTokenSource = Nothing
-        End If
-        stressTasks.Clear()
-        Me.Invoke(Sub()
-                      LblStatusMessage.Text = "CPU-Stresstest beendet."
-                      'LblStatusMessage.ForeColor = Color.Green
-                  End Sub)
-    End Sub
-
-    Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
-        Dim intervalMs As Integer = 1000
-
-        Do While Not cancellationToken.IsCancellationRequested
-            Try
-                cpu?.Update()
-                Dim currentCoreTemps As New Dictionary(Of String, Single)()
-                For Each sensor As ISensor In coreTemperatures
-                    If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) And Not sensor.Name.Contains("Distance to TjMax") AndAlso sensor.Value.HasValue Then
-                        currentCoreTemps.Add(sensor.Name, sensor.Value.Value)
-                    End If
-                Next
-                If currentCoreTemps.Any() Then
-                    SyncLock backgroundTempMeasurements
-                        Dim newEntry As New CoreTempData With {
-                        .Timestamp = Date.Now,
-                        .CoreTemperatures = currentCoreTemps}
-                        backgroundTempMeasurements.Add(newEntry)
-                    End SyncLock
-                End If
-                Task.Delay(intervalMs, cancellationToken).Wait()
-            Catch ex As OperationCanceledException
-
-                Exit Do
-            Catch ex As Exception
-                Exit Do
-            End Try
-        Loop
-    End Sub
-
-    Private Function SaveTemperatureDataToCsv(data As List(Of CoreTempData))
-        Dim programDirectory As String = AppDomain.CurrentDomain.BaseDirectory
-        Dim logDirectory As String = Path.Combine(programDirectory, "TemperatureLogs")
-        If Not Directory.Exists(logDirectory) Then
-            Directory.CreateDirectory(logDirectory)
-        End If
-        Dim fileName As String = $"CoolCore_Temp_Log_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
-        Dim filePath As String = Path.Combine(logDirectory, fileName)
-
-        Try
-            Using writer As New StreamWriter(filePath, False, Encoding.UTF8)
-                Dim coreNames As New SortedSet(Of String)()
-                For Each entry In data
-
-                    For Each kvp In entry.CoreTemperatures
-                        coreNames.Add(kvp.Key)
-                    Next
-                Next
-                writer.Write("Timestamp")
-                For Each coreName In coreNames
-                    writer.Write($",{coreName} (°C)")
-                Next
-                writer.WriteLine()
-                For Each entry In data
-                    writer.Write(entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff"))
-                    For Each coreName In coreNames
-                        Dim temp As Single = 0
-                        If entry.CoreTemperatures.TryGetValue(coreName, temp) Then
-                            writer.Write($",{temp.ToString("F1", CultureInfo.InvariantCulture)}")
-                        Else
-                            writer.Write(",N/A")
-                        End If
-                    Next
-                    writer.WriteLine()
-                Next
-            End Using
-            Me.Invoke(Sub()
-                          LblStatusMessage.Text = $"Temperature data saved to {filePath}"
-                          'LblStatusMessage.ForeColor = Color.Blue
-                      End Sub)
-            Return filePath
-        Catch ex As Exception
-            Me.Invoke(Sub()
-                          LblStatusMessage.Text = $"Error saving data: {ex.Message}"
-                          'LblStatusMessage.ForeColor = Color.Red
-                      End Sub)
-            Return Nothing
-        End Try
-        Return filePath
+        Return Task.CompletedTask
     End Function
 
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    'Form Logic
+    Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LblStatusMessage.Text = "Ready to read system information."
         LblStatusMessage.ForeColor = Color.Black
-        ClearCpuDisplayControls()
         If computer Is Nothing Then
             computer = New Computer()
         End If
@@ -234,16 +117,34 @@ Public Class Form1
         LblStatusMessage.ForeColor = Color.Black
         Me.Text = "CoolCore - Monitoring Tool" & " - " & My.Application.Info.Version.ToString(4)
         ApplyTheme(My.Settings.ApplicationTheme)
-        InitializePerCoreCounters()
-        InitializeCoreTemperatureSensors()
-        'InitializeOpenHardwareMonitor()
-        InitializeVoltageSensors()
+        ClearCpuDisplayControls()
+        Await Task.Run(Sub()
+                           InitializePerCoreCounters()
+                           InitializeCoreTemperatureSensors()
+                           InitializeVoltageSensors()
+                       End Sub)
+
+        Dim sysInfoTask As Task = Task.Run(Sub()
+                                               ReadAndDisplaySystemInfoAsync()
+                                           End Sub)
         Using ReadAndDisplaySystemInfoAsync()
             refreshTimer.Start()
         End Using
+
+        Dim LogSystem As Task = Task.Run(Sub()
+                                             StartStopLog()
+                                             UpdateLogSize()
+                                             BrandCheck()
+                                         End Sub)
+
+        Await sysInfoTask
+        Await LogSystem
+
+    End Sub
+
+    Private Function BrandCheck() As Task
         Dim sysinfo = systemInfoRepository.GetCurrentSystemInfo.CpuName
         Dim cpuName As String = sysinfo
-        MessageBox.Show(cpuName)
         Dim cpuNameLower As String = cpuName.ToLowerInvariant()
         If cpuNameLower.Contains("intel") Then
             If cpuNameLower.Contains("intel") AndAlso Settings.ApplicationTheme = "Standard" Then
@@ -251,7 +152,6 @@ Public Class Form1
                 Settings.CpuLogoName = "intel"
             ElseIf cpuNameLower.Contains("intel") AndAlso Settings.ApplicationTheme = "Dark" Then
                 PicBox2.Image = Resources.IntelLogo_white
-
             End If
         ElseIf cpuNameLower.Contains("amd") Then
             If cpuNameLower.Contains("amd") AndAlso Settings.ApplicationTheme = "Standard" Then
@@ -263,29 +163,8 @@ Public Class Form1
         Else
             PicBox2.Image = Nothing
         End If
-        StartStopLog()
-
-    End Sub
-
-    Public Sub StartStopLog()
-        Dim Start As Boolean = Settings.LogStartStop
-        If Start = True Then
-            Me.Invoke(Sub()
-                          StartLog()
-                          CheckAndManageLogFile()
-                      End Sub)
-        ElseIf Start = False Then
-            If isLoggingActive Then
-                StopLog()
-                LblStatusMessage.Text = "Logging stopped."
-            End If
-        End If
-    End Sub
-    Public Sub UpdateLogSize()
-        Dim logSizeKB As Integer = My.Settings.MAX_LOG_SIZE_KB
-        LogSize = logSizeKB
-        LblStatusMessage.Text = $"Max. Loggröße: {logSizeKB} KB"
-    End Sub
+        Return Task.CompletedTask
+    End Function
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         refreshTimer.Stop()
         refreshTimer.Dispose()
@@ -314,36 +193,7 @@ Public Class Form1
         End If
     End Sub
 
-
-    Private Sub InitializePerCoreCounters()
-        Try
-
-            Dim numberOfLogicalProcessors As Integer = 0
-            Dim searcher As New ManagementObjectSearcher("SELECT NumberOfLogicalProcessors FROM Win32_Processor")
-            For Each queryObj As ManagementObject In searcher.Get()
-                numberOfLogicalProcessors = CInt(If(queryObj("NumberOfLogicalProcessors"), 0))
-                Exit For
-            Next
-
-            If numberOfLogicalProcessors > 0 Then
-
-                For Each counter In cpuLoadCounters
-                    counter.Dispose()
-                Next
-                cpuLoadCounters.Clear()
-                For i As Integer = 0 To Math.Min(numberOfLogicalProcessors - 1, LoadBoxes.Count - 1)
-                    Dim instanceName As String = i.ToString()
-                    Dim counter As New PerformanceCounter("Processor", "% Processor Time", instanceName)
-                    cpuLoadCounters.Add(counter)
-                Next
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show($"Error initializing per-core counters: {ex.Message}", "Initialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Error initializing per-core counters: {ex.Message}")
-        End Try
-    End Sub
-
+    'Sensor initialization
     Private Sub InitializeCoreTemperatureSensors()
         Try
             If computer Is Nothing Then
@@ -393,7 +243,6 @@ Public Class Form1
 
         End Try
     End Sub
-
     Private Sub InitializeVoltageSensors()
         cpuVoltageSensorMap.Clear()
         genericVcoreSensor = Nothing
@@ -418,7 +267,6 @@ Public Class Form1
             Next
         End If
     End Sub
-
     Private Sub UpdateVoltageDisplay()
         Try
             If cpu IsNot Nothing Then
@@ -477,7 +325,13 @@ Public Class Form1
         End Try
     End Sub
 
+    'Timer Progress
     Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs)
+        If cpu Is Nothing Then
+            InitializeCoreTemperatureSensors()
+            InitializePerCoreCounters()
+            InitializeVoltageSensors()
+        End If
         Try
             cpu?.Update()
             For i As Integer = 0 To cpuLoadCounters.Count - 1
@@ -553,6 +407,35 @@ Public Class Form1
         End Try
     End Sub
 
+    'Hardware Initialization
+    Private Sub InitializePerCoreCounters()
+        Try
+
+            Dim numberOfLogicalProcessors As Integer = 0
+            Dim searcher As New ManagementObjectSearcher("SELECT NumberOfLogicalProcessors FROM Win32_Processor")
+            For Each queryObj As ManagementObject In searcher.Get()
+                numberOfLogicalProcessors = CInt(If(queryObj("NumberOfLogicalProcessors"), 0))
+                Exit For
+            Next
+
+            If numberOfLogicalProcessors > 0 Then
+
+                For Each counter In cpuLoadCounters
+                    counter.Dispose()
+                Next
+                cpuLoadCounters.Clear()
+                For i As Integer = 0 To Math.Min(numberOfLogicalProcessors - 1, LoadBoxes.Count - 1)
+                    Dim instanceName As String = i.ToString()
+                    Dim counter As New PerformanceCounter("Processor", "% Processor Time", instanceName)
+                    cpuLoadCounters.Add(counter)
+                Next
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show($"Error initializing per-core counters: {ex.Message}", "Initialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"Error initializing per-core counters: {ex.Message}")
+        End Try
+    End Sub
     Private Function ReadAndDisplaySystemInfoAsync() As Task
         LblStatusMessage.Text = "Reading system information and saving to database..."
         'LblStatusMessage.ForeColor = Color.CadetBlue
@@ -685,10 +568,8 @@ Public Class Form1
                       End Sub)
             MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-
         Return Task.CompletedTask
     End Function
-    '#--------------------------------------------------------------------------------------------------------------------'
     Private Sub ClearCpuDisplayControls()
         ModelBox.Text = ""
         FrequencyBox.Text = ""
@@ -707,11 +588,21 @@ Public Class Form1
         For Each kvp In MaxTempBoxes : kvp.Value.Text = "" : Next
     End Sub
 
-    Private Sub CloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CloseToolStripMenuItem.Click
-        Me.Close()
-    End Sub
-
+    'Test Section initialization
     Private Sub BtnToggleMonitor1_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitor1.Click
+        Dim attentionMessage = File.ReadAllText("TestInfo.txt")
+        Dim result As DialogResult = MessageBox.Show(Me, attentionMessage, "Wichtiger Hinweis", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
+        If result = DialogResult.OK Then
+            TestStart()
+        Else
+            MessageBox.Show(Me,
+                            "Test Vorgang nicht gestartet!",
+                            caption:="Info: Test nicht gestartet:",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information)
+        End If
+    End Sub
+    Private Sub TestStart()
         If Not isMonitoringActive Then
             isMonitoringActive = True
             backgroundTempMeasurements.Clear()
@@ -742,7 +633,6 @@ Public Class Form1
         StopCpuStressTest()
         StopMonitoringProcess()
     End Sub
-
     Private Async Sub StopMonitoringProcess()
         If Not isMonitoringActive Then Exit Sub
         isMonitoringActive = False
@@ -784,19 +674,142 @@ Public Class Form1
         LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
         'LblStatusMessage.ForeColor = Color.Green
     End Sub
-
     Private Sub MonitoringTimer_Tick(sender As Object, e As EventArgs)
         If monitoringForm IsNot Nothing AndAlso Not monitoringForm.IsDisposed Then
             monitoringForm.UpdateElapsedTime(monitoringStopwatch.Elapsed)
 
         End If
     End Sub
-
     Private Sub LoadingForm_StopRequested(sender As Object, e As EventArgs)
         Call StopMonitoringProcess()
 
     End Sub
+    Private Sub StartCpuStressTest()
 
+        StopCpuStressTest()
+        cancellationTokenSource = New CancellationTokenSource()
+        Dim cancellationToken = cancellationTokenSource.Token
+        Dim processorCount As Integer = Environment.ProcessorCount
+        For i As Integer = 0 To processorCount - 1
+            Dim cpuStressTask = Task.Run(Sub()
+                                             While Not cancellationToken.IsCancellationRequested
+
+                                                 Dim result As Double = 1.0
+                                                 For j As Integer = 0 To 1000000
+                                                     result = Math.Sqrt(result + Math.Sin(j) * Math.Cos(j))
+                                                 Next
+                                             End While
+                                         End Sub, cancellationToken)
+            stressTasks.Add(cpuStressTask)
+        Next
+
+        Me.Invoke(Sub()
+                      LblStatusMessage.Text = "CPU-Stresstest läuft..."
+                      LblStatusMessage.ForeColor = Color.DarkOrange
+                  End Sub)
+    End Sub
+    Private Sub StopCpuStressTest()
+        If cancellationTokenSource IsNot Nothing Then
+            cancellationTokenSource.Cancel()
+            Try
+                Task.WaitAll(stressTasks.ToArray(), 5000)
+            Catch ex As AggregateException
+                For Each innerEx In ex.InnerExceptions
+                    Debug.WriteLine($"Fehler beim Beenden der Stress-Task: {innerEx.Message}")
+                Next
+            Catch ex As Exception
+                Debug.WriteLine($"Fehler beim Warten auf Stress-Tasks: {ex.Message}")
+            End Try
+            cancellationTokenSource.Dispose() '
+            cancellationTokenSource = Nothing
+        End If
+        stressTasks.Clear()
+        Me.Invoke(Sub()
+                      LblStatusMessage.Text = "CPU-Stresstest beendet."
+                      'LblStatusMessage.ForeColor = Color.Green
+                  End Sub)
+    End Sub
+    Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
+        Dim intervalMs As Integer = 1000
+
+        Do While Not cancellationToken.IsCancellationRequested
+            Try
+                cpu?.Update()
+                Dim currentCoreTemps As New Dictionary(Of String, Single)()
+                For Each sensor As ISensor In coreTemperatures
+                    If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) And Not sensor.Name.Contains("Distance to TjMax") AndAlso sensor.Value.HasValue Then
+                        currentCoreTemps.Add(sensor.Name, sensor.Value.Value)
+                    End If
+                Next
+                If currentCoreTemps.Any() Then
+                    SyncLock backgroundTempMeasurements
+                        Dim newEntry As New CoreTempData With {
+                        .Timestamp = Date.Now,
+                        .CoreTemperatures = currentCoreTemps}
+                        backgroundTempMeasurements.Add(newEntry)
+                    End SyncLock
+                End If
+                Task.Delay(intervalMs, cancellationToken).Wait()
+            Catch ex As OperationCanceledException
+
+                Exit Do
+            Catch ex As Exception
+                Exit Do
+            End Try
+        Loop
+    End Sub
+    Private Function SaveTemperatureDataToCsv(data As List(Of CoreTempData))
+        Dim programDirectory As String = AppDomain.CurrentDomain.BaseDirectory
+        Dim logDirectory As String = Path.Combine(programDirectory, "TemperatureLogs")
+        If Not Directory.Exists(logDirectory) Then
+            Directory.CreateDirectory(logDirectory)
+        End If
+        Dim fileName As String = $"CoolCore_Temp_Log_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+        Dim filePath As String = Path.Combine(logDirectory, fileName)
+
+        Try
+            Using writer As New StreamWriter(filePath, False, Encoding.UTF8)
+                Dim coreNames As New SortedSet(Of String)()
+                For Each entry In data
+
+                    For Each kvp In entry.CoreTemperatures
+                        coreNames.Add(kvp.Key)
+                    Next
+                Next
+                writer.Write("Timestamp")
+                For Each coreName In coreNames
+                    writer.Write($",{coreName} (°C)")
+                Next
+                writer.WriteLine()
+                For Each entry In data
+                    writer.Write(entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff"))
+                    For Each coreName In coreNames
+                        Dim temp As Single = 0
+                        If entry.CoreTemperatures.TryGetValue(coreName, temp) Then
+                            writer.Write($",{temp.ToString("F1", CultureInfo.InvariantCulture)}")
+                        Else
+                            writer.Write(",N/A")
+                        End If
+                    Next
+                    writer.WriteLine()
+                Next
+            End Using
+            Me.Invoke(Sub()
+                          LblStatusMessage.Text = $"Temperature data saved to {filePath}"
+                          'LblStatusMessage.ForeColor = Color.Blue
+                      End Sub)
+            Return filePath
+        Catch ex As Exception
+            Me.Invoke(Sub()
+                          LblStatusMessage.Text = $"Error saving data: {ex.Message}"
+                          'LblStatusMessage.ForeColor = Color.Red
+                      End Sub)
+            Return Nothing
+        End Try
+        Return filePath
+    End Function
+
+    'Archive load and archived measurements from the TemperatureLogs directory
     Private Sub LoadArchivedMeasurementsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoadArchivedMeasurementsToolStripMenuItem.Click
         Dim programDirectory1 As String = AppDomain.CurrentDomain.BaseDirectory
         Dim logDirectory1 As String = Path.Combine(programDirectory1, "TemperatureLogs")
@@ -831,11 +844,7 @@ Public Class Form1
         End Using
     End Sub
 
-    Private Sub InfoMenuItem_Click(sender As Object, e As EventArgs) Handles InfoMenuItem.Click
-        AboutBox1.ShowDialog(Me)
-    End Sub
-
-
+    'Export CPU Info Section
     Private Sub ExportCPUInfoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportCPUInfoToolStripMenuItem.Click
         Dim currentSystemInfo As SystemInfoData = systemInfoRepository.GetCurrentSystemInfo()
         If currentSystemInfo Is Nothing Then
@@ -963,6 +972,7 @@ Public Class Form1
         End Try
     End Function
 
+    'Theme Section
     Private Sub ApplyTheme(theme As String)
         Select Case theme
             Case "Dark"
@@ -1070,7 +1080,6 @@ Public Class Form1
                 End If
         End Select
     End Sub
-
     Private Sub ApplyThemeToToolStripItem(item As ToolStripItem, theme As String)
         Select Case theme
             Case "Dark"
@@ -1093,7 +1102,14 @@ Public Class Form1
                 End If
         End Select
     End Sub
+    Private Sub OptionsForm_ThemeChanged(sender As Object, newTheme As String)
+        ApplyTheme(newTheme)
+    End Sub
 
+    'Menu Item Click Events
+    Private Sub InfoMenuItem_Click(sender As Object, e As EventArgs) Handles InfoMenuItem.Click
+        AboutBox1.ShowDialog(Me)
+    End Sub
     Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
         Using optionsForm As New OptionsForm()
             AddHandler optionsForm.ThemeChanged, AddressOf OptionsForm_ThemeChanged
@@ -1102,94 +1118,9 @@ Public Class Form1
             End If
         End Using
     End Sub
-    Private Sub OptionsForm_ThemeChanged(sender As Object, newTheme As String)
-        ApplyTheme(newTheme)
+    Private Sub CloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CloseToolStripMenuItem.Click
+        Me.Close()
     End Sub
-
-    Private Function GetTemperatureColor(temperature As Single) As Color
-        Const YELLOW_THRESHOLD As Single = 55.0F
-        Const ORANGE_THRESHOLD As Single = 70.0F
-        Const RED_THRESHOLD As Single = 90.0F
-        Try
-            If temperature <= YELLOW_THRESHOLD Then
-                Return Color.Green
-            ElseIf temperature > YELLOW_THRESHOLD Then
-                Return Color.Orange
-            ElseIf temperature > ORANGE_THRESHOLD Then
-                Return Color.OrangeRed
-            ElseIf temperature > RED_THRESHOLD Then
-                Return Color.Red
-            End If
-        Catch ex As Exception
-            Debug.WriteLine($"Error in GetTemperatureColor: {ex.Message}")
-            Return Color.Black
-        End Try
-    End Function
-
-    Private Sub FAQToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FAQToolStripMenuItem.Click
-        FAQForm.Show()
-    End Sub
-
-    Private Sub SupportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SupportToolStripMenuItem.Click
-        Try
-            Dim supportPagePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Support\support.html")
-
-            If File.Exists(supportPagePath) Then
-                Process.Start(supportPagePath)
-            Else
-                MessageBox.Show("Die Supportseite konnte nicht gefunden werden: " & supportPagePath, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End If
-        Catch ex As Exception
-            MessageBox.Show($"Fehler beim Öffnen der Supportseite: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub StartLog()
-        Try
-            If temperatureLogWriter IsNot Nothing Then
-                temperatureLogWriter.Close()
-                temperatureLogWriter.Dispose()
-                temperatureLogWriter = Nothing
-            End If
-            temperatureLogWriter = New StreamWriter(LogFilePath, append:=True)
-            temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log gestartet: {DateTime.Now} ---")
-            temperatureLogWriter.WriteLine("Zeitpunkt ; CPU-Core ; MinTemp ;MaxTemp ; CurrentTemp")
-            isLoggingActive = True
-            LblStatusMessage.Text = "Temperatur-Logging wurde gestartet. Daten werden in 'CoolCore_TemperatureLog.txt' geschrieben."
-            Debug.WriteLine("Temperatur-Logging gestartet.")
-        Catch ex As Exception
-            MessageBox.Show($"Fehler beim Starten des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Logging Start Error: {ex.Message}")
-            isLoggingActive = False
-        End Try
-    End Sub
-
-    Private Sub StopLog()
-        Try
-            If temperatureLogWriter IsNot Nothing Then
-                temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log beendet: {DateTime.Now} ---")
-                temperatureLogWriter.Close()
-                temperatureLogWriter.Dispose()
-                temperatureLogWriter = Nothing
-            End If
-            isLoggingActive = False
-            LblStatusMessage.Text = "Temperatur-Logging wurde beendet."
-            Debug.WriteLine("Temperatur-Logging beendet.")
-            ExportLogToolStripMenuItem.Enabled = True
-        Catch ex As Exception
-            MessageBox.Show($"Fehler beim Beenden des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Logging Stop Error: {ex.Message}")
-            isLoggingActive = False
-        End Try
-    End Sub
-    Private Structure LogEntry
-        Public Property Timestamp As DateTime
-        Public Property Core As String
-        Public Property MinTemp As Single
-        Public Property MaxTemp As Single
-        Public Property CurrentTemp As Single
-        Public Property CpuName As String
-    End Structure
     Private Sub ExportLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportLogToolStripMenuItem.Click
         Dim programDirectory As String = AppDomain.CurrentDomain.BaseDirectory
         Dim logDirectory As String = logDir
@@ -1218,7 +1149,97 @@ Public Class Form1
             End If
         End Using
     End Sub
+    Private Sub FAQToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FAQToolStripMenuItem.Click
+        FAQForm.Show()
+    End Sub
+    Private Sub SupportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SupportToolStripMenuItem.Click
+        Try
+            Dim supportPagePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Support\support.html")
 
+            If File.Exists(supportPagePath) Then
+                Process.Start(supportPagePath)
+            Else
+                MessageBox.Show("Die Supportseite konnte nicht gefunden werden: " & supportPagePath, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Öffnen der Supportseite: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    'Log Section
+    Public Sub StartStopLog()
+        Dim Start As Boolean = Settings.LogStartStop
+        If Start = True Then
+            Me.Invoke(Sub()
+                          StartLog()
+                          CheckAndManageLogFile()
+                      End Sub)
+        ElseIf Start = False Then
+            If isLoggingActive Then
+                StopLog()
+                LblStatusMessage.Text = "Logging stopped."
+            End If
+        End If
+    End Sub
+    Private Sub StartLog()
+        Try
+            If temperatureLogWriter IsNot Nothing Then
+                temperatureLogWriter.Close()
+                temperatureLogWriter.Dispose()
+                temperatureLogWriter = Nothing
+            End If
+            temperatureLogWriter = New StreamWriter(LogFilePath, append:=True)
+            temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log gestartet: {DateTime.Now} ---")
+            temperatureLogWriter.WriteLine("Zeitpunkt ; CPU-Core ; MinTemp ;MaxTemp ; CurrentTemp")
+            isLoggingActive = True
+            LblStatusMessage.Text = "Temperatur-Logging wurde gestartet. Daten werden in 'CoolCore_TemperatureLog.txt' geschrieben."
+            Debug.WriteLine("Temperatur-Logging gestartet.")
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Starten des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"Logging Start Error: {ex.Message}")
+            isLoggingActive = False
+        End Try
+    End Sub
+    Private Sub StopLog()
+        Try
+            If temperatureLogWriter IsNot Nothing Then
+                temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log beendet: {DateTime.Now} ---")
+                temperatureLogWriter.Close()
+                temperatureLogWriter.Dispose()
+                temperatureLogWriter = Nothing
+            End If
+            isLoggingActive = False
+            LblStatusMessage.Text = "Temperatur-Logging wurde beendet."
+            Debug.WriteLine("Temperatur-Logging beendet.")
+            ExportLogToolStripMenuItem.Enabled = True
+        Catch ex As Exception
+            MessageBox.Show($"Fehler beim Beenden des Loggings: {ex.Message}", "Logging Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"Logging Stop Error: {ex.Message}")
+            isLoggingActive = False
+        End Try
+    End Sub
+    Private Structure LogEntry
+        Public Property Timestamp As DateTime
+        Public Property Core As String
+        Public Property MinTemp As Single
+        Public Property MaxTemp As Single
+        Public Property CurrentTemp As Single
+        Public Property CpuName As String
+    End Structure
+
+    'Helper Section
+    Public Function UpdateLogSize() As Task
+        Dim logSizeKB As Integer = My.Settings.MAX_LOG_SIZE_KB
+        LogSize = logSizeKB
+        If LblStatusMessage.InvokeRequired Then
+            LblStatusMessage.Invoke(Sub()
+                                        LblStatusMessage.Text = $"Max. Loggröße: {logSizeKB} KB"
+                                    End Sub)
+        Else
+            LblStatusMessage.Text = $"Max. Loggröße: {logSizeKB} KB"
+        End If
+        Return Task.CompletedTask
+    End Function
     Private Sub ExportLog(LogFilePath As String)
         If Not File.Exists(LogFilePath) Then
             MessageBox.Show("Die Temperatur-Logdatei wurde nicht gefunden. Bitte starten Sie das Logging zuerst.", "Export Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -1375,8 +1396,75 @@ Public Class Form1
             Debug.WriteLine($"Fehler beim Verwalten der Log-Datei: {ex.Message}")
         End Try
     End Sub
-
-    Private Sub Core3_Click(sender As Object, e As EventArgs) Handles Core3.Click
-
+    Private Function GetTemperatureColor(temperature As Single) As Color
+        Const YELLOW_THRESHOLD As Single = 55.0F
+        Const ORANGE_THRESHOLD As Single = 70.0F
+        Const RED_THRESHOLD As Single = 90.0F
+        Try
+            If temperature <= YELLOW_THRESHOLD Then
+                Return Color.Green
+            ElseIf temperature > YELLOW_THRESHOLD Then
+                Return Color.Orange
+            ElseIf temperature > ORANGE_THRESHOLD Then
+                Return Color.OrangeRed
+            ElseIf temperature > RED_THRESHOLD Then
+                Return Color.Red
+            End If
+        Catch ex As Exception
+            Debug.WriteLine($"Error in GetTemperatureColor: {ex.Message}")
+            Return Color.Black
+        End Try
+    End Function
+    Private Sub CheckAndSetSystemFonts()
+        Dim isWindows7OrOlder As Boolean = False
+        Dim osVersion As Version = Environment.OSVersion.Version
+        ' Windows 7 is version 6.1
+        If osVersion.Major < 6 OrElse (osVersion.Major = 6 AndAlso osVersion.Minor <= 1) Then
+            isWindows7OrOlder = True
+            Debug.WriteLine("Running on Windows 7 or older.")
+        Else
+            Debug.WriteLine("Running on Windows 8 or newer.")
+        End If
+        If isWindows7OrOlder Then
+            Dim fallbackFontFamily As FontFamily = Nothing
+            If FontFamily.Families.Any(Function(f) f.Name = FallbackFontFamilyName) Then
+                fallbackFontFamily = New FontFamily(FallbackFontFamilyName)
+                Debug.WriteLine($"Fallback font set to: {FallbackFontFamilyName}")
+            ElseIf FontFamily.Families.Any(Function(f) f.Name = FallbackFontFamilyNameOld) Then
+                fallbackFontFamily = New FontFamily(FallbackFontFamilyNameOld)
+                Debug.WriteLine($"Fallback font set to: {FallbackFontFamilyNameOld}")
+            Else
+                Debug.WriteLine("No preferred fallback font found. Using generic Sans Serif.")
+                fallbackFontFamily = FontFamily.GenericSansSerif
+            End If
+            If fallbackFontFamily IsNot Nothing Then
+                Dim programFontsToCheck As New List(Of String) From {
+                    "Arial",
+                    "Calibri",
+                    "Tahoma"
+                }
+                Dim controlsToProcess As New Queue(Of Control)()
+                controlsToProcess.Enqueue(Me)
+                While controlsToProcess.Count > 0
+                    Dim currentControl As Control = controlsToProcess.Dequeue()
+                    If currentControl.Font IsNot Nothing Then
+                        Dim currentFontFamilyName As String = currentControl.Font.FontFamily.Name
+                        If programFontsToCheck.Contains(currentFontFamilyName) AndAlso
+                           Not FontFamily.Families.Any(Function(f) f.Name = currentFontFamilyName) Then
+                            Try
+                                Dim newFont As New Font(fallbackFontFamily, currentControl.Font.Size, currentControl.Font.Style)
+                                currentControl.Font = newFont
+                                Debug.WriteLine($"Changed font for control '{currentControl.Name}' to '{fallbackFontFamily.Name}'.")
+                            Catch ex As Exception
+                                Debug.WriteLine($"Error changing font for control '{currentControl.Name}': {ex.Message}")
+                            End Try
+                        End If
+                    End If
+                    For Each childControl As Control In currentControl.Controls
+                        controlsToProcess.Enqueue(childControl)
+                    Next
+                End While
+            End If
+        End If
     End Sub
 End Class

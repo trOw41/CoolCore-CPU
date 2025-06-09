@@ -48,6 +48,7 @@
     <WarningsAsErrors>
     </WarningsAsErrors>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -267,6 +268,9 @@
     <Content Include="45_11594827525_023-cpu.ico" />
     <Content Include="78_11594827525_045-firmware.ico" />
     <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestInfo.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\001-computer.png" />
