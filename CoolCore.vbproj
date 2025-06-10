@@ -78,7 +78,7 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>45_11594827525_023-cpu.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\024-cpu-1.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -270,6 +270,14 @@
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\8.png" />
+    <None Include="Resources\7.png" />
+    <None Include="Resources\1 %282%29.png" />
+    <None Include="Resources\2 %282%29.png" />
+    <None Include="Resources\3 %282%29.png" />
+    <None Include="Resources\4.png" />
+    <None Include="Resources\5.png" />
+    <None Include="Resources\6.png" />
     <Content Include="TestInfo.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -26,6 +26,8 @@ Partial Class FAQForm
         Me.LblTitel = New System.Windows.Forms.Label()
         Me.TrvFAQ = New System.Windows.Forms.TreeView()
         Me.TxtAnswer = New System.Windows.Forms.RichTextBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'LblTitel
@@ -48,28 +50,37 @@ Partial Class FAQForm
         Me.TrvFAQ.Location = New System.Drawing.Point(0, 29)
         Me.TrvFAQ.Name = "TrvFAQ"
         Me.TrvFAQ.ShowNodeToolTips = True
-        Me.TrvFAQ.Size = New System.Drawing.Size(323, 484)
+        Me.TrvFAQ.Size = New System.Drawing.Size(315, 484)
         Me.TrvFAQ.TabIndex = 1
         '
         'TxtAnswer
         '
         Me.TxtAnswer.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.TxtAnswer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TxtAnswer.Dock = System.Windows.Forms.DockStyle.Right
+        Me.TxtAnswer.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TxtAnswer.Font = New System.Drawing.Font("Bahnschrift SemiLight", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtAnswer.Location = New System.Drawing.Point(329, 29)
+        Me.TxtAnswer.Location = New System.Drawing.Point(321, 29)
         Me.TxtAnswer.Name = "TxtAnswer"
         Me.TxtAnswer.ReadOnly = True
-        Me.TxtAnswer.Size = New System.Drawing.Size(583, 484)
+        Me.TxtAnswer.Size = New System.Drawing.Size(579, 211)
         Me.TxtAnswer.TabIndex = 2
         Me.TxtAnswer.Text = ""
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Location = New System.Drawing.Point(440, 243)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(338, 267)
+        Me.PictureBox1.TabIndex = 3
+        Me.PictureBox1.TabStop = False
         '
         'FAQForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoSize = True
+        Me.BackColor = System.Drawing.SystemColors.Window
         Me.ClientSize = New System.Drawing.Size(912, 513)
+        Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.TxtAnswer)
         Me.Controls.Add(Me.TrvFAQ)
         Me.Controls.Add(Me.LblTitel)
@@ -78,6 +89,7 @@ Partial Class FAQForm
         Me.MaximizeBox = False
         Me.Name = "FAQForm"
         Me.Text = "CoolCore FAQ"
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -85,4 +97,5 @@ Partial Class FAQForm
     Friend WithEvents LblTitel As Label
     Friend WithEvents TrvFAQ As TreeView
     Friend WithEvents TxtAnswer As RichTextBox
+    Friend WithEvents PictureBox1 As PictureBox
 End Class

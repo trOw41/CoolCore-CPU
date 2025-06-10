@@ -62,7 +62,7 @@ Partial Class Form1
         Me.Label6 = New System.Windows.Forms.Label()
         Me.MinTemplbl = New System.Windows.Forms.Label()
         Me.Core0 = New System.Windows.Forms.Label()
-        Me.Core1 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.Core2 = New System.Windows.Forms.Label()
         Me.Core3 = New System.Windows.Forms.Label()
         Me.CoreTemp = New System.Windows.Forms.TextBox()
@@ -325,7 +325,7 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.Label6)
         Me.Panel2.Controls.Add(Me.MinTemplbl)
         Me.Panel2.Controls.Add(Me.Core0)
-        Me.Panel2.Controls.Add(Me.Core1)
+        Me.Panel2.Controls.Add(Me.Label9)
         Me.Panel2.Controls.Add(Me.Core2)
         Me.Panel2.Controls.Add(Me.Core3)
         Me.Panel2.Controls.Add(Me.CoreTemp)
@@ -435,12 +435,11 @@ Partial Class Form1
         resources.ApplyResources(Me.Core0, "Core0")
         Me.Core0.Name = "Core0"
         '
-        'Core1
+        'Label9
         '
-        Me.Core1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        resources.ApplyResources(Me.Core1, "Core1")
-        Me.Core1.Name = "Core1"
-        Me.Core1.UseCompatibleTextRendering = True
+        Me.Label9.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        resources.ApplyResources(Me.Label9, "Label9")
+        Me.Label9.Name = "Label9"
         '
         'Core2
         '
@@ -874,7 +873,6 @@ Partial Class Form1
     Friend WithEvents TJBox As TextBox
     Friend WithEvents CoreTemp3 As TextBox
     Friend WithEvents Core0 As Label
-    Friend WithEvents Core1 As Label
     Friend WithEvents Core2 As Label
     Friend WithEvents Core3 As Label
     Friend WithEvents MinTemp As TextBox
@@ -931,4 +929,5 @@ Partial Class Form1
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
     Friend WithEvents Label8 As Label
     Friend WithEvents PicBox2 As PictureBox
+    Friend WithEvents Label9 As Label
 End Class

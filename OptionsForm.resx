@@ -118,11 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Label2.Text" xml:space="preserve">
-    <value>CPU Stress-Intervall (Sekunden)
-Dieses Intervall definiert die Dauer, in der Ihr Prozessor für Messzwecke unter Volllast (100% Auslastung) betrieben wird. Ziel ist die Ermittlung der maximalen "Stress-Temperatur" zur Optimierung der Datenverarbeitung und Durchschnittstemperaturberechnungen in CoolCore.
-Wichtiger Hinweis:
-Stress-Messungen können die Systemstabilität vorübergehend beeinträchtigen (z.B. Überlastung, Einfrieren). Bei älteren oder defekten Systemen kann es zu einer automatischen Abschaltung bei Erreichen der maximalen Temperatur (TjMax) kommen. 
-Häufiges oder langes "Stressen" der CPU kann zudem zu dauerhaften Schäden oder erhöhter Lüfterlautstärke führen. Die Nutzung erfolgt auf eigene Gefahr; jegliche Gewährleistung ist ausgeschlossen.</value>
+    <value>Dieses Intervall definiert die Dauer, in der Ihr Prozessor für Messzwecke unter Volllast (100% Auslastung) betrieben wird. Ziel ist die Ermittlung der maximalen "Stress-Temperatur" zur Optimierung der Datenverarbeitung und Durchschnittstemperaturberechnungen in CoolCore. Stress-Messungen können die Systemstabilität vorübergehend beeinträchtigen (z.B. Überlastung, Einfrieren). Bei älteren oder defekten Systemen kann es zu einer automatischen Abschaltung bei Erreichen der maximalen Temperatur (TjMax) kommen. 
+Häufiges oder langes "Stressen" der CPU kann zudem zu dauerhaften Schäden oder erhöhter Lüfterlautstärke führen.
+Die Nutzung erfolgt auf eigene Gefahr; jegliche Gewährleistung ist ausgeschlossen.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="PictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

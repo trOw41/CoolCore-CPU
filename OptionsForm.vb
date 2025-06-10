@@ -200,16 +200,4 @@ Public Class OptionsForm
                          End Sub)
         End If
     End Sub
-
-    Private Sub CheckedListBox1_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CheckedListBox1.ItemCheck
-        If CheckedListBox1.SelectedItem IsNot Nothing Then
-            Dim selectedItem = CheckedListBox1.SelectedItem.ToString()
-            If e.NewValue = CheckState.Checked Then
-                My.Settings.MonitorTime = selectedItem
-                'Label1.Text = "CPU Stresstest Intervall (in Sekunden): " & My.Settings.MonitorTime
-            ElseIf e.NewValue = CheckState.Unchecked Then
-                ' Do nothing if unchecked, as we only want to change the interval when checked
-            End If
-        End If
-    End Sub
 End Class

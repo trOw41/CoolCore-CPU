@@ -1,14 +1,14 @@
 ﻿' FAQForm.vb
 Imports System.Drawing
+Imports System.Runtime.Versioning
 Imports System.Windows.Forms
 
 Public Class FAQForm
 
     Private Sub FAQForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
         PopulateFAQsTreeView()
-
         ApplyCurrentTheme()
+        PictureBox1.SizeMode = PictureBoxSizeMode.Zoom
         If TrvFAQ.Nodes.Count > 0 AndAlso TrvFAQ.Nodes(0).Nodes.Count > 0 Then
             TrvFAQ.SelectedNode = TrvFAQ.Nodes(0).Nodes(0)
             If TrvFAQ.SelectedNode.Tag IsNot Nothing Then
@@ -99,16 +99,39 @@ Public Class FAQForm
     End Function
 
     Private Sub TrvFAQ_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles TrvFAQ.AfterSelect
-        If e.Node IsNot Nothing AndAlso e.Node.Tag IsNot Nothing AndAlso e.Node.Nodes.Count = 0 Then
-            TxtAnswer.Text = e.Node.Tag.ToString()
+        Dim selectedNode As TreeNode = e.Node
+        If selectedNode IsNot Nothing AndAlso selectedNode.Tag IsNot Nothing AndAlso selectedNode.Nodes.Count = 0 Then
+            TxtAnswer.Text = selectedNode.Tag.ToString()
         Else
             TxtAnswer.Text = String.Empty
         End If
+
+        ' Bildauswahl anhand des Knotentexts (Frage oder Kategorie)
+        Select Case selectedNode.Text
+            Case "Was ist CoolCore?"
+                PictureBox1.Image = PictureLoad("1")
+            Case "Systeminformationen & Aktualisierungen"
+                PictureBox1.Image = PictureLoad("2")
+            Case "Temperaturen & Sensoren"
+                PictureBox1.Image = PictureLoad("3")
+            Case "Leistung & Systemstatus"
+                PictureBox1.Image = PictureLoad("4")
+            Case "CPU-Stresstest"
+                PictureBox1.Image = PictureLoad("5")
+            Case "Logging"
+                PictureBox1.Image = PictureLoad("6")
+            Case "Einstellungen"
+                PictureBox1.Image = PictureLoad("7")
+            Case "Über CoolCore"
+                PictureBox1.Image = PictureLoad("8")
+            Case Else
+                PictureBox1.Image = Nothing
+        End Select
     End Sub
+
 
     Private Sub ApplyCurrentTheme()
         Dim theme As String = My.Settings.ApplicationTheme
-
         Select Case theme
             Case "Dark"
                 Me.BackColor = Color.FromArgb(45, 45, 48)
@@ -129,4 +152,22 @@ Public Class FAQForm
         End Select
     End Sub
 
+    ' Gibt das gewünschte Bild anhand einer Bildnummer als String zurück.
+    Private Function PictureLoad(picKey As String) As Image
+        Select Case picKey
+            Case "1" : Return My.Resources._1
+            Case "2" : Return My.Resources._2
+            Case "3" : Return My.Resources._3
+            Case "4" : Return My.Resources._4
+            Case "5" : Return My.Resources._5
+            Case "6" : Return My.Resources._6
+            Case "7" : Return My.Resources._7
+            Case "8" : Return My.Resources._9
+            Case Else : Return Nothing
+        End Select
+    End Function
+
+    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
+
+    End Sub
 End Class

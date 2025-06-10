@@ -1113,9 +1113,7 @@ Public Class Form1
     Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
         Using optionsForm As New OptionsForm()
             AddHandler optionsForm.ThemeChanged, AddressOf OptionsForm_ThemeChanged
-            If optionsForm.ShowDialog() = DialogResult.OK Then
-
-            End If
+            optionsForm.ShowDialog(Me)
         End Using
     End Sub
     Private Sub CloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CloseToolStripMenuItem.Click
@@ -1467,4 +1465,5 @@ Public Class Form1
             End If
         End If
     End Sub
+
 End Class
