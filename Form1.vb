@@ -14,6 +14,8 @@ Imports Microsoft.VisualBasic.Logging
 Imports Newtonsoft.Json
 Imports OpenHardwareMonitor.Hardware
 Imports Timer = System.Windows.Forms.Timer
+Imports System.Text.RegularExpressions
+Imports System.Management
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
     Public Property CoreTemperatures As Dictionary(Of String, Single)
@@ -55,6 +57,9 @@ Public Class Form1
     Private ReadOnly FallbackFontFamilyName As String = "Segoe UI"
     Private ReadOnly FallbackFontFamilyNameOld As String = "Microsoft Sans Serif"
     Private Const CPU_SPECS_CSV_FILE As String = "intel-cpus.csv"
+    Private foundCpuDetails As New Dictionary(Of String, String)()
+
+
     'Programm initialization
     Public Sub New()
         InitializeComponent()
@@ -124,26 +129,18 @@ Public Class Form1
                            InitializePerCoreCounters()
                            InitializeCoreTemperatureSensors()
                            InitializeVoltageSensors()
+
+
                        End Sub)
-
-        Dim sysInfoTask As Task = Task.Run(Sub()
-                                               ReadAndDisplaySystemInfoAsync()
-
-                                           End Sub)
-        Using ReadAndDisplaySystemInfoAsync()
-            refreshTimer.Start()
-            getCpuSubInfos()
-        End Using
-
+        refreshTimer.Start()
         Dim LogSystem As Task = Task.Run(Sub()
                                              StartStopLog()
                                              UpdateLogSize()
                                              BrandCheck()
                                          End Sub)
-
-        Await sysInfoTask
         Await LogSystem
-
+        ReadAndDisplaySystemInfoAsync()
+        GetCpuSubInfos()
     End Sub
 
     Private Function BrandCheck() As Task
@@ -486,7 +483,7 @@ Public Class Form1
             Debug.WriteLine($"Error initializing per-core counters: {ex.Message}")
         End Try
     End Sub
-    Private Function ReadAndDisplaySystemInfoAsync() As Task
+    Private Sub ReadAndDisplaySystemInfoAsync()
         LblStatusMessage.Text = "Reading system information and saving to database..."
         'LblStatusMessage.ForeColor = Color.CadetBlue
         Dim systemInfo As New SystemInfoData With {
@@ -625,8 +622,8 @@ Public Class Form1
                       End Sub)
             MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-        Return Task.CompletedTask
-    End Function
+
+    End Sub
     Private Sub ClearCpuDisplayControls()
         ModelBox.Text = ""
         FrequencyBox.Text = ""
@@ -646,7 +643,9 @@ Public Class Form1
     End Sub
 
     'CPU Sub Information
-    Private Sub getCpuSubInfos()
+    Private Sub GetCpuSubInfos()
+
+        foundCpuDetails.Clear()
         Dim cpuNameFromWMI As String = "N/A"
         Dim processorIdFromWMI As String = "N/A"
         Dim manufacturerFromWMI As String = "N/A"
@@ -655,7 +654,7 @@ Public Class Form1
             For Each queryObj As ManagementObject In searcher.Get()
                 cpuNameFromWMI = queryObj("Name")?.ToString()
                 processorIdFromWMI = queryObj("ProcessorId")?.ToString()
-                ' manufacturerFromWMI = queryObj("Manufacturer")?.ToString() 
+                manufacturerFromWMI = queryObj("Manufacturer")?.ToString()
                 Dim name As String = queryObj("Name")?.ToString()
                 Dim family As String = queryObj("Family")?.ToString()
                 Dim stepping As String = queryObj("Stepping")?.ToString()
@@ -670,23 +669,24 @@ Public Class Form1
         End Try
         ModelBox.Text = cpuNameFromWMI
         CPUIDBox.Text = processorIdFromWMI
-        Dim lithography As String = "N/A"
-        Dim tdp As String = "N/A"
+        ' Dim foundCpuDetails As New Dictionary(Of String, String)()
 
         Dim csvFilePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, CPU_SPECS_CSV_FILE)
+
         If File.Exists(csvFilePath) Then
             Try
                 Dim lines As String() = File.ReadAllLines(csvFilePath)
                 If lines.Length > 0 Then
                     Dim headers As String() = lines(0).Split(","c).Select(Function(h) h.Trim("""").Trim()).ToArray()
                     Dim nameColumnIndex As Integer = Array.IndexOf(headers, "CpuName")
-                    Dim lithographyColumnIndex As Integer = Array.IndexOf(headers, "Lithography")
-                    Dim tdpColumnIndex As Integer = Array.IndexOf(headers, "TDP")
+
                     If nameColumnIndex = -1 Then
-                        'Debug.WriteLine($"CSV Error: Spalte 'CpuName' nicht gefunden in '{CPU_SPECS_CSV_FILE}'")
+                        Debug.WriteLine($"CSV Error: Spalte 'CpuName' nicht gefunden in '{CPU_SPECS_CSV_FILE}'")
                         LithographyBox.Text = "CSV Error: CpuName-Spalte fehlt"
+                        TDPBox.Text = "CSV Error"
                         Return
                     End If
+
                     Dim normalizedWmiCpuName As String = NormalizeCpuName(cpuNameFromWMI)
                     Debug.WriteLine($"Normalized WMI CPU Name: '{normalizedWmiCpuName}'")
 
@@ -696,21 +696,28 @@ Public Class Form1
                         If data.Length > nameColumnIndex Then
                             Dim csvCpuName As String = data(nameColumnIndex)
                             Dim normalizedCsvCpuName As String = NormalizeCpuName(csvCpuName)
-                            Debug.WriteLine($"Normalized CSV CPU Name: '{normalizedCsvCpuName}' from original '{csvCpuName}'")
+                            Debug.WriteLine($"Comparing: WMI Normalized '{normalizedWmiCpuName}' with CSV Normalized '{normalizedCsvCpuName}' (Original CSV: '{csvCpuName}')")
+
                             If Not String.IsNullOrWhiteSpace(normalizedWmiCpuName) AndAlso
-                               normalizedCsvCpuName.Contains(normalizedWmiCpuName) OrElse
                                normalizedWmiCpuName.Contains(normalizedCsvCpuName) Then
-                                'Debug.WriteLine($"Match found: WMI '{cpuNameFromWMI}' vs CSV '{csvCpuName}'")
-                                If lithographyColumnIndex <> -1 AndAlso data.Length > lithographyColumnIndex Then
-                                    lithography = data(lithographyColumnIndex)
+                                For colIndex As Integer = 0 To headers.Length - 1
+                                    If colIndex < data.Length Then
+                                        Dim headerName As String = headers(colIndex)
+                                        Dim cellValue As String = data(colIndex)
+                                        foundCpuDetails.Add(headerName, cellValue)
+                                    End If
+                                Next
+                                If foundCpuDetails.ContainsKey("Lithography") Then
+                                    LithographyBox.Text = foundCpuDetails("Lithography")
                                 Else
-                                    lithography = "N/A (CSV)"
+                                    LithographyBox.Text = "N/A (Litho in CSV fehlt)"
                                 End If
-                                If tdpColumnIndex <> -1 AndAlso data.Length > tdpColumnIndex Then
-                                    tdp = data(tdpColumnIndex)
-                                Else
-                                    tdp = "N/A (CSV)"
+
+                                If foundCpuDetails.ContainsKey("TDPMax") Then
+
+                                    TDPBox.Text = foundCpuDetails("TDP")
                                 End If
+
                                 Exit For
                             End If
                         End If
@@ -718,16 +725,13 @@ Public Class Form1
                 End If
             Catch ex As Exception
                 Debug.WriteLine($"Fehler beim Lesen oder Parsen der CSV-Datei '{CPU_SPECS_CSV_FILE}': {ex.Message}")
-                lithography = "CSV Lesefehler"
-                tdp = "CSV Lesefehler"
+                LithographyBox.Text = "CSV Lesefehler"
             End Try
         Else
             Debug.WriteLine($"CSV Error: Datei '{CPU_SPECS_CSV_FILE}' nicht gefunden unter '{csvFilePath}'")
-            lithography = "CSV nicht gefunden"
-            tdp = "CSV nicht gefunden"
+            LithographyBox.Text = "CSV nicht gefunden"
         End If
-        LithographyBox.Text = lithography
-        TDPBox.Text = tdp
+
     End Sub
 
     Private Function NormalizeCpuName(ByVal cpuName As String) As String
@@ -744,7 +748,7 @@ Public Class Form1
         normalizedName = normalizedName.Replace("ghz", "")
         normalizedName = normalizedName.Replace("k", "")
         normalizedName = normalizedName.Replace("x", "")
-        ' Regex.Replace(normalizedName, "\d+(\.\d+)?$", "").Trim() 
+        ' normalizedName = Regex.Replace(normalizedName, "\d+(\.\d+)?$", "").Trim()
         normalizedName = System.Text.RegularExpressions.Regex.Replace(normalizedName, "\s+", " ").Trim()
         Return normalizedName
     End Function
@@ -827,11 +831,11 @@ Public Class Form1
         ' refreshTimer.Start()
         monitoringTimer.Stop()
         monitoringStopwatch.Stop()
-        Me.Invoke(Sub() ReadAndDisplaySystemInfoAsync().Wait())
-        Await ReadAndDisplaySystemInfoAsync()
-        InitializePerCoreCounters()
-        InitializeCoreTemperatureSensors()
-
+        Me.Invoke(Sub()
+                      InitializePerCoreCounters()
+                      InitializeCoreTemperatureSensors()
+                      ReadAndDisplaySystemInfoAsync()
+                  End Sub)
         LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
         'LblStatusMessage.ForeColor = Color.Green
     End Sub
@@ -1007,27 +1011,29 @@ Public Class Form1
 
     'Export CPU Info Section
     Private Sub ExportCPUInfoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportCPUInfoToolStripMenuItem.Click
-        Dim currentSystemInfo As SystemInfoData = systemInfoRepository.GetCurrentSystemInfo()
-        If currentSystemInfo Is Nothing Then
+        If foundCpuDetails.Count = 0 Then
+            MessageBox.Show("Keine CPU-Informationen zum Exportieren verfügbar. Bitte scannen Sie zuerst die CPU-Details.", "Exportinformation", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
-        systemInfoRepository.SaveSystemInfo(currentSystemInfo)
-        Dim htmlContent As String = GenerateSystemInfoHtml(currentSystemInfo)
+
+        Dim htmlContent As String = GenerateSystemInfoHtml(foundCpuDetails)
+
         Using saveFileDialog As New SaveFileDialog()
             saveFileDialog.Filter = "HTML-Datei (*.html)|*.html|Alle Dateien (*.*)|*.*"
-            saveFileDialog.Title = "Systeminformationen exportieren"
-            saveFileDialog.FileName = $"SystemInfo_{DateTime.Now:yyyyMMdd_HHmmss}.html"
+            saveFileDialog.Title = "CPU-Informationen exportieren"
+            saveFileDialog.FileName = $"CPUInfo_{DateTime.Now:yyyyMMdd_HHmmss}.html"
             If saveFileDialog.ShowDialog() = DialogResult.OK Then
                 Try
                     File.WriteAllText(saveFileDialog.FileName, htmlContent, System.Text.Encoding.UTF8)
-                    MessageBox.Show("Systeminformationen erfolgreich exportiert.", "Export abgeschlossen", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    MessageBox.Show("CPU-Informationen erfolgreich exportiert.", "Export abgeschlossen", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Catch ex As Exception
                     MessageBox.Show($"Fehler beim Speichern der HTML-Datei: {ex.Message}", "Exportfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             End If
         End Using
     End Sub
-    Private Function GenerateSystemInfoHtml(data As SystemInfoData) As String
+
+    Private Function GenerateSystemInfoHtml(cpuData As Dictionary(Of String, String)) As String
         Dim htmlBuilder As New System.Text.StringBuilder()
         Try
             htmlBuilder.AppendLine("<!DOCTYPE html>")
@@ -1045,80 +1051,23 @@ Public Class Form1
             htmlBuilder.AppendLine("  th, td { padding: 8px; border: 1px solid #ddd; text-align: left; vertical-align: top; }")
             htmlBuilder.AppendLine("  th { background-color: #f2f2f2; font-weight: bold; width: 30%; }")
             htmlBuilder.AppendLine("  .note { margin-top: 30px; font-size: 0.9em; color: #777; text-align: center; }")
-            htmlBuilder.AppendLine("  .value-list { list-style-type: disc; margin: 0; padding-left: 20px; }")
-            htmlBuilder.AppendLine("  .value-list li { margin-bottom: 3px; }")
             htmlBuilder.AppendLine("</style>")
             htmlBuilder.AppendLine("</head>")
             htmlBuilder.AppendLine("<body>")
             htmlBuilder.AppendLine("  <div class='container'>")
-            htmlBuilder.AppendLine("    <h1>Systeminformationen Bericht</h1>")
-            htmlBuilder.AppendLine($"    <p class='note'>Bericht erstellt am: {data.Timestamp:dd.MM.yyyy HH:mm:ss}</p>")
+            htmlBuilder.AppendLine("    <h1>CPU Informationen Bericht</h1>")
+            ' Hier können Sie allgemeine Informationen hinzufügen, wenn gewünscht
+            htmlBuilder.AppendLine($"    <p class='note'>Bericht erstellt am: {DateTime.Now:dd.MM.yyyy HH:mm:ss}</p>")
 
-            htmlBuilder.AppendLine("    <h2>Host Info</h2>")
+            htmlBuilder.AppendLine("    <h2>CPU Details</h2>")
             htmlBuilder.AppendLine("    <table>")
-            htmlBuilder.AppendLine($"      <tr><th>Computername</th><td>{data.ComputerName}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Hostname</th><td>{data.HostName}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Benutzername</th><td>{data.UserName}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Domain</th><td>{data.DomainName}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Betriebssystem</th><td>{data.OSSystem} ({data.Architecture})</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Systemtyp</th><td>{data.SystemType}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Systemverzeichnis</th><td>{data.SystemDirectory}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Programmverzeichnis</th><td>{data.ProgramDirectory}</td></tr>")
+
+            ' Iteriere durch alle Schlüssel-Wert-Paare im Dictionary und füge sie als Tabellenzeilen hinzu
+            For Each entry In cpuData.OrderBy(Function(e) e.Key) ' Optional: Nach Eigenschaftsname sortieren
+                htmlBuilder.AppendLine($"      <tr><th>{entry.Key}</th><td>{entry.Value}</td></tr>")
+            Next
+
             htmlBuilder.AppendLine("    </table>")
-
-            htmlBuilder.AppendLine("    <h2>CPU Informationen</h2>")
-            htmlBuilder.AppendLine("    <table>")
-            htmlBuilder.AppendLine($"      <tr><th>CPU Name</th><td>{data.CpuName}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Anzahl Kerne</th><td>{data.NumberOfCores}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Anzahl logischer Prozessoren</th><td>{data.NumberOfLogicalProcessors}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Prozessorzähler (Threads)</th><td>{data.ProcessorCount}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Aktuelle Taktrate</th><td>{data.CurrentClockSpeedMHz} MHz</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Prozessorinformationen</th><td>{data.ProcessorInformation}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Gesamter physischer Speicher</th><td>{(data.TotalPhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Verfügbarer physischer Speicher</th><td>{(data.AvailablePhysicalMemory / (1024.0 * 1024 * 1024)):F2} GB</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>Grafikkarten Informationen</th><td>{data.GraphicsCardInformation}</td></tr>")
-            htmlBuilder.AppendLine($"      <tr><th>BIOS Version</th><td>{data.BIOSVersion}</td></tr>")
-            htmlBuilder.AppendLine("    </table>")
-
-            htmlBuilder.AppendLine("    <h2>Netzwerk Informationen</h2>")
-            htmlBuilder.AppendLine("    <table>")
-            htmlBuilder.AppendLine("      <tr><th>IP-Adressen</th><td>")
-            If Not String.IsNullOrEmpty(data.IPAddresses) Then
-                htmlBuilder.AppendLine("        <ul class='value-list'>")
-                For Each ipAddress As String In data.IPAddresses.Split(";"c)
-                    htmlBuilder.AppendLine($"          <li>{ipAddress.Trim()}</li>")
-                Next
-                htmlBuilder.AppendLine("        </ul>")
-            Else
-                htmlBuilder.AppendLine("        N/A")
-            End If
-            htmlBuilder.AppendLine("      </td></tr>")
-
-            htmlBuilder.AppendLine("      <tr><th>Netzwerkadapter Namen</th><td>")
-            If Not String.IsNullOrEmpty(data.NetworkAdapterNames) Then
-                htmlBuilder.AppendLine("        <ul class='value-list'>")
-                For Each adapterName As String In data.NetworkAdapterNames.Split(";"c)
-                    htmlBuilder.AppendLine($"          <li>{adapterName.Trim()}</li>")
-                Next
-                htmlBuilder.AppendLine("        </ul>")
-            Else
-                htmlBuilder.AppendLine("        N/A")
-            End If
-            htmlBuilder.AppendLine("      </td></tr>")
-
-            htmlBuilder.AppendLine("      <tr><th>MAC-Adressen</th><td>")
-            If Not String.IsNullOrEmpty(data.NetworkAdapterMacAddresses) Then
-                htmlBuilder.AppendLine("        <ul class='value-list'>")
-                For Each macAddress As String In data.NetworkAdapterMacAddresses.Split(";"c)
-                    htmlBuilder.AppendLine($"          <li>{macAddress.Trim()}</li>")
-                Next
-                htmlBuilder.AppendLine("        </ul>")
-            Else
-                htmlBuilder.AppendLine("        N/A")
-            End If
-            htmlBuilder.AppendLine("      </td></tr>")
-            htmlBuilder.AppendLine("    </table>")
-
 
             htmlBuilder.AppendLine("    <p class='note'>Bericht erstellt von CoolCore Tool.</p>")
             htmlBuilder.AppendLine("  </div>")
@@ -1627,7 +1576,14 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub CPUIDBox_TextChanged(sender As Object, e As EventArgs)
-
+    Private Sub CpuInfoMenu_Click(sender As Object, e As EventArgs) Handles CpuInfoMenu.Click
+        If foundCpuDetails.Count > 0 Then
+            Dim cpuInfoForm As New CpuinfoForm()
+            cpuInfoForm.LoadCpuInfo(foundCpuDetails)
+            cpuInfoForm.Show()
+        Else
+            MessageBox.Show("Keine detaillierten CPU-Informationen in der CSV-Datei für Ihre CPU gefunden.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
     End Sub
+
 End Class

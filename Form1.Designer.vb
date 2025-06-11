@@ -37,7 +37,7 @@ Partial Class Form1
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.LoadArchivedMeasurementsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BtnCpuInfo = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CpuInfoMenu = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InfoMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
@@ -45,10 +45,9 @@ Partial Class Form1
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.SupportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.PicBox2 = New System.Windows.Forms.PictureBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.PicBox2 = New System.Windows.Forms.PictureBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
@@ -92,7 +91,6 @@ Partial Class Form1
         Me.Lithography = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.Threads = New System.Windows.Forms.Label()
         Me.AllCores = New System.Windows.Forms.Label()
         Me.TDP = New System.Windows.Forms.Label()
@@ -120,8 +118,8 @@ Partial Class Form1
         Me.LblStatusMessage = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -179,7 +177,7 @@ Partial Class Form1
         'ToolsToolStripMenuItem
         '
         Me.ToolsToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem, Me.ToolStripSeparator5, Me.BtnCpuInfo})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem, Me.ToolStripSeparator5, Me.CpuInfoMenu})
         Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
@@ -214,11 +212,11 @@ Partial Class Form1
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
         resources.ApplyResources(Me.ToolStripSeparator5, "ToolStripSeparator5")
         '
-        'BtnCpuInfo
+        'CpuInfoMenu
         '
-        Me.BtnCpuInfo.Image = Global.CoolCore.My.Resources.Resources._023_cpu
-        Me.BtnCpuInfo.Name = "BtnCpuInfo"
-        resources.ApplyResources(Me.BtnCpuInfo, "BtnCpuInfo")
+        Me.CpuInfoMenu.Image = Global.CoolCore.My.Resources.Resources._023_cpu
+        Me.CpuInfoMenu.Name = "CpuInfoMenu"
+        resources.ApplyResources(Me.CpuInfoMenu, "CpuInfoMenu")
         '
         'HelpToolStripMenuItem
         '
@@ -259,16 +257,14 @@ Partial Class Form1
         'Panel1
         '
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel1.Controls.Add(Me.PicBox2)
-        Me.Panel1.Controls.Add(Me.Label8)
-        Me.Panel1.Controls.Add(Me.Label7)
         Me.Panel1.Controls.Add(Me.PictureBox1)
+        Me.Panel1.Controls.Add(Me.PicBox2)
+        Me.Panel1.Controls.Add(Me.Label7)
         Me.Panel1.Controls.Add(Me.Label3)
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Controls.Add(Me.Lithography)
         Me.Panel1.Controls.Add(Me.Label4)
         Me.Panel1.Controls.Add(Me.Label10)
-        Me.Panel1.Controls.Add(Me.Label11)
         Me.Panel1.Controls.Add(Me.Threads)
         Me.Panel1.Controls.Add(Me.AllCores)
         Me.Panel1.Controls.Add(Me.TDP)
@@ -291,23 +287,19 @@ Partial Class Form1
         resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Name = "Panel1"
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        resources.ApplyResources(Me.PictureBox1, "PictureBox1")
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.TabStop = False
+        '
         'PicBox2
         '
         Me.PicBox2.Image = Global.CoolCore.My.Resources.Resources._002_app_1
         resources.ApplyResources(Me.PicBox2, "PicBox2")
         Me.PicBox2.Name = "PicBox2"
         Me.PicBox2.TabStop = False
-        '
-        'Label8
-        '
-        Me.Label8.AutoEllipsis = True
-        Me.Label8.BackColor = System.Drawing.Color.Transparent
-        Me.Label8.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        resources.ApplyResources(Me.Label8, "Label8")
-        Me.Label8.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label8.Name = "Label8"
-        Me.Label8.UseCompatibleTextRendering = True
-        Me.Label8.UseMnemonic = False
         '
         'Label7
         '
@@ -319,13 +311,6 @@ Partial Class Form1
         Me.Label7.Name = "Label7"
         Me.Label7.UseCompatibleTextRendering = True
         Me.Label7.UseMnemonic = False
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        resources.ApplyResources(Me.PictureBox1, "PictureBox1")
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.TabStop = False
         '
         'Label3
         '
@@ -683,13 +668,6 @@ Partial Class Form1
         resources.ApplyResources(Me.Label10, "Label10")
         Me.Label10.Name = "Label10"
         '
-        'Label11
-        '
-        Me.Label11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label11.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        resources.ApplyResources(Me.Label11, "Label11")
-        Me.Label11.Name = "Label11"
-        '
         'Threads
         '
         resources.ApplyResources(Me.Threads, "Threads")
@@ -885,8 +863,8 @@ Partial Class Form1
         Me.MenuStrip1.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
-        CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.Panel3.ResumeLayout(False)
@@ -981,14 +959,12 @@ Partial Class Form1
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
-    Friend WithEvents Label8 As Label
     Friend WithEvents PicBox2 As PictureBox
     Friend WithEvents Label9 As Label
     Friend WithEvents FrequencyBox2 As TextBox
     Friend WithEvents Label10 As Label
-    Friend WithEvents Label11 As Label
     Friend WithEvents Label13 As Label
     Friend WithEvents Label12 As Label
     Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
-    Friend WithEvents BtnCpuInfo As ToolStripMenuItem
+    Friend WithEvents CpuInfoMenu As ToolStripMenuItem
 End Class

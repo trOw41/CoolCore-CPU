@@ -156,6 +156,12 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="CoreTemp.vb" />
+    <Compile Include="CpuInfoForm.Designer.vb">
+      <DependentUpon>CpuInfoForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CpuInfoForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FAQForm.Designer.vb">
       <DependentUpon>FAQForm.vb</DependentUpon>
     </Compile>
@@ -221,6 +227,9 @@
   <ItemGroup>
     <EmbeddedResource Include="AboutBox1.resx">
       <DependentUpon>AboutBox1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CpuInfoForm.resx">
+      <DependentUpon>CpuInfoForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FAQForm.resx">
       <DependentUpon>FAQForm.vb</DependentUpon>
