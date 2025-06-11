@@ -128,7 +128,6 @@
     <Import Include="CoolCore.My" />
     <Import Include="CoolCore.My.Resources" />
     <Import Include="Microsoft.VisualBasic" />
-    <Import Include="Microsoft.VisualBasic.Val" />
     <Import Include="Microsoft.Win32.SafeHandles" />
     <Import Include="OpenHardwareMonitor.Hardware" />
     <Import Include="OpenHardwareMonitor.Hardware.Cpu" />

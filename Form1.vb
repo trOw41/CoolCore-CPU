@@ -84,22 +84,35 @@ Public Class Form1
             .IsStorageEnabled = True
         }
         refreshTimer.Start()
-        Dim InitBoxes As Task = Task.Run(Function() CeckTempLoadBoxes())
-        tos.IsBalloon = True
-        tos.ShowAlways = True
-        tos.AutoPopDelay = 3000 ' 0,3 Sekunden
-        tos.InitialDelay = 500 ' 0,5 Sekunden
-        tos.ReshowDelay = 1000 ' 1 Sekunde
-        tos.ToolTipIcon = ToolTipIcon.Info
-        tos.ToolTipTitle = "info:"
-        tos.SetToolTip(PicBox2, "CPU-Logo basierend auf der CPU-Herstellererkennung." & vbCrLf & "Das Logo wird automatisch angepasst, wenn Sie das Theme wechseln.")
-        tos.SetToolTip(TJBox, "Tj-Case/Max bezeichnet die maximal zugelassene  Temperatur des Integrated Heat Spreader (IHS) im Prozessor.")
-        tos.SetToolTip(TDPBox, "TDP bezeichnet die Thermal Design Power des Prozessors." & vbCrLf & "Dies ist die maximale Wärmeabgabe, die der Kühler abführen muss.")
-        tos.SetToolTip(LithographyBox, "Lithographie bezeichnet den Fertigungsprozess des Prozessors.")
-        tos.SetToolTip(SockBox, "Ein Bus ist ein Subsystem, das Daten zwischen den Komponenten eines Computers oder zwischen Computern überträgt." _
-           & vbCrLf & " Hierzu gehören: der Front-Side-Bus (FSB), der Daten zwischen der CPU und dem Memory-Controller-Hub überträgt;" _
-           & vbCrLf & "das Direct-Media-Interface (DMI), das eine Punkt-zu-Punkt-Verbindung zwischen einem integrierten Intel Speichercontroller und einem Intel I/O-Controller-Hub auf dem Mainboard des Computers herstellt;" _
-           & vbCrLf & "und die Quick-Path-Schnittstelle (QPI), die eine Punkt-zu-Punkt-Verbindung zwischen der CPU und dem integrierten Speichercontroller herstellt.")
+    End Sub
+
+    'Form Logic
+    Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LblStatusMessage.Text = "Ready to read system information."
+        LblStatusMessage.ForeColor = Color.Black
+        If computer Is Nothing Then
+            computer = New Computer()
+        End If
+        computer.Hardware.Clear()
+        computer.Open(True)
+        computer.IsCpuEnabled = True
+        computer.IsGpuEnabled = True
+        LblStatusMessage.ForeColor = Color.Black
+        Me.Text = "CoolCore - Monitoring Tool" & " - " & My.Application.Info.Version.ToString(4)
+        ApplyTheme(My.Settings.ApplicationTheme)
+        ClearCpuDisplayControls()
+        refreshTimer.Start()
+
+        Await Task.Run(Function() CeckTempLoadBoxes())
+        Await Task.Run(Sub()
+                           StartStopLog()
+                           InitializeVoltageSensors()
+                           InitializeCoreTemperatureSensors()
+                           InitializePerCoreCounters()
+                           ReadAndDisplaySystemInfoAsync()
+                           GetCpuSubInfos()
+                       End Sub)
+        Await Task.WhenAll(UpdateLogSize, BrandCheck, ToolTipSettings())
     End Sub
     Private Function CeckTempLoadBoxes() As Task
         If LoadBox IsNot Nothing Then LoadBoxes.Add(0, LoadBox)
@@ -124,39 +137,6 @@ Public Class Form1
         If VBox4 IsNot Nothing Then VoltBoxes.Add(4, VBox4)
         Return Task.CompletedTask
     End Function
-
-    'Form Logic
-    Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        LblStatusMessage.Text = "Ready to read system information."
-        LblStatusMessage.ForeColor = Color.Black
-        If computer Is Nothing Then
-            computer = New Computer()
-        End If
-        computer.Hardware.Clear()
-        computer.Open(True)
-        computer.IsCpuEnabled = True
-        computer.IsGpuEnabled = True
-        LblStatusMessage.ForeColor = Color.Black
-        Me.Text = "CoolCore - Monitoring Tool" & " - " & My.Application.Info.Version.ToString(4)
-        ApplyTheme(My.Settings.ApplicationTheme)
-        ClearCpuDisplayControls()
-        Await Task.Run(Sub()
-                           InitializePerCoreCounters()
-                           InitializeCoreTemperatureSensors()
-                           InitializeVoltageSensors()
-
-
-                       End Sub)
-        refreshTimer.Start()
-        Dim LogSystem As Task = Task.Run(Sub()
-                                             StartStopLog()
-                                             UpdateLogSize()
-                                             BrandCheck()
-                                         End Sub)
-        Await LogSystem
-        ReadAndDisplaySystemInfoAsync()
-        GetCpuSubInfos()
-    End Sub
 
     Private Function BrandCheck() As Task
         Dim sysinfo = systemInfoRepository.GetCurrentSystemInfo.CpuName
@@ -1577,4 +1557,36 @@ Public Class Form1
             End If
         End If
     End Sub
+    Private Function ToolTipSettings() As Task
+        tos.SetToolTip(LoadBox, "Aktuelle CPU-Auslastung des Kerns")
+        tos.SetToolTip(CoreTemp, "Aktuelle Kerntemperatur")
+        tos.SetToolTip(MinTemp, "Minimale Kerntemperatur seit dem letzten Start")
+        tos.IsBalloon = True
+        tos.ShowAlways = True
+        tos.AutoPopDelay = 5000 ' 0,3 Sekunden
+        tos.InitialDelay = 500 ' 0,5 Sekunden
+        tos.ReshowDelay = 1000 ' 1 Sekunde
+        tos.ToolTipIcon = ToolTipIcon.Info
+        tos.ToolTipTitle = "info:"
+        tos.SetToolTip(PicBox2, "CPU-Logo basierend auf der CPU-Herstellererkennung." & vbCrLf & "Das Logo wird automatisch angepasst, wenn Sie das Theme wechseln.")
+        tos.SetToolTip(TJBox, "Tj-Case/Max bezeichnet die maximal zugelassene  Temperatur des Integrated Heat Spreader (IHS) im Prozessor.")
+        tos.SetToolTip(TDPBox, "TDP bezeichnet die Thermal Design Power des Prozessors." & vbCrLf & "Dies ist die maximale Wärmeabgabe, die der Kühler abführen muss.")
+        tos.SetToolTip(LithographyBox, "Lithographie bezeichnet den Fertigungsprozess des Prozessors.")
+        tos.SetToolTip(SockBox, "Ein Bus ist ein Subsystem, das Daten zwischen den Komponenten eines Computers oder zwischen Computern überträgt." _
+           & vbCrLf & " Hierzu gehören: der Front-Side-Bus (FSB), der Daten zwischen der CPU und dem Memory-Controller-Hub überträgt;" _
+           & vbCrLf & "das Direct-Media-Interface (DMI), das eine Punkt-zu-Punkt-Verbindung zwischen einem integrierten Intel Speichercontroller und einem Intel I/O-Controller-Hub auf dem Mainboard des Computers herstellt;" _
+           & vbCrLf & "und die Quick-Path-Schnittstelle (QPI), die eine Punkt-zu-Punkt-Verbindung zwischen der CPU und dem integrierten Speichercontroller herstellt.")
+        tos.SetToolTip(VidBox, "Der Bus Speed bezeichnet die Geschwindigkeit des Front-Side-Bus (FSB) oder des Direct Media Interface (DMI) in MHz." & vbCrLf & "Er beeinflusst die Datenübertragungsrate zwischen der CPU und anderen Komponenten.")
+        tos.SetToolTip(PowerBox, "Die Package Power bezeichnet die Gesamtleistung, die von der CPU verbraucht wird." & vbCrLf & "Sie wird in Watt (W) gemessen und gibt an, wie viel Energie die CPU benötigt.")
+        tos.SetToolTip(PowerBox2, "Die Core Power bezeichnet die Leistung, die von den einzelnen Kernen der CPU verbraucht wird." & vbCrLf & "Sie wird in Watt (W) gemessen und gibt an, wie viel Energie jeder Kern benötigt.")
+        tos.SetToolTip(FrequencyBox, "Die CPU-Frequenz bezeichnet die Geschwindigkeit, mit der die CPU arbeitet." & vbCrLf & "Sie wird in MHz oder GHz gemessen und gibt an, wie viele Zyklen die CPU pro Sekunde ausführen kann.")
+        tos.SetToolTip(FrequencyBox2, "Die CPU-Frequenz bezeichnet die Geschwindigkeit, mit der die CPU arbeitet." & vbCrLf & "Sie wird in MHz oder GHz gemessen und gibt an, wie viele Zyklen die CPU pro Sekunde ausführen kann.")
+        tos.SetToolTip(ModelBox, "Der CPU-Name bezeichnet den Namen des Prozessors" & vbCrLf & "und gibt an, um welches Modell es sich handelt." & vbCrLf & "Er wird in der Regel auf dem Prozessor selbst aufgedruckt.")
+        tos.SetToolTip(CPUIDBox, "Die CPUID bezeichnet eine eindeutige Kennung für den Prozessor." & vbCrLf & "Sie wird verwendet, um Informationen über den Prozessor zu identifizieren und zu überprüfen.")
+        tos.SetToolTip(PlatformBox, "Die Plattform bezeichnet die Hardware-Architektur des Systems." & vbCrLf & "Sie gibt an, welche Art von Prozessor und Chipsatz verwendet wird.")
+        tos.SetToolTip(CoresBox, "Die Anzahl der Kerne bezeichnet die Anzahl der physischen Kerne im Prozessor." & vbCrLf & "Ein Kern ist ein unabhängiger Verarbeitungseinheit, die in der Lage ist, Befehle auszuführen.")
+        tos.SetToolTip(ThreadBox, "Die Anzahl der Threads bezeichnet die Anzahl der logischen Kerne im Prozessor." & vbCrLf & "Ein Thread ist ein unabhängiger Ausführungspfad, der von einem Kern verarbeitet werden kann." & vbCrLf & "Ein Prozessor kann mehrere Threads gleichzeitig ausführen, um die Leistung zu steigern.")
+        Return Task.CompletedTask
+    End Function
+
 End Class
