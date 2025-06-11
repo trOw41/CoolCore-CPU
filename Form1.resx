@@ -174,13 +174,13 @@
     <value>Export Log</value>
   </data>
   <data name="LogMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>143, 22</value>
   </data>
   <data name="LogMenuItem.Text" xml:space="preserve">
     <value>Log -&gt;</value>
   </data>
   <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>140, 6</value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -212,16 +212,16 @@
 </value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>143, 22</value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Text" xml:space="preserve">
     <value>Temp. Archiv</value>
   </data>
   <data name="ToolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>140, 6</value>
   </data>
   <data name="CpuInfoMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>143, 22</value>
   </data>
   <data name="CpuInfoMenu.Text" xml:space="preserve">
     <value>CPU Info</value>
@@ -369,10 +369,10 @@
     <value>NoControl</value>
   </data>
   <data name="PictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>253, 168</value>
+    <value>334, 166</value>
   </data>
   <data name="PictureBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>18, 16</value>
+    <value>20, 27</value>
   </data>
   <data name="PictureBox1.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>Zoom</value>
@@ -423,13 +423,13 @@
     <value>NoControl</value>
   </data>
   <data name="Label7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>138, 168</value>
+    <value>216, 170</value>
   </data>
   <data name="Label7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="Label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>122, 20</value>
+    <value>122, 22</value>
   </data>
   <data name="Label7.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -437,6 +437,9 @@
   <data name="Label7.Text" xml:space="preserve">
     <value>CoolCore Monitor
 </value>
+  </data>
+  <data name="Label7.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
   </data>
   <data name="&gt;&gt;Label7.Name" xml:space="preserve">
     <value>Label7</value>
@@ -457,7 +460,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>250, 188</value>
+    <value>2, 188</value>
   </data>
   <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>102, 14</value>
@@ -703,7 +706,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label13.Location" type="System.Drawing.Point, System.Drawing">
-    <value>120, 5</value>
+    <value>120, 7</value>
   </data>
   <data name="Label13.Size" type="System.Drawing.Size, System.Drawing">
     <value>58, 14</value>
@@ -736,7 +739,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label12.Location" type="System.Drawing.Point, System.Drawing">
-    <value>56, 5</value>
+    <value>56, 7</value>
   </data>
   <data name="Label12.Size" type="System.Drawing.Size, System.Drawing">
     <value>58, 14</value>
@@ -769,7 +772,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>303, 57</value>
+    <value>303, 60</value>
   </data>
   <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>54, 14</value>
@@ -802,7 +805,7 @@
     <value>NoControl</value>
   </data>
   <data name="MaxTemplbl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>245, 55</value>
+    <value>245, 58</value>
   </data>
   <data name="MaxTemplbl.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 19</value>
@@ -835,7 +838,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>122, 54</value>
+    <value>122, 57</value>
   </data>
   <data name="Label6.Size" type="System.Drawing.Size, System.Drawing">
     <value>58, 21</value>
@@ -868,7 +871,7 @@
     <value>NoControl</value>
   </data>
   <data name="MinTemplbl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>187, 54</value>
+    <value>187, 57</value>
   </data>
   <data name="MinTemplbl.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 21</value>
@@ -1594,16 +1597,16 @@
     <value>NoControl</value>
   </data>
   <data name="Lithography.Location" type="System.Drawing.Point, System.Drawing">
-    <value>264, 97</value>
+    <value>262, 97</value>
   </data>
   <data name="Lithography.Size" type="System.Drawing.Size, System.Drawing">
-    <value>29, 14</value>
+    <value>38, 14</value>
   </data>
   <data name="Lithography.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="Lithography.Text" xml:space="preserve">
-    <value>Lithography:</value>
+    <value>Lith:</value>
   </data>
   <data name="&gt;&gt;Lithography.Name" xml:space="preserve">
     <value>Lithography</value>
@@ -1621,7 +1624,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 153</value>
+    <value>12, 153</value>
   </data>
   <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 14</value>
@@ -1631,6 +1634,9 @@
   </data>
   <data name="Label4.Text" xml:space="preserve">
     <value>CPUID :</value>
+  </data>
+  <data name="Label4.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
   </data>
   <data name="&gt;&gt;Label4.Name" xml:space="preserve">
     <value>Label4</value>
@@ -1648,16 +1654,16 @@
     <value>NoControl</value>
   </data>
   <data name="Label10.Location" type="System.Drawing.Point, System.Drawing">
-    <value>206, 69</value>
+    <value>217, 67</value>
   </data>
   <data name="Label10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 17</value>
+    <value>41, 17</value>
   </data>
   <data name="Label10.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="Label10.Text" xml:space="preserve">
-    <value>Aktuell:</value>
+    <value>Clock:</value>
   </data>
   <data name="&gt;&gt;Label10.Name" xml:space="preserve">
     <value>Label10</value>
@@ -1732,7 +1738,7 @@
     <value>264, 125</value>
   </data>
   <data name="TDP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>31, 14</value>
+    <value>30, 14</value>
   </data>
   <data name="TDP.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1759,16 +1765,19 @@
     <value>NoControl</value>
   </data>
   <data name="Revision.Location" type="System.Drawing.Point, System.Drawing">
-    <value>19, 126</value>
+    <value>10, 126</value>
   </data>
   <data name="Revision.Size" type="System.Drawing.Size, System.Drawing">
-    <value>39, 14</value>
+    <value>51, 14</value>
   </data>
   <data name="Revision.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="Revision.Text" xml:space="preserve">
-    <value>Rev. :</value>
+    <value>Socket :</value>
+  </data>
+  <data name="Revision.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
   </data>
   <data name="&gt;&gt;Revision.Name" xml:space="preserve">
     <value>Revision</value>
@@ -1786,16 +1795,19 @@
     <value>NoControl</value>
   </data>
   <data name="VID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>19, 97</value>
+    <value>26, 97</value>
   </data>
   <data name="VID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>42, 14</value>
+    <value>35, 14</value>
   </data>
   <data name="VID.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="VID.Text" xml:space="preserve">
-    <value>FSB :</value>
+    <value>Bus :</value>
+  </data>
+  <data name="VID.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
   </data>
   <data name="&gt;&gt;VID.Name" xml:space="preserve">
     <value>VID</value>
@@ -1813,16 +1825,16 @@
     <value>NoControl</value>
   </data>
   <data name="Frequency.Location" type="System.Drawing.Point, System.Drawing">
-    <value>14, 68</value>
+    <value>26, 67</value>
   </data>
   <data name="Frequency.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 14</value>
+    <value>35, 19</value>
   </data>
   <data name="Frequency.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="Frequency.Text" xml:space="preserve">
-    <value>Freq. :</value>
+    <value>Max :</value>
   </data>
   <data name="&gt;&gt;Frequency.Name" xml:space="preserve">
     <value>Frequency</value>
@@ -1840,7 +1852,7 @@
     <value>NoControl</value>
   </data>
   <data name="Platform.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 39</value>
+    <value>17, 39</value>
   </data>
   <data name="Platform.Size" type="System.Drawing.Size, System.Drawing">
     <value>44, 16</value>
@@ -1850,6 +1862,9 @@
   </data>
   <data name="Platform.Text" xml:space="preserve">
     <value>Arch. :</value>
+  </data>
+  <data name="Platform.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
   </data>
   <data name="&gt;&gt;Platform.Name" xml:space="preserve">
     <value>Platform</value>
@@ -1917,28 +1932,31 @@
   <data name="&gt;&gt;LithographyBox.ZOrder" xml:space="preserve">
     <value>16</value>
   </data>
-  <data name="RevisionBox.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="SockBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Cascadia Code SemiBold, 9pt, style=Bold</value>
   </data>
-  <data name="RevisionBox.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="SockBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>64, 122</value>
   </data>
-  <data name="RevisionBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 21</value>
+  <data name="SockBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 21</value>
   </data>
-  <data name="RevisionBox.TabIndex" type="System.Int32, mscorlib">
+  <data name="SockBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;RevisionBox.Name" xml:space="preserve">
-    <value>RevisionBox</value>
+  <data name="SockBox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
-  <data name="&gt;&gt;RevisionBox.Type" xml:space="preserve">
+  <data name="&gt;&gt;SockBox.Name" xml:space="preserve">
+    <value>SockBox</value>
+  </data>
+  <data name="&gt;&gt;SockBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;RevisionBox.Parent" xml:space="preserve">
+  <data name="&gt;&gt;SockBox.Parent" xml:space="preserve">
     <value>Panel1</value>
   </data>
-  <data name="&gt;&gt;RevisionBox.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;SockBox.ZOrder" xml:space="preserve">
     <value>17</value>
   </data>
   <data name="CPUIDBox.Font" type="System.Drawing.Font, System.Drawing">
@@ -1948,10 +1966,13 @@
     <value>64, 149</value>
   </data>
   <data name="CPUIDBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 21</value>
+    <value>73, 21</value>
   </data>
   <data name="CPUIDBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="CPUIDBox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
   <data name="&gt;&gt;CPUIDBox.Name" xml:space="preserve">
     <value>CPUIDBox</value>
@@ -2128,16 +2149,25 @@
     <value>24</value>
   </data>
   <data name="ModelBox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Cascadia Code SemiBold, 8.25pt, style=Bold</value>
+    <value>Cascadia Code SemiBold, 10pt, style=Bold</value>
   </data>
   <data name="ModelBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>64, 9</value>
   </data>
+  <data name="ModelBox.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>301, 21</value>
+  </data>
   <data name="ModelBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>301, 20</value>
+    <value>301, 23</value>
   </data>
   <data name="ModelBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="ModelBox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="ModelBox.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="&gt;&gt;ModelBox.Name" xml:space="preserve">
     <value>ModelBox</value>
@@ -2158,16 +2188,19 @@
     <value>NoControl</value>
   </data>
   <data name="Model.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 12</value>
+    <value>16, 9</value>
   </data>
   <data name="Model.Size" type="System.Drawing.Size, System.Drawing">
-    <value>43, 13</value>
+    <value>44, 25</value>
   </data>
   <data name="Model.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="Model.Text" xml:space="preserve">
-    <value>Model:</value>
+    <value>Model :</value>
+  </data>
+  <data name="Model.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
   </data>
   <data name="&gt;&gt;Model.Name" xml:space="preserve">
     <value>Model</value>

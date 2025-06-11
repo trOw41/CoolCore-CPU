@@ -100,7 +100,7 @@ Partial Class Form1
         Me.Platform = New System.Windows.Forms.Label()
         Me.TDPBox = New System.Windows.Forms.TextBox()
         Me.LithographyBox = New System.Windows.Forms.TextBox()
-        Me.RevisionBox = New System.Windows.Forms.TextBox()
+        Me.SockBox = New System.Windows.Forms.TextBox()
         Me.CPUIDBox = New System.Windows.Forms.TextBox()
         Me.VidBox = New System.Windows.Forms.TextBox()
         Me.FrequencyBox2 = New System.Windows.Forms.TextBox()
@@ -274,7 +274,7 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.Platform)
         Me.Panel1.Controls.Add(Me.TDPBox)
         Me.Panel1.Controls.Add(Me.LithographyBox)
-        Me.Panel1.Controls.Add(Me.RevisionBox)
+        Me.Panel1.Controls.Add(Me.SockBox)
         Me.Panel1.Controls.Add(Me.CPUIDBox)
         Me.Panel1.Controls.Add(Me.VidBox)
         Me.Panel1.Controls.Add(Me.FrequencyBox2)
@@ -726,14 +726,14 @@ Partial Class Form1
         Me.LithographyBox.Name = "LithographyBox"
         Me.LithographyBox.ReadOnly = True
         '
-        'RevisionBox
+        'SockBox
         '
-        Me.RevisionBox.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.RevisionBox.Cursor = System.Windows.Forms.Cursors.Default
-        resources.ApplyResources(Me.RevisionBox, "RevisionBox")
-        Me.RevisionBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.RevisionBox.Name = "RevisionBox"
-        Me.RevisionBox.ReadOnly = True
+        Me.SockBox.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.SockBox.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.SockBox, "SockBox")
+        Me.SockBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.SockBox.Name = "SockBox"
+        Me.SockBox.ReadOnly = True
         '
         'CPUIDBox
         '
@@ -892,7 +892,7 @@ Partial Class Form1
     Friend WithEvents VidBox As TextBox
     Friend WithEvents Label4 As Label
     Friend WithEvents Revision As Label
-    Friend WithEvents RevisionBox As TextBox
+    Friend WithEvents SockBox As TextBox
     Friend WithEvents CPUIDBox As TextBox
     Friend WithEvents TDPBox As TextBox
     Friend WithEvents LithographyBox As TextBox

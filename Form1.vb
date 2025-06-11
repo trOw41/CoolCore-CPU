@@ -58,7 +58,7 @@ Public Class Form1
     Private ReadOnly FallbackFontFamilyNameOld As String = "Microsoft Sans Serif"
     Private Const CPU_SPECS_CSV_FILE As String = "intel-cpus.csv"
     Private foundCpuDetails As New Dictionary(Of String, String)()
-
+    Private tos As New ToolTip()
 
     'Programm initialization
     Public Sub New()
@@ -85,6 +85,21 @@ Public Class Form1
         }
         refreshTimer.Start()
         Dim InitBoxes As Task = Task.Run(Function() CeckTempLoadBoxes())
+        tos.IsBalloon = True
+        tos.ShowAlways = True
+        tos.AutoPopDelay = 3000 ' 0,3 Sekunden
+        tos.InitialDelay = 500 ' 0,5 Sekunden
+        tos.ReshowDelay = 1000 ' 1 Sekunde
+        tos.ToolTipIcon = ToolTipIcon.Info
+        tos.ToolTipTitle = "info:"
+        tos.SetToolTip(PicBox2, "CPU-Logo basierend auf der CPU-Herstellererkennung." & vbCrLf & "Das Logo wird automatisch angepasst, wenn Sie das Theme wechseln.")
+        tos.SetToolTip(TJBox, "Tj-Case/Max bezeichnet die maximal zugelassene  Temperatur des Integrated Heat Spreader (IHS) im Prozessor.")
+        tos.SetToolTip(TDPBox, "TDP bezeichnet die Thermal Design Power des Prozessors." & vbCrLf & "Dies ist die maximale Wärmeabgabe, die der Kühler abführen muss.")
+        tos.SetToolTip(LithographyBox, "Lithographie bezeichnet den Fertigungsprozess des Prozessors.")
+        tos.SetToolTip(SockBox, "Ein Bus ist ein Subsystem, das Daten zwischen den Komponenten eines Computers oder zwischen Computern überträgt." _
+           & vbCrLf & " Hierzu gehören: der Front-Side-Bus (FSB), der Daten zwischen der CPU und dem Memory-Controller-Hub überträgt;" _
+           & vbCrLf & "das Direct-Media-Interface (DMI), das eine Punkt-zu-Punkt-Verbindung zwischen einem integrierten Intel Speichercontroller und einem Intel I/O-Controller-Hub auf dem Mainboard des Computers herstellt;" _
+           & vbCrLf & "und die Quick-Path-Schnittstelle (QPI), die eine Punkt-zu-Punkt-Verbindung zwischen der CPU und dem integrierten Speichercontroller herstellt.")
     End Sub
     Private Function CeckTempLoadBoxes() As Task
         If LoadBox IsNot Nothing Then LoadBoxes.Add(0, LoadBox)
@@ -536,25 +551,14 @@ Public Class Form1
 
             Dim MaxFreq As Double = Math.Round(systemInfo.CurrentClockSpeedMHz / 1000, 2, MidpointRounding.ToEven) ' Convert MHz to GHz for display
             '#--------------------------------------------------------------------------------------------------------------------'
-            Dim biosVersion As String = "N/A"
-            Dim biosSearcher As New ManagementObjectSearcher("SELECT Version FROM Win32_BIOS")
-            For Each obj As ManagementObject In biosSearcher.Get()
-                biosVersion = If(obj("Version"), "N/A").ToString()
-                Exit For
-            Next
             Me.Invoke(Sub()
 
-                          ModelBox.Text = systemInfo.CpuName.Aggregate("", Function(current, nextChar) current & nextChar.ToString().ToUpperInvariant())
-
+                          'ModelBox.Text = systemInfo.CpuName.Aggregate("", Function(current, nextChar) current & nextChar.ToString().ToUpperInvariant())
                           PlatformBox.Text = systemInfo.Architecture
                           CoresBox.Text = systemInfo.NumberOfCores.ToString()
                           ThreadBox.Text = systemInfo.NumberOfLogicalProcessors.ToString()
                           PowerBox.Text = "N/A"
-
-
-                          '#--------------------------------------------------------------------------------------------------------------------'
                           If cpu IsNot Nothing Then
-
                               ModelBox.Text &= $" ({cpu.Identifier})"
                               Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
                               If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
@@ -568,22 +572,8 @@ Public Class Form1
                               Else
                                   PowerBox2.Text = "N/A"
                               End If
-                              RevisionBox.Text = cpu.Identifier.ToString.LastIndexOf("/"c)
-                              CPUIDBox.Text = "N/A"
-                              LithographyBox.Text = "N/A"
+
                           Else
-                              TDPBox.Text = "N/A"
-                              'VidBox.Text = "N/A"
-                              'RevisionBox.Text = "N/A"
-                              'CPUIDBox.Text = "N/A"
-                              LithographyBox.Text = "N/A"
-                          End If
-                          Dim tjmax = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Temperature AndAlso s.Name.Contains("Distance to TjMax"))
-                          If tjmax IsNot Nothing AndAlso tjmax.Value.HasValue Then
-                              Dim maxtj As Single = 15.0F
-                              TJBox.Text = $"{tjmax.Value.Value + maxtj}°C"
-                          Else
-                              TJBox.Text = "N/A"
                           End If
                           Dim vid = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Clock AndAlso s.Name.Contains("Bus Speed"))
                           If vid IsNot Nothing AndAlso vid.Value.HasValue Then
@@ -599,22 +589,12 @@ Public Class Form1
                           If PowerAllCores IsNot Nothing AndAlso PowerAllCores.Value.HasValue Then
                               PowerBox2.Text = $"{PowerAllCores.Value.Value:F3}V"
                           Else
-                              LithographyBox.Text = "N/A"
                           End If
-                          Dim tdp = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("TDP"))
-                          If tdp IsNot Nothing AndAlso tdp.Value.HasValue Then
-                              TDPBox.Text = $"{tdp.Value.Value:F1} W"
-                          Else
-                              TDPBox.Text = "N/A"
-                          End If
-
                       End Sub)
-            '#--------------------------------------------------------------------------------------------------------------------'
             Me.Invoke(Sub()
                           LblStatusMessage.Text = "System information successfully read and saved to database!"
                           'LblStatusMessage.ForeColor = Color.Green
                       End Sub)
-
         Catch ex As Exception
             Me.Invoke(Sub()
                           LblStatusMessage.Text = "Error: " & ex.Message
@@ -622,7 +602,6 @@ Public Class Form1
                       End Sub)
             MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-
     End Sub
     Private Sub ClearCpuDisplayControls()
         ModelBox.Text = ""
@@ -631,7 +610,7 @@ Public Class Form1
         PowerBox2.Text = ""
         TDPBox.Text = ""
         LithographyBox.Text = ""
-        RevisionBox.Text = ""
+        SockBox.Text = ""
         CPUIDBox.Text = ""
         VidBox.Text = ""
         For Each kvp In LoadBoxes
@@ -658,8 +637,8 @@ Public Class Form1
                 Dim name As String = queryObj("Name")?.ToString()
                 Dim family As String = queryObj("Family")?.ToString()
                 Dim stepping As String = queryObj("Stepping")?.ToString()
-                Dim revision As String = queryObj("revision")?.ToString()
-                ' Debug.WriteLine($"Name: {name}, Family: {family}, Stepping: {stepping}, Revision: {revision}")
+                Dim revision As String = queryObj("Revision")?.ToString()
+                'Debug.WriteLine($"Name: {name}, Family: {family}, Stepping: {stepping}, Revision: {revision}")
                 ModelBox.Text = name
                 CPUIDBox.Text = If(queryObj("processorId"), "N/A").ToString()
                 Exit For
@@ -669,7 +648,7 @@ Public Class Form1
         End Try
         ModelBox.Text = cpuNameFromWMI
         CPUIDBox.Text = processorIdFromWMI
-        ' Dim foundCpuDetails As New Dictionary(Of String, String)()
+
 
         Dim csvFilePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, CPU_SPECS_CSV_FILE)
 
@@ -696,7 +675,7 @@ Public Class Form1
                         If data.Length > nameColumnIndex Then
                             Dim csvCpuName As String = data(nameColumnIndex)
                             Dim normalizedCsvCpuName As String = NormalizeCpuName(csvCpuName)
-                            Debug.WriteLine($"Comparing: WMI Normalized '{normalizedWmiCpuName}' with CSV Normalized '{normalizedCsvCpuName}' (Original CSV: '{csvCpuName}')")
+                            'Debug.WriteLine($"Comparing: WMI Normalized '{normalizedWmiCpuName}' with CSV Normalized '{normalizedCsvCpuName}' (Original CSV: '{csvCpuName}')")
 
                             If Not String.IsNullOrWhiteSpace(normalizedWmiCpuName) AndAlso
                                normalizedWmiCpuName.Contains(normalizedCsvCpuName) Then
@@ -705,6 +684,7 @@ Public Class Form1
                                         Dim headerName As String = headers(colIndex)
                                         Dim cellValue As String = data(colIndex)
                                         foundCpuDetails.Add(headerName, cellValue)
+                                        Debug.WriteLine($"Found CPU detail: {headerName} = {cellValue}")
                                     End If
                                 Next
                                 If foundCpuDetails.ContainsKey("Lithography") Then
@@ -713,11 +693,25 @@ Public Class Form1
                                     LithographyBox.Text = "N/A (Litho in CSV fehlt)"
                                 End If
 
-                                If foundCpuDetails.ContainsKey("TDPMax") Then
-
-                                    TDPBox.Text = foundCpuDetails("TDP")
+                                If foundCpuDetails.ContainsKey("CpuId") Then
+                                    CPUIDBox.Text = foundCpuDetails("CpuId")
                                 End If
 
+                                If foundCpuDetails.ContainsKey("MaxTDP") Then
+                                    TDPBox.Text = foundCpuDetails("MaxTDP")
+                                Else
+                                    TDPBox.Text = "N/A (TDP in CSV fehlt)"
+                                End If
+                                If foundCpuDetails.ContainsKey("TCase") Then
+                                    TJBox.Text = foundCpuDetails("TCase")
+                                Else
+                                    TJBox.Text = "N/A (Revision in CSV fehlt)"
+                                End If
+                                If foundCpuDetails.ContainsKey("SocketsSupported") Then
+                                    SockBox.Text = foundCpuDetails("SocketsSupported")
+                                Else
+                                    SockBox.Text = "N/A (SocketsSupported in CSV fehlt)"
+                                End If
                                 Exit For
                             End If
                         End If
@@ -819,7 +813,7 @@ Public Class Form1
             Dim savedFilePath As String = SaveTemperatureDataToCsv(backgroundTempMeasurements)
             If Not String.IsNullOrEmpty(savedFilePath) Then
                 Dim chartForm As New Form2(savedFilePath)
-                chartForm.Show
+                chartForm.Show()
                 ' MessageBox.Show($"Temperature data saved to {savedFilePath}", "Monitoring Stopped", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 'ExportLog(savedFilePath)
             Else
@@ -1015,9 +1009,7 @@ Public Class Form1
             MessageBox.Show("Keine CPU-Informationen zum Exportieren verfügbar. Bitte scannen Sie zuerst die CPU-Details.", "Exportinformation", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
-
         Dim htmlContent As String = GenerateSystemInfoHtml(foundCpuDetails)
-
         Using saveFileDialog As New SaveFileDialog()
             saveFileDialog.Filter = "HTML-Datei (*.html)|*.html|Alle Dateien (*.*)|*.*"
             saveFileDialog.Title = "CPU-Informationen exportieren"
@@ -1273,6 +1265,16 @@ Public Class Form1
             MessageBox.Show($"Fehler beim Öffnen der Supportseite: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+    Private Sub CpuInfoMenu_Click(sender As Object, e As EventArgs) Handles CpuInfoMenu.Click
+        If foundCpuDetails.Count > 0 Then
+            Dim cpuInfoForm As New CpuinfoForm()
+            cpuInfoForm.LoadCpuInfo(foundCpuDetails)
+            cpuInfoForm.Show()
+        Else
+            MessageBox.Show("Keine detaillierten CPU-Informationen in der CSV-Datei für Ihre CPU gefunden.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+    End Sub
+
 
     'Log Section
     Public Sub StartStopLog()
@@ -1575,15 +1577,4 @@ Public Class Form1
             End If
         End If
     End Sub
-
-    Private Sub CpuInfoMenu_Click(sender As Object, e As EventArgs) Handles CpuInfoMenu.Click
-        If foundCpuDetails.Count > 0 Then
-            Dim cpuInfoForm As New CpuinfoForm()
-            cpuInfoForm.LoadCpuInfo(foundCpuDetails)
-            cpuInfoForm.Show()
-        Else
-            MessageBox.Show("Keine detaillierten CPU-Informationen in der CSV-Datei für Ihre CPU gefunden.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        End If
-    End Sub
-
 End Class
