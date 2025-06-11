@@ -1,18 +1,19 @@
-﻿Imports System.Net
-Imports System.IO
-Imports System.Text
-Imports System.Threading
-Imports Timer = System.Windows.Forms.Timer
+﻿Imports System.Collections.Generic
+Imports System.Drawing
 Imports System.Globalization
-Imports System.Reflection
-Imports Microsoft.VisualBasic.Logging
-Imports OpenHardwareMonitor.Hardware
-Imports Newtonsoft.Json
-Imports System.Collections.Generic
+Imports System.IO
 Imports System.Linq
+Imports System.Net
+Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Runtime.Versioning
-Imports System.Drawing
+Imports System.Text
+Imports System.Threading
+Imports HidSharp.Utility
+Imports Microsoft.VisualBasic.Logging
+Imports Newtonsoft.Json
+Imports OpenHardwareMonitor.Hardware
+Imports Timer = System.Windows.Forms.Timer
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
     Public Property CoreTemperatures As Dictionary(Of String, Single)
@@ -23,6 +24,7 @@ Public Class Form1
     Private cpuLoadCounter As PerformanceCounter
     Private refreshTimer As Timer
     Private cpuLoadCounters As New List(Of PerformanceCounter)()
+    Private freqCores As New List(Of PerformanceCounter)()
     Private ReadOnly LoadBoxes As New Dictionary(Of Integer, TextBox)()
     Private ReadOnly MinTempBoxes As New Dictionary(Of Integer, TextBox)()
     Private ReadOnly MaxTempBoxes As New Dictionary(Of Integer, TextBox)()
@@ -52,7 +54,7 @@ Public Class Form1
     Private LogSize As Long = Settings.MAX_LOG_SIZE_KB
     Private ReadOnly FallbackFontFamilyName As String = "Segoe UI"
     Private ReadOnly FallbackFontFamilyNameOld As String = "Microsoft Sans Serif"
-
+    Private Const CPU_SPECS_CSV_FILE As String = "intel-cpus.csv"
     'Programm initialization
     Public Sub New()
         InitializeComponent()
@@ -126,9 +128,11 @@ Public Class Form1
 
         Dim sysInfoTask As Task = Task.Run(Sub()
                                                ReadAndDisplaySystemInfoAsync()
+
                                            End Sub)
         Using ReadAndDisplaySystemInfoAsync()
             refreshTimer.Start()
+            getCpuSubInfos()
         End Using
 
         Dim LogSystem As Task = Task.Run(Sub()
@@ -340,7 +344,6 @@ Public Class Form1
                     LoadBoxes(i).Text = $"{currentCoreLoad:F2}%"
                 End If
             Next
-
             Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
             If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
                 PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W"
@@ -377,6 +380,7 @@ Public Class Form1
                                   CoreTempBoxes(coreIndex).Text = $"{sensor.Value:F1}°C"
                                   CoreTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Value)
                               End If
+
                           End Sub)
                 If isLoggingActive AndAlso temperatureLogWriter IsNot Nothing Then
                     Try
@@ -398,7 +402,10 @@ Public Class Form1
                 StopCpuStressTest()
                 'Exit Sub
             End If
-            CheckAndManageLogFile()
+            Me.Invoke(Sub()
+                          CheckAndManageLogFile()
+                          FrequencyBox2.Text = $"{Math.Round(UpdateCpuFrequencyDisplay(), 1)} MHz"
+                      End Sub)
         Catch ex As Exception
             For Each kvp In LoadBoxes : kvp.Value.Text = "Error" : Next
             For Each kvp In CoreTempBoxes : kvp.Value.Text = "Error" : Next
@@ -406,6 +413,49 @@ Public Class Form1
             For Each kvp In MaxTempBoxes : kvp.Value.Text = "Error" : Next
         End Try
     End Sub
+
+    Private Function UpdateCpuFrequencyDisplay()
+        Try
+            If cpu Is Nothing Then
+                Return FrequencyBox2.Text = "N/A"
+            End If
+            cpu.Update()
+            Dim coreClocks As New List(Of Single)()
+            Dim packageClock As ISensor = Nothing
+            For Each sensor In cpu.Sensors
+                If sensor.SensorType = SensorType.Clock AndAlso sensor.Value.HasValue Then
+                    If sensor.Name.StartsWith("CPU Core #") OrElse sensor.Name.StartsWith("Core #") Then
+                        coreClocks.Add(sensor.Value.Value)
+                    ElseIf sensor.Name.Contains("CPU Package") OrElse sensor.Name.Contains("Core Max") OrElse sensor.Name.Contains("CPU Bus") Then
+                        If sensor.Name.Contains("CPU Package") OrElse sensor.Name.Contains("Core Max") Then
+                            packageClock = sensor
+                        End If
+                    End If
+                End If
+            Next
+            If packageClock IsNot Nothing Then
+                Return packageClock.Value.Value
+            ElseIf coreClocks.Count > 0 Then
+                Dim averageCoreClock As Single = coreClocks.Average()
+                Dim maxCoreClock As Single = coreClocks.Max()
+                'maxCoreClock
+                Return averageCoreClock
+            Else
+                Dim currentClockSpeedWMI As Integer = 0
+                Using searcher As New ManagementObjectSearcher("SELECT CurrentClockSpeed FROM Win32_Processor")
+                    For Each queryObj As ManagementObject In searcher.Get()
+                        Return currentClockSpeedWMI = If(queryObj("CurrentClockSpeed"), 0)
+                        Exit For
+                    Next
+                End Using
+            End If
+        Catch ex As Exception
+            If FrequencyBox2 IsNot Nothing Then
+                FrequencyBox2.Text = "Fehler"
+            End If
+            Debug.WriteLine($"UpdateCpuFrequencyDisplay ERROR: {ex.Message}")
+        End Try
+    End Function
 
     'Hardware Initialization
     Private Sub InitializePerCoreCounters()
@@ -485,6 +535,9 @@ Public Class Form1
             systemInfo.NumberOfLogicalProcessors = numberOfLogicalProcessors
             systemInfo.CurrentClockSpeedMHz = currentClockSpeed
             systemInfo.Architecture = architecture
+            Debug.WriteLine(systemInfo)
+
+            Dim MaxFreq As Double = Math.Round(systemInfo.CurrentClockSpeedMHz / 1000, 2, MidpointRounding.ToEven) ' Convert MHz to GHz for display
             '#--------------------------------------------------------------------------------------------------------------------'
             Dim biosVersion As String = "N/A"
             Dim biosSearcher As New ManagementObjectSearcher("SELECT Version FROM Win32_BIOS")
@@ -495,7 +548,7 @@ Public Class Form1
             Me.Invoke(Sub()
 
                           ModelBox.Text = systemInfo.CpuName.Aggregate("", Function(current, nextChar) current & nextChar.ToString().ToUpperInvariant())
-                          FrequencyBox.Text = systemInfo.CurrentClockSpeedMHz.ToString() & " MHz"
+
                           PlatformBox.Text = systemInfo.Architecture
                           CoresBox.Text = systemInfo.NumberOfCores.ToString()
                           ThreadBox.Text = systemInfo.NumberOfLogicalProcessors.ToString()
@@ -520,13 +573,13 @@ Public Class Form1
                               End If
                               RevisionBox.Text = cpu.Identifier.ToString.LastIndexOf("/"c)
                               CPUIDBox.Text = "N/A"
-                              LitBox.Text = "N/A"
+                              LithographyBox.Text = "N/A"
                           Else
                               TDPBox.Text = "N/A"
-                              VidBox.Text = "N/A"
-                              RevisionBox.Text = "N/A"
-                              CPUIDBox.Text = "N/A"
-                              LitBox.Text = "N/A"
+                              'VidBox.Text = "N/A"
+                              'RevisionBox.Text = "N/A"
+                              'CPUIDBox.Text = "N/A"
+                              LithographyBox.Text = "N/A"
                           End If
                           Dim tjmax = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Temperature AndAlso s.Name.Contains("Distance to TjMax"))
                           If tjmax IsNot Nothing AndAlso tjmax.Value.HasValue Then
@@ -537,7 +590,11 @@ Public Class Form1
                           End If
                           Dim vid = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Clock AndAlso s.Name.Contains("Bus Speed"))
                           If vid IsNot Nothing AndAlso vid.Value.HasValue Then
+                              Dim sum As Double = 0.0
+                              Dim total As Double = 0.0
                               VidBox.Text = $"{vid.Value.Value:F3} Mhz"
+                              sum = systemInfo.CurrentClockSpeedMHz + CInt(vid.Value.Value)
+                              FrequencyBox.Text = Math.Round(sum / 1000, 1) & " GHz"
                           Else
                               VidBox.Text = "N/A"
                           End If
@@ -545,7 +602,7 @@ Public Class Form1
                           If PowerAllCores IsNot Nothing AndAlso PowerAllCores.Value.HasValue Then
                               PowerBox2.Text = $"{PowerAllCores.Value.Value:F3}V"
                           Else
-                              LitBox.Text = "N/A"
+                              LithographyBox.Text = "N/A"
                           End If
                           Dim tdp = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("TDP"))
                           If tdp IsNot Nothing AndAlso tdp.Value.HasValue Then
@@ -576,7 +633,7 @@ Public Class Form1
         PlatformBox.Text = ""
         PowerBox2.Text = ""
         TDPBox.Text = ""
-        LitBox.Text = ""
+        LithographyBox.Text = ""
         RevisionBox.Text = ""
         CPUIDBox.Text = ""
         VidBox.Text = ""
@@ -587,6 +644,110 @@ Public Class Form1
         For Each kvp In MinTempBoxes : kvp.Value.Text = "" : Next
         For Each kvp In MaxTempBoxes : kvp.Value.Text = "" : Next
     End Sub
+
+    'CPU Sub Information
+    Private Sub getCpuSubInfos()
+        Dim cpuNameFromWMI As String = "N/A"
+        Dim processorIdFromWMI As String = "N/A"
+        Dim manufacturerFromWMI As String = "N/A"
+        Try
+            Dim searcher As New ManagementObjectSearcher("SELECT Name, ProcessorId, Manufacturer FROM Win32_Processor")
+            For Each queryObj As ManagementObject In searcher.Get()
+                cpuNameFromWMI = queryObj("Name")?.ToString()
+                processorIdFromWMI = queryObj("ProcessorId")?.ToString()
+                ' manufacturerFromWMI = queryObj("Manufacturer")?.ToString() 
+                Dim name As String = queryObj("Name")?.ToString()
+                Dim family As String = queryObj("Family")?.ToString()
+                Dim stepping As String = queryObj("Stepping")?.ToString()
+                Dim revision As String = queryObj("revision")?.ToString()
+                ' Debug.WriteLine($"Name: {name}, Family: {family}, Stepping: {stepping}, Revision: {revision}")
+                ModelBox.Text = name
+                CPUIDBox.Text = If(queryObj("processorId"), "N/A").ToString()
+                Exit For
+            Next
+        Catch ex As Exception
+            Debug.WriteLine($"Fehler beim Abrufen der CPU-Informationen von WMI: {ex.Message}")
+        End Try
+        ModelBox.Text = cpuNameFromWMI
+        CPUIDBox.Text = processorIdFromWMI
+        Dim lithography As String = "N/A"
+        Dim tdp As String = "N/A"
+
+        Dim csvFilePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, CPU_SPECS_CSV_FILE)
+        If File.Exists(csvFilePath) Then
+            Try
+                Dim lines As String() = File.ReadAllLines(csvFilePath)
+                If lines.Length > 0 Then
+                    Dim headers As String() = lines(0).Split(","c).Select(Function(h) h.Trim("""").Trim()).ToArray()
+                    Dim nameColumnIndex As Integer = Array.IndexOf(headers, "CpuName")
+                    Dim lithographyColumnIndex As Integer = Array.IndexOf(headers, "Lithography")
+                    Dim tdpColumnIndex As Integer = Array.IndexOf(headers, "TDP")
+                    If nameColumnIndex = -1 Then
+                        'Debug.WriteLine($"CSV Error: Spalte 'CpuName' nicht gefunden in '{CPU_SPECS_CSV_FILE}'")
+                        LithographyBox.Text = "CSV Error: CpuName-Spalte fehlt"
+                        Return
+                    End If
+                    Dim normalizedWmiCpuName As String = NormalizeCpuName(cpuNameFromWMI)
+                    Debug.WriteLine($"Normalized WMI CPU Name: '{normalizedWmiCpuName}'")
+
+                    For i As Integer = 1 To lines.Length - 1
+                        Dim data As String() = lines(i).Split(","c).Select(Function(d) d.Trim("""").Trim()).ToArray()
+
+                        If data.Length > nameColumnIndex Then
+                            Dim csvCpuName As String = data(nameColumnIndex)
+                            Dim normalizedCsvCpuName As String = NormalizeCpuName(csvCpuName)
+                            Debug.WriteLine($"Normalized CSV CPU Name: '{normalizedCsvCpuName}' from original '{csvCpuName}'")
+                            If Not String.IsNullOrWhiteSpace(normalizedWmiCpuName) AndAlso
+                               normalizedCsvCpuName.Contains(normalizedWmiCpuName) OrElse
+                               normalizedWmiCpuName.Contains(normalizedCsvCpuName) Then
+                                'Debug.WriteLine($"Match found: WMI '{cpuNameFromWMI}' vs CSV '{csvCpuName}'")
+                                If lithographyColumnIndex <> -1 AndAlso data.Length > lithographyColumnIndex Then
+                                    lithography = data(lithographyColumnIndex)
+                                Else
+                                    lithography = "N/A (CSV)"
+                                End If
+                                If tdpColumnIndex <> -1 AndAlso data.Length > tdpColumnIndex Then
+                                    tdp = data(tdpColumnIndex)
+                                Else
+                                    tdp = "N/A (CSV)"
+                                End If
+                                Exit For
+                            End If
+                        End If
+                    Next
+                End If
+            Catch ex As Exception
+                Debug.WriteLine($"Fehler beim Lesen oder Parsen der CSV-Datei '{CPU_SPECS_CSV_FILE}': {ex.Message}")
+                lithography = "CSV Lesefehler"
+                tdp = "CSV Lesefehler"
+            End Try
+        Else
+            Debug.WriteLine($"CSV Error: Datei '{CPU_SPECS_CSV_FILE}' nicht gefunden unter '{csvFilePath}'")
+            lithography = "CSV nicht gefunden"
+            tdp = "CSV nicht gefunden"
+        End If
+        LithographyBox.Text = lithography
+        TDPBox.Text = tdp
+    End Sub
+
+    Private Function NormalizeCpuName(ByVal cpuName As String) As String
+        If String.IsNullOrWhiteSpace(cpuName) Then
+            Return String.Empty
+        End If
+        Dim normalizedName As String = cpuName.ToLowerInvariant()
+        normalizedName = normalizedName.Replace("(r)", "")
+        normalizedName = normalizedName.Replace("®", "")
+        normalizedName = normalizedName.Replace("(tm)", "")
+        normalizedName = normalizedName.Replace("™", "")
+        normalizedName = normalizedName.Replace("cpu @", "")
+        normalizedName = normalizedName.Replace("processor", "")
+        normalizedName = normalizedName.Replace("ghz", "")
+        normalizedName = normalizedName.Replace("k", "")
+        normalizedName = normalizedName.Replace("x", "")
+        ' Regex.Replace(normalizedName, "\d+(\.\d+)?$", "").Trim() 
+        normalizedName = System.Text.RegularExpressions.Regex.Replace(normalizedName, "\s+", " ").Trim()
+        Return normalizedName
+    End Function
 
     'Test Section initialization
     Private Sub BtnToggleMonitor1_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitor1.Click
@@ -1466,4 +1627,7 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub CPUIDBox_TextChanged(sender As Object, e As EventArgs)
+
+    End Sub
 End Class

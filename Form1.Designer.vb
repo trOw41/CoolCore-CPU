@@ -36,6 +36,8 @@ Partial Class Form1
         Me.ExportLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.LoadArchivedMeasurementsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BtnCpuInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InfoMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
@@ -57,6 +59,8 @@ Partial Class Form1
         Me.CoreTemp1 = New System.Windows.Forms.TextBox()
         Me.TjMax = New System.Windows.Forms.Label()
         Me.Power = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.MaxTemplbl = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -87,6 +91,8 @@ Partial Class Form1
         Me.PowerBox = New System.Windows.Forms.TextBox()
         Me.Lithography = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.Threads = New System.Windows.Forms.Label()
         Me.AllCores = New System.Windows.Forms.Label()
         Me.TDP = New System.Windows.Forms.Label()
@@ -95,10 +101,11 @@ Partial Class Form1
         Me.Frequency = New System.Windows.Forms.Label()
         Me.Platform = New System.Windows.Forms.Label()
         Me.TDPBox = New System.Windows.Forms.TextBox()
-        Me.LitBox = New System.Windows.Forms.TextBox()
+        Me.LithographyBox = New System.Windows.Forms.TextBox()
         Me.RevisionBox = New System.Windows.Forms.TextBox()
         Me.CPUIDBox = New System.Windows.Forms.TextBox()
         Me.VidBox = New System.Windows.Forms.TextBox()
+        Me.FrequencyBox2 = New System.Windows.Forms.TextBox()
         Me.FrequencyBox = New System.Windows.Forms.TextBox()
         Me.ThreadBox = New System.Windows.Forms.TextBox()
         Me.CoresBox = New System.Windows.Forms.TextBox()
@@ -172,7 +179,7 @@ Partial Class Form1
         'ToolsToolStripMenuItem
         '
         Me.ToolsToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem, Me.ToolStripSeparator5, Me.BtnCpuInfo})
         Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
@@ -201,6 +208,17 @@ Partial Class Form1
         '
         resources.ApplyResources(Me.LoadArchivedMeasurementsToolStripMenuItem, "LoadArchivedMeasurementsToolStripMenuItem")
         Me.LoadArchivedMeasurementsToolStripMenuItem.Name = "LoadArchivedMeasurementsToolStripMenuItem"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        resources.ApplyResources(Me.ToolStripSeparator5, "ToolStripSeparator5")
+        '
+        'BtnCpuInfo
+        '
+        Me.BtnCpuInfo.Image = Global.CoolCore.My.Resources.Resources._023_cpu
+        Me.BtnCpuInfo.Name = "BtnCpuInfo"
+        resources.ApplyResources(Me.BtnCpuInfo, "BtnCpuInfo")
         '
         'HelpToolStripMenuItem
         '
@@ -249,6 +267,8 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Controls.Add(Me.Lithography)
         Me.Panel1.Controls.Add(Me.Label4)
+        Me.Panel1.Controls.Add(Me.Label10)
+        Me.Panel1.Controls.Add(Me.Label11)
         Me.Panel1.Controls.Add(Me.Threads)
         Me.Panel1.Controls.Add(Me.AllCores)
         Me.Panel1.Controls.Add(Me.TDP)
@@ -257,10 +277,11 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.Frequency)
         Me.Panel1.Controls.Add(Me.Platform)
         Me.Panel1.Controls.Add(Me.TDPBox)
-        Me.Panel1.Controls.Add(Me.LitBox)
+        Me.Panel1.Controls.Add(Me.LithographyBox)
         Me.Panel1.Controls.Add(Me.RevisionBox)
         Me.Panel1.Controls.Add(Me.CPUIDBox)
         Me.Panel1.Controls.Add(Me.VidBox)
+        Me.Panel1.Controls.Add(Me.FrequencyBox2)
         Me.Panel1.Controls.Add(Me.FrequencyBox)
         Me.Panel1.Controls.Add(Me.ThreadBox)
         Me.Panel1.Controls.Add(Me.CoresBox)
@@ -320,6 +341,8 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.CoreTemp1)
         Me.Panel2.Controls.Add(Me.TjMax)
         Me.Panel2.Controls.Add(Me.Power)
+        Me.Panel2.Controls.Add(Me.Label13)
+        Me.Panel2.Controls.Add(Me.Label12)
         Me.Panel2.Controls.Add(Me.Label5)
         Me.Panel2.Controls.Add(Me.MaxTemplbl)
         Me.Panel2.Controls.Add(Me.Label6)
@@ -408,6 +431,16 @@ Partial Class Form1
         '
         resources.ApplyResources(Me.Power, "Power")
         Me.Power.Name = "Power"
+        '
+        'Label13
+        '
+        resources.ApplyResources(Me.Label13, "Label13")
+        Me.Label13.Name = "Label13"
+        '
+        'Label12
+        '
+        resources.ApplyResources(Me.Label12, "Label12")
+        Me.Label12.Name = "Label12"
         '
         'Label5
         '
@@ -645,6 +678,18 @@ Partial Class Form1
         resources.ApplyResources(Me.Label4, "Label4")
         Me.Label4.Name = "Label4"
         '
+        'Label10
+        '
+        resources.ApplyResources(Me.Label10, "Label10")
+        Me.Label10.Name = "Label10"
+        '
+        'Label11
+        '
+        Me.Label11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label11.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        resources.ApplyResources(Me.Label11, "Label11")
+        Me.Label11.Name = "Label11"
+        '
         'Threads
         '
         resources.ApplyResources(Me.Threads, "Threads")
@@ -694,14 +739,14 @@ Partial Class Form1
         Me.TDPBox.Name = "TDPBox"
         Me.TDPBox.ReadOnly = True
         '
-        'LitBox
+        'LithographyBox
         '
-        Me.LitBox.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.LitBox.Cursor = System.Windows.Forms.Cursors.Default
-        resources.ApplyResources(Me.LitBox, "LitBox")
-        Me.LitBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.LitBox.Name = "LitBox"
-        Me.LitBox.ReadOnly = True
+        Me.LithographyBox.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.LithographyBox.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.LithographyBox, "LithographyBox")
+        Me.LithographyBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.LithographyBox.Name = "LithographyBox"
+        Me.LithographyBox.ReadOnly = True
         '
         'RevisionBox
         '
@@ -729,6 +774,15 @@ Partial Class Form1
         Me.VidBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.VidBox.Name = "VidBox"
         Me.VidBox.ReadOnly = True
+        '
+        'FrequencyBox2
+        '
+        Me.FrequencyBox2.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.FrequencyBox2.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.FrequencyBox2, "FrequencyBox2")
+        Me.FrequencyBox2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.FrequencyBox2.Name = "FrequencyBox2"
+        Me.FrequencyBox2.ReadOnly = True
         '
         'FrequencyBox
         '
@@ -863,7 +917,7 @@ Partial Class Form1
     Friend WithEvents RevisionBox As TextBox
     Friend WithEvents CPUIDBox As TextBox
     Friend WithEvents TDPBox As TextBox
-    Friend WithEvents LitBox As TextBox
+    Friend WithEvents LithographyBox As TextBox
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Lithography As Label
     Friend WithEvents TDP As Label
@@ -930,4 +984,11 @@ Partial Class Form1
     Friend WithEvents Label8 As Label
     Friend WithEvents PicBox2 As PictureBox
     Friend WithEvents Label9 As Label
+    Friend WithEvents FrequencyBox2 As TextBox
+    Friend WithEvents Label10 As Label
+    Friend WithEvents Label11 As Label
+    Friend WithEvents Label13 As Label
+    Friend WithEvents Label12 As Label
+    Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
+    Friend WithEvents BtnCpuInfo As ToolStripMenuItem
 End Class

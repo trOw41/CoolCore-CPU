@@ -128,6 +128,7 @@
     <Import Include="CoolCore.My" />
     <Import Include="CoolCore.My.Resources" />
     <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.Val" />
     <Import Include="Microsoft.Win32.SafeHandles" />
     <Import Include="OpenHardwareMonitor.Hardware" />
     <Import Include="OpenHardwareMonitor.Hardware.Cpu" />
@@ -242,9 +243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsForm.resx">
       <DependentUpon>OptionsForm.vb</DependentUpon>
@@ -292,6 +293,12 @@
     <None Include="Resources\023-cpu1.png" />
     <None Include="Resources\024-cpu-1.png" />
     <None Include="Resources\024-cpu-1.ico" />
+    <None Include="amd-cpus.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="intel-cpus.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\tools-and-utensils.png" />
     <None Include="Resources\temp.png" />
     <None Include="Resources\IntelLogo.png" />
