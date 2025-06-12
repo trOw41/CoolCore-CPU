@@ -83,6 +83,9 @@ Public Class Form1
             .IsPsuEnabled = True,
             .IsStorageEnabled = True
         }
+
+        Dim InitBoxes As Task = Task.Run(Function() CeckTempLoadBoxes())
+
         refreshTimer.Start()
     End Sub
 
@@ -98,21 +101,28 @@ Public Class Form1
         computer.IsCpuEnabled = True
         computer.IsGpuEnabled = True
         LblStatusMessage.ForeColor = Color.Black
-        Me.Text = "CoolCore - Monitoring Tool" & " - " & My.Application.Info.Version.ToString(4)
+        Me.Text = "CoolCore - Monitoring CPU" & " - " & My.Application.Info.Version.ToString(4)
         ApplyTheme(My.Settings.ApplicationTheme)
         ClearCpuDisplayControls()
-        refreshTimer.Start()
-
-        Await Task.Run(Function() CeckTempLoadBoxes())
         Await Task.Run(Sub()
-                           StartStopLog()
-                           InitializeVoltageSensors()
-                           InitializeCoreTemperatureSensors()
                            InitializePerCoreCounters()
-                           ReadAndDisplaySystemInfoAsync()
-                           GetCpuSubInfos()
+                           InitializeCoreTemperatureSensors()
+                           InitializeVoltageSensors()
                        End Sub)
-        Await Task.WhenAll(UpdateLogSize, BrandCheck, ToolTipSettings())
+        refreshTimer.Start()
+        Dim LogSystem As Task = Task.Run(Sub()
+                                             StartStopLog()
+                                             UpdateLogSize()
+                                             BrandCheck()
+
+                                         End Sub)
+        Await LogSystem
+        Dim hardwareInfoTask As Task = Task.Run(Function()
+                                                    ReadAndDisplaySystemInfoAsync()
+                                                    GetCpuSubInfos()
+                                                    Return Task.CompletedTask
+                                                End Function)
+        Await hardwareInfoTask
     End Sub
     Private Function CeckTempLoadBoxes() As Task
         If LoadBox IsNot Nothing Then LoadBoxes.Add(0, LoadBox)
@@ -478,9 +488,7 @@ Public Class Form1
             Debug.WriteLine($"Error initializing per-core counters: {ex.Message}")
         End Try
     End Sub
-    Private Sub ReadAndDisplaySystemInfoAsync()
-        LblStatusMessage.Text = "Reading system information and saving to database..."
-        'LblStatusMessage.ForeColor = Color.CadetBlue
+    Private Function ReadAndDisplaySystemInfoAsync() As Task
         Dim systemInfo As New SystemInfoData With {
             .Timestamp = DateTime.Now
         }
@@ -582,8 +590,13 @@ Public Class Form1
                       End Sub)
             MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    End Sub
+        Return Task.CompletedTask
+    End Function
     Private Sub ClearCpuDisplayControls()
+        If Me.InvokeRequired Then
+            Me.Invoke(Sub() ClearCpuDisplayControls())
+            Return
+        End If
         ModelBox.Text = ""
         FrequencyBox.Text = ""
         PlatformBox.Text = ""
@@ -602,8 +615,10 @@ Public Class Form1
     End Sub
 
     'CPU Sub Information
-    Private Sub GetCpuSubInfos()
-
+    Private Function GetCpuSubInfos() As Task
+        If Me.InvokeRequired Then
+            Me.Invoke(Sub() GetCpuSubInfos())
+        End If
         foundCpuDetails.Clear()
         Dim cpuNameFromWMI As String = "N/A"
         Dim processorIdFromWMI As String = "N/A"
@@ -626,9 +641,18 @@ Public Class Form1
         Catch ex As Exception
             Debug.WriteLine($"Fehler beim Abrufen der CPU-Informationen von WMI: {ex.Message}")
         End Try
-        ModelBox.Text = cpuNameFromWMI
-        CPUIDBox.Text = processorIdFromWMI
 
+        If ModelBox.InvokeRequired Then
+            ModelBox.Invoke(Sub() ModelBox.Text = cpuNameFromWMI)
+        Else
+            ModelBox.Text = cpuNameFromWMI
+        End If
+        'CPUIDBox.Text = processorIdFromWMI
+        If CPUIDBox.InvokeRequired Then
+            CPUIDBox.Invoke(Sub() CPUIDBox.Text = processorIdFromWMI)
+        Else
+            CPUIDBox.Text = processorIdFromWMI
+        End If
 
         Dim csvFilePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, CPU_SPECS_CSV_FILE)
 
@@ -643,7 +667,7 @@ Public Class Form1
                         Debug.WriteLine($"CSV Error: Spalte 'CpuName' nicht gefunden in '{CPU_SPECS_CSV_FILE}'")
                         LithographyBox.Text = "CSV Error: CpuName-Spalte fehlt"
                         TDPBox.Text = "CSV Error"
-                        Return
+                        'Return
                     End If
 
                     Dim normalizedWmiCpuName As String = NormalizeCpuName(cpuNameFromWMI)
@@ -668,27 +692,50 @@ Public Class Form1
                                     End If
                                 Next
                                 If foundCpuDetails.ContainsKey("Lithography") Then
-                                    LithographyBox.Text = foundCpuDetails("Lithography")
+                                    If LithographyBox.InvokeRequired Then
+                                        LithographyBox.Invoke(Sub() LithographyBox.Text = foundCpuDetails("Lithography"))
+                                    Else
+                                        LithographyBox.Text = foundCpuDetails("Lithography")
+                                    End If
                                 Else
                                     LithographyBox.Text = "N/A (Litho in CSV fehlt)"
                                 End If
 
                                 If foundCpuDetails.ContainsKey("CpuId") Then
-                                    CPUIDBox.Text = foundCpuDetails("CpuId")
+                                    If CPUIDBox.InvokeRequired Then
+                                        CPUIDBox.Invoke(Sub() CPUIDBox.Text = foundCpuDetails("CpuId"))
+                                    Else
+                                        CPUIDBox.Text = foundCpuDetails("CpuId")
+                                    End If
+
                                 End If
 
                                 If foundCpuDetails.ContainsKey("MaxTDP") Then
-                                    TDPBox.Text = foundCpuDetails("MaxTDP")
+                                    If TDPBox.InvokeRequired Then
+                                        TDPBox.Invoke(Sub() TDPBox.Text = foundCpuDetails("MaxTDP"))
+                                    Else
+                                        TDPBox.Text = foundCpuDetails("MaxTDP")
+                                    End If
                                 Else
                                     TDPBox.Text = "N/A (TDP in CSV fehlt)"
                                 End If
                                 If foundCpuDetails.ContainsKey("TCase") Then
-                                    TJBox.Text = foundCpuDetails("TCase")
+                                    If TJBox.InvokeRequired Then
+                                        TJBox.Invoke(Sub() TJBox.Text = foundCpuDetails("TCase"))
+                                    Else
+                                        TJBox.Text = foundCpuDetails("TCase")
+                                    End If
+
                                 Else
                                     TJBox.Text = "N/A (Revision in CSV fehlt)"
                                 End If
                                 If foundCpuDetails.ContainsKey("SocketsSupported") Then
-                                    SockBox.Text = foundCpuDetails("SocketsSupported")
+                                    If SockBox.InvokeRequired Then
+                                        SockBox.Invoke(Sub() SockBox.Text = foundCpuDetails("SocketsSupported"))
+                                    Else
+                                        SockBox.Text = foundCpuDetails("SocketsSupported")
+                                    End If
+
                                 Else
                                     SockBox.Text = "N/A (SocketsSupported in CSV fehlt)"
                                 End If
@@ -699,14 +746,18 @@ Public Class Form1
                 End If
             Catch ex As Exception
                 Debug.WriteLine($"Fehler beim Lesen oder Parsen der CSV-Datei '{CPU_SPECS_CSV_FILE}': {ex.Message}")
-                LithographyBox.Text = "CSV Lesefehler"
+                If LithographyBox.InvokeRequired Then
+                    LithographyBox.Invoke(Sub() LithographyBox.Text = "CSV Lesefehler")
+                Else
+                    LithographyBox.Text = "CSV Lesefehler"
+                End If
             End Try
         Else
             Debug.WriteLine($"CSV Error: Datei '{CPU_SPECS_CSV_FILE}' nicht gefunden unter '{csvFilePath}'")
             LithographyBox.Text = "CSV nicht gefunden"
         End If
-
-    End Sub
+        Return Task.CompletedTask
+    End Function
 
     Private Function NormalizeCpuName(ByVal cpuName As String) As String
         If String.IsNullOrWhiteSpace(cpuName) Then
@@ -808,10 +859,16 @@ Public Class Form1
         Me.Invoke(Sub()
                       InitializePerCoreCounters()
                       InitializeCoreTemperatureSensors()
-                      ReadAndDisplaySystemInfoAsync()
+                      'ReadAndDisplaySystemInfoAsync()
                   End Sub)
+        Dim hardwareInfoTask As Task = Task.Run(Function()
+                                                    ReadAndDisplaySystemInfoAsync()
+                                                    GetCpuSubInfos()
+                                                    Return Task.CompletedTask
+                                                End Function)
+        Await hardwareInfoTask
         LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
-        'LblStatusMessage.ForeColor = Color.Green
+        LblStatusMessage.ForeColor = SystemColors.WindowText
     End Sub
     Private Sub MonitoringTimer_Tick(sender As Object, e As EventArgs)
         If monitoringForm IsNot Nothing AndAlso Not monitoringForm.IsDisposed Then
@@ -1004,7 +1061,6 @@ Public Class Form1
             End If
         End Using
     End Sub
-
     Private Function GenerateSystemInfoHtml(cpuData As Dictionary(Of String, String)) As String
         Dim htmlBuilder As New System.Text.StringBuilder()
         Try
@@ -1076,7 +1132,7 @@ Public Class Form1
             Case "Standard"
                 ' Apply Standard/Light Theme
                 Me.BackColor = ColorTranslator.FromHtml("#F0F0F0")
-                Me.ForeColor = ColorTranslator.FromHtml("#333333")
+                Me.ForeColor = SystemColors.WindowText
                 For Each ctrl As Control In Me.Controls
                     ApplyThemeToControl(ctrl, theme)
                 Next
@@ -1108,7 +1164,7 @@ Public Class Form1
                 ElseIf TypeOf ctrl Is Label Then
                     CType(ctrl, Label).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
                 ElseIf TypeOf ctrl Is CheckBox Then
-                    CType(ctrl, CheckBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+                    CType(ctrl, CheckBox).ForeColor = SystemColors.HotTrack
                 ElseIf TypeOf ctrl Is GroupBox Then
                     CType(ctrl, GroupBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
                     CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#282C34")
@@ -1130,16 +1186,16 @@ Public Class Form1
             Case "Standard"
                 If TypeOf ctrl Is Button Then
                     CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#E1E1E1")
-                    CType(ctrl, Button).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, Button).ForeColor = SystemColors.WindowText
                     CType(ctrl, Button).FlatStyle = FlatStyle.Flat
                     CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#CCCCCC")
                     CType(ctrl, Button).FlatAppearance.BorderSize = 1
                 ElseIf TypeOf ctrl Is TextBox Then
                     CType(ctrl, TextBox).BackColor = Color.White
-                    CType(ctrl, TextBox).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, TextBox).ForeColor = SystemColors.WindowText
                     CType(ctrl, TextBox).BorderStyle = BorderStyle.FixedSingle
                 ElseIf TypeOf ctrl Is Label Then
-                    CType(ctrl, Label).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, Label).ForeColor = SystemColors.WindowText
                 ElseIf TypeOf ctrl Is CheckBox Then
                     CType(ctrl, CheckBox).ForeColor = ColorTranslator.FromHtml("#333333")
                 ElseIf TypeOf ctrl Is GroupBox Then
@@ -1150,7 +1206,7 @@ Public Class Form1
                     Next
                 ElseIf TypeOf ctrl Is Panel Then
                     CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#F0F0F0")
-                    CType(ctrl, Panel).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, Panel).ForeColor = SystemColors.WindowText 'ColorTranslator.FromHtml("#333333")
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
@@ -1165,8 +1221,8 @@ Public Class Form1
     Private Sub ApplyThemeToToolStripItem(item As ToolStripItem, theme As String)
         Select Case theme
             Case "Dark"
-                item.BackColor = Color.DarkGray
-                item.ForeColor = SystemColors.WindowText
+                item.BackColor = ColorTranslator.FromHtml("#282C34")
+                item.ForeColor = SystemColors.ControlLightLight
                 If TypeOf item Is ToolStripDropDownItem Then
                     Dim dropDownItem As ToolStripDropDownItem = CType(item, ToolStripDropDownItem)
                     For Each subItem As ToolStripItem In dropDownItem.DropDownItems
@@ -1254,7 +1310,6 @@ Public Class Form1
             MessageBox.Show("Keine detaillierten CPU-Informationen in der CSV-Datei für Ihre CPU gefunden.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
-
 
     'Log Section
     Public Sub StartStopLog()

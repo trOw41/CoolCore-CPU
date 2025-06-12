@@ -272,6 +272,12 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
+    <None Include="rmreg2.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="setreg.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="45_11594827525_023-cpu.ico" />
@@ -287,6 +293,17 @@
     <None Include="Resources\4.png" />
     <None Include="Resources\5.png" />
     <None Include="Resources\6.png" />
+    <None Include="Resources\archiv_log_box.png" />
+    <None Include="Resources\cpu_test.png" />
+    <None Include="Resources\export_log.png" />
+    <None Include="Resources\log_1.png" />
+    <None Include="Resources\log_details.png" />
+    <None Include="Resources\Main_dark.png" />
+    <None Include="Resources\Main_Standard.png" />
+    <None Include="Resources\menu_export.png" />
+    <None Include="Resources\options_Standard.png" />
+    <None Include="Resources\statistics_detail.png" />
+    <None Include="Resources\temperatures_standard.png" />
     <Content Include="TestInfo.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

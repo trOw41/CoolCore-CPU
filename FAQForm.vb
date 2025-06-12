@@ -155,14 +155,14 @@ Public Class FAQForm
     ' Gibt das gewünschte Bild anhand einer Bildnummer als String zurück.
     Private Function PictureLoad(picKey As String) As Image
         Select Case picKey
-            Case "1" : Return My.Resources._1
-            Case "2" : Return My.Resources._2
-            Case "3" : Return My.Resources._3
-            Case "4" : Return My.Resources._4
-            Case "5" : Return My.Resources._5
-            Case "6" : Return My.Resources._6
-            Case "7" : Return My.Resources._7
-            Case "8" : Return My.Resources._9
+            Case "1" : Return My.Resources.Main_Standard
+            Case "2" : Return My.Resources.Main_dark
+            Case "3" : Return My.Resources.log_details
+            Case "4" : Return My.Resources.menu_export
+            Case "5" : Return My.Resources.cpu_test
+            Case "6" : Return My.Resources.archiv_log_box
+            Case "7" : Return My.Resources.options_Standard
+            Case "8" : Return My.Resources._024_cpu
             Case Else : Return Nothing
         End Select
     End Function

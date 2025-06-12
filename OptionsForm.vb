@@ -3,7 +3,7 @@ Public Class OptionsForm
     Public Event ThemeChanged As EventHandler(Of String)
 
     Private Sub OptionsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case My.Settings.ApplicationTheme
+        Select Case Settings.ApplicationTheme
             Case "Dark"
                 chkDarkTheme.Checked = True
                 chkStandardTheme.Checked = False
@@ -13,7 +13,7 @@ Public Class OptionsForm
             Case Else
                 chkDarkTheme.Checked = False
                 chkStandardTheme.Checked = True
-                My.Settings.ApplicationTheme = "Standard"
+                Settings.ApplicationTheme = "Standard"
         End Select
         Label1.Text = "CPU Stresstest Intervall (in Sekunden): " & My.Settings.MonitorTime
         LogTimeLabel.Text = "Loggröße: " & My.Settings.MAX_LOG_SIZE_KB & " KB"
@@ -25,7 +25,8 @@ Public Class OptionsForm
                 Exit For
             End If
         Next
-        LogStartStopBox.Checked = My.Settings.LogStartStop
+        LogStartStopBox.Checked = Settings.LogStartStop
+        BootBox.Checked = Settings.BootUp
         Dim monitorTime = Settings.MonitorTime
         If monitorTime > 0 Then
             For i = 0 To CheckedListBox1.Items.Count - 1
@@ -101,13 +102,16 @@ Public Class OptionsForm
                 For Each ctrl As Control In Me.Controls
                     ApplyThemeToControl(ctrl, theme)
                 Next
+                PictureBox1.Image = My.Resources._024_cpu
                 Me.Icon = My.Resources._024_cpu_1
             Case "Standard"
+                ' Apply Standard/Light Theme
                 Me.BackColor = ColorTranslator.FromHtml("#F0F0F0")
-                Me.ForeColor = ColorTranslator.FromHtml("#333333")
+                Me.ForeColor = SystemColors.WindowText
                 For Each ctrl As Control In Me.Controls
                     ApplyThemeToControl(ctrl, theme)
                 Next
+                PictureBox1.Image = My.Resources._023_cpu
                 Me.Icon = My.Resources._023_cpu_1
         End Select
     End Sub
@@ -127,7 +131,7 @@ Public Class OptionsForm
                 ElseIf TypeOf ctrl Is Label Then
                     CType(ctrl, Label).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
                 ElseIf TypeOf ctrl Is CheckBox Then
-                    CType(ctrl, CheckBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+                    CType(ctrl, CheckBox).ForeColor = SystemColors.ControlLightLight
                 ElseIf TypeOf ctrl Is GroupBox Then
                     CType(ctrl, GroupBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
                     CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#282C34")
@@ -144,16 +148,16 @@ Public Class OptionsForm
             Case "Standard"
                 If TypeOf ctrl Is Button Then
                     CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#E1E1E1")
-                    CType(ctrl, Button).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, Button).ForeColor = SystemColors.WindowText
                     CType(ctrl, Button).FlatStyle = FlatStyle.Flat
                     CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#CCCCCC")
                     CType(ctrl, Button).FlatAppearance.BorderSize = 1
                 ElseIf TypeOf ctrl Is TextBox Then
                     CType(ctrl, TextBox).BackColor = Color.White
-                    CType(ctrl, TextBox).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, TextBox).ForeColor = SystemColors.WindowText
                     CType(ctrl, TextBox).BorderStyle = BorderStyle.FixedSingle
                 ElseIf TypeOf ctrl Is Label Then
-                    CType(ctrl, Label).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, Label).ForeColor = SystemColors.WindowText
                 ElseIf TypeOf ctrl Is CheckBox Then
                     CType(ctrl, CheckBox).ForeColor = ColorTranslator.FromHtml("#333333")
                 ElseIf TypeOf ctrl Is GroupBox Then
@@ -164,11 +168,12 @@ Public Class OptionsForm
                     Next
                 ElseIf TypeOf ctrl Is Panel Then
                     CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#F0F0F0")
-                    CType(ctrl, Panel).ForeColor = ColorTranslator.FromHtml("#333333")
+                    CType(ctrl, Panel).ForeColor = SystemColors.WindowText 'ColorTranslator.FromHtml("#333333")
                     For Each innerCtrl As Control In ctrl.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
                 End If
+
         End Select
     End Sub
 
@@ -199,5 +204,28 @@ Public Class OptionsForm
                              Form1.StartStopLog()
                          End Sub)
         End If
+    End Sub
+
+    Private Sub BootBox_CheckedChanged(sender As Object, e As EventArgs) Handles BootBox.CheckedChanged
+        Try
+            If BootBox.Checked = True Then
+                Settings.BootUp = True
+                If Settings.Autostart = False Then
+                    Using Process.Start("setreg.bat")
+                        Settings.Autostart = True
+                    End Using
+                Else
+                End If
+            ElseIf BootBox.Checked = False Then
+                Settings.BootUp = False
+                If Settings.Autostart = True Then
+                    Using Process.Start("rmreg2.bat")
+                        Settings.Autostart = False
+                    End Using
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show($"Error Prozess kan nicht gestzartet werden: {ex.Message}")
+        End Try
     End Sub
 End Class
