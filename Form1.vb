@@ -3,19 +3,20 @@ Imports System.Drawing
 Imports System.Globalization
 Imports System.IO
 Imports System.Linq
+Imports System.Management
 Imports System.Net
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Runtime.Versioning
+Imports System.Security.Principal
 Imports System.Text
+Imports System.Text.RegularExpressions
 Imports System.Threading
 Imports HidSharp.Utility
 Imports Microsoft.VisualBasic.Logging
 Imports Newtonsoft.Json
 Imports OpenHardwareMonitor.Hardware
 Imports Timer = System.Windows.Forms.Timer
-Imports System.Text.RegularExpressions
-Imports System.Management
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
     Public Property CoreTemperatures As Dictionary(Of String, Single)
@@ -63,6 +64,23 @@ Public Class Form1
     'Programm initialization
     Public Sub New()
         InitializeComponent()
+        If Not IsAdministrator() Then
+            Dim result As DialogResult = MessageBox.Show("Das Programm benötigt Administratorrechte, um ordnungsgemäß zu funktionieren. Möchten Sie das Programm als Administrator neu starten?", "Administratorrechte erforderlich", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+            If result = DialogResult.Yes Then
+                Dim startInfo As New ProcessStartInfo()
+                startInfo.UseShellExecute = True
+                startInfo.WorkingDirectory = Environment.CurrentDirectory
+                startInfo.FileName = Application.ExecutablePath
+                startInfo.Verb = "runas"
+                Try
+                    Process.Start(startInfo)
+                Catch ex As Exception
+                    MessageBox.Show("Fehler beim Versuch, das Programm als Administrator neu zu starten: " & ex.Message, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
+            Application.Exit()
+            Return
+        End If
         CheckAndSetSystemFonts()
         systemInfoRepository = New SystemInfoRepository()
         cpuLoadCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
@@ -88,6 +106,12 @@ Public Class Form1
 
         refreshTimer.Start()
     End Sub
+    'Admin check
+    Private Function IsAdministrator() As Boolean
+        Dim identity As WindowsIdentity = WindowsIdentity.GetCurrent()
+        Dim principal As New WindowsPrincipal(identity)
+        Return principal.IsInRole(WindowsBuiltInRole.Administrator)
+    End Function
 
     'Form Logic
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load

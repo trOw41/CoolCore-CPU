@@ -1,4 +1,6 @@
 ﻿' OptionsForm.vb
+Imports System.Windows
+
 Public Class OptionsForm
     Public Event ThemeChanged As EventHandler(Of String)
 
@@ -187,9 +189,12 @@ Public Class OptionsForm
             My.Settings.MAX_LOG_SIZE_KB = LogSizeBox.SelectedItem.ToString()
         End If
         LogTimeLabel.Text = "Loggröße: " & My.Settings.MAX_LOG_SIZE_KB & " KB"
-        Form1.Invoke(Sub()
-                         Form1.UpdateLogSize()
-                     End Sub)
+        If Form1 IsNot Nothing AndAlso Form1.IsHandleCreated Then
+            Form1.Invoke(Sub()
+                             Form1.UpdateLogSize()
+                         End Sub)
+        End If
+
     End Sub
 
     Private Sub LogStartStopBox_CheckedChanged(sender As Object, e As EventArgs) Handles LogStartStopBox.CheckedChanged
@@ -200,9 +205,12 @@ Public Class OptionsForm
                          End Sub)
         ElseIf LogStartStopBox.Checked = True Then
             My.Settings.LogStartStop = True
-            Form1.Invoke(Sub()
-                             Form1.StartStopLog()
-                         End Sub)
+            If Form1 IsNot Nothing AndAlso Form1.IsHandleCreated Then
+                ' Update the log size and start/stop logging if the form is active
+                Form1.Invoke(Sub()
+                                 Form1.StartStopLog()
+                             End Sub)
+            End If
         End If
     End Sub
 
@@ -213,6 +221,7 @@ Public Class OptionsForm
                 If Settings.Autostart = False Then
                     Using Process.Start("setreg.bat")
                         Settings.Autostart = True
+
                     End Using
                 Else
                 End If
@@ -226,6 +235,7 @@ Public Class OptionsForm
             End If
         Catch ex As Exception
             MessageBox.Show($"Error Prozess kan nicht gestzartet werden: {ex.Message}")
+            BootBox.Checked = Not BootBox.Checked ' Reset the checkbox state
         End Try
     End Sub
 End Class
