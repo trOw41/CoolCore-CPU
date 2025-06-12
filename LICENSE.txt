@@ -1,7 +1,7 @@
 END USER LICENSE AGREEMENT (EULA) FOR COOLCORE-CPU
 
-Version: 1.8.2
-Date: [June 8, 2025]
+Version: 1.8.5
+Date: [June 12, 2025]
 
 This End User License Agreement ("EULA") is a legally binding agreement between you, the end user (hereinafter referred to as the "User"), and Daniel Trojan (trOw41) (hereinafter referred to as the "Licensor") regarding the software application "CoolCore-CPU" (hereinafter referred to as the "Software"), including all associated media, documentation, and online materials.
 
