@@ -1,5 +1,5 @@
 ﻿' OptionsForm.vb
-Imports System.Windows
+Imports System.Windows.Forms
 
 Public Class OptionsForm
     Public Event ThemeChanged As EventHandler(Of String)
@@ -18,7 +18,6 @@ Public Class OptionsForm
                 Settings.ApplicationTheme = "Standard"
         End Select
         Label1.Text = "CPU Stresstest Intervall (in Sekunden): " & My.Settings.MonitorTime
-        LogTimeLabel.Text = "Loggröße: " & My.Settings.MAX_LOG_SIZE_KB & " KB"
         For i = 0 To LogSizeBox.Items.Count - 1
             Dim items = i
             LogSizeBox.Items(i) = Settings.MAX_LOG_SIZE_KB
@@ -87,6 +86,9 @@ Public Class OptionsForm
     End Sub
 
     Private Sub CheckedListBox1_SelectedValueChanged(sender As Object, e As EventArgs) Handles CheckedListBox1.SelectedValueChanged
+        If Settings.InfoMessage = False Then
+            InfoDialog.ShowDialog(Me)
+        End If
         If CheckedListBox1.SelectedItem IsNot Nothing Then
             My.Settings.MonitorTime = CheckedListBox1.SelectedItem.ToString()
             Label1.Text = "CPU Stresstest Intervall (in Sekunden): " & My.Settings.MonitorTime
@@ -104,7 +106,7 @@ Public Class OptionsForm
                 For Each ctrl As Control In Me.Controls
                     ApplyThemeToControl(ctrl, theme)
                 Next
-                PictureBox1.Image = My.Resources._024_cpu
+                'PictureBox1.Image = My.Resources._024_cpu
                 Me.Icon = My.Resources._024_cpu_1
             Case "Standard"
                 ' Apply Standard/Light Theme
@@ -113,7 +115,7 @@ Public Class OptionsForm
                 For Each ctrl As Control In Me.Controls
                     ApplyThemeToControl(ctrl, theme)
                 Next
-                PictureBox1.Image = My.Resources._023_cpu
+                'PictureBox1.Image = My.Resources._023_cpu
                 Me.Icon = My.Resources._023_cpu_1
         End Select
     End Sub
@@ -188,7 +190,6 @@ Public Class OptionsForm
         If LogSizeBox.SelectedItem IsNot Nothing Then
             My.Settings.MAX_LOG_SIZE_KB = LogSizeBox.SelectedItem.ToString()
         End If
-        LogTimeLabel.Text = "Loggröße: " & My.Settings.MAX_LOG_SIZE_KB & " KB"
         If Form1 IsNot Nothing AndAlso Form1.IsHandleCreated Then
             Form1.Invoke(Sub()
                              Form1.UpdateLogSize()
@@ -206,7 +207,6 @@ Public Class OptionsForm
         ElseIf LogStartStopBox.Checked = True Then
             My.Settings.LogStartStop = True
             If Form1 IsNot Nothing AndAlso Form1.IsHandleCreated Then
-                ' Update the log size and start/stop logging if the form is active
                 Form1.Invoke(Sub()
                                  Form1.StartStopLog()
                              End Sub)
@@ -214,14 +214,14 @@ Public Class OptionsForm
         End If
     End Sub
 
-    Private Sub BootBox_CheckedChanged(sender As Object, e As EventArgs) Handles BootBox.CheckedChanged
+    Public Sub BootBox_CheckedChanged(sender As Object, e As EventArgs) Handles BootBox.CheckedChanged
         Try
             If BootBox.Checked = True Then
                 Settings.BootUp = True
                 If Settings.Autostart = False Then
                     Using Process.Start("setreg.bat")
                         Settings.Autostart = True
-
+                        MessageBox.Show("Autostart wurde aktiviert. CoolCore wird mit dem nächsten System Start ausgeführt.", "Autostart aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End Using
                 Else
                 End If
@@ -230,6 +230,7 @@ Public Class OptionsForm
                 If Settings.Autostart = True Then
                     Using Process.Start("rmreg2.bat")
                         Settings.Autostart = False
+                        MessageBox.Show("Autostart wurde deaktiviert. CoolCore wird nicht mehr automatisch gestartet.", "Autostart deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End Using
                 End If
             End If
@@ -238,4 +239,5 @@ Public Class OptionsForm
             BootBox.Checked = Not BootBox.Checked ' Reset the checkbox state
         End Try
     End Sub
+
 End Class

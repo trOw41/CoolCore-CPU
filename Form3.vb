@@ -25,7 +25,7 @@ Public Class Form3
         Me.ControlBox = False
         Me.FormBorderStyle = FormBorderStyle.FixedDialog
         Me.StartPosition = FormStartPosition.CenterParent
-        ProgressBar1.Style = ProgressBarStyle.Marquee
+        ProgressBar1.Style = ProgressBarStyle.Blocks
 
         LblLoadingText.Text = "Monitoring CPU Temperatur:"
         LblLoadingText.AutoSize = True
@@ -41,9 +41,10 @@ Public Class Form3
         End If
 
         If AnimationTimer IsNot Nothing Then
-            AnimationTimer.Interval = 30
+            AnimationTimer.Interval = Settings.MonitorTime
             AddHandler AnimationTimer.Tick, AddressOf AnimationTimer_Tick
         End If
+
     End Sub
 
     Private Sub Form3_load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -56,12 +57,37 @@ Public Class Form3
 
     Public Sub UpdateElapsedTime(elapsedTime As TimeSpan)
         Dim monitorTime As Double = My.Settings.MonitorTime
+        Dim tickerMax As Integer = monitorTime
+        Dim ticker As Integer = elapsedTime.TotalSeconds
+        ProgressBar1.Maximum = tickerMax
+
         If Me.InvokeRequired Then
             Me.Invoke(Sub() UpdateElapsedTime(elapsedTime))
         Else
             If TimeLabel IsNot Nothing Then
                 TimeLabel.Text = $"Dauer: {elapsedTime:hh\:mm\:ss}"
-                LblLoadingText.Text = $"Monitoring CPU Temperatur noch: {Math.Round(monitorTime - elapsedTime.TotalSeconds)}s"
+                'LblLoadingText.Text = $"Monitoring CPU Temperatur noch: {Math.Round(monitorTime - elapsedTime.TotalSeconds)}s"
+                Me.Invoke(Sub()
+                              ProgressBar1.Value = ticker
+                              If ticker > 0 Then
+                                  LblLoadingText.Text = "ermittel Sensoren.."
+                              End If
+                              If ticker > 4 Then
+                                  LblLoadingText.Text = "Starte CPU überladung (Stress).."
+                              End If
+                              If ticker > 9 Then
+                                  LblLoadingText.Text = $"ermittel Temperatur Werte bitte warten {Math.Round(monitorTime - elapsedTime.TotalSeconds)}s"
+                              End If
+                              If monitorTime - ticker < 7 Then
+                                  LblLoadingText.Text = "beende Stress Ladung.."
+                              End If
+                              If monitorTime - ticker < 4 Then
+                                  LblLoadingText.Text = "schreibe Werte in die Tabelle.."
+                              End If
+                              If ticker = monitorTime Then
+                                  LblLoadingText.Text = "Beende Stress-Test"
+                              End If
+                          End Sub)
             End If
         End If
     End Sub
@@ -161,9 +187,7 @@ Public Class Form3
 
         _dataFlowOffset = (_dataFlowOffset + _dataFlowSpeed) Mod 200
 
-        If PnlCpuFanAnimation IsNot Nothing Then
-            PnlCpuFanAnimation.Invalidate()
-        End If
+        PnlCpuFanAnimation?.Invalidate()
     End Sub
     Public Sub StartAnimation()
         If AnimationTimer IsNot Nothing Then
@@ -231,4 +255,5 @@ Public Class Form3
             g.DrawRectangle(borderPen, 0, 0, panelWidth - 1, panelHeight - 1)
         End Using
     End Sub
+
 End Class

@@ -34,26 +34,28 @@ Partial Class Form3
         'LblLoadingText
         '
         Me.LblLoadingText.AutoSize = True
-        Me.LblLoadingText.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LblLoadingText.Location = New System.Drawing.Point(12, 9)
+        Me.LblLoadingText.BackColor = System.Drawing.Color.Transparent
+        Me.LblLoadingText.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LblLoadingText.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.LblLoadingText.Location = New System.Drawing.Point(3, 30)
         Me.LblLoadingText.Name = "LblLoadingText"
-        Me.LblLoadingText.Size = New System.Drawing.Size(94, 19)
+        Me.LblLoadingText.Size = New System.Drawing.Size(79, 17)
         Me.LblLoadingText.TabIndex = 1
         Me.LblLoadingText.Text = "Bitte warten.."
         '
         'ProgressBar1
         '
         Me.ProgressBar1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ProgressBar1.Location = New System.Drawing.Point(0, 78)
+        Me.ProgressBar1.Location = New System.Drawing.Point(0, 89)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(359, 25)
+        Me.ProgressBar1.Size = New System.Drawing.Size(359, 14)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 2
         '
         'TimeLabel
         '
         Me.TimeLabel.AutoSize = True
-        Me.TimeLabel.Location = New System.Drawing.Point(12, 49)
+        Me.TimeLabel.Location = New System.Drawing.Point(3, 72)
         Me.TimeLabel.Name = "TimeLabel"
         Me.TimeLabel.Size = New System.Drawing.Size(38, 14)
         Me.TimeLabel.TabIndex = 3
@@ -62,9 +64,10 @@ Partial Class Form3
         'PnlCpuFanAnimation
         '
         Me.PnlCpuFanAnimation.BackColor = System.Drawing.Color.Transparent
-        Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(274, 12)
+        Me.PnlCpuFanAnimation.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(285, 12)
         Me.PnlCpuFanAnimation.Name = "PnlCpuFanAnimation"
-        Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(64, 58)
+        Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(71, 63)
         Me.PnlCpuFanAnimation.TabIndex = 4
         '
         'AnimationTimer

@@ -118,124 +118,127 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="036-folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\036-folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="034-signature" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\034-signature.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="002-app-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\002-app-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="031-computer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\031-computer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="019-person" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\019-person.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="021-about" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\021-about.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="033-monitor-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\033-monitor-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="018-close-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\018-close-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="037-folder-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\037-folder-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="030-ram-2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\030-ram-2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="032-faq-3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\032-faq-3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="004-computer-science" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\004-computer-science.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="031-faq-2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\031-faq-2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="023-cpu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\023-cpu1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="022-processor" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\022-processor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="014-close" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\014-close.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="038-system-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\038-system-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="statistics_detail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\statistics_detail.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="025-help" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\025-help.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="024-cpu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\024-cpu-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="AMDLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AMDLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="023_cpu_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\45_11594827525_023-cpu.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_024_cpu_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\024-cpu-1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="032-faq-3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\032-faq-3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="fan1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\001-computer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="fan2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\003-computer-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="004-computer-science" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\004-computer-science.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="temp1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tools-and-utensils.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="014-close" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\014-close.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="temp2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\temp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="024-cpu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\024-cpu-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="AMDLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AMDLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="034-signature" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\034-signature.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="AMDLogo_Dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AMDLogo_Dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="018-close-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\018-close-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IntelLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IntelLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="_024_cpu_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\024-cpu-1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IntelLogo_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IntelLogo-white.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="archiv_log_box" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\archiv_log_box.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Main_Standard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main_Standard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="cpu_test" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\cpu_test.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="AMDLogo_Dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AMDLogo_Dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="export_log" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\export_log.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="temp1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tools-and-utensils.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="log_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\log_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="002-app-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\002-app-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="log_details" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\log_details.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="023-cpu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\023-cpu1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="036-folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\036-folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="022-processor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\022-processor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="033-monitor-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\033-monitor-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="037-folder-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\037-folder-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="export_log" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\export_log.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="021-about" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\021-about.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="023_cpu_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\45_11594827525_023-cpu.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fan2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\003-computer-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="019-person" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\019-person.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="archiv_log_box" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\archiv_log_box.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Main_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Main_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Main_Standard" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Main_Standard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="menu_export" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\menu_export.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="log_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\log_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="options_Standard" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\options_Standard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="statistics_detail" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\statistics_detail.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="temp2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\temp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_export" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menu_export.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="temperatures_standard" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\temperatures_standard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IntelLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IntelLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="038-system-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\038-system-1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="031-computer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\031-computer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="031-faq-2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\031-faq-2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cpu_test" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cpu_test.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="030-ram-2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\030-ram-2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="009-system" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\009-system.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

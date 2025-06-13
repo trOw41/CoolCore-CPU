@@ -67,11 +67,12 @@ Public Class Form1
         If Not IsAdministrator() Then
             Dim result As DialogResult = MessageBox.Show("Das Programm benötigt Administratorrechte, um ordnungsgemäß zu funktionieren. Möchten Sie das Programm als Administrator neu starten?", "Administratorrechte erforderlich", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
             If result = DialogResult.Yes Then
-                Dim startInfo As New ProcessStartInfo()
-                startInfo.UseShellExecute = True
-                startInfo.WorkingDirectory = Environment.CurrentDirectory
-                startInfo.FileName = Application.ExecutablePath
-                startInfo.Verb = "runas"
+                Dim startInfo As New ProcessStartInfo With {
+                    .UseShellExecute = True,
+                    .WorkingDirectory = Environment.CurrentDirectory,
+                    .FileName = Application.ExecutablePath,
+                    .Verb = "runas"
+                }
                 Try
                     Process.Start(startInfo)
                 Catch ex As Exception
@@ -81,6 +82,7 @@ Public Class Form1
             Application.Exit()
             Return
         End If
+
         CheckAndSetSystemFonts()
         systemInfoRepository = New SystemInfoRepository()
         cpuLoadCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
@@ -128,6 +130,8 @@ Public Class Form1
         Me.Text = "CoolCore - Monitoring CPU" & " - " & My.Application.Info.Version.ToString(4)
         ApplyTheme(My.Settings.ApplicationTheme)
         ClearCpuDisplayControls()
+
+
         Await Task.Run(Sub()
                            InitializePerCoreCounters()
                            InitializeCoreTemperatureSensors()
@@ -1402,10 +1406,10 @@ Public Class Form1
         LogSize = logSizeKB
         If LblStatusMessage.InvokeRequired Then
             LblStatusMessage.Invoke(Sub()
-                                        LblStatusMessage.Text = $"Max. Loggröße: {logSizeKB} KB"
+                                        LblStatusMessage.Text = $"Max. Loggröße: {logSizeKB} MB"
                                     End Sub)
         Else
-            LblStatusMessage.Text = $"Max. Loggröße: {logSizeKB} KB"
+            LblStatusMessage.Text = $"Max. Loggröße: {logSizeKB} MB"
         End If
         Return Task.CompletedTask
     End Function
