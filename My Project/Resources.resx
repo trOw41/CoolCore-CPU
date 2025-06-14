@@ -241,4 +241,7 @@
   <data name="009-system" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\009-system.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="_78_11594827525_045_firmware" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\78_11594827525_045-firmware.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -17,6 +17,7 @@ Imports Microsoft.VisualBasic.Logging
 Imports Newtonsoft.Json
 Imports OpenHardwareMonitor.Hardware
 Imports Timer = System.Windows.Forms.Timer
+Imports System.Deployment.Application
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
     Public Property CoreTemperatures As Dictionary(Of String, Single)
@@ -151,7 +152,77 @@ Public Class Form1
                                                     Return Task.CompletedTask
                                                 End Function)
         Await hardwareInfoTask
+        Dim url As String = "https://cool-core.de.cool/updates/cool-core/version.txt"
+        Dim versionCheckTask As Task = Task.Run(Sub()
+                                                    Dim latestVersion As String = CheckForUpdatesAsync(url).Result.ToString()
+                                                    If Not String.IsNullOrEmpty(latestVersion) Then
+
+                                                        If Not My.Application.Info.Version.ToString().Equals(latestVersion) Then
+
+                                                        Else
+                                                            LblStatusMessage.Text = "You are using the latest version."
+                                                        End If
+                                                    Else
+                                                        LblStatusMessage.Text = "Error checking for updates."
+                                                        LblStatusMessage.ForeColor = Color.Red
+                                                    End If
+                                                End Sub)
     End Sub
+    Private Async Function CheckForUpdatesAsync(url As String) As Task(Of String)
+        Dim version As String
+        Try
+            Using client As New WebClient()
+                Dim versionText As String = Await client.DownloadStringTaskAsync(url)
+                If Not String.IsNullOrEmpty(versionText) Then
+                    version = versionText.Trim()
+                    'MessageBox.Show(version)
+                    If Not String.IsNullOrEmpty(version) Then
+                        If LblStatusMessage.InvokeRequired Then
+                            LblStatusMessage.Invoke(Sub()
+                                                        LblStatusMessage.Text = $"Latest version from server: {version}"
+                                                    End Sub)
+                        Else
+                            LblStatusMessage.Text = $"Latest version from server: {version}"
+                        End If
+                        Dim currentVersion As New Version(My.Application.Info.Version.ToString(4))
+                        Dim serverVersion As New Version(version)
+                        If serverVersion.Equals(currentVersion) Then
+                        ElseIf serverVersion > currentVersion Then
+                            Dim result As DialogResult = MessageBox.Show("New version available: " & serverVersion.ToString() & vbCrLf & "Do you want to download it now?", "Update Available", MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
+                            If result = DialogResult.OK Then
+                                Dim setupPath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CoolCoreSetup.exe")
+                                Try
+                                    client.DownloadFile("https://cool-core.de.cool/updates/cool-core/CoolCoreSetup.exe", setupPath)
+                                    MessageBox.Show("Update wird installiert. Anwendung wird beendet...")
+                                    If File.Exists(setupPath) Then
+                                        Try
+                                            Dim psi As New ProcessStartInfo() With {
+                                                .FileName = setupPath,
+                                                .UseShellExecute = True,
+                                                .WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory
+                                            }
+                                            Process.Start(psi)
+                                        Catch ex As Exception
+                                            MessageBox.Show("Fehler beim Starten des Setups: " & ex.Message)
+                                        End Try
+                                        Application.Exit()
+                                    Else
+                                        MessageBox.Show("Error File not found!")
+                                    End If
+                                Catch ex As Exception
+                                    MessageBox.Show("Fehler beim Herunterladen des Updates: " & ex.Message)
+                                End Try
+                            End If
+                        End If
+                    End If
+                End If
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine($"Error checking for updates: {ex.Message}")
+        End Try
+        Return True
+    End Function
+
     Private Function CeckTempLoadBoxes() As Task
         If LoadBox IsNot Nothing Then LoadBoxes.Add(0, LoadBox)
         If LoadBox1 IsNot Nothing Then LoadBoxes.Add(1, LoadBox1)

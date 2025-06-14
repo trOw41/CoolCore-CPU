@@ -281,6 +281,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
+        '''</summary>
+        Public ReadOnly Property _78_11594827525_045_firmware() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("_78_11594827525_045_firmware", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         '''</summary>
         Public ReadOnly Property AMDLogo() As System.Drawing.Bitmap

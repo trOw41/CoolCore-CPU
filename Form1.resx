@@ -369,7 +369,7 @@
     <value>NoControl</value>
   </data>
   <data name="PictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>334, 166</value>
+    <value>261, 174</value>
   </data>
   <data name="PictureBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>20, 27</value>
@@ -396,7 +396,7 @@
     <value>160, 87</value>
   </data>
   <data name="PicBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 80</value>
+    <value>96, 83</value>
   </data>
   <data name="PicBox2.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>StretchImage</value>
@@ -423,7 +423,7 @@
     <value>NoControl</value>
   </data>
   <data name="Label7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>216, 170</value>
+    <value>143, 178</value>
   </data>
   <data name="Label7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
