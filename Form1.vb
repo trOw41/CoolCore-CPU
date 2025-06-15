@@ -130,8 +130,17 @@ Public Class Form1
 
     'Form Logic
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        LoadMySqlCredentials()
-
+        If Settings.FirstStart Then
+            Dim res As DialogResult = WelcomeForm.ShowDialog(Me)
+            If res = DialogResult.OK Then
+                Settings.Save()
+                Settings.FirstStart = False
+                Settings.Save()
+                LoadMySqlCredentials()
+            End If
+        Else
+            LoadMySqlCredentials()
+        End If
         LblStatusMessage.Text = "Ready to read system information."
         LblStatusMessage.ForeColor = Color.Black
         If computer Is Nothing Then
@@ -1204,13 +1213,15 @@ Public Class Form1
             cancellationTokenSource = Nothing
         End If
         stressTasks.Clear()
-        Me.Invoke(Sub()
+        Me.Invoke(Async Sub()
                       LblStatusMessage.Text = "CPU-Stresstest beendet."
                       If Settings.ApplicationTheme = "Dark" Then
                           LblStatusMessage.ForeColor = SystemColors.ControlLight
                       ElseIf Settings.ApplicationTheme = "Standard" Then
                           LblStatusMessage.ForeColor = SystemColors.ControlText
                       End If
+                      'Await ReadAndDisplaySystemInfoAsync()
+                      Await CheckCpuSub()
                   End Sub)
     End Sub
     Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
