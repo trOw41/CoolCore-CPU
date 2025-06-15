@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.Generic
+Imports System.ComponentModel.Design
 Imports System.Drawing
 Imports System.Globalization
 Imports System.IO
@@ -14,10 +15,13 @@ Imports System.Text.RegularExpressions
 Imports System.Threading
 Imports HidSharp.Utility
 Imports Microsoft.VisualBasic.Logging
+Imports MySql.Data.MySqlClient
 Imports Newtonsoft.Json
+Imports Newtonsoft.Json.Linq
 Imports OpenHardwareMonitor.Hardware
 Imports Timer = System.Windows.Forms.Timer
-Imports System.Deployment.Application
+
+
 Public Structure CoreTempData
     Public Property Timestamp As DateTime
     Public Property CoreTemperatures As Dictionary(Of String, Single)
@@ -61,7 +65,14 @@ Public Class Form1
     Private Const CPU_SPECS_CSV_FILE As String = "intel-cpus.csv"
     Private foundCpuDetails As New Dictionary(Of String, String)()
     Private tos As New ToolTip()
-
+    ' MySQL Connection String Constants
+    Private _mysqlServer As String
+    Private _mysqlPort As String
+    Private _mysqlDatabase As String
+    Private _mysqlUid As String
+    Private _mysqlPassword As String
+    Private _mysqlCpuTableName As String
+    Private Const MYSQL_CONFIG_FILE As String = "mysql_credentials.json"
     'Programm initialization
     Public Sub New()
         InitializeComponent()
@@ -118,6 +129,7 @@ Public Class Form1
 
     'Form Logic
     Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadMySqlCredentials()
         LblStatusMessage.Text = "Ready to read system information."
         LblStatusMessage.ForeColor = Color.Black
         If computer Is Nothing Then
@@ -146,9 +158,9 @@ Public Class Form1
 
                                          End Sub)
         Await LogSystem
-        Dim hardwareInfoTask As Task = Task.Run(Function()
-                                                    ReadAndDisplaySystemInfoAsync()
-                                                    GetCpuSubInfos()
+        Dim hardwareInfoTask As Task = Task.Run(Async Function()
+                                                    Await ReadAndDisplaySystemInfoAsync()
+                                                    Await GetCpuSubInfos()
                                                     Return Task.CompletedTask
                                                 End Function)
         Await hardwareInfoTask
@@ -167,6 +179,33 @@ Public Class Form1
                                                         LblStatusMessage.ForeColor = Color.Red
                                                     End If
                                                 End Sub)
+    End Sub
+    Private Sub LoadMySqlCredentials()
+        Dim filePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MYSQL_CONFIG_FILE)
+
+        If File.Exists(filePath) Then
+            Try
+                Dim jsonContent As String = File.ReadAllText(filePath)
+                Dim config As JObject = JObject.Parse(jsonContent)
+
+                _mysqlServer = config("MYSQL_SERVER")?.ToString()
+                _mysqlPort = config("MYSQL_PORT")?.ToString()
+                _mysqlDatabase = config("MYSQL_DATABASE")?.ToString()
+                _mysqlUid = config("MYSQL_UID")?.ToString()
+                _mysqlPassword = config("MYSQL_PASSWORD")?.ToString()
+                _mysqlCpuTableName = config("MYSQL_CPU_TABLE_NAME")?.ToString()
+
+                Debug.WriteLine("MySQL-Zugangsdaten erfolgreich aus JSON-Datei geladen.")
+            Catch ex As Exception
+                Debug.WriteLine($"Fehler beim Laden der MySQL-Zugangsdaten aus '{MYSQL_CONFIG_FILE}': {ex.Message}")
+                MessageBox.Show($"Fehler beim Laden der MySQL-Zugangsdaten: {ex.Message}", "Konfigurationsfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                ' Optional: Anwendung beenden oder Datenbankfunktionen deaktivieren, wenn Zugangsdaten nicht geladen werden können
+            End Try
+        Else
+            Debug.WriteLine($"MySQL-Konfigurationsdatei '{MYSQL_CONFIG_FILE}' nicht gefunden unter '{filePath}'. Verwende Standard-/Leere Werte.")
+            MessageBox.Show($"MySQL-Konfigurationsdatei '{MYSQL_CONFIG_FILE}' nicht gefunden.", "Konfigurationsfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ' Optional: Anwendung beenden oder Datenbankfunktionen deaktivieren
+        End If
     End Sub
     Private Async Function CheckForUpdatesAsync(url As String) As Task(Of String)
         Dim version As String
@@ -556,6 +595,7 @@ Public Class Form1
             End If
             Debug.WriteLine($"UpdateCpuFrequencyDisplay ERROR: {ex.Message}")
         End Try
+        Return True
     End Function
 
     'Hardware Initialization
@@ -714,167 +754,202 @@ Public Class Form1
     End Sub
 
     'CPU Sub Information
-    Private Function GetCpuSubInfos() As Task
-        If Me.InvokeRequired Then
-            Me.Invoke(Sub() GetCpuSubInfos())
-        End If
+    Private Async Function GetCpuSubInfos() As Task
         foundCpuDetails.Clear()
         Dim cpuNameFromWMI As String = "N/A"
         Dim processorIdFromWMI As String = "N/A"
-        Dim manufacturerFromWMI As String = "N/A"
+
         Try
             Dim searcher As New ManagementObjectSearcher("SELECT Name, ProcessorId, Manufacturer FROM Win32_Processor")
             For Each queryObj As ManagementObject In searcher.Get()
                 cpuNameFromWMI = queryObj("Name")?.ToString()
                 processorIdFromWMI = queryObj("ProcessorId")?.ToString()
-                manufacturerFromWMI = queryObj("Manufacturer")?.ToString()
-                Dim name As String = queryObj("Name")?.ToString()
-                Dim family As String = queryObj("Family")?.ToString()
-                Dim stepping As String = queryObj("Stepping")?.ToString()
-                Dim revision As String = queryObj("Revision")?.ToString()
-                'Debug.WriteLine($"Name: {name}, Family: {family}, Stepping: {stepping}, Revision: {revision}")
-                ModelBox.Text = name
-                CPUIDBox.Text = If(queryObj("processorId"), "N/A").ToString()
+
+                If ModelBox.InvokeRequired Then
+                    ModelBox.Invoke(Sub() ModelBox.Text = cpuNameFromWMI)
+                Else
+                    ModelBox.Text = cpuNameFromWMI
+                End If
+
                 Exit For
             Next
         Catch ex As Exception
             Debug.WriteLine($"Fehler beim Abrufen der CPU-Informationen von WMI: {ex.Message}")
+            If ModelBox.InvokeRequired Then
+                ModelBox.Invoke(Sub() ModelBox.Text = "WMI Error")
+            Else
+                ModelBox.Text = "WMI Error"
+            End If
+            If CPUIDBox.InvokeRequired Then
+                CPUIDBox.Invoke(Sub() CPUIDBox.Text = "WMI Error")
+            Else
+                CPUIDBox.Text = "WMI Error"
+            End If
         End Try
 
-        If ModelBox.InvokeRequired Then
-            ModelBox.Invoke(Sub() ModelBox.Text = cpuNameFromWMI)
-        Else
-            ModelBox.Text = cpuNameFromWMI
-        End If
-        'CPUIDBox.Text = processorIdFromWMI
-        If CPUIDBox.InvokeRequired Then
-            CPUIDBox.Invoke(Sub() CPUIDBox.Text = processorIdFromWMI)
-        Else
-            CPUIDBox.Text = processorIdFromWMI
+        Dim normalizedWmiCpuName As String = NormalizeCpuName(cpuNameFromWMI)
+        Debug.WriteLine($"Normalized WMI CPU Name for DB search: '{normalizedWmiCpuName}'")
+
+        ' --- Start MySQL Database Query ---
+        ' Use the loaded fields here
+        If String.IsNullOrEmpty(_mysqlServer) OrElse String.IsNullOrEmpty(_mysqlDatabase) Then
+            Debug.WriteLine("MySQL credentials not loaded. Cannot connect to database.")
+            ' Update UI to reflect that DB connection is not possible
+            If LithographyBox.InvokeRequired Then
+                LithographyBox.Invoke(Sub() LithographyBox.Text = "DB Config Missing")
+            Else
+                LithographyBox.Text = "DB Config Missing"
+            End If
+            If TDPBox.InvokeRequired Then
+                TDPBox.Invoke(Sub() TDPBox.Text = "DB Config Missing")
+            Else
+                TDPBox.Text = "DB Config Missing"
+            End If
+            If TJBox.InvokeRequired Then
+                TJBox.Invoke(Sub() TJBox.Text = "DB Config Missing")
+            Else
+                TJBox.Text = "DB Config Missing"
+            End If
+            If SockBox.InvokeRequired Then
+                SockBox.Invoke(Sub() SockBox.Text = "DB Config Missing")
+            Else
+                SockBox.Text = "DB Config Missing"
+            End If
+
+            Return
         End If
 
-        Dim csvFilePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, CPU_SPECS_CSV_FILE)
+        Dim connectionString As String = $"Server={_mysqlServer};Port={_mysqlPort};Database={_mysqlDatabase};Uid={_mysqlUid};Pwd={_mysqlPassword};"
 
-        If File.Exists(csvFilePath) Then
+        Using connection As New MySqlConnection(connectionString)
             Try
-                Dim lines As String() = File.ReadAllLines(csvFilePath)
-                If lines.Length > 0 Then
-                    Dim headers As String() = lines(0).Split(","c).Select(Function(h) h.Trim("""").Trim()).ToArray()
-                    Dim nameColumnIndex As Integer = Array.IndexOf(headers, "CpuName")
+                Await connection.OpenAsync()
+                Debug.WriteLine("Successfully connected to MySQL database.")
 
-                    If nameColumnIndex = -1 Then
-                        Debug.WriteLine($"CSV Error: Spalte 'CpuName' nicht gefunden in '{CPU_SPECS_CSV_FILE}'")
-                        LithographyBox.Text = "CSV Error: CpuName-Spalte fehlt"
-                        TDPBox.Text = "CSV Error"
-                        'Return
-                    End If
+                Dim query As String = $"SELECT CpuId, CpuName, MaxTDP, Lithography, TjMax, SocketsSupported FROM {_mysqlCpuTableName} WHERE REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(CpuName), '(R)', ''), '®', ''), '(TM)', ''), '™', ''), 'CPU', ''), 'PROCESSOR', ''), 'INTEL', '') LIKE @normalizedCpuNamePattern LIMIT 1;"
 
-                    Dim normalizedWmiCpuName As String = NormalizeCpuName(cpuNameFromWMI)
-                    Debug.WriteLine($"Normalized WMI CPU Name: '{normalizedWmiCpuName}'")
+                Using command As New MySqlCommand(query, connection)
+                    command.Parameters.AddWithValue("@normalizedCpuNamePattern", $"%{normalizedWmiCpuName}%")
 
-                    For i As Integer = 1 To lines.Length - 1
-                        Dim data As String() = lines(i).Split(","c).Select(Function(d) d.Trim("""").Trim()).ToArray()
-
-                        If data.Length > nameColumnIndex Then
-                            Dim csvCpuName As String = data(nameColumnIndex)
-                            Dim normalizedCsvCpuName As String = NormalizeCpuName(csvCpuName)
-                            'Debug.WriteLine($"Comparing: WMI Normalized '{normalizedWmiCpuName}' with CSV Normalized '{normalizedCsvCpuName}' (Original CSV: '{csvCpuName}')")
-
-                            If Not String.IsNullOrWhiteSpace(normalizedWmiCpuName) AndAlso
-                               normalizedWmiCpuName.Contains(normalizedCsvCpuName) Then
-                                For colIndex As Integer = 0 To headers.Length - 1
-                                    If colIndex < data.Length Then
-                                        Dim headerName As String = headers(colIndex)
-                                        Dim cellValue As String = data(colIndex)
-                                        foundCpuDetails.Add(headerName, cellValue)
-                                        Debug.WriteLine($"Found CPU detail: {headerName} = {cellValue}")
-                                    End If
-                                Next
-                                If foundCpuDetails.ContainsKey("Lithography") Then
-                                    If LithographyBox.InvokeRequired Then
-                                        LithographyBox.Invoke(Sub() LithographyBox.Text = foundCpuDetails("Lithography"))
-                                    Else
-                                        LithographyBox.Text = foundCpuDetails("Lithography")
-                                    End If
-                                Else
-                                    LithographyBox.Text = "N/A (Litho in CSV fehlt)"
-                                End If
-
-                                If foundCpuDetails.ContainsKey("CpuId") Then
-                                    If CPUIDBox.InvokeRequired Then
-                                        CPUIDBox.Invoke(Sub() CPUIDBox.Text = foundCpuDetails("CpuId"))
-                                    Else
-                                        CPUIDBox.Text = foundCpuDetails("CpuId")
-                                    End If
-
-                                End If
-
-                                If foundCpuDetails.ContainsKey("MaxTDP") Then
-                                    If TDPBox.InvokeRequired Then
-                                        TDPBox.Invoke(Sub() TDPBox.Text = foundCpuDetails("MaxTDP"))
-                                    Else
-                                        TDPBox.Text = foundCpuDetails("MaxTDP")
-                                    End If
-                                Else
-                                    TDPBox.Text = "N/A (TDP in CSV fehlt)"
-                                End If
-                                If foundCpuDetails.ContainsKey("TCase") Then
-                                    If TJBox.InvokeRequired Then
-                                        TJBox.Invoke(Sub() TJBox.Text = foundCpuDetails("TCase"))
-                                    Else
-                                        TJBox.Text = foundCpuDetails("TCase")
-                                    End If
-
-                                Else
-                                    TJBox.Text = "N/A (Revision in CSV fehlt)"
-                                End If
-                                If foundCpuDetails.ContainsKey("SocketsSupported") Then
-                                    If SockBox.InvokeRequired Then
-                                        SockBox.Invoke(Sub() SockBox.Text = foundCpuDetails("SocketsSupported"))
-                                    Else
-                                        SockBox.Text = foundCpuDetails("SocketsSupported")
-                                    End If
-
-                                Else
-                                    SockBox.Text = "N/A (SocketsSupported in CSV fehlt)"
-                                End If
-                                Exit For
-                            End If
+                    Using reader As MySqlDataReader = CType(Await command.ExecuteReaderAsync(), MySqlDataReader)
+                        If reader.Read() Then
+                            foundCpuDetails.Clear()
+                            For i As Integer = 0 To reader.FieldCount - 1
+                                Dim colName As String = reader.GetName(i)
+                                Dim colValue As String = reader.GetValue(i)?.ToString()
+                                foundCpuDetails.Add(colName, colValue)
+                                Debug.WriteLine($"Found DB detail: {colName} = {colValue}")
+                            Next
+                        Else
+                            Debug.WriteLine($"No matching CPU found in the database for WMI name: '{cpuNameFromWMI}' (Normalized: '{normalizedWmiCpuName}')")
                         End If
-                    Next
-                End If
+                    End Using
+                End Using
+
+            Catch ex As MySqlException
+                Debug.WriteLine($"MySQL Database Error: {ex.Message}")
+                foundCpuDetails.Clear()
+                foundCpuDetails.Add("Error", $"DB Error: {ex.Message}")
             Catch ex As Exception
-                Debug.WriteLine($"Fehler beim Lesen oder Parsen der CSV-Datei '{CPU_SPECS_CSV_FILE}': {ex.Message}")
-                If LithographyBox.InvokeRequired Then
-                    LithographyBox.Invoke(Sub() LithographyBox.Text = "CSV Lesefehler")
-                Else
-                    LithographyBox.Text = "CSV Lesefehler"
-                End If
+                Debug.WriteLine($"General Database Access Error: {ex.Message}")
+                foundCpuDetails.Clear()
+                foundCpuDetails.Add("Error", $"General DB Error: {ex.Message}")
             End Try
+        End Using
+        ' --- End MySQL Database Query ---
+        Debug.WriteLine("MYSQL_SERVER: " & _mysqlServer)
+        Debug.WriteLine("MYSQL_PORT: " & _mysqlPort)
+        Debug.WriteLine("MYSQL_DATABASE: " & _mysqlDatabase)
+        Debug.WriteLine("MYSQL_UID: " & _mysqlUid)
+        Debug.WriteLine("MYSQL_PASSWORD: " & _mysqlPassword)
+        Debug.WriteLine("MYSQL_CPU_TABLE_NAME: " & _mysqlCpuTableName)
+        ' Update UI from foundCpuDetails
+        If foundCpuDetails.ContainsKey("Lithography") Then
+            If LithographyBox.InvokeRequired Then
+                LithographyBox.Invoke(Sub() LithographyBox.Text = foundCpuDetails("Lithography"))
+            Else
+                LithographyBox.Text = foundCpuDetails("Lithography")
+            End If
         Else
-            Debug.WriteLine($"CSV Error: Datei '{CPU_SPECS_CSV_FILE}' nicht gefunden unter '{csvFilePath}'")
-            LithographyBox.Text = "CSV nicht gefunden"
+            If LithographyBox.InvokeRequired Then
+                LithographyBox.Invoke(Sub() LithographyBox.Text = "N/A (Lithography in DB fehlt)")
+            Else
+                LithographyBox.Text = "N/A (Lithography in DB fehlt)"
+            End If
         End If
-        Return Task.CompletedTask
+        If foundCpuDetails.ContainsKey("CpuId") Then
+            If CPUIDBox.InvokeRequired Then
+                CPUIDBox.Invoke(Sub() CPUIDBox.Text = foundCpuDetails("CpuId"))
+            Else
+                CPUIDBox.Text = foundCpuDetails("CpuId")
+            End If
+        End If
+        If foundCpuDetails.ContainsKey("MaxTDP") Then
+            If TDPBox.InvokeRequired Then
+                TDPBox.Invoke(Sub() TDPBox.Text = foundCpuDetails("MaxTDP"))
+            Else
+                TDPBox.Text = foundCpuDetails("MaxTDP")
+            End If
+        Else
+            If TDPBox.InvokeRequired Then
+                TDPBox.Invoke(Sub() TDPBox.Text = "N/A (MaxTDP in DB fehlt)")
+            Else
+                TDPBox.Text = "N/A (MaxTDP in DB fehlt)"
+            End If
+        End If
+        If foundCpuDetails.ContainsKey("TjMax") Then
+            If TJBox.InvokeRequired Then
+                TJBox.Invoke(Sub() TJBox.Text = foundCpuDetails("TjMax"))
+            Else
+                TJBox.Text = foundCpuDetails("TjMax")
+            End If
+        Else
+            If TJBox.InvokeRequired Then
+                TJBox.Invoke(Sub() TJBox.Text = "N/A (TjMax in DB fehlt)")
+            Else
+                TJBox.Text = "N/A (TjMax in DB fehlt)"
+            End If
+        End If
+        If foundCpuDetails.ContainsKey("CpuName") Then
+            If ModelBox.InvokeRequired Then
+                ModelBox.Invoke(Sub() ModelBox.Text = foundCpuDetails("CpuName"))
+            Else
+                ModelBox.Text = foundCpuDetails("CpuName")
+            End If
+        End If
+        If foundCpuDetails.ContainsKey("SocketsSupported") Then
+            If SockBox.InvokeRequired Then
+                SockBox.Invoke(Sub() SockBox.Text = foundCpuDetails("SocketsSupported"))
+            Else
+                SockBox.Text = foundCpuDetails("SocketsSupported")
+            End If
+        Else
+            If SockBox.InvokeRequired Then
+                SockBox.Invoke(Sub() SockBox.Text = "N/A (SocketsSupported in DB fehlt)")
+            Else
+                SockBox.Text = "N/A (SocketsSupported in DB fehlt)"
+            End If
+        End If
     End Function
 
     Private Function NormalizeCpuName(ByVal cpuName As String) As String
         If String.IsNullOrWhiteSpace(cpuName) Then
             Return String.Empty
         End If
-        Dim normalizedName As String = cpuName.ToLowerInvariant()
-        normalizedName = normalizedName.Replace("(r)", "")
+        Dim normalizedName As String = cpuName.ToUpperInvariant()
+        normalizedName = normalizedName.Replace("(R)", "")
         normalizedName = normalizedName.Replace("®", "")
-        normalizedName = normalizedName.Replace("(tm)", "")
+        normalizedName = normalizedName.Replace("(TM)", "")
         normalizedName = normalizedName.Replace("™", "")
-        normalizedName = normalizedName.Replace("cpu @", "")
-        normalizedName = normalizedName.Replace("processor", "")
-        normalizedName = normalizedName.Replace("ghz", "")
-        normalizedName = normalizedName.Replace("k", "")
-        normalizedName = normalizedName.Replace("x", "")
-        ' normalizedName = Regex.Replace(normalizedName, "\d+(\.\d+)?$", "").Trim()
+        normalizedName = normalizedName.Replace("CPU", "")
+        normalizedName = normalizedName.Replace("PROCESSOR", "")
+        normalizedName = normalizedName.Replace("INTEL", "")
+        normalizedName = normalizedName.Replace("@", "")
+        normalizedName = normalizedName.Replace("GHZ", "")
         normalizedName = System.Text.RegularExpressions.Regex.Replace(normalizedName, "\s+", " ").Trim()
-        Return normalizedName
+        ' Entferne Taktfrequenz am Ende, z.B. "3.10", "2.50", "4", "4.2"
+        normalizedName = System.Text.RegularExpressions.Regex.Replace(normalizedName, "\s\d+(\.\d+)?$", "")
+        Return normalizedName.Trim()
     End Function
 
     'Test Section initialization
@@ -960,9 +1035,9 @@ Public Class Form1
                       InitializeCoreTemperatureSensors()
                       'ReadAndDisplaySystemInfoAsync()
                   End Sub)
-        Dim hardwareInfoTask As Task = Task.Run(Function()
-                                                    ReadAndDisplaySystemInfoAsync()
-                                                    GetCpuSubInfos()
+        Dim hardwareInfoTask As Task = Task.Run(Async Function()
+                                                    Await ReadAndDisplaySystemInfoAsync()
+                                                    Await GetCpuSubInfos()
                                                     Return Task.CompletedTask
                                                 End Function)
         Await hardwareInfoTask
@@ -1015,13 +1090,17 @@ Public Class Form1
             Catch ex As Exception
                 Debug.WriteLine($"Fehler beim Warten auf Stress-Tasks: {ex.Message}")
             End Try
-            cancellationTokenSource.Dispose() '
+            cancellationTokenSource.Dispose()
             cancellationTokenSource = Nothing
         End If
         stressTasks.Clear()
         Me.Invoke(Sub()
                       LblStatusMessage.Text = "CPU-Stresstest beendet."
-                      'LblStatusMessage.ForeColor = Color.Green
+                      If Settings.ApplicationTheme = "Dark" Then
+                          LblStatusMessage.ForeColor = SystemColors.ControlLight
+                      ElseIf Settings.ApplicationTheme = "Standard" Then
+                          LblStatusMessage.ForeColor = SystemColors.ControlText
+                      End If
                   End Sub)
     End Sub
     Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
@@ -1104,7 +1183,7 @@ Public Class Form1
         Return filePath
     End Function
 
-    'Archive load and archived measurements from the TemperatureLogs directory
+    'Archive load
     Private Sub LoadArchivedMeasurementsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoadArchivedMeasurementsToolStripMenuItem.Click
         Dim programDirectory1 As String = AppDomain.CurrentDomain.BaseDirectory
         Dim logDirectory1 As String = Path.Combine(programDirectory1, "TemperatureLogs")
@@ -1141,24 +1220,7 @@ Public Class Form1
 
     'Export CPU Info Section
     Private Sub ExportCPUInfoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportCPUInfoToolStripMenuItem.Click
-        If foundCpuDetails.Count = 0 Then
-            MessageBox.Show("Keine CPU-Informationen zum Exportieren verfügbar. Bitte scannen Sie zuerst die CPU-Details.", "Exportinformation", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Exit Sub
-        End If
-        Dim htmlContent As String = GenerateSystemInfoHtml(foundCpuDetails)
-        Using saveFileDialog As New SaveFileDialog()
-            saveFileDialog.Filter = "HTML-Datei (*.html)|*.html|Alle Dateien (*.*)|*.*"
-            saveFileDialog.Title = "CPU-Informationen exportieren"
-            saveFileDialog.FileName = $"CPUInfo_{DateTime.Now:yyyyMMdd_HHmmss}.html"
-            If saveFileDialog.ShowDialog() = DialogResult.OK Then
-                Try
-                    File.WriteAllText(saveFileDialog.FileName, htmlContent, System.Text.Encoding.UTF8)
-                    MessageBox.Show("CPU-Informationen erfolgreich exportiert.", "Export abgeschlossen", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Catch ex As Exception
-                    MessageBox.Show($"Fehler beim Speichern der HTML-Datei: {ex.Message}", "Exportfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End If
-        End Using
+
     End Sub
     Private Function GenerateSystemInfoHtml(cpuData As Dictionary(Of String, String)) As String
         Dim htmlBuilder As New System.Text.StringBuilder()
@@ -1742,5 +1804,4 @@ Public Class Form1
         tos.SetToolTip(ThreadBox, "Die Anzahl der Threads bezeichnet die Anzahl der logischen Kerne im Prozessor." & vbCrLf & "Ein Thread ist ein unabhängiger Ausführungspfad, der von einem Kern verarbeitet werden kann." & vbCrLf & "Ein Prozessor kann mehrere Threads gleichzeitig ausführen, um die Leistung zu steigern.")
         Return Task.CompletedTask
     End Function
-
 End Class
