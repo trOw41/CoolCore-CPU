@@ -149,6 +149,42 @@ Namespace My
                 Me("InfoMessage") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property MashineID() As Integer
+            Get
+                Return CType(Me("MashineID"),Integer)
+            End Get
+            Set
+                Me("MashineID") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property IsCpuSubInfoLoaded() As Boolean
+            Get
+                Return CType(Me("IsCpuSubInfoLoaded"),Boolean)
+            End Get
+            Set
+                Me("IsCpuSubInfoLoaded") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property CName() As String
+            Get
+                Return CType(Me("CName"),String)
+            End Get
+            Set
+                Me("CName") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

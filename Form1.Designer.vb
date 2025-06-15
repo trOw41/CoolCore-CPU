@@ -116,6 +116,8 @@ Partial Class Form1
         Me.DataColumn1 = New System.Data.DataColumn()
         Me.DataColumn2 = New System.Data.DataColumn()
         Me.LblStatusMessage = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.FanBox = New System.Windows.Forms.TextBox()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -267,11 +269,13 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.Label10)
         Me.Panel1.Controls.Add(Me.Threads)
         Me.Panel1.Controls.Add(Me.AllCores)
+        Me.Panel1.Controls.Add(Me.Label8)
         Me.Panel1.Controls.Add(Me.TDP)
         Me.Panel1.Controls.Add(Me.Revision)
         Me.Panel1.Controls.Add(Me.VID)
         Me.Panel1.Controls.Add(Me.Frequency)
         Me.Panel1.Controls.Add(Me.Platform)
+        Me.Panel1.Controls.Add(Me.FanBox)
         Me.Panel1.Controls.Add(Me.TDPBox)
         Me.Panel1.Controls.Add(Me.LithographyBox)
         Me.Panel1.Controls.Add(Me.SockBox)
@@ -843,6 +847,20 @@ Partial Class Form1
         resources.ApplyResources(Me.LblStatusMessage, "LblStatusMessage")
         Me.LblStatusMessage.Name = "LblStatusMessage"
         '
+        'Label8
+        '
+        resources.ApplyResources(Me.Label8, "Label8")
+        Me.Label8.Name = "Label8"
+        '
+        'FanBox
+        '
+        Me.FanBox.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.FanBox.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.FanBox, "FanBox")
+        Me.FanBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.FanBox.Name = "FanBox"
+        Me.FanBox.ReadOnly = True
+        '
         'Form1
         '
         resources.ApplyResources(Me, "$this")
@@ -967,4 +985,6 @@ Partial Class Form1
     Friend WithEvents Label12 As Label
     Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
     Friend WithEvents CpuInfoMenu As ToolStripMenuItem
+    Friend WithEvents Label8 As Label
+    Friend WithEvents FanBox As TextBox
 End Class
