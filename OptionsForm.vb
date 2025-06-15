@@ -3,6 +3,7 @@ Imports System.Windows.Forms
 
 Public Class OptionsForm
     Public Event ThemeChanged As EventHandler(Of String)
+    Private _updateCheckBoxInitialState As CheckState
 
     Private Sub OptionsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case Settings.ApplicationTheme
@@ -17,7 +18,7 @@ Public Class OptionsForm
                 chkStandardTheme.Checked = True
                 Settings.ApplicationTheme = "Standard"
         End Select
-        Label1.Text = "CPU Stresstest Intervall (in Sekunden): " & My.Settings.MonitorTime
+        Label1.Text = "CPU Stresstest Info: " & My.Settings.MonitorTime
         For i = 0 To LogSizeBox.Items.Count - 1
             Dim items = i
             LogSizeBox.Items(i) = Settings.MAX_LOG_SIZE_KB
@@ -27,7 +28,10 @@ Public Class OptionsForm
             End If
         Next
         LogStartStopBox.Checked = Settings.LogStartStop
+        updateCheckBox.Checked = Settings.UpdateCheck
         BootBox.Checked = Settings.BootUp
+        updateCheckBox.Checked = Settings.UpdateCheck
+        _updateCheckBoxInitialState = updateCheckBox.CheckState
         Dim monitorTime = Settings.MonitorTime
         If monitorTime > 0 Then
             For i = 0 To CheckedListBox1.Items.Count - 1
@@ -38,6 +42,7 @@ Public Class OptionsForm
                 End If
             Next
         End If
+
     End Sub
 
     Private Sub ChkDarkTheme_CheckedChanged(sender As Object, e As EventArgs) Handles chkDarkTheme.CheckedChanged
@@ -235,9 +240,30 @@ Public Class OptionsForm
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show($"Error Prozess kan nicht gestzartet werden: {ex.Message}")
+            MessageBox.Show($"Error Prozess kan nicht gestartet werden: {ex.Message}")
             BootBox.Checked = Not BootBox.Checked ' Reset the checkbox state
         End Try
     End Sub
 
+    Private Sub UpdateCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles updateCheckBox.CheckedChanged
+
+    End Sub
+
+
+    Private Sub UpdateCheckBox_CheckStateChanged(sender As Object, e As EventArgs) Handles updateCheckBox.CheckStateChanged
+        If updateCheckBox.CheckState = _updateCheckBoxInitialState Then
+            ' Keine Änderung, keine MessageBox anzeigen
+            Return
+        End If
+
+        If updateCheckBox.CheckState = CheckState.Checked Then
+            My.Settings.UpdateCheck = True
+            'MessageBox.Show("Update Check wurde aktiviert. Sie werden benachrichtigt, wenn eine neue Version verfügbar ist.", "Update Check aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Else
+            My.Settings.UpdateCheck = False
+            MessageBox.Show("Update Check wurde deaktiviert. Sie werden keine Benachrichtigungen über neue Versionen erhalten.", "Update Check deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+
+        _updateCheckBoxInitialState = updateCheckBox.CheckState
+    End Sub
 End Class

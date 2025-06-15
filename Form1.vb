@@ -18,7 +18,7 @@ Imports Microsoft.VisualBasic.Logging
 Imports MySql.Data.MySqlClient
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
-Imports OpenHardwareMonitor.Hardware
+Imports OpenHardwareMonitor.Hardware.Controller.AeroCool
 Imports Timer = System.Windows.Forms.Timer
 
 
@@ -73,6 +73,7 @@ Public Class Form1
     Private _mysqlPassword As String
     Private _mysqlCpuTableName As String
     Private Const MYSQL_CONFIG_FILE As String = "mysql_credentials.json"
+
     'Programm initialization
     Public Sub New()
         InitializeComponent()
@@ -151,7 +152,7 @@ Public Class Form1
         computer.IsCpuEnabled = True
         computer.IsGpuEnabled = True
         LblStatusMessage.ForeColor = Color.Black
-        Me.Text = "CoolCore - Monitoring CPU" & " - " & My.Application.Info.Version.ToString(4)
+        Me.Text = "CoolCore-CPU" & " - " & My.Application.Info.Version.ToString(4)
         ApplyTheme(My.Settings.ApplicationTheme)
         ClearCpuDisplayControls()
 
@@ -177,21 +178,26 @@ Public Class Form1
                                                     Return Task.CompletedTask
                                                 End Function)
         Await hardwareInfoTask
-        Dim url As String = "https://cool-core.de.cool/updates/cool-core/version.txt"
-        Dim versionCheckTask As Task = Task.Run(Sub()
-                                                    Dim latestVersion As String = CheckForUpdatesAsync(url).Result.ToString()
-                                                    If Not String.IsNullOrEmpty(latestVersion) Then
 
-                                                        If Not My.Application.Info.Version.ToString().Equals(latestVersion) Then
+        If My.Settings.UpdateCheck = True Then
+            Dim url As String = "https://cool-core.de.cool/updates/cool-core/version.txt"
+            Dim versionCheckTask As Task = Task.Run(Sub()
+                                                        Dim latestVersion As String = CheckForUpdatesAsync(url).Result.ToString()
+                                                        If Not String.IsNullOrEmpty(latestVersion) Then
 
+                                                            If Not My.Application.Info.Version.ToString().Equals(latestVersion) Then
+
+                                                            Else
+                                                                LblStatusMessage.Text = "You are using the latest version."
+                                                            End If
                                                         Else
-                                                            LblStatusMessage.Text = "You are using the latest version."
+                                                            LblStatusMessage.Text = "Error checking for updates."
+                                                            LblStatusMessage.ForeColor = Color.Red
                                                         End If
-                                                    Else
-                                                        LblStatusMessage.Text = "Error checking for updates."
-                                                        LblStatusMessage.ForeColor = Color.Red
-                                                    End If
-                                                End Sub)
+                                                    End Sub)
+        ElseIf Settings.UpdateCheck = False Then
+        End If
+
 
     End Sub
     Private Sub LoadMySqlCredentials()
@@ -482,6 +488,10 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub UpdateCpuFan()
+
+    End Sub
+
     'Timer Progress
     Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs)
         If cpu Is Nothing Then
@@ -500,6 +510,36 @@ Public Class Form1
             Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
             If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
                 PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W"
+            End If
+            Dim aeroCoolController As AeroCoolGroup = Nothing
+            For Each hw In computer.Hardware
+                If TypeOf hw Is AeroCoolGroup Then
+                    aeroCoolController = CType(hw, AeroCoolGroup)
+                    Debug.WriteLine($"AeroCool Controller gefunden: {hw.Name}")
+                    hw.Update()
+                    Exit For
+                End If
+            Next
+            If aeroCoolController IsNot Nothing Then
+                Dim fanValues As New List(Of String)
+                For Each sensor As ISensor In aeroCoolController.Hardware
+                    If sensor.SensorType = SensorType.Fan AndAlso sensor.Value.HasValue Then
+                        fanValues.Add($"{sensor.Name}: {sensor.Value.Value:F0} RPM")
+                    End If
+                Next
+                If fanValues.Count > 0 Then
+                    FanBox.Text = String.Join(" | ", fanValues)
+                Else
+                    FanBox.Text = "N/A"
+                End If
+            Else
+                ' Fallback: CPU-Lüfter anzeigen, falls AeroCool nicht gefunden
+                Dim cpuFan = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Fan)
+                If cpuFan IsNot Nothing AndAlso cpuFan.Value.HasValue Then
+                    FanBox.Text = $"{cpuFan.Name}: {cpuFan.Value.Value:F0} RPM"
+                Else
+                    FanBox.Text = "N/A"
+                End If
             End If
             For i As Integer = 0 To cpuLoadCounters.Count - 1
                 Dim sensor As ISensor = coreTemperatures(i)
@@ -831,7 +871,6 @@ Public Class Form1
         End If
     End Function
 
-
     Private Async Function GetCpuSubInfos() As Task
         foundCpuDetails.Clear()
         Dim cpuNameFromWMI As String = "N/A"
@@ -1014,7 +1053,7 @@ Public Class Form1
         End If
     End Function
 
-    Private Async Function AMDCpuInfo() As Task
+    Private Function AMDCpuInfo() As Task
         Dim cpuNameFromWMI As String = "N/A"
         Dim processorIdFromWMI As String = "N/A"
         Try
@@ -1049,6 +1088,7 @@ Public Class Form1
             Settings.CName = normalizedWmiCpuName ' Beispielweise den Namen als ID speichern.
         End If
 
+        Return Task.CompletedTask
     End Function
 
     Private Function NormalizeCpuName(ByVal cpuName As String) As String
