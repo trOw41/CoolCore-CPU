@@ -93,11 +93,13 @@ Partial Class Form1
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Threads = New System.Windows.Forms.Label()
         Me.AllCores = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.TDP = New System.Windows.Forms.Label()
         Me.Revision = New System.Windows.Forms.Label()
         Me.VID = New System.Windows.Forms.Label()
         Me.Frequency = New System.Windows.Forms.Label()
         Me.Platform = New System.Windows.Forms.Label()
+        Me.FanBox = New System.Windows.Forms.TextBox()
         Me.TDPBox = New System.Windows.Forms.TextBox()
         Me.LithographyBox = New System.Windows.Forms.TextBox()
         Me.SockBox = New System.Windows.Forms.TextBox()
@@ -116,8 +118,10 @@ Partial Class Form1
         Me.DataColumn1 = New System.Data.DataColumn()
         Me.DataColumn2 = New System.Data.DataColumn()
         Me.LblStatusMessage = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.FanBox = New System.Windows.Forms.TextBox()
+        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.IntelCPUDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AmdCPUDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -179,7 +183,7 @@ Partial Class Form1
         'ToolsToolStripMenuItem
         '
         Me.ToolsToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem, Me.ToolStripSeparator5, Me.CpuInfoMenu})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem, Me.ToolStripSeparator5, Me.CpuInfoMenu, Me.ToolStripSeparator6})
         Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
@@ -216,6 +220,7 @@ Partial Class Form1
         '
         'CpuInfoMenu
         '
+        Me.CpuInfoMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.IntelCPUDBToolStripMenuItem, Me.ToolStripSeparator7, Me.AmdCPUDBToolStripMenuItem})
         Me.CpuInfoMenu.Image = Global.CoolCore.My.Resources.Resources._023_cpu
         Me.CpuInfoMenu.Name = "CpuInfoMenu"
         resources.ApplyResources(Me.CpuInfoMenu, "CpuInfoMenu")
@@ -683,6 +688,11 @@ Partial Class Form1
         resources.ApplyResources(Me.AllCores, "AllCores")
         Me.AllCores.Name = "AllCores"
         '
+        'Label8
+        '
+        resources.ApplyResources(Me.Label8, "Label8")
+        Me.Label8.Name = "Label8"
+        '
         'TDP
         '
         resources.ApplyResources(Me.TDP, "TDP")
@@ -711,6 +721,15 @@ Partial Class Form1
         Me.Platform.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Platform, "Platform")
         Me.Platform.Name = "Platform"
+        '
+        'FanBox
+        '
+        Me.FanBox.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.FanBox.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.FanBox, "FanBox")
+        Me.FanBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.FanBox.Name = "FanBox"
+        Me.FanBox.ReadOnly = True
         '
         'TDPBox
         '
@@ -847,19 +866,25 @@ Partial Class Form1
         resources.ApplyResources(Me.LblStatusMessage, "LblStatusMessage")
         Me.LblStatusMessage.Name = "LblStatusMessage"
         '
-        'Label8
+        'ToolStripSeparator6
         '
-        resources.ApplyResources(Me.Label8, "Label8")
-        Me.Label8.Name = "Label8"
+        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
+        resources.ApplyResources(Me.ToolStripSeparator6, "ToolStripSeparator6")
         '
-        'FanBox
+        'IntelCPUDBToolStripMenuItem
         '
-        Me.FanBox.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.FanBox.Cursor = System.Windows.Forms.Cursors.Default
-        resources.ApplyResources(Me.FanBox, "FanBox")
-        Me.FanBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.FanBox.Name = "FanBox"
-        Me.FanBox.ReadOnly = True
+        Me.IntelCPUDBToolStripMenuItem.Name = "IntelCPUDBToolStripMenuItem"
+        resources.ApplyResources(Me.IntelCPUDBToolStripMenuItem, "IntelCPUDBToolStripMenuItem")
+        '
+        'ToolStripSeparator7
+        '
+        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
+        resources.ApplyResources(Me.ToolStripSeparator7, "ToolStripSeparator7")
+        '
+        'AmdCPUDBToolStripMenuItem
+        '
+        Me.AmdCPUDBToolStripMenuItem.Name = "AmdCPUDBToolStripMenuItem"
+        resources.ApplyResources(Me.AmdCPUDBToolStripMenuItem, "AmdCPUDBToolStripMenuItem")
         '
         'Form1
         '
@@ -987,4 +1012,8 @@ Partial Class Form1
     Friend WithEvents CpuInfoMenu As ToolStripMenuItem
     Friend WithEvents Label8 As Label
     Friend WithEvents FanBox As TextBox
+    Friend WithEvents IntelCPUDBToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
+    Friend WithEvents AmdCPUDBToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator6 As ToolStripSeparator
 End Class

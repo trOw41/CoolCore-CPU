@@ -117,14 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="TextBox1.Text" xml:space="preserve">
-    <value>Um Ihnen die bestmögliche Überwachung Ihrer CPU zu bieten, benötigt CoolCore beim **ersten Start** eine Internetverbindung. Diese Verbindung wird genutzt, um wichtige Metadaten wie die Lithographie oder die TjMax-Temperatur spezifisch für Ihre CPU von unseren Servern herunterzuladen.
-
-**Keine Sorge:** Dieser Internetzugriff ist nur bei der Neu- oder Erstinstallation erforderlich. Die ermittelten Daten werden anschließend als Datenbank auf Ihrem PC gespeichert, sodass CoolCore danach **keinen weiteren Netzwerkzugriff** benötigt, um seine Hauptfunktionen auszuführen.
-CoolCore versucht bei jedem Start im Hintergrund, den Update-Server zu erreichen. Dies ist ein **optionaler täglicher Update-Check** und keine zwingende Voraussetzung für die Nutzung des Tools.
-
-Wir wünschen Ihnen viel Erfolg mit CoolCore!</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

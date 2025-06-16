@@ -119,7 +119,7 @@ Public Class Form1
 
         Dim InitBoxes As Task = Task.Run(Function() CeckTempLoadBoxes())
 
-        refreshTimer.Start()
+
     End Sub
 
     'Admin check
@@ -130,7 +130,7 @@ Public Class Form1
     End Function
 
     'Form Logic
-    Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If Settings.FirstStart Then
             Dim res As DialogResult = WelcomeForm.ShowDialog(Me)
             If res = DialogResult.OK Then
@@ -138,10 +138,19 @@ Public Class Form1
                 Settings.FirstStart = False
                 Settings.Save()
                 LoadMySqlCredentials()
+                Start_extend()
+                refreshTimer.Start()
+            Else
+                Me.Close()
             End If
         Else
             LoadMySqlCredentials()
+            Start_extend()
+            refreshTimer.Start()
         End If
+    End Sub
+
+    Private Async Sub Start_extend()
         LblStatusMessage.Text = "Ready to read system information."
         LblStatusMessage.ForeColor = Color.Black
         If computer Is Nothing Then
@@ -197,8 +206,6 @@ Public Class Form1
                                                     End Sub)
         ElseIf Settings.UpdateCheck = False Then
         End If
-
-
     End Sub
     Private Sub LoadMySqlCredentials()
         Dim filePath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MYSQL_CONFIG_FILE)
@@ -1608,7 +1615,13 @@ Public Class Form1
         End Using
     End Sub
     Private Sub FAQToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FAQToolStripMenuItem.Click
-        FAQForm.Show()
+        Dim url As String = "https://cool-core.de.cool/faq.html"
+        Dim result As DialogResult = MessageBox.Show("Sie werden zu CoolCore FAQ Website weiter geleitet", "FAQ:", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
+        If result = DialogResult.OK Then
+            Process.Start(url)
+        ElseIf DialogResult.Cancel Then
+
+        End If
     End Sub
     Private Sub SupportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SupportToolStripMenuItem.Click
         Try
@@ -1864,9 +1877,9 @@ Public Class Form1
         End Try
     End Sub
     Private Function GetTemperatureColor(temperature As Single) As Color
-        Const YELLOW_THRESHOLD As Single = 55.0F
-        Const ORANGE_THRESHOLD As Single = 70.0F
-        Const RED_THRESHOLD As Single = 90.0F
+        Const YELLOW_THRESHOLD As Single = 61.0F
+        Const ORANGE_THRESHOLD As Single = 72.0F
+        Const RED_THRESHOLD As Single = 86.0F
         Try
             If temperature <= YELLOW_THRESHOLD Then
                 Return Color.Green
@@ -1965,4 +1978,24 @@ Public Class Form1
         tos.SetToolTip(ThreadBox, "Die Anzahl der Threads bezeichnet die Anzahl der logischen Kerne im Prozessor." & vbCrLf & "Ein Thread ist ein unabhängiger Ausführungspfad, der von einem Kern verarbeitet werden kann." & vbCrLf & "Ein Prozessor kann mehrere Threads gleichzeitig ausführen, um die Leistung zu steigern.")
         Return Task.CompletedTask
     End Function
+
+    Private Sub IntelCPUDBToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles IntelCPUDBToolStripMenuItem.Click
+        Dim url As String = "https://www.cool-core.de.cool/intel_stats.html"
+        Dim result As DialogResult = MessageBox.Show("Sie werden zu CoolCore Intel CPU Database weiter geleitet", "Intel CPU Database:", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
+        If result = DialogResult.OK Then
+            Process.Start(url)
+        ElseIf DialogResult.Cancel Then
+            ' Do nothing if the user cancels
+        End If
+    End Sub
+
+    Private Sub AmdCPUDBToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AmdCPUDBToolStripMenuItem.Click
+        Dim url As String = String.Format("https://www.cool-core.de.cool/AMDCpuDatabaseSupport.html")
+        Dim result As DialogResult = MessageBox.Show("Sie werden zu CoolCore AMD CPU Database weiter geleitet", "AMD CPU Database:", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
+        If result = DialogResult.OK Then
+            Process.Start(url)
+        ElseIf DialogResult.Cancel Then
+            ' Do nothing if the user cancels
+        End If
+    End Sub
 End Class
