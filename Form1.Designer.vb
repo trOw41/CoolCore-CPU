@@ -128,12 +128,18 @@ Partial Class Form1
         Me.SystemViewList = New System.Windows.Forms.ListView()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.GCLabel = New System.Windows.Forms.Label()
+        Me.GCLogo = New System.Windows.Forms.PictureBox()
+        Me.GCList = New System.Windows.Forms.ListView()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.GCClockBox = New System.Windows.Forms.TextBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.GCLoadBox = New System.Windows.Forms.TextBox()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.GCTempBox = New System.Windows.Forms.TextBox()
         Me.GCTempLabel = New System.Windows.Forms.Label()
+        Me.GCLabel = New System.Windows.Forms.Label()
         Me.GCNameBox = New System.Windows.Forms.TextBox()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -146,6 +152,7 @@ Partial Class Form1
         Me.Panel3.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
+        CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -458,7 +465,7 @@ Partial Class Form1
         '
         'BtnToggleMonitor1
         '
-        Me.BtnToggleMonitor1.BackgroundImage = Global.CoolCore.My.Resources.Resources._033_monitor_1
+        Me.BtnToggleMonitor1.BackgroundImage = Global.CoolCore.My.Resources.Resources.fan1
         resources.ApplyResources(Me.BtnToggleMonitor1, "BtnToggleMonitor1")
         Me.BtnToggleMonitor1.Name = "BtnToggleMonitor1"
         '
@@ -928,73 +935,76 @@ Partial Class Form1
         resources.ApplyResources(Me.SystemViewList, "SystemViewList")
         Me.SystemViewList.FullRowSelect = True
         Me.SystemViewList.GridLines = True
+        Me.SystemViewList.HideSelection = False
         Me.SystemViewList.LargeImageList = Me.ImageList1
         Me.SystemViewList.MultiSelect = False
         Me.SystemViewList.Name = "SystemViewList"
         Me.SystemViewList.ShowItemToolTips = True
         Me.SystemViewList.SmallImageList = Me.ImageList1
+        Me.SystemViewList.StateImageList = Me.ImageList1
         Me.SystemViewList.UseCompatibleStateImageBehavior = False
-        Me.SystemViewList.View = System.Windows.Forms.View.Tile
+        Me.SystemViewList.View = System.Windows.Forms.View.Details
         '
         'ImageList1
         '
         Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "001-desktop-computer.png")
-        Me.ImageList1.Images.SetKeyName(1, "002-tablet.png")
-        Me.ImageList1.Images.SetKeyName(2, "003-cpu.png")
-        Me.ImageList1.Images.SetKeyName(3, "004-upgrade.png")
-        Me.ImageList1.Images.SetKeyName(4, "005-hacker.png")
-        Me.ImageList1.Images.SetKeyName(5, "006-restart.png")
-        Me.ImageList1.Images.SetKeyName(6, "007-update.png")
-        Me.ImageList1.Images.SetKeyName(7, "008-repair.png")
-        Me.ImageList1.Images.SetKeyName(8, "009-technology.png")
-        Me.ImageList1.Images.SetKeyName(9, "010-stethoscope.png")
-        Me.ImageList1.Images.SetKeyName(10, "011-warning.png")
-        Me.ImageList1.Images.SetKeyName(11, "012-laptop.png")
-        Me.ImageList1.Images.SetKeyName(12, "013-laptop-1.png")
-        Me.ImageList1.Images.SetKeyName(13, "014-speech-bubble.png")
-        Me.ImageList1.Images.SetKeyName(14, "015-computer.png")
-        Me.ImageList1.Images.SetKeyName(15, "016-shield.png")
-        Me.ImageList1.Images.SetKeyName(16, "017-motherboard.png")
-        Me.ImageList1.Images.SetKeyName(17, "018-biometric-identification.png")
-        Me.ImageList1.Images.SetKeyName(18, "019-laptop-2.png")
-        Me.ImageList1.Images.SetKeyName(19, "020-computer-1.png")
+        Me.ImageList1.Images.SetKeyName(0, "025-gpu.png")
+        Me.ImageList1.Images.SetKeyName(1, "001-app.png")
+        Me.ImageList1.Images.SetKeyName(2, "028-ram.png")
+        Me.ImageList1.Images.SetKeyName(3, "003-coding.png")
+        Me.ImageList1.Images.SetKeyName(4, "047-circuit.png")
+        Me.ImageList1.Images.SetKeyName(5, "006-laptop.png")
+        Me.ImageList1.Images.SetKeyName(6, "021-domain-servers.png")
+        Me.ImageList1.Images.SetKeyName(7, "026-graphics-card.png")
+        Me.ImageList1.Images.SetKeyName(8, "027-gpu-1.png")
+        Me.ImageList1.Images.SetKeyName(9, "038-system-1.png")
         '
         'TabPage3
         '
+        Me.TabPage3.Controls.Add(Me.GCList)
         Me.TabPage3.Controls.Add(Me.Label2)
         Me.TabPage3.Controls.Add(Me.Panel4)
         resources.ApplyResources(Me.TabPage3, "TabPage3")
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
-        'GCLabel
+        'GCLogo
         '
-        resources.ApplyResources(Me.GCLabel, "GCLabel")
-        Me.GCLabel.Name = "GCLabel"
+        Me.GCLogo.BackColor = System.Drawing.SystemColors.ControlLight
+        resources.ApplyResources(Me.GCLogo, "GCLogo")
+        Me.GCLogo.Name = "GCLogo"
+        Me.GCLogo.TabStop = False
         '
-        'GCTempBox
+        'GCList
         '
-        Me.GCTempBox.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.GCTempBox.BorderStyle = System.Windows.Forms.BorderStyle.None
-        resources.ApplyResources(Me.GCTempBox, "GCTempBox")
-        Me.GCTempBox.Name = "GCTempBox"
+        Me.GCList.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.GCList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        resources.ApplyResources(Me.GCList, "GCList")
+        Me.GCList.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.GCList.FullRowSelect = True
+        Me.GCList.GridLines = True
+        Me.GCList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
+        Me.GCList.HideSelection = False
+        Me.GCList.MultiSelect = False
+        Me.GCList.Name = "GCList"
+        Me.GCList.ShowItemToolTips = True
+        Me.GCList.SmallImageList = Me.ImageList1
+        Me.GCList.UseCompatibleStateImageBehavior = False
+        Me.GCList.View = System.Windows.Forms.View.SmallIcon
         '
-        'GCTempLabel
+        'Label2
         '
-        resources.ApplyResources(Me.GCTempLabel, "GCTempLabel")
-        Me.GCTempLabel.Name = "GCTempLabel"
-        '
-        'GCNameBox
-        '
-        Me.GCNameBox.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.GCNameBox.BorderStyle = System.Windows.Forms.BorderStyle.None
-        resources.ApplyResources(Me.GCNameBox, "GCNameBox")
-        Me.GCNameBox.Name = "GCNameBox"
+        resources.ApplyResources(Me.Label2, "Label2")
+        Me.Label2.Name = "Label2"
         '
         'Panel4
         '
+        Me.Panel4.Controls.Add(Me.GCLogo)
+        Me.Panel4.Controls.Add(Me.GCClockBox)
+        Me.Panel4.Controls.Add(Me.Label11)
+        Me.Panel4.Controls.Add(Me.GCLoadBox)
+        Me.Panel4.Controls.Add(Me.Label14)
         Me.Panel4.Controls.Add(Me.GCTempBox)
         Me.Panel4.Controls.Add(Me.GCTempLabel)
         Me.Panel4.Controls.Add(Me.GCLabel)
@@ -1002,10 +1012,64 @@ Partial Class Form1
         resources.ApplyResources(Me.Panel4, "Panel4")
         Me.Panel4.Name = "Panel4"
         '
-        'Label2
+        'GCClockBox
         '
-        resources.ApplyResources(Me.Label2, "Label2")
-        Me.Label2.Name = "Label2"
+        Me.GCClockBox.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.GCClockBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        resources.ApplyResources(Me.GCClockBox, "GCClockBox")
+        Me.GCClockBox.ForeColor = System.Drawing.SystemColors.HotTrack
+        Me.GCClockBox.Name = "GCClockBox"
+        Me.GCClockBox.ReadOnly = True
+        Me.GCClockBox.ShortcutsEnabled = False
+        '
+        'Label11
+        '
+        resources.ApplyResources(Me.Label11, "Label11")
+        Me.Label11.Name = "Label11"
+        '
+        'GCLoadBox
+        '
+        Me.GCLoadBox.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.GCLoadBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        resources.ApplyResources(Me.GCLoadBox, "GCLoadBox")
+        Me.GCLoadBox.ForeColor = System.Drawing.SystemColors.HotTrack
+        Me.GCLoadBox.Name = "GCLoadBox"
+        Me.GCLoadBox.ReadOnly = True
+        Me.GCLoadBox.ShortcutsEnabled = False
+        '
+        'Label14
+        '
+        resources.ApplyResources(Me.Label14, "Label14")
+        Me.Label14.Name = "Label14"
+        '
+        'GCTempBox
+        '
+        Me.GCTempBox.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.GCTempBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        resources.ApplyResources(Me.GCTempBox, "GCTempBox")
+        Me.GCTempBox.ForeColor = System.Drawing.SystemColors.HotTrack
+        Me.GCTempBox.Name = "GCTempBox"
+        Me.GCTempBox.ReadOnly = True
+        Me.GCTempBox.ShortcutsEnabled = False
+        '
+        'GCTempLabel
+        '
+        resources.ApplyResources(Me.GCTempLabel, "GCTempLabel")
+        Me.GCTempLabel.Name = "GCTempLabel"
+        '
+        'GCLabel
+        '
+        resources.ApplyResources(Me.GCLabel, "GCLabel")
+        Me.GCLabel.Name = "GCLabel"
+        '
+        'GCNameBox
+        '
+        Me.GCNameBox.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.GCNameBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        resources.ApplyResources(Me.GCNameBox, "GCNameBox")
+        Me.GCNameBox.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.GCNameBox.Name = "GCNameBox"
+        Me.GCNameBox.ReadOnly = True
         '
         'Form1
         '
@@ -1038,6 +1102,7 @@ Partial Class Form1
         Me.TabPage2.ResumeLayout(False)
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
+        CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
         Me.ResumeLayout(False)
@@ -1154,4 +1219,10 @@ Partial Class Form1
     Friend WithEvents GCNameBox As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Panel4 As Panel
+    Friend WithEvents GCList As ListView
+    Friend WithEvents GCClockBox As TextBox
+    Friend WithEvents Label11 As Label
+    Friend WithEvents GCLoadBox As TextBox
+    Friend WithEvents Label14 As Label
+    Friend WithEvents GCLogo As PictureBox
 End Class

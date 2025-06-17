@@ -31,10 +31,10 @@ Partial Class CpuinfoForm
         '
         Me.Label1.AutoSize = True
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Label1.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(85, 25)
+        Me.Label1.Size = New System.Drawing.Size(65, 19)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "CPU Info:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -42,14 +42,14 @@ Partial Class CpuinfoForm
         'InfoList
         '
         Me.InfoList.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.InfoList.Font = New System.Drawing.Font("Bahnschrift", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.InfoList.Font = New System.Drawing.Font("Bahnschrift", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InfoList.FullRowSelect = True
         Me.InfoList.HideSelection = False
-        Me.InfoList.Location = New System.Drawing.Point(0, 25)
+        Me.InfoList.Location = New System.Drawing.Point(0, 19)
         Me.InfoList.MultiSelect = False
         Me.InfoList.Name = "InfoList"
         Me.InfoList.ShowItemToolTips = True
-        Me.InfoList.Size = New System.Drawing.Size(611, 606)
+        Me.InfoList.Size = New System.Drawing.Size(417, 287)
         Me.InfoList.TabIndex = 1
         Me.InfoList.UseCompatibleStateImageBehavior = False
         Me.InfoList.View = System.Windows.Forms.View.Details
@@ -58,7 +58,7 @@ Partial Class CpuinfoForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(611, 631)
+        Me.ClientSize = New System.Drawing.Size(417, 306)
         Me.Controls.Add(Me.InfoList)
         Me.Controls.Add(Me.Label1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

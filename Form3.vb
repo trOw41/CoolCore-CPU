@@ -48,11 +48,9 @@ Public Class Form3
     End Sub
 
     Private Sub Form3_load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If Settings.ApplicationTheme = "Dark" Then
-            Form3_ThemeChanged(Me, "Dark")
-        Else
-            Form3_ThemeChanged(Me, "Standard")
-        End If
+        Me.BackColor = ColorTranslator.FromHtml("#F0F0F0")
+        Me.ForeColor = ColorTranslator.FromHtml("#333333")
+        _cpuImage = My.Resources.tools_and_utensils
     End Sub
 
     Public Sub UpdateElapsedTime(elapsedTime As TimeSpan)
@@ -92,91 +90,6 @@ Public Class Form3
         End If
     End Sub
 
-    Private Sub ApplyTheme(theme As String)
-        Select Case theme
-            Case "Dark"
-                Me.BackColor = ColorTranslator.FromHtml("#282C34")
-                Me.ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                For Each ctrl As Control In Me.Controls
-                    ApplyThemeToControl(ctrl, theme)
-                Next
-                Me.Icon = My.Resources._024_cpu_1
-            Case "Standard"
-                Me.BackColor = ColorTranslator.FromHtml("#F0F0F0")
-                Me.ForeColor = ColorTranslator.FromHtml("#333333")
-                For Each ctrl As Control In Me.Controls
-                    ApplyThemeToControl(ctrl, theme)
-                Next
-                Me.Icon = My.Resources._023_cpu_1
-        End Select
-    End Sub
-    Private Sub ApplyThemeToControl(ctrl As Control, theme As String)
-        Select Case theme
-            Case "Dark"
-                If TypeOf ctrl Is Button Then
-                    CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#3B4048")
-                    CType(ctrl, Button).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                    CType(ctrl, Button).FlatStyle = FlatStyle.Flat
-                    CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#4A5059")
-                    CType(ctrl, Button).FlatAppearance.BorderSize = 1
-                ElseIf TypeOf ctrl Is TextBox Then
-                    CType(ctrl, TextBox).BackColor = ColorTranslator.FromHtml("#3B4048")
-                    CType(ctrl, TextBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                    CType(ctrl, TextBox).BorderStyle = BorderStyle.FixedSingle
-                ElseIf TypeOf ctrl Is Label Then
-                    CType(ctrl, Label).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                ElseIf TypeOf ctrl Is CheckBox Then
-                    CType(ctrl, CheckBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                ElseIf TypeOf ctrl Is GroupBox Then
-                    CType(ctrl, GroupBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                    CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#282C34")
-                    For Each innerCtrl As Control In ctrl.Controls
-                        ApplyThemeToControl(innerCtrl, theme)
-                    Next
-                ElseIf TypeOf ctrl Is Panel Then
-                    CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#282C34")
-                    CType(ctrl, Panel).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                    For Each innerCtrl As Control In ctrl.Controls
-                        ApplyThemeToControl(innerCtrl, theme)
-                    Next
-                End If
-                _cpuImage = My.Resources.temp1
-            Case "Standard"
-                If TypeOf ctrl Is Button Then
-                    CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#E1E1E1")
-                    CType(ctrl, Button).ForeColor = ColorTranslator.FromHtml("#333333")
-                    CType(ctrl, Button).FlatStyle = FlatStyle.Flat
-                    CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#CCCCCC")
-                    CType(ctrl, Button).FlatAppearance.BorderSize = 1
-                ElseIf TypeOf ctrl Is TextBox Then
-                    CType(ctrl, TextBox).BackColor = Color.White
-                    CType(ctrl, TextBox).ForeColor = ColorTranslator.FromHtml("#333333")
-                    CType(ctrl, TextBox).BorderStyle = BorderStyle.FixedSingle
-                ElseIf TypeOf ctrl Is Label Then
-                    CType(ctrl, Label).ForeColor = ColorTranslator.FromHtml("#333333")
-                ElseIf TypeOf ctrl Is CheckBox Then
-                    CType(ctrl, CheckBox).ForeColor = ColorTranslator.FromHtml("#333333")
-                ElseIf TypeOf ctrl Is GroupBox Then
-                    CType(ctrl, GroupBox).ForeColor = ColorTranslator.FromHtml("#333333")
-                    CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#F0F0F0")
-                    For Each innerCtrl As Control In ctrl.Controls
-                        ApplyThemeToControl(innerCtrl, theme)
-                    Next
-                ElseIf TypeOf ctrl Is Panel Then
-                    CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#F0F0F0")
-                    CType(ctrl, Panel).ForeColor = ColorTranslator.FromHtml("#333333")
-                    For Each innerCtrl As Control In ctrl.Controls
-                        ApplyThemeToControl(innerCtrl, theme)
-                    Next
-                End If
-                _cpuImage = My.Resources.fan1
-        End Select
-    End Sub
-
-    Private Sub Form3_ThemeChanged(sender As Object, newTheme As String)
-        ApplyTheme(newTheme)
-    End Sub
-
 
 
     Private Sub AnimationTimer_Tick(sender As Object, e As EventArgs)
@@ -185,7 +98,7 @@ Public Class Form3
             _pulseDirection *= -1
         End If
 
-        _dataFlowOffset = (_dataFlowOffset + _dataFlowSpeed) Mod 200
+        _dataFlowOffset = (_dataFlowOffset + _dataFlowSpeed) Mod 400
 
         PnlCpuFanAnimation?.Invalidate()
     End Sub
@@ -202,7 +115,7 @@ Public Class Form3
     End Sub
     Private Sub PnlCpuFanAnimation_Paint(sender As Object, e As PaintEventArgs)
         Dim g As Graphics = e.Graphics
-        g.SmoothingMode = SmoothingMode.HighQuality
+        g.SmoothingMode = SmoothingMode.HighSpeed
         g.InterpolationMode = InterpolationMode.HighQualityBicubic
 
         Dim panelWidth As Integer = PnlCpuFanAnimation.Width

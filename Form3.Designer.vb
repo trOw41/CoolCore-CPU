@@ -33,41 +33,47 @@ Partial Class Form3
         '
         'LblLoadingText
         '
-        Me.LblLoadingText.AutoSize = True
+        Me.LblLoadingText.AutoEllipsis = True
         Me.LblLoadingText.BackColor = System.Drawing.Color.Transparent
-        Me.LblLoadingText.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LblLoadingText.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.LblLoadingText.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblLoadingText.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblLoadingText.Location = New System.Drawing.Point(3, 30)
+        Me.LblLoadingText.Location = New System.Drawing.Point(3, 46)
         Me.LblLoadingText.Name = "LblLoadingText"
-        Me.LblLoadingText.Size = New System.Drawing.Size(79, 17)
+        Me.LblLoadingText.Size = New System.Drawing.Size(325, 65)
         Me.LblLoadingText.TabIndex = 1
         Me.LblLoadingText.Text = "Bitte warten.."
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ProgressBar1.Location = New System.Drawing.Point(0, 89)
+        Me.ProgressBar1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ProgressBar1.Location = New System.Drawing.Point(4, 162)
+        Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(0)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(359, 14)
+        Me.ProgressBar1.Size = New System.Drawing.Size(473, 14)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 2
         '
         'TimeLabel
         '
-        Me.TimeLabel.AutoSize = True
-        Me.TimeLabel.Location = New System.Drawing.Point(3, 72)
+        Me.TimeLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TimeLabel.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TimeLabel.Location = New System.Drawing.Point(1, 138)
         Me.TimeLabel.Name = "TimeLabel"
-        Me.TimeLabel.Size = New System.Drawing.Size(38, 14)
+        Me.TimeLabel.Size = New System.Drawing.Size(330, 19)
         Me.TimeLabel.TabIndex = 3
         Me.TimeLabel.Text = "Label1"
         '
         'PnlCpuFanAnimation
         '
+        Me.PnlCpuFanAnimation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PnlCpuFanAnimation.BackColor = System.Drawing.Color.Transparent
-        Me.PnlCpuFanAnimation.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(285, 12)
+        Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(334, 12)
         Me.PnlCpuFanAnimation.Name = "PnlCpuFanAnimation"
-        Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(71, 63)
+        Me.PnlCpuFanAnimation.Padding = New System.Windows.Forms.Padding(3)
+        Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(137, 132)
         Me.PnlCpuFanAnimation.TabIndex = 4
         '
         'AnimationTimer
@@ -78,7 +84,7 @@ Partial Class Form3
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
-        Me.ClientSize = New System.Drawing.Size(359, 103)
+        Me.ClientSize = New System.Drawing.Size(483, 179)
         Me.Controls.Add(Me.PnlCpuFanAnimation)
         Me.Controls.Add(Me.TimeLabel)
         Me.Controls.Add(Me.ProgressBar1)
@@ -93,7 +99,6 @@ Partial Class Form3
         Me.Text = "Form3"
         Me.TopMost = True
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents LblLoadingText As Label

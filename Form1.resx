@@ -456,7 +456,7 @@
     <value>158, 87</value>
   </data>
   <data name="PicBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 83</value>
+    <value>96, 90</value>
   </data>
   <data name="PicBox2.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>StretchImage</value>
@@ -553,10 +553,10 @@
     <value>NoControl</value>
   </data>
   <data name="BtnToggleMonitor1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>106, 0</value>
+    <value>106, 2</value>
   </data>
   <data name="BtnToggleMonitor1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>41, 36</value>
+    <value>41, 40</value>
   </data>
   <data name="BtnToggleMonitor1.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -577,10 +577,10 @@
     <value>NoControl</value>
   </data>
   <data name="Label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 11</value>
+    <value>6, 15</value>
   </data>
   <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 14</value>
+    <value>97, 14</value>
   </data>
   <data name="Label1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -601,10 +601,10 @@
     <value>1</value>
   </data>
   <data name="Panel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>210, 11</value>
+    <value>217, 11</value>
   </data>
   <data name="Panel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 38</value>
+    <value>169, 45</value>
   </data>
   <data name="Panel3.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -1627,7 +1627,7 @@
     <value>7, 195</value>
   </data>
   <data name="Panel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>378, 195</value>
+    <value>371, 195</value>
   </data>
   <data name="Panel2.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2329,7 +2329,7 @@
     <value>0, 0</value>
   </data>
   <data name="Panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>385, 402</value>
+    <value>378, 402</value>
   </data>
   <data name="Panel1.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -2374,7 +2374,7 @@
     <value>0</value>
   </data>
   <data name="SystemViewList.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift SemiLight SemiConde, 9.75pt</value>
+    <value>Bahnschrift SemiLight SemiConde, 10.25pt</value>
   </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>247, 19</value>
@@ -2383,9 +2383,9 @@
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAI
-        GAAAAk1TRnQBSQFMAgEBFAEAARgBAAEIAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
-        AwABQAMAAWADAAEBAQABCAYAARgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADm
+        FAAAAk1TRnQBSQFMAgEBCgEAARABAAEQAQABGAEAARgBAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        AwABYAMAAUgDAAEBAQABCAYAARsYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
         AWYDAAGZAwABzAIAATMDAAIzAgABMwFmAgABMwGZAgABMwHMAgABMwH/AgABZgMAAWYBMwIAAmYCAAFm
@@ -2412,81 +2412,68 @@
         AcwBAAH/AZkB/wEAAf8BzAIAAf8BzAEzAQAB/wHMAWYBAAH/AcwBmQEAAf8CzAEAAf8BzAH/AQAC/wEz
         AQABzAH/AWYBAAL/AZkBAAL/AcwBAAJmAf8BAAFmAf8BZgEAAWYC/wEAAf8CZgEAAf8BZgH/AQAC/wFm
         AQABIQEAAaUBAANfAQADdwEAA4YBAAOWAQADywEAA7IBAAPXAQAD3QEAA+MBAAPqAQAD8QEAA/gBAAHw
-        AfsB/wEAAaQCoAEAA4ADAAH/AgAB/wMAAv8BAAH/AwAB/wEAAf8BAAL/AgAD//8A/wD/AP8ACQAB/wFM
-        Af8DAAHzAUwIAAxMAfQPkAQACZAFAAEaAUwIAAH1Ab0GAAEWBUwB/wVMAZACugOQBWwFkAYABWwHAAH1
-        AZQKAAG9BgAKTAEHAQAPCQH0BZEBzwmRBAAJuQEAAfUFAAGWAZ0ETAH/BEwCAAcJARkHCRCQAQABFgEA
-        AfQEuQRxAbkCAAFMAgAB9AGdAroB7QNMAf8DTAMABgkD9BYJAwAB9AS5BHEBuQIAAfMBAAH/BZ0DTAH/
-        AkwB8wMABAkB8wH0AXoBswHbAfQBCAwJARcHCQG9AgAB9AK5AnEBuQKQArkEAAOdAboDnQFMAU0B/wJM
-        BAABGQIJAvQCegOzAfQB4gMJARkGCQMXBgkBTAIAAfQJuQMAAf8GnQG6AbsDTAGdBAABGQIJAfQDegSz
-        AfQDCQEZBAkB7gUXBQkBlAIAAfQDuQGfAbkBuwIHAbkDAAHgAZ0BugSdAroCTAG5AZ0EAAIZAfIBGgN6
-        BLMB9AMJARkDCQHuAhcBvQQXBAkB/wIAAfQFuQG7AgcBuQIAAf8BugG/BJ0BugGWBLoBnQQAAhkB8wG9
-        A3oEswH0AwkCGQIJAxcBvQEXAf8DFwMJAQABGgEAAfQDuQF+AbkBuwIHAbkCAAFMARkDnQK6AZ0BugKd
-        AroBnQQAAhkB8wEJA7MEegH0AwkDGQEXAbcB/wIXAfQCFwH/ARcDCQEAARYBAAH/CbkCAAH/AQABnQK6
-        AZ0BugKdAboEnQQAAhkB8wEJA7MEegH0AwkDGQMXAf8BFwG3ARcB/wIXAeMCCQIAAUwOAAOdAboDnQG6
-        AZYBugGdBQACGQHzAQkDswR6AfQDCQMZChcBtgIJAwABTAkAAUwEAAKdAboDnQGWAboBnQHzBgAB9AHz
-        AvQCswN6BPQBAAQZBBcBCQQXAwkEAAEWARoFAAGTARsGAAOdAb8DnQH/CgAC9AG7Ar0B9AH/BAAFGQGT
-        AQcCGQEJAZMBtgQJBgAB/wGUAUwBvQsAARkBugHgAf8NAAT0AfMFAAH0DRkCCQH0D5AMAAG0AbMB9AUA
-        CZAKAAMHBgABkAK6A5AFbAWQBAAMswYABWwKAAHwAQcBnQGXAbsBBwH/BQAPCQQADLMB9AWRAc8JkQQA
-        AgcFlwIHBAACCQvdAgkCAAF+ARoMsxCQAwABBwGYApcDcgKXAgcDAAEJDPQBCAEJAgADWQuzEAkCAAEH
-        AZ0ClwF3A5EDlwEHAfACAAEJBPQBFgNMARoD9AEIAQkBvQxZA7MMCQHsAwkCAAEHBJcBcQFsBZcBBwIA
-        ARkD9AEWBUwB8wL0AQgBCQJZAboBswVZAkwCWQOzARkFCQGOAUwB6gFMAgkBbgMJAgABBwGXAZ0HkAKX
-        AQcCAAEZA/QCTAH/AZQB/wJMAvQBCAEJAlkBswGLAbMDWQNMAlkDswEZBAkB6gJMAeoCTAHqBAkCAAEH
-        AZcB4AcZApcBBwIAARkD9AJMAZQB/wNMAvQBCAEJA1kBswGLAbMBWQJMAWkBTAJZA7MBGQUJBUwFCQIA
-        AQcBlwHgBxkClwEHAgABGQP0AkwB/wHjAf8CTAL0AQgBCQRZAbMBiwGzAUwBaQFMA1kDswIZBAkFTAUJ
-        AgABBwGXAeABGQHiBRkClwEHAgABGQP0AZMFTAP0AQgBCQVZAbMBiwOzA1kDswMZAgkB9wFNA0YBTAUJ
-        AgABBwGXAeAB/wYZApcBBwIAARkE9AEHA0wB8wP0AQgBCQVZAfQFswJZAwAEGQFuAQkBkwNvAbUBCQHq
-        AwkCAAEHAZcBnQcZApcBBwIAARkM9AEIAQkEWQL0A7MBeQGzAlkDAAUZAgkCTAGOAgkB7AMJAgACBwiX
-        AZ0CBwMADNUBGQEAA1kC9AFZArMFWQMABxkD6gYJAwAB/wEHAZ0FlwEZAQcFAAGzAZcBegEXCLMB8wIA
-        AVkC9AJZAe0CswRZAwAGGQG1AhkHCQUAAQcE4AGYAQcGAAH/C7MEAAHzBAAB/wG0BwAB9A0ZAgkFAAG8
-        BQcB8wcAAbMBuwIAAfQBswMAAbMB9AYACZADAAH0D5AB9A+QAwABswHbAQABWQEAAVkBAAF+AQABswH0
-        CAAFbAUAAZACugOQBWwGkAK6A5AFbAWQBgABWQEAAVkBAAGgBQAB9AWRAc8JkQEADwkBAA8JAgABswH/
-        AgABWQEAAVkBAAGgAgACswEAEJABAA8JAQACCQEIDAkCAAFZAwAFvQMAAfQBABAJAQAPCQEAAgkB9AgJ
-        AvQCCQIAAVkCAAH/Bb0DAAH0AQAGCQFvA7UBbwUJAQAPCQEAAQkE9AEZAwkB8wP0AbsBCQUAAf8FvQUA
-        ARkKCQFGBAkBAAEZDEwBFgEJAQABGQQJBPQB8QUJAbQBswRZBb0EWQGzARkECQFMBQkBbwQJAQABGQZM
-        Af8GTAEJAQABGQMJA/QBkwL0AfEBCQEIAgkBAAH/AwAGvQH/AwAB9AEZAwkBkwJMBAkBbwQJAQACGQtM
-        AgkBAAEZA/QBCAHDAZkBHAF4ARsB8wL0AgkEAAi9BAACGQEJARYBTAIJAUwCCQEZAvQDCQEAAhkBFgRM
-        Af8ETAMJAQACGQH0AgkBwwEbARoCwwEJAvQCCQQACL0EAAMZAUwECQFMAQkB9AEHAfQDCQEAAxkETAH/
-        A0wBTQMJAQAEGQfDBAkB8QMHCL0BAAMHAxkBTAQJAUwBCQP0AwkBAAQZA0wB/wNMBAkBAAQZAcMC6wHD
-        AesB7QHDBAkCAAMHAb0BmgG9AZoDvQIHAe4BAAMZAZABGQMJAZAHCQEABBkBkwJMAf8CTAUJAQAEGQfD
-        BAkCAAMHAb0BmgG9AZoDvQMHAQADGQGQAZ8CGQHvAZAHCQIABPICTAH/AUwBkwTyAwAD9AbDAfMD9AEA
-        Af8CBwG8AQABvQGaAb0BmgG9AfQBvQEAAwcEGQGfAhkBCAEZBwkHAANMDAAFwwwAAfMIAAH0DRkCCQcA
-        Af8BFg4AAfQBwwH2CgAJkAcACZAHAAmQBwAJkAkABWwLAAVsCwAFbAsABWwFAAH0BZEBzwmRAfQFkQHP
-        CZEB9AWRAc8JkQH0BZEBzwmRQJBFCQGzAbsDCQK0CgkBTAGTAfcBbwFNCwkBTAGTAfcBcwFMCQkBswHV
-        BQkBTAFzAwkBGQMJBosBswKLAwkBGQQJAZMCCQHbAgkBTAQJARkDCQGTARYFCQFMBAkBGQMJAbMBtAHV
-        AwkBTAFGAUwDCQEZAwkBiwIJAosBswIJAYsDCQEZAwkBTQEJAbMDCQHVAQkBTAMJARkLCQFMAwkBGQMJ
-        AdsBswG0AdUBCQFMAUYBTAFNAwkBGQMJCYsDCQEZBAkB2wYJAfcDCQEZBgkBswQJAfcDCQEZBAkB2wGz
-        AbQB+AFGAUwBTQQJAhkNdAEJAhkBCQFzAQkBswoJAhkBCQFzBAkBswcJAhkECQHbBbMECQMZAgkHBwQJ
-        AxkBjgEJAdsCCQGzBwkDGQGOBQkBswYJAxkFCQWzAwkEGQEJB3QECQQZAgkBswEJAbMBCQGzAQkBcwMJ
-        BBkICQGOAwkEGQIJAfQBGQKzAtsBswMJBRkGdAHtBAkEGQJMAgkBswMJAY4DCQQZAUwLCQUZAfQBGQEJ
-        ArMGCQYZBXQFCQQZAkwBGQQJAU0ECQUZAUwBGQQJAUwECQQZAvQBGQEJArMB2wUJCRkHCQYZAQcDTAYJ
-        BhkB7gNMBgkJGQEJAdsFCQH0DRkCCQH0DRkCCQH0DRkCCQH0DRkCCQMAAfUJAAGzFQABWQEAAVkBAAFZ
-        AQABGgGgAQABWQMAAfQPkAsAAbsEkAEADpABkQIAC3YBGQIAAZACugOQBWwFkAsAAboEGQGRAbQNCQGQ
-        AX4BWQR2BBkDdgGQAVkCAA8JBAAGkAEABRkBkAG6DQkBkAIAAXYJBwGXAZYDAAYJAfcBkwcJBgACbAGQ
-        AgAFGQGQCAkBjgFzAgkBgQEJAZAB9AFZAXYJBwHgAZABWQIABAkCTAFNARYCTAFNBAkB/wqQBRkBkAMJ
-        Ae0ECQJMAQkBtQGLAQkBkAEAAfQBdgcHAe8CugGWAfQCAAMJA0wC/wGUA0wDCQHwCpAFGQGQBAkBRgG1
-        AgkBTAFpAW8DCQGQAQABnwF2BAcB9AHwAwcB4AGQAZ8CAAEZAQkLTAIJAfABtAkJBRkBkAEJARkMCQL0
-        AVkBdgQHAvQDBwHgAZABWQIAARkBCQRMAv8BlARMAgkB8AG0AgkCswUJBRkBkAEJAbQBGQG1AQkBRgMJ
-        AUYB7QMJAZACAAF2AgcCtQEHAfIB9AIHAeABlgMAARkBFgtMAgkB8AG0AwkCswQJAhkCkAEZAZABCQEZ
-        AQkBGQFGBAkBtQFGAwkBkAJZAXYBuwGSBAcB8gH0AQcB4AGQAVkCAAEZBUwC/wGUBEwB9wEJAfABtAEZ
-        AwkDswQJAZACAAGQAQkBiwMZCQkBkAIAAXYHBwHyAfQB7QFMAwABGQFNBEwC/wGUBEwCCQHwAbQCGQMJ
-        A7MDCQGQAgABkAEJARkBgQQZBwkBkAJZA3YBlgQHAXYBCQJMAVkCAAIZA0wBtwL/Ab0BFgNMAgkB8AG0
-        AxkCCQGzBQkBkAIAAZABCQEZAYEIGQMJAZACAAl2AkwBRgFMAf8BAAIZA0wF/wNMAgkB8AG0BRkBCQHb
-        BAkBkAMAD5ADAAFZAQABWQEAAVkBAAEaAaABAAJMAUYBTAIAAvIDTAP/A0wC8gEAAfABkAoJAboBkBUA
-        AaABAAGgAQAB9AIAAf8CAANMBQADTAG3A0wFAAyQAbsgAAEHARoHAAGUAU0BGgYAAUIBTQE+BwABPgMA
-        ASgDAAFAAwABYAMAAQEBAAEBBgABAxYAA/+BAAHxAc8B8AMAAfABBwHPAfMB8AMAAfwBHwHPAf0B+AEA
-        AYADAAHwAQUB8AEBAYADAAGgAQYBwAEDAYADAAHgAQYBgAEDAYADAAFgAQcBgAEHAYADAAFgAQcBAAEH
-        AYADAAFgAQcBAAEHAYADAAFgAQYBAAEHAYADAAGgAQYBAAEHAYADAAGgAQYBgAEHAYADAAHfAf8BgAEP
-        AYADAAHvAfsBwAEPAcABAQIAAfMB5wHgAR8B+AEPAgAB/AE/AfgBfwH8AR8EAAH/AfEB8AEHAf4BPwIA
-        AfABAAH8AR8B+AEPAYABAAHwAwAB8AEHAYABAAHAAwAB4AEDAYABAAHAAwABwAEBAYAFAAHAAQEBgAUA
-        AcABAQGABQABwAEBAYAFAAHAAQEBgAUAAcABAQGABQABwAEBAYACAAEHAgABwAEBAYACAAEHAgABwAEB
-        AcABAQEAAQcCAAHgAQcBwAEBAYABBwIAAfgBDwHAAQMB3gF/AgAB+AEPAeYBcwHwAQcEAAHlAVMB/AEf
-        BAAB/QFfAgABgAEAAYABAAHNAVkCAAGAAQABgAEAAdwBHQIAAYABAAGAAQAB2AEdAgABgAEAAYABAAH4
-        AR8CAAGAAQABgAUAAYABAAGAAQABuAEOAgABgAEAAYABAAHwAQ8CAAGAAQABgAEAAfABDwIAAYABAAGA
-        AgABCAIAAYABAAGAAQABwAEBAgABgAEAAYABAAHAAQECAAHAAQEBwAEBAggCAAH+AT8B/AEfAf4B/wIA
-        Af4BfwH+AT8B8AEHAfABBwHwAQcB8AEHAfwBHwH8AR8B/AEfAfwBH3AAAe8B+wL/AeoBlwIAAf8B4AGA
-        AQABwAEDAgAB/wHgAwABAQGAAQAB8AEgAgABwAEDAYABAAH8AWADAAEBAYAFAAGAAQEBgAUAAYABAQGA
-        BgABAQGABQABwAEDAYAGAAEBAYACAAEDAgABwAEDAYACAAEDAwABAQGAAgABAwIAAcABAAGAAgABAwGA
-        AQAB6gGQAcABAQEAAQMC/wHqAdgB+AEPAYABAwP/AfwB/gE/Cw==
+        AfsB/wEAAaQCoAEAA4ADAAH/AgAB/wMAAv8BAAH/AwAB/wEAAf8BAAL/AgAD/yEAAbkC6AG5RgABGQMA
+        Af8CAAHbCgAB/wG5AdsB4QG5AgABuQHhAdsBuUAAAdMCAAHaAwABGQIAAdMKAAG5AQABuQHoBAAB6AG5
+        AQABuQYAAZI4AAEZAgAB4gMAAf8CAAHcCQABuQwAAbk8AA/ZCAABuQMAAf8C2wH/AwABuTwAAeIP2QgA
+        AbkCAAEJAbkC/wG5AeACAAG5Af85AALZAeIP2QEJAdkBugMAAbkB3wH/AgABuQQAAbkCAAH/Ad8BuToA
+        AeIP2QYAAbkEAAHfBAABuQH/AwABuToAAeIP2QYAAbkEAAG5BAABuQQAAbk4AAHiARkB4gK4A/8BuAHo
+        ArgB2wL/AeICuAH/AeIB9AMAAt8B4AIAAbkBwQIAAeEBuQIAAegBuQHfOgAB4gK4AQABuAG5AbgB4gK4
+        ARkCuAEAArgIAAG5AwAB3wO5AwABuTwAAeICuAEAAf8BAAG4AwABGQK4AQACuAcAAd8BuQoAAbkB2zsA
+        AeICuAEAA7gB4gG4AQABGQK4AQACuAcAAdsBuQEAAfQGAAH0AQABuQHoOQABvwG5AQAClQMAAZUDAAHi
+        ApUB/wKVAeIBlQHBBQABswS5AgADuQHfAds9AA+4CQAB6AIAAbkCAAG5AgAB6D4ADLgBCQEAAbgMAAS5
+        PgABvgGVAQALlQEJAgABlQHiAZUB4E4AC7gDAAG4UAAB/w+VFQAB9AIAAfQ4AAH/IwAB9AEAAfQ7AAGb
+        AgABlQIAAf8DAAGVFwAB9D0AAZwCAAGcAgAB/wMAAZUXAAHyUwAB6wrwVQAB7QoAARQ6AAEUAQcBkgIA
+        AfcB9AHtARQlAAH3FQAB9BoAAUMJ8wUAAf8DDgEAAQ4BDy8AAe0aAAH/CwAB/wMAARAgAAHsAfMDAAER
+        DgAB7RkAAeoB/wEHBwAB8gEAAeoB/wIAAf8BEAEAAuoDAAHrFUMB9wMAAe0B8AEAAf8BAAEVAfQEAAYR
+        ARACAAHtAwABQwEAAf8TAAHzAf8BBwEAAewBkgQAAfIBAAHzAwAB7QEOBOwBAAHqLgAB7QUAAfQBAALz
+        AgABEwIAAeoCAAETBgAB/wHvAf8BBwEAAewFAAHyAQAB7wH/BQAB8gERAf8KAAa8AUMJAAHvFQAB/wUA
+        AfQIAAHqAgABEwgAAf8BBwEAAewEAAFDAfJTAAG8AQABEQH/AQcBAAEOAfQCAAHwAQAB8gEAAREB/wcA
+        AQ4DAAH0KQAB9wsAARUJAAHqBgAB6wH/AQcBAAHvBQAB8gEAAewCAAHxCQAB/zUAARMB7AEAAe0HAAH0
+        BQAB8gH/AQcHAAHyAQAB8QH/AQAB8QkAAf8sAAEHCgABDgHzARMEAAG8AfcB9AUAAewB/wEAB+8CAAHs
+        Af8BAAEHAf8IAAH/BwAB/wHvARQiAAHtBAABEAMAAf8B7AH/AfQCAAH/AgAB9AEAAQcB/wHxAfADAAHt
+        CQABEAMAAfQJAAH/HQAB8Q4AAe0EAAHxBAAB9AUAAe0B/woAARQBBwHvAgAB9wHyAfcBFAQAAe0B/wgA
+        Af8sAAHtAgAB9AEAAfAB7AEAAf8BDgHzAbwB/wgAAf8BDgUAAfMC/wHyAQAB8wEAAf8B8gQAAfEJAAH/
+        LAABkgQAARAB9AEAAfEB/wHrAewB9AIAAf8B8gEAAeoEAAHwAwAB8wEAAvMB9AsAARAHAAH/KwABDwgA
+        AbwB/wEAAe8B9AEQDgABBw4AARAHAAH/KQAB9wQAAesB6gMAAv8B6wIAAe0FAAEHAW0XAAEQBwAB/wcA
+        Af8B8AEVDwAQ8gH0BAAB6wESBQABEwEQBwABDgESFwABEAIAAZIBQwMAAf8WAAH0LQAB8QYAAUMFAAFD
+        CAAB6wHvAwAB/ywAAe0YAAHsAQAB8TEAARIBAAHwAgAB7Q0AAe0BEyEAAfcHAAEQIAAC/wMAAe8FAAf0
+        AgAB7RoABhEBFQHsAfcBAAEQAQABBwEAAhEBEAEAAf8yAAHtIAAB7wHtAfcHAAEQHgABQxUAAfEiAAH/
+        BQcCAAYHowAB7CYAARIDAAEOLwABvAETAQcDAAH/ARAB/yQAAbwxAAHzAQAB6gEUCgAB7QH/AQ4RAAGS
+        PQAB9AMAAe0BAAHxCAABvAEAAfMBAAHzAQAB8wEAAfMBFAHzAQAB8wEVAfMBFAHzAQAB8wETPQAB9AEP
+        AgAB8AEAARMBEAcAAfMSAAHtPgAB/wH0AesFAAH3AQABEAHqAgAB8xIAAfQwAAG8AZINAAHvAbwGAAHs
+        BAAB8xIAAfQxAAH/CgAB/wEAAe8EAAH/CAAB8wcAAREKAAH0GQAB6xUAAfMBAAH/BQAB8AgAAfQLAAHz
+        AwAB6wEAAf8B7AQAAe0B/wEAAesDAAH0CwAB8QEAAREIAAEOAgAB9BcAAf8DAAH/BQAB/wEAAgcFAAH/
+        BwAB8wMAAeoCAAETAQAB8wH/AQAB6gIAARIDAAH0CgAB7QMAAREQAAHxARMB/wEUAQAB6gEAAfIBAAHx
+        ARMHAAH/AgAB9AUAAf8LAAEOAQAB/wMAAfMDAAHqBQAB6gHzAeoCAAESAwAB9B8AAfMFAAH/AfMC/wHq
+        BAAB6gIAAf8BAAHwBgABDgHrCgABDgIAAfMCAAHzAwAB6wEAAf8B7AIAAf8BFAHqAgABEgMAAfQDAAHt
+        BQABDgH0BQABkgIAAW0LAAHzAfQBAAEOAZIBAAEOAfMCAAHqBAABEQIAAf8CAAHrAfQBAAHvAfEBAAFD
+        CwABDgIAAfMCAAHzBwABEwMAAewCAAHrAwAB9AsAAfQDAAHsAQAB7QHvAQAB6gQAAfQFAAHzBgAB8wEH
+        Af8B6gcAAf8UAAEOBQAB8xIAAfQDAAH/BwABDgIAAewBAAHsAgABBwEAAQ8DAAHqFQAB8wEAAf8UAAEO
+        BQAB8xIAAfQNAAHtAQAB7AQAAe8BAAHqAgABExUAAfMBAAH/FAABDgEAAf8B6gIAAbwS8wHsDgAB7QYA
+        AQcBAAH/AQAB6gQAAQ8QAAHzFgABDgUAAfMqAAH0GQAB/xQAAQ4FAAHzRAAB/wEAAQcDAAH0DgABDgEA
+        AQ8CAAL0RAAB/wMAAeoCAAH/AbwBBwsAAQ4CAAEPAQAB6h0AAf8BAAHtJQAB/wEAAf8DAAH/BQABDggA
+        AQ4bAAHzLQAB/wFDEwAB6wH3KgAB7wGSHgABEHYAAUIBTQE+BwABPgMAASgDAAFgAwABSAMAAQEBAAEB
+        BQABYAEDFgAD/wEABP8BDwH/BgAB/gHdAb8B8AFhAf8GAAH+Ad0BvwH0AfIBAQYAAf4B3QG/AecB/gF9
+        BgAB+AEAAQ8B9wEOAf0GAAHwAQABDwH2AQYBfQYAAcABAAEBAcYB9gE9BgAB8AEAAQ8B3gHzAb0GAAHw
+        AQABDwHeAfcBvQYAAcABAAEBAcYBZgE9BgAB8QEAAU8B9wEOAf0GAAHxAVwBTwHnAf4BfQYAAfEBBAFP
+        AeUB+gF9BgABwQHcAQEB8AFgAf0GAAHwAQABDwHzAW0B/QYAAfABAAEvAfcBDwH9BgABwAEAASEB9wH/
+        Af0GAAHwAQAB7wH3Af8BAQYAAfABAAEPAfcB/wEzBgAB+AEAAR8B9wH/AScGAAH+AdkBvwH3Af8BLwYA
+        Af4B2QG/AfcB/wEfBgAD/wHwAQABPwYAA/8B+AEAAX8GAAHhAQ8E/wGAAgAD/wHAAQcBgAP/AYACAAP/
+        AZ8B+QHSA/8BggFAAQAD/wGPAekBkgGAAgABgAIAAegBAQGHAYgB6wGAAwABgAIAAeoBJQGXAQoB6QHx
+        AYACAAGAAgABiwH9AbcBygFPAf8BwAEAAQED/wGgAgABiQGpAfkBwAEAAQMB8AEAAQcBoAIAAYkB6wF5
+        Ac8B/wH7A/8BgwEgAcgBjwHpAX8BzwH/AfsBgAIAAeUBQQEEAZABGQE/Ac8BwAH7AYACAAGFAQkBIAHf
+        AfcBPwHPAYAB+wGaAUMB+AHjAQoBUgHhAQ8BPwHPAYAB+wGAAgABgAEKAVIB4QFPAX8BzwH/AfsBgAIA
+        AaIBCAG0AcEB9wHfAc8BgAH7AcABAAEBAaQBAQFUAc0B9wHfAc8BgAH7AfABAAEHAYABYAGYAf0B9wHf
+        Ac8BwAH7AfABAAEHAYACAAGCAQgBGQHPAf8B+wGAAQABAQHgAgABvQH3AfkBzwH/AfsBgAIAAe8C/wFf
+        Av8B4AEAAQMBgAIAAQ8C/wG/Ad8B3gP/AYIBQAEAA/8BgAEVARYD/wGAAgAE/wEfAd4D/wGAAgAE/wLA
+        FP8BjwP/AeABHAEDBP8B/AEhA/8BwAEIAQEE/wH4AXUBwAEIAQAB3wHJAfkE/wH5AY0B0AIAAd8ByQH5
+        BP8B+QElAdcB/wH+Ad8ByQH5A/8BggGAAXQBFwH/Af4B3wHJAfkBwAEAAUEBPwH2AXYBVwH/Af4B3wHJ
+        AfkD/wE/AfEBZAFXAZcBngHfAckB+QGAAgABPgH9AQ0BVwFHAS4BwAEIAQEBgAEAAQEBMgHJAfUBVwFB
+        AW4B4AEcAQMBwAEUAQEBJgHMASEBFwF0AW4D/wHAAdgBAQEmAc8BjQGXAUQBbgHgAR8BDwHAAUkBgQEy
+        AV8B/QEXAZEBbgHAAQ4BBwGAAcgBAQE/Af8B/QFTAf8B/gHPAcwBYwGAAgABPwH/Af0BUQH/Af4B3wHI
+        AfEBgAIAAT8B/wH9ARACAAHfAckB+AGBAf8BwAIAAQEB1wL/Ad8BywH8A/8BPwH/Af0BlwL/Ad8ByQH5
+        A/8BIgE4AQ0BZwL/Ad8BzAHzA/8BKgEbAe0BjwL/Ac8BjgFnA/8BIgE4AQ0D/wHAAR8BDwP/AT8B/wH5
+        Bf8BnwP/AYABAAEDDP8L
 </value>
   </data>
   <data name="SystemViewList.Location" type="System.Drawing.Point, System.Drawing">
@@ -2537,6 +2524,30 @@
   <data name="&gt;&gt;TabPage2.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="GCList.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Bahnschrift SemiLight SemiConde, 9.75pt</value>
+  </data>
+  <data name="GCList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 195</value>
+  </data>
+  <data name="GCList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>362, 194</value>
+  </data>
+  <data name="GCList.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;GCList.Name" xml:space="preserve">
+    <value>GCList</value>
+  </data>
+  <data name="&gt;&gt;GCList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;GCList.Parent" xml:space="preserve">
+    <value>TabPage3</value>
+  </data>
+  <data name="&gt;&gt;GCList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="Label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -2544,7 +2555,7 @@
     <value>Bahnschrift SemiCondensed, 12pt</value>
   </data>
   <data name="Label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 3</value>
+    <value>4, 3</value>
   </data>
   <data name="Label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>176, 19</value>
@@ -2553,7 +2564,7 @@
     <value>4</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Grafik Karten Information:</value>
+    <value>Grafik Vendor Information:</value>
   </data>
   <data name="&gt;&gt;Label2.Name" xml:space="preserve">
     <value>Label2</value>
@@ -2565,22 +2576,175 @@
     <value>TabPage3</value>
   </data>
   <data name="&gt;&gt;Label2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="GCLogo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>261, 80</value>
+  </data>
+  <data name="GCLogo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 77</value>
+  </data>
+  <data name="GCLogo.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="GCLogo.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;GCLogo.Name" xml:space="preserve">
+    <value>GCLogo</value>
+  </data>
+  <data name="&gt;&gt;GCLogo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;GCLogo.Parent" xml:space="preserve">
+    <value>Panel4</value>
+  </data>
+  <data name="&gt;&gt;GCLogo.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="GCClockBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 10pt</value>
+  </data>
+  <data name="GCClockBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>261, 51</value>
+  </data>
+  <data name="GCClockBox.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="GCClockBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 20</value>
+  </data>
+  <data name="GCClockBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;GCClockBox.Name" xml:space="preserve">
+    <value>GCClockBox</value>
+  </data>
+  <data name="&gt;&gt;GCClockBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;GCClockBox.Parent" xml:space="preserve">
+    <value>Panel4</value>
+  </data>
+  <data name="&gt;&gt;GCClockBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="Label11.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label11.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Label11.Location" type="System.Drawing.Point, System.Drawing">
+    <value>186, 53</value>
+  </data>
+  <data name="Label11.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 14</value>
+  </data>
+  <data name="Label11.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="Label11.Text" xml:space="preserve">
+    <value>Clock(Mhz):</value>
+  </data>
+  <data name="&gt;&gt;Label11.Name" xml:space="preserve">
+    <value>Label11</value>
+  </data>
+  <data name="&gt;&gt;Label11.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label11.Parent" xml:space="preserve">
+    <value>Panel4</value>
+  </data>
+  <data name="&gt;&gt;Label11.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="GCLoadBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 10pt</value>
+  </data>
+  <data name="GCLoadBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>85, 81</value>
+  </data>
+  <data name="GCLoadBox.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>52, 20</value>
+  </data>
+  <data name="GCLoadBox.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="GCLoadBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>52, 20</value>
+  </data>
+  <data name="GCLoadBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="GCLoadBox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;GCLoadBox.Name" xml:space="preserve">
+    <value>GCLoadBox</value>
+  </data>
+  <data name="&gt;&gt;GCLoadBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;GCLoadBox.Parent" xml:space="preserve">
+    <value>Panel4</value>
+  </data>
+  <data name="&gt;&gt;GCLoadBox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="Label14.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label14.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Label14.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 85</value>
+  </data>
+  <data name="Label14.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 14</value>
+  </data>
+  <data name="Label14.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="Label14.Text" xml:space="preserve">
+    <value>load % :</value>
+  </data>
+  <data name="&gt;&gt;Label14.Name" xml:space="preserve">
+    <value>Label14</value>
+  </data>
+  <data name="&gt;&gt;Label14.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label14.Parent" xml:space="preserve">
+    <value>Panel4</value>
+  </data>
+  <data name="&gt;&gt;Label14.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="GCTempBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 10pt</value>
   </data>
   <data name="GCTempBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>85, 51</value>
   </data>
+  <data name="GCTempBox.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>52, 20</value>
+  </data>
+  <data name="GCTempBox.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
   <data name="GCTempBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 15</value>
+    <value>52, 20</value>
   </data>
   <data name="GCTempBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
+  <data name="GCTempBox.Text" xml:space="preserve">
+    <value>temperatur</value>
+  </data>
   <data name="GCTempBox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
-  </data>
-  <data name="GCTempBox.WordWrap" type="System.Boolean, mscorlib">
-    <value>False</value>
   </data>
   <data name="&gt;&gt;GCTempBox.Name" xml:space="preserve">
     <value>GCTempBox</value>
@@ -2592,13 +2756,13 @@
     <value>Panel4</value>
   </data>
   <data name="&gt;&gt;GCTempBox.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>5</value>
   </data>
   <data name="GCTempLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="GCTempLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 51</value>
+    <value>9, 51</value>
   </data>
   <data name="GCTempLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>70, 14</value>
@@ -2619,13 +2783,13 @@
     <value>Panel4</value>
   </data>
   <data name="&gt;&gt;GCTempLabel.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>6</value>
   </data>
   <data name="GCLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="GCLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 7</value>
+    <value>9, 12</value>
   </data>
   <data name="GCLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>40, 14</value>
@@ -2646,22 +2810,25 @@
     <value>Panel4</value>
   </data>
   <data name="&gt;&gt;GCLabel.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>7</value>
+  </data>
+  <data name="GCNameBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Bahnschrift SemiLight SemiConde, 10pt, style=Bold</value>
   </data>
   <data name="GCNameBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>85, 9</value>
   </data>
+  <data name="GCNameBox.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
   <data name="GCNameBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>176, 15</value>
+    <value>266, 24</value>
   </data>
   <data name="GCNameBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="GCNameBox.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="GCNameBox.WordWrap" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="GCNameBox.Text" xml:space="preserve">
+    <value>Titel</value>
   </data>
   <data name="&gt;&gt;GCNameBox.Name" xml:space="preserve">
     <value>GCNameBox</value>
@@ -2673,13 +2840,13 @@
     <value>Panel4</value>
   </data>
   <data name="&gt;&gt;GCNameBox.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>8</value>
   </data>
   <data name="Panel4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 53</value>
+    <value>8, 25</value>
   </data>
   <data name="Panel4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>362, 90</value>
+    <value>362, 164</value>
   </data>
   <data name="Panel4.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2694,7 +2861,7 @@
     <value>TabPage3</value>
   </data>
   <data name="&gt;&gt;Panel4.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="TabPage3.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 23</value>

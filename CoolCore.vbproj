@@ -311,6 +311,10 @@
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\nvidia-logo-vert.png" />
+    <None Include="Resources\pngegg.png" />
+    <None Include="Resources\atiamdlogo.png" />
+    <None Include="Resources\Nvidia-Logo.wine.png" />
     <Content Include="WilkommenInfo.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

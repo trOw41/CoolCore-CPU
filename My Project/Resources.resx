@@ -244,4 +244,16 @@
   <data name="_78_11594827525_045_firmware" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\78_11594827525_045-firmware.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="atiamdlogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\atiamdlogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Nvidia_Logo_wine" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Nvidia-Logo.wine.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pngegg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pngegg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tools_and_utensils" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tools-and-utensils.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
