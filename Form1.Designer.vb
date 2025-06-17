@@ -23,6 +23,7 @@ Partial Class Form1
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -38,12 +39,23 @@ Partial Class Form1
         Me.LoadArchivedMeasurementsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.CpuInfoMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.IntelCPUDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AmdCPUDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InfoMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.FAQToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.SupportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DataSet1 = New System.Data.DataSet()
+        Me.DataTable1 = New System.Data.DataTable()
+        Me.DataColumn1 = New System.Data.DataColumn()
+        Me.DataColumn2 = New System.Data.DataColumn()
+        Me.LblStatusMessage = New System.Windows.Forms.Label()
+        Me.Standard = New System.Windows.Forms.TabControl()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PicBox2 = New System.Windows.Forms.PictureBox()
@@ -112,24 +124,29 @@ Partial Class Form1
         Me.PlatformBox = New System.Windows.Forms.TextBox()
         Me.ModelBox = New System.Windows.Forms.TextBox()
         Me.Model = New System.Windows.Forms.Label()
+        Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.SystemViewList = New System.Windows.Forms.ListView()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
+        Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.GCLabel = New System.Windows.Forms.Label()
+        Me.GCTempBox = New System.Windows.Forms.TextBox()
+        Me.GCTempLabel = New System.Windows.Forms.Label()
+        Me.GCNameBox = New System.Windows.Forms.TextBox()
+        Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.DataSet1 = New System.Data.DataSet()
-        Me.DataTable1 = New System.Data.DataTable()
-        Me.DataColumn1 = New System.Data.DataColumn()
-        Me.DataColumn2 = New System.Data.DataColumn()
-        Me.LblStatusMessage = New System.Windows.Forms.Label()
-        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
-        Me.IntelCPUDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
-        Me.AmdCPUDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
+        CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Standard.SuspendLayout()
+        Me.TabPage1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
-        CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabPage2.SuspendLayout()
+        Me.TabPage3.SuspendLayout()
+        Me.Panel4.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -225,6 +242,28 @@ Partial Class Form1
         Me.CpuInfoMenu.Name = "CpuInfoMenu"
         resources.ApplyResources(Me.CpuInfoMenu, "CpuInfoMenu")
         '
+        'IntelCPUDBToolStripMenuItem
+        '
+        Me.IntelCPUDBToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources.IntelLogo
+        Me.IntelCPUDBToolStripMenuItem.Name = "IntelCPUDBToolStripMenuItem"
+        resources.ApplyResources(Me.IntelCPUDBToolStripMenuItem, "IntelCPUDBToolStripMenuItem")
+        '
+        'ToolStripSeparator7
+        '
+        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
+        resources.ApplyResources(Me.ToolStripSeparator7, "ToolStripSeparator7")
+        '
+        'AmdCPUDBToolStripMenuItem
+        '
+        Me.AmdCPUDBToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources.AMDLogo_Dark
+        Me.AmdCPUDBToolStripMenuItem.Name = "AmdCPUDBToolStripMenuItem"
+        resources.ApplyResources(Me.AmdCPUDBToolStripMenuItem, "AmdCPUDBToolStripMenuItem")
+        '
+        'ToolStripSeparator6
+        '
+        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
+        resources.ApplyResources(Me.ToolStripSeparator6, "ToolStripSeparator6")
+        '
         'HelpToolStripMenuItem
         '
         Me.HelpToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
@@ -261,9 +300,49 @@ Partial Class Form1
         Me.SupportToolStripMenuItem.Name = "SupportToolStripMenuItem"
         resources.ApplyResources(Me.SupportToolStripMenuItem, "SupportToolStripMenuItem")
         '
+        'DataSet1
+        '
+        Me.DataSet1.DataSetName = "NewDataSet"
+        Me.DataSet1.Tables.AddRange(New System.Data.DataTable() {Me.DataTable1})
+        '
+        'DataTable1
+        '
+        Me.DataTable1.Columns.AddRange(New System.Data.DataColumn() {Me.DataColumn1, Me.DataColumn2})
+        Me.DataTable1.TableName = "StringTable"
+        '
+        'DataColumn1
+        '
+        Me.DataColumn1.ColumnName = "Name"
+        '
+        'DataColumn2
+        '
+        Me.DataColumn2.ColumnName = "Wert"
+        '
+        'LblStatusMessage
+        '
+        resources.ApplyResources(Me.LblStatusMessage, "LblStatusMessage")
+        Me.LblStatusMessage.Name = "LblStatusMessage"
+        '
+        'Standard
+        '
+        Me.Standard.Controls.Add(Me.TabPage1)
+        Me.Standard.Controls.Add(Me.TabPage2)
+        Me.Standard.Controls.Add(Me.TabPage3)
+        resources.ApplyResources(Me.Standard, "Standard")
+        Me.Standard.HotTrack = True
+        Me.Standard.Multiline = True
+        Me.Standard.Name = "Standard"
+        Me.Standard.SelectedIndex = 0
+        '
+        'TabPage1
+        '
+        Me.TabPage1.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.TabPage1.Controls.Add(Me.Panel1)
+        resources.ApplyResources(Me.TabPage1, "TabPage1")
+        Me.TabPage1.Name = "TabPage1"
+        '
         'Panel1
         '
-        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel1.Controls.Add(Me.PictureBox1)
         Me.Panel1.Controls.Add(Me.PicBox2)
         Me.Panel1.Controls.Add(Me.Label7)
@@ -836,55 +915,97 @@ Partial Class Form1
         Me.Model.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Model.Name = "Model"
         '
+        'TabPage2
+        '
+        Me.TabPage2.Controls.Add(Me.SystemViewList)
+        resources.ApplyResources(Me.TabPage2, "TabPage2")
+        Me.TabPage2.Name = "TabPage2"
+        Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'SystemViewList
+        '
+        Me.SystemViewList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        resources.ApplyResources(Me.SystemViewList, "SystemViewList")
+        Me.SystemViewList.FullRowSelect = True
+        Me.SystemViewList.GridLines = True
+        Me.SystemViewList.LargeImageList = Me.ImageList1
+        Me.SystemViewList.MultiSelect = False
+        Me.SystemViewList.Name = "SystemViewList"
+        Me.SystemViewList.ShowItemToolTips = True
+        Me.SystemViewList.SmallImageList = Me.ImageList1
+        Me.SystemViewList.UseCompatibleStateImageBehavior = False
+        Me.SystemViewList.View = System.Windows.Forms.View.Tile
+        '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "001-desktop-computer.png")
+        Me.ImageList1.Images.SetKeyName(1, "002-tablet.png")
+        Me.ImageList1.Images.SetKeyName(2, "003-cpu.png")
+        Me.ImageList1.Images.SetKeyName(3, "004-upgrade.png")
+        Me.ImageList1.Images.SetKeyName(4, "005-hacker.png")
+        Me.ImageList1.Images.SetKeyName(5, "006-restart.png")
+        Me.ImageList1.Images.SetKeyName(6, "007-update.png")
+        Me.ImageList1.Images.SetKeyName(7, "008-repair.png")
+        Me.ImageList1.Images.SetKeyName(8, "009-technology.png")
+        Me.ImageList1.Images.SetKeyName(9, "010-stethoscope.png")
+        Me.ImageList1.Images.SetKeyName(10, "011-warning.png")
+        Me.ImageList1.Images.SetKeyName(11, "012-laptop.png")
+        Me.ImageList1.Images.SetKeyName(12, "013-laptop-1.png")
+        Me.ImageList1.Images.SetKeyName(13, "014-speech-bubble.png")
+        Me.ImageList1.Images.SetKeyName(14, "015-computer.png")
+        Me.ImageList1.Images.SetKeyName(15, "016-shield.png")
+        Me.ImageList1.Images.SetKeyName(16, "017-motherboard.png")
+        Me.ImageList1.Images.SetKeyName(17, "018-biometric-identification.png")
+        Me.ImageList1.Images.SetKeyName(18, "019-laptop-2.png")
+        Me.ImageList1.Images.SetKeyName(19, "020-computer-1.png")
+        '
+        'TabPage3
+        '
+        Me.TabPage3.Controls.Add(Me.Label2)
+        Me.TabPage3.Controls.Add(Me.Panel4)
+        resources.ApplyResources(Me.TabPage3, "TabPage3")
+        Me.TabPage3.Name = "TabPage3"
+        Me.TabPage3.UseVisualStyleBackColor = True
+        '
+        'GCLabel
+        '
+        resources.ApplyResources(Me.GCLabel, "GCLabel")
+        Me.GCLabel.Name = "GCLabel"
+        '
+        'GCTempBox
+        '
+        Me.GCTempBox.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.GCTempBox.BorderStyle = System.Windows.Forms.BorderStyle.None
+        resources.ApplyResources(Me.GCTempBox, "GCTempBox")
+        Me.GCTempBox.Name = "GCTempBox"
+        '
+        'GCTempLabel
+        '
+        resources.ApplyResources(Me.GCTempLabel, "GCTempLabel")
+        Me.GCTempLabel.Name = "GCTempLabel"
+        '
+        'GCNameBox
+        '
+        Me.GCNameBox.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.GCNameBox.BorderStyle = System.Windows.Forms.BorderStyle.None
+        resources.ApplyResources(Me.GCNameBox, "GCNameBox")
+        Me.GCNameBox.Name = "GCNameBox"
+        '
+        'Panel4
+        '
+        Me.Panel4.Controls.Add(Me.GCTempBox)
+        Me.Panel4.Controls.Add(Me.GCTempLabel)
+        Me.Panel4.Controls.Add(Me.GCLabel)
+        Me.Panel4.Controls.Add(Me.GCNameBox)
+        resources.ApplyResources(Me.Panel4, "Panel4")
+        Me.Panel4.Name = "Panel4"
+        '
         'Label2
         '
         resources.ApplyResources(Me.Label2, "Label2")
-        Me.Label2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Label2.Name = "Label2"
-        Me.Label2.UseCompatibleTextRendering = True
-        '
-        'DataSet1
-        '
-        Me.DataSet1.DataSetName = "NewDataSet"
-        Me.DataSet1.Tables.AddRange(New System.Data.DataTable() {Me.DataTable1})
-        '
-        'DataTable1
-        '
-        Me.DataTable1.Columns.AddRange(New System.Data.DataColumn() {Me.DataColumn1, Me.DataColumn2})
-        Me.DataTable1.TableName = "StringTable"
-        '
-        'DataColumn1
-        '
-        Me.DataColumn1.ColumnName = "Name"
-        '
-        'DataColumn2
-        '
-        Me.DataColumn2.ColumnName = "Wert"
-        '
-        'LblStatusMessage
-        '
-        resources.ApplyResources(Me.LblStatusMessage, "LblStatusMessage")
-        Me.LblStatusMessage.Name = "LblStatusMessage"
-        '
-        'ToolStripSeparator6
-        '
-        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        resources.ApplyResources(Me.ToolStripSeparator6, "ToolStripSeparator6")
-        '
-        'IntelCPUDBToolStripMenuItem
-        '
-        Me.IntelCPUDBToolStripMenuItem.Name = "IntelCPUDBToolStripMenuItem"
-        resources.ApplyResources(Me.IntelCPUDBToolStripMenuItem, "IntelCPUDBToolStripMenuItem")
-        '
-        'ToolStripSeparator7
-        '
-        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        resources.ApplyResources(Me.ToolStripSeparator7, "ToolStripSeparator7")
-        '
-        'AmdCPUDBToolStripMenuItem
-        '
-        Me.AmdCPUDBToolStripMenuItem.Name = "AmdCPUDBToolStripMenuItem"
-        resources.ApplyResources(Me.AmdCPUDBToolStripMenuItem, "AmdCPUDBToolStripMenuItem")
         '
         'Form1
         '
@@ -892,9 +1013,8 @@ Partial Class Form1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Controls.Add(Me.Standard)
         Me.Controls.Add(Me.LblStatusMessage)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -904,6 +1024,10 @@ Partial Class Form1
         Me.Name = "Form1"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Standard.ResumeLayout(False)
+        Me.TabPage1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -911,8 +1035,11 @@ Partial Class Form1
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.Panel3.ResumeLayout(False)
-        CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TabPage2.ResumeLayout(False)
+        Me.TabPage3.ResumeLayout(False)
+        Me.TabPage3.PerformLayout()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -922,79 +1049,18 @@ Partial Class Form1
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents LogMenuItem As ToolStripMenuItem
-    Friend WithEvents Panel1 As Panel
     Friend WithEvents CloseToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents Label2 As Label
-    Friend WithEvents ModelBox As TextBox
-    Friend WithEvents Model As Label
-    Friend WithEvents Platform As Label
-    Friend WithEvents FrequencyBox As TextBox
-    Friend WithEvents PlatformBox As TextBox
-    Friend WithEvents VID As Label
-    Friend WithEvents Frequency As Label
-    Friend WithEvents VidBox As TextBox
-    Friend WithEvents Label4 As Label
-    Friend WithEvents Revision As Label
-    Friend WithEvents SockBox As TextBox
-    Friend WithEvents CPUIDBox As TextBox
-    Friend WithEvents TDPBox As TextBox
-    Friend WithEvents LithographyBox As TextBox
-    Friend WithEvents Panel2 As Panel
-    Friend WithEvents Lithography As Label
-    Friend WithEvents TDP As Label
-    Friend WithEvents CoreTemp2 As TextBox
-    Friend WithEvents CoreTemp1 As TextBox
-    Friend WithEvents CoreTemp As TextBox
-    Friend WithEvents TJBox As TextBox
-    Friend WithEvents CoreTemp3 As TextBox
-    Friend WithEvents Core0 As Label
-    Friend WithEvents Core2 As Label
-    Friend WithEvents Core3 As Label
-    Friend WithEvents MinTemp As TextBox
-    Friend WithEvents TjMax As Label
-    Friend WithEvents Power As Label
-    Friend WithEvents MinTemplbl As Label
-    Friend WithEvents MaxTemplbl As Label
-    Friend WithEvents MaxTemp2 As TextBox
-    Friend WithEvents MaxTemp1 As TextBox
-    Friend WithEvents MinTemp2 As TextBox
-    Friend WithEvents MinTemp1 As TextBox
-    Friend WithEvents MaxTemp As TextBox
-    Friend WithEvents LoadBox2 As TextBox
-    Friend WithEvents LoadBox1 As TextBox
-    Friend WithEvents LoadBox As TextBox
-    Friend WithEvents MaxTemp3 As TextBox
-    Friend WithEvents MinTemp3 As TextBox
-    Friend WithEvents PowerBox As TextBox
-    Friend WithEvents LoadBox3 As TextBox
-    Friend WithEvents Label3 As Label
-    Friend WithEvents Label5 As Label
-    Friend WithEvents PowerBox2 As TextBox
     Friend WithEvents DataSet1 As DataSet
     Friend WithEvents DataTable1 As DataTable
     Friend WithEvents DataColumn1 As DataColumn
     Friend WithEvents DataColumn2 As DataColumn
     Friend WithEvents LblStatusMessage As Label
-    Friend WithEvents Threads As Label
-    Friend WithEvents AllCores As Label
-    Friend WithEvents ThreadBox As TextBox
-    Friend WithEvents CoresBox As TextBox
     Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents InfoMenuItem As ToolStripMenuItem
-    Friend WithEvents BtnToggleMonitor1 As Button
-    Friend WithEvents Panel3 As Panel
-    Friend WithEvents Label1 As Label
     Friend WithEvents LoadArchivedMeasurementsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents Label6 As Label
-    Friend WithEvents VBox4 As TextBox
-    Friend WithEvents VBox3 As TextBox
-    Friend WithEvents VBox2 As TextBox
-    Friend WithEvents Vbox1 As TextBox
     Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExportCPUInfoToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents PictureBox1 As PictureBox
-    Friend WithEvents Label7 As Label
     Friend WithEvents FAQToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SupportToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExportLogToolStripMenuItem As ToolStripMenuItem
@@ -1002,18 +1068,90 @@ Partial Class Form1
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
-    Friend WithEvents PicBox2 As PictureBox
-    Friend WithEvents Label9 As Label
-    Friend WithEvents FrequencyBox2 As TextBox
-    Friend WithEvents Label10 As Label
-    Friend WithEvents Label13 As Label
-    Friend WithEvents Label12 As Label
     Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
     Friend WithEvents CpuInfoMenu As ToolStripMenuItem
-    Friend WithEvents Label8 As Label
-    Friend WithEvents FanBox As TextBox
     Friend WithEvents IntelCPUDBToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
     Friend WithEvents AmdCPUDBToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator6 As ToolStripSeparator
+    Friend WithEvents Standard As TabControl
+    Friend WithEvents TabPage1 As TabPage
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents PicBox2 As PictureBox
+    Friend WithEvents Label7 As Label
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents BtnToggleMonitor1 As Button
+    Friend WithEvents Label1 As Label
+    Friend WithEvents CoreTemp3 As TextBox
+    Friend WithEvents CoreTemp2 As TextBox
+    Friend WithEvents CoreTemp1 As TextBox
+    Friend WithEvents TjMax As Label
+    Friend WithEvents Power As Label
+    Friend WithEvents Label13 As Label
+    Friend WithEvents Label12 As Label
+    Friend WithEvents Label5 As Label
+    Friend WithEvents MaxTemplbl As Label
+    Friend WithEvents Label6 As Label
+    Friend WithEvents MinTemplbl As Label
+    Friend WithEvents Core0 As Label
+    Friend WithEvents Label9 As Label
+    Friend WithEvents Core2 As Label
+    Friend WithEvents Core3 As Label
+    Friend WithEvents CoreTemp As TextBox
+    Friend WithEvents LoadBox2 As TextBox
+    Friend WithEvents MaxTemp2 As TextBox
+    Friend WithEvents LoadBox1 As TextBox
+    Friend WithEvents MaxTemp1 As TextBox
+    Friend WithEvents MinTemp2 As TextBox
+    Friend WithEvents MinTemp1 As TextBox
+    Friend WithEvents PowerBox2 As TextBox
+    Friend WithEvents LoadBox As TextBox
+    Friend WithEvents MaxTemp3 As TextBox
+    Friend WithEvents MaxTemp As TextBox
+    Friend WithEvents LoadBox3 As TextBox
+    Friend WithEvents VBox4 As TextBox
+    Friend WithEvents VBox3 As TextBox
+    Friend WithEvents VBox2 As TextBox
+    Friend WithEvents Vbox1 As TextBox
+    Friend WithEvents MinTemp As TextBox
+    Friend WithEvents MinTemp3 As TextBox
+    Friend WithEvents TJBox As TextBox
+    Friend WithEvents PowerBox As TextBox
+    Friend WithEvents Lithography As Label
+    Friend WithEvents Label4 As Label
+    Friend WithEvents Label10 As Label
+    Friend WithEvents Threads As Label
+    Friend WithEvents AllCores As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents TDP As Label
+    Friend WithEvents Revision As Label
+    Friend WithEvents VID As Label
+    Friend WithEvents Frequency As Label
+    Friend WithEvents Platform As Label
+    Friend WithEvents FanBox As TextBox
+    Friend WithEvents TDPBox As TextBox
+    Friend WithEvents LithographyBox As TextBox
+    Friend WithEvents SockBox As TextBox
+    Friend WithEvents CPUIDBox As TextBox
+    Friend WithEvents VidBox As TextBox
+    Friend WithEvents FrequencyBox2 As TextBox
+    Friend WithEvents FrequencyBox As TextBox
+    Friend WithEvents ThreadBox As TextBox
+    Friend WithEvents CoresBox As TextBox
+    Friend WithEvents PlatformBox As TextBox
+    Friend WithEvents ModelBox As TextBox
+    Friend WithEvents Model As Label
+    Friend WithEvents TabPage2 As TabPage
+    Friend WithEvents SystemViewList As ListView
+    Friend WithEvents ImageList1 As ImageList
+    Friend WithEvents TabPage3 As TabPage
+    Friend WithEvents GCTempLabel As Label
+    Friend WithEvents GCTempBox As TextBox
+    Friend WithEvents GCLabel As Label
+    Friend WithEvents GCNameBox As TextBox
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Panel4 As Panel
 End Class

@@ -23,9 +23,6 @@ Partial Class OptionsForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(OptionsForm))
-        Me.lblThemeSetting = New System.Windows.Forms.Label()
-        Me.chkDarkTheme = New System.Windows.Forms.CheckBox()
-        Me.chkStandardTheme = New System.Windows.Forms.CheckBox()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -35,7 +32,6 @@ Partial Class OptionsForm
         Me.LogStartStopBox = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label20 = New System.Windows.Forms.Label()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
@@ -44,61 +40,21 @@ Partial Class OptionsForm
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.updateCheckBox = New System.Windows.Forms.CheckBox()
         Me.BootBox = New System.Windows.Forms.CheckBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.InfoButton = New System.Windows.Forms.Button()
-        Me.updateCheckBox = New System.Windows.Forms.CheckBox()
-        Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'lblThemeSetting
-        '
-        Me.lblThemeSetting.AutoSize = True
-        Me.lblThemeSetting.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblThemeSetting.Location = New System.Drawing.Point(4, 7)
-        Me.lblThemeSetting.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.lblThemeSetting.Name = "lblThemeSetting"
-        Me.lblThemeSetting.Size = New System.Drawing.Size(49, 18)
-        Me.lblThemeSetting.TabIndex = 0
-        Me.lblThemeSetting.Text = "Theme:"
-        '
-        'chkDarkTheme
-        '
-        Me.chkDarkTheme.AutoSize = True
-        Me.chkDarkTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.chkDarkTheme.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkDarkTheme.Location = New System.Drawing.Point(126, 9)
-        Me.chkDarkTheme.Margin = New System.Windows.Forms.Padding(4)
-        Me.chkDarkTheme.Name = "chkDarkTheme"
-        Me.chkDarkTheme.Size = New System.Drawing.Size(79, 17)
-        Me.chkDarkTheme.TabIndex = 1
-        Me.chkDarkTheme.Text = "DarkTheme"
-        Me.chkDarkTheme.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.chkDarkTheme.UseVisualStyleBackColor = True
-        '
-        'chkStandardTheme
-        '
-        Me.chkStandardTheme.AutoSize = True
-        Me.chkStandardTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.chkStandardTheme.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkStandardTheme.Location = New System.Drawing.Point(222, 9)
-        Me.chkStandardTheme.Margin = New System.Windows.Forms.Padding(4)
-        Me.chkStandardTheme.Name = "chkStandardTheme"
-        Me.chkStandardTheme.Size = New System.Drawing.Size(104, 17)
-        Me.chkStandardTheme.TabIndex = 2
-        Me.chkStandardTheme.Text = "Standard Theme"
-        Me.chkStandardTheme.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.chkStandardTheme.UseVisualStyleBackColor = True
         '
         'btnSave
         '
         Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnSave.Location = New System.Drawing.Point(313, 316)
+        Me.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnSave.Location = New System.Drawing.Point(313, 289)
         Me.btnSave.Margin = New System.Windows.Forms.Padding(4)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(86, 25)
@@ -110,8 +66,8 @@ Partial Class OptionsForm
         '
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnCancel.Location = New System.Drawing.Point(5, 316)
+        Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnCancel.Location = New System.Drawing.Point(5, 289)
         Me.btnCancel.Margin = New System.Windows.Forms.Padding(4)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(92, 25)
@@ -161,7 +117,7 @@ Partial Class OptionsForm
         Me.Label4.Font = New System.Drawing.Font("Bahnschrift SemiLight", 10.0!)
         Me.Label4.ForeColor = System.Drawing.SystemColors.WindowText
         Me.Label4.LiveSetting = System.Windows.Forms.Automation.AutomationLiveSetting.Assertive
-        Me.Label4.Location = New System.Drawing.Point(4, 32)
+        Me.Label4.Location = New System.Drawing.Point(4, 34)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(379, 35)
@@ -211,19 +167,6 @@ Partial Class OptionsForm
         Me.Label20.Text = "KB"
         Me.Label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.Label20.UseMnemonic = False
-        '
-        'Panel2
-        '
-        Me.Panel2.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel2.Controls.Add(Me.chkStandardTheme)
-        Me.Panel2.Controls.Add(Me.chkDarkTheme)
-        Me.Panel2.Controls.Add(Me.lblThemeSetting)
-        Me.Panel2.Location = New System.Drawing.Point(-1, 161)
-        Me.Panel2.Margin = New System.Windows.Forms.Padding(4)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(394, 35)
-        Me.Panel2.TabIndex = 9
         '
         'Label5
         '
@@ -308,10 +251,9 @@ Partial Class OptionsForm
         Me.Panel3.Controls.Add(Me.LogSizeBox)
         Me.Panel3.Controls.Add(Me.Label3)
         Me.Panel3.Controls.Add(Me.Label20)
-        Me.Panel3.Controls.Add(Me.Panel2)
         Me.Panel3.Location = New System.Drawing.Point(5, 103)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(393, 206)
+        Me.Panel3.Size = New System.Drawing.Size(393, 179)
         Me.Panel3.TabIndex = 13
         '
         'Panel4
@@ -321,10 +263,22 @@ Partial Class OptionsForm
         Me.Panel4.Controls.Add(Me.BootBox)
         Me.Panel4.Controls.Add(Me.Label9)
         Me.Panel4.Controls.Add(Me.Label18)
-        Me.Panel4.Location = New System.Drawing.Point(-1, 68)
+        Me.Panel4.Location = New System.Drawing.Point(-1, 87)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(393, 95)
+        Me.Panel4.Size = New System.Drawing.Size(393, 92)
         Me.Panel4.TabIndex = 14
+        '
+        'updateCheckBox
+        '
+        Me.updateCheckBox.AutoSize = True
+        Me.updateCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.updateCheckBox.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.25!)
+        Me.updateCheckBox.Location = New System.Drawing.Point(222, 2)
+        Me.updateCheckBox.Name = "updateCheckBox"
+        Me.updateCheckBox.Size = New System.Drawing.Size(117, 17)
+        Me.updateCheckBox.TabIndex = 8
+        Me.updateCheckBox.Text = "auf Updates prüfen"
+        Me.updateCheckBox.UseVisualStyleBackColor = True
         '
         'BootBox
         '
@@ -359,10 +313,10 @@ Partial Class OptionsForm
         Me.Label18.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Label18.Font = New System.Drawing.Font("Bahnschrift SemiLight", 10.0!)
         Me.Label18.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Label18.Location = New System.Drawing.Point(4, 26)
+        Me.Label18.Location = New System.Drawing.Point(4, 23)
         Me.Label18.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(383, 63)
+        Me.Label18.Size = New System.Drawing.Size(383, 65)
         Me.Label18.TabIndex = 7
         Me.Label18.Text = "Hier können die Einstellungen für einen Start von CoolCore bei System-boot vorgen" &
     "ommen werden. Wenn ""Update check"" aktiviert ist prüft CC bei jedem Start des Pro" &
@@ -386,22 +340,10 @@ Partial Class OptionsForm
         Me.InfoButton.TabIndex = 14
         Me.InfoButton.UseVisualStyleBackColor = True
         '
-        'updateCheckBox
-        '
-        Me.updateCheckBox.AutoSize = True
-        Me.updateCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.updateCheckBox.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.25!)
-        Me.updateCheckBox.Location = New System.Drawing.Point(222, 2)
-        Me.updateCheckBox.Name = "updateCheckBox"
-        Me.updateCheckBox.Size = New System.Drawing.Size(117, 17)
-        Me.updateCheckBox.TabIndex = 8
-        Me.updateCheckBox.Text = "auf Updates prüfen"
-        Me.updateCheckBox.UseVisualStyleBackColor = True
-        '
         'OptionsForm
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
-        Me.ClientSize = New System.Drawing.Size(403, 345)
+        Me.ClientSize = New System.Drawing.Size(403, 318)
         Me.Controls.Add(Me.Label15)
         Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.InfoButton)
@@ -421,8 +363,6 @@ Partial Class OptionsForm
         Me.Name = "OptionsForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Settings"
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         Me.Panel4.ResumeLayout(False)
@@ -431,10 +371,6 @@ Partial Class OptionsForm
         Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents lblThemeSetting As Label
-    Friend WithEvents chkDarkTheme As CheckBox
-    Friend WithEvents chkStandardTheme As CheckBox
     Friend WithEvents btnSave As Button
     Friend WithEvents btnCancel As Button
     Friend WithEvents Label1 As Label
@@ -443,7 +379,6 @@ Partial Class OptionsForm
     Friend WithEvents LogSizeBox As ComboBox
     Friend WithEvents Label4 As Label
     Friend WithEvents LogStartStopBox As CheckBox
-    Friend WithEvents Panel2 As Panel
     Friend WithEvents Label5 As Label
     Friend WithEvents Label6 As Label
     Friend WithEvents Label14 As Label

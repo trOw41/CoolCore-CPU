@@ -8,6 +8,7 @@ Imports System.Management
 Imports System.Net
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports System.Runtime.Serialization
 Imports System.Runtime.Versioning
 Imports System.Security.Principal
 Imports System.Text
@@ -164,8 +165,6 @@ Public Class Form1
         Me.Text = "CoolCore-CPU" & " - " & My.Application.Info.Version.ToString(4)
         ApplyTheme(My.Settings.ApplicationTheme)
         ClearCpuDisplayControls()
-
-
         Await Task.Run(Sub()
                            InitializePerCoreCounters()
                            InitializeCoreTemperatureSensors()
@@ -183,6 +182,7 @@ Public Class Form1
         Dim hardwareInfoTask As Task = Task.Run(Async Function()
                                                     Await ReadAndDisplaySystemInfoAsync()
                                                     'Await GetCpuSubInfos()
+                                                    Await ReadGraphicCardInfo()
                                                     Await CheckCpuSub()
                                                     Return Task.CompletedTask
                                                 End Function)
@@ -205,6 +205,26 @@ Public Class Form1
                                                         End If
                                                     End Sub)
         ElseIf Settings.UpdateCheck = False Then
+        End If
+
+        If My.Settings.BootUp = True Then
+            Dim startupPath As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "CoolCore-CPU.lnk")
+            If Not File.Exists(startupPath) Then
+                Try
+                    Dim psi As New ProcessStartInfo With {
+                        .FileName = Application.ExecutablePath,
+                        .Arguments = "--startup",
+                        .WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory
+                    }
+                    Dim shell As Object = CreateObject("WScript.Shell")
+                    Dim shortcut As Object = shell.CreateShortcut(startupPath)
+                    shortcut.TargetPath = psi.FileName
+                    shortcut.Arguments = psi.Arguments
+                    shortcut.Save()
+                Catch ex As Exception
+                    MessageBox.Show("Error creating startup shortcut: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
         End If
     End Sub
     Private Sub LoadMySqlCredentials()
@@ -703,6 +723,7 @@ Public Class Form1
             systemInfo.SystemDirectory = Environment.SystemDirectory
             systemInfo.ProgramDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
             systemInfo.HostName = Dns.GetHostName()
+            systemInfo.GraphicsCardInformation = "N/A"
             '#--------------------------------------------------------------------------------------------------------------------'
             Dim cpuName As String = "N/A"
             Dim numberOfCores As Integer = 0
@@ -778,6 +799,21 @@ Public Class Form1
                               PowerBox2.Text = $"{PowerAllCores.Value.Value:F3}V"
                           Else
                           End If
+                          SystemViewList.Items.Clear()
+                          SystemViewList.Items.Add($"CPU Name: {systemInfo.CpuName}")
+                          SystemViewList.Items.Add($"Architecture: {systemInfo.Architecture}")
+                          SystemViewList.Items.Add($"Cores: {systemInfo.NumberOfCores}")
+                          SystemViewList.Items.Add($"Threads: {systemInfo.NumberOfLogicalProcessors}")
+                          SystemViewList.Items.Add($"Current Clock Speed: {systemInfo.CurrentClockSpeedMHz} MHz ({MaxFreq} GHz)")
+                          SystemViewList.Items.Add($"Graphic Card: {systemInfo.GraphicsCardInformation}")
+                          SystemViewList.Items.Add($"Operating System: {systemInfo.OSSystem}")
+                          SystemViewList.Items.Add($"System Type: {systemInfo.SystemType}")
+                          SystemViewList.Items.Add($"Computer Name: {systemInfo.ComputerName}")
+                          SystemViewList.Items.Add($"User Name: {systemInfo.UserName}")
+                          SystemViewList.Items.Add($"Domain Name: {systemInfo.DomainName}")
+                          SystemViewList.Items.Add($"System Directory: {systemInfo.SystemDirectory}")
+                          SystemViewList.Items.Add($"Program Directory: {systemInfo.ProgramDirectory}")
+                          SystemViewList.Items.Add($"Host Name: {systemInfo.HostName}")
                       End Sub)
             Me.Invoke(Sub()
                           LblStatusMessage.Text = "System information successfully read and saved to database!"
@@ -789,6 +825,23 @@ Public Class Form1
                           'LblStatusMessage.ForeColor = Color.Red
                       End Sub)
             MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+        Return Task.CompletedTask
+    End Function
+    Private Function ReadGraphicCardInfo() As Task
+        Try
+            Dim graphicsCardInfo As String = "N/A"
+            Dim searcher As New ManagementObjectSearcher("SELECT Name FROM Win32_VideoController")
+            For Each queryObj As ManagementObject In searcher.Get()
+                graphicsCardInfo = If(queryObj("Name"), "N/A").ToString()
+                Exit For
+            Next
+            If Not String.IsNullOrEmpty(graphicsCardInfo) Then
+                Me.Invoke(Sub() SystemViewList.Items.Add($"Graphics Card: {graphicsCardInfo}"))
+                Debug.WriteLine($"Graphics Card: {graphicsCardInfo}")
+            End If
+        Catch ex As Exception
+            Debug.WriteLine($"Error reading graphics card information: {ex.Message}")
         End Try
         Return Task.CompletedTask
     End Function
@@ -872,6 +925,7 @@ Public Class Form1
                             SockBox.Text = foundCpuDetails("SocketsSupported")
                         End If
                     End If
+
                     Return
                 End If
             End If
@@ -1053,10 +1107,10 @@ Public Class Form1
                 Next
             End Using
             If LblStatusMessage.InvokeRequired Then
-                    LblStatusMessage.Invoke(Sub() LblStatusMessage.Text = $"CPU-Infos als CSV gespeichert: {csvPath}")
-                Else
-                    LblStatusMessage.Text = "Your text here"
-                End If
+                LblStatusMessage.Invoke(Sub() LblStatusMessage.Text = $"CPU-Infos als CSV gespeichert: {csvPath}")
+            Else
+                LblStatusMessage.Text = "Your text here"
+            End If
         End If
     End Function
 
@@ -1119,7 +1173,7 @@ Public Class Form1
     End Function
 
     'Test Section initialization
-    Private Sub BtnToggleMonitor1_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitor1.Click
+    Private Sub BtnToggleMonitor1_Click(sender As Object, e As EventArgs)
         Dim attentionMessage = File.ReadAllText("TestInfo.txt")
         Dim result As DialogResult = MessageBox.Show(Me, attentionMessage, "Wichtiger Hinweis", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
         If result = DialogResult.OK Then
@@ -1386,10 +1440,8 @@ Public Class Form1
         End Using
     End Sub
 
-    'Export CPU Info Section
-    Private Sub ExportCPUInfoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportCPUInfoToolStripMenuItem.Click
+    'SystemView Section
 
-    End Sub
     Private Function GenerateSystemInfoHtml(cpuData As Dictionary(Of String, String)) As String
         Dim htmlBuilder As New System.Text.StringBuilder()
         Try
@@ -1441,148 +1493,131 @@ Public Class Form1
 
     'Theme Section
     Private Sub ApplyTheme(theme As String)
-        Select Case theme
-            Case "Dark"
-                Me.BackColor = ColorTranslator.FromHtml("#282C34")
-                Me.ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                For Each ctrl As Control In Me.Controls
-                    ApplyThemeToControl(ctrl, theme)
-                Next
-
-                If Me.MainMenuStrip IsNot Nothing Then
-                    Me.MainMenuStrip.BackColor = Color.FromArgb(50, 50, 53)
-                    Me.MainMenuStrip.ForeColor = Color.White
-                    For Each item As ToolStripItem In Me.MainMenuStrip.Items
-                        ApplyThemeToToolStripItem(item, theme)
+        If theme = "Standard then" Then
+            Me.BackColor = ColorTranslator.FromHtml("#F0F0F0")
+            Me.ForeColor = SystemColors.WindowText
+            For Each ctrl As Control In Me.Controls
+                ApplyThemeToAllControls(ctrl, theme)
+                If TypeOf ctrl Is TabControl Then
+                    For Each tabPage As TabPage In CType(ctrl, TabControl).TabPages
+                        tabPage.BackColor = ColorTranslator.FromHtml("#F0F0F0")
+                        tabPage.ForeColor = SystemColors.WindowText
+                        For Each innerCtrl As Control In tabPage.Controls
+                            ApplyThemeToControl(innerCtrl, theme)
+                        Next
                     Next
                 End If
-                PictureBox1.Image = My.Resources._024_cpu
-                Me.Icon = My.Resources._024_cpu_1
-            Case "Standard"
-                ' Apply Standard/Light Theme
-                Me.BackColor = ColorTranslator.FromHtml("#F0F0F0")
-                Me.ForeColor = SystemColors.WindowText
-                For Each ctrl As Control In Me.Controls
-                    ApplyThemeToControl(ctrl, theme)
+            Next
+            If Me.MainMenuStrip IsNot Nothing Then
+                Me.MainMenuStrip.BackColor = SystemColors.Control
+                Me.MainMenuStrip.ForeColor = SystemColors.ControlText
+                For Each item As ToolStripItem In Me.MainMenuStrip.Items
+                    ApplyThemeToToolStripItem(item, theme)
                 Next
-
-                If Me.MainMenuStrip IsNot Nothing Then
-                    Me.MainMenuStrip.BackColor = SystemColors.Control
-                    Me.MainMenuStrip.ForeColor = SystemColors.ControlText
-                    For Each item As ToolStripItem In Me.MainMenuStrip.Items
-                        ApplyThemeToToolStripItem(item, theme)
-                    Next
-                End If
-                PictureBox1.Image = My.Resources._023_cpu
-                Me.Icon = My.Resources._023_cpu_1
-        End Select
+            End If
+            PictureBox1.Image = My.Resources._023_cpu
+            Me.Icon = My.Resources._023_cpu_1
+        End If
     End Sub
     Private Sub ApplyThemeToControl(ctrl As Control, theme As String)
-        Select Case theme
-            Case "Dark"
-                If TypeOf ctrl Is Button Then
-                    CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#3B4048")
-                    CType(ctrl, Button).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                    CType(ctrl, Button).FlatStyle = FlatStyle.Flat
-                    CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#4A5059")
-                    CType(ctrl, Button).FlatAppearance.BorderSize = 1
-                ElseIf TypeOf ctrl Is TextBox Then
-                    CType(ctrl, TextBox).BackColor = ColorTranslator.FromHtml("#3B4048")
-                    CType(ctrl, TextBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                    CType(ctrl, TextBox).BorderStyle = BorderStyle.FixedSingle
-                ElseIf TypeOf ctrl Is Label Then
-                    CType(ctrl, Label).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                ElseIf TypeOf ctrl Is CheckBox Then
-                    CType(ctrl, CheckBox).ForeColor = SystemColors.HotTrack
-                ElseIf TypeOf ctrl Is GroupBox Then
-                    CType(ctrl, GroupBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                    CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#282C34")
-                    For Each innerCtrl As Control In ctrl.Controls
+        theme = Settings.ApplicationTheme
+        If theme = "Standard" Then
+            Standard.BackColor = ColorTranslator.FromHtml("#F0F0F0")
+            Standard.ForeColor = SystemColors.WindowText
+            If TypeOf ctrl Is Button Then
+                CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#E1E1E1")
+                CType(ctrl, Button).ForeColor = SystemColors.WindowText
+                CType(ctrl, Button).FlatStyle = FlatStyle.Flat
+                CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#CCCCCC")
+                CType(ctrl, Button).FlatAppearance.BorderSize = 1
+            ElseIf TypeOf ctrl Is TextBox Then
+                CType(ctrl, TextBox).BackColor = Color.White
+                CType(ctrl, TextBox).ForeColor = SystemColors.WindowText
+                CType(ctrl, TextBox).BorderStyle = BorderStyle.FixedSingle
+                For Each innerCtrl As Control In ctrl.Controls
+                    ApplyThemeToControl(innerCtrl, theme)
+                Next
+            ElseIf TypeOf ctrl Is Label Then
+                CType(ctrl, Label).ForeColor = SystemColors.WindowText 'ColorTranslator.FromHtml("#333333")
+            ElseIf TypeOf ctrl Is Panel Then
+                CType(ctrl, Panel).BackColor = SystemColors.Control
+                CType(ctrl, Panel).ForeColor = SystemColors.WindowText 'ColorTranslator.FromHtml("#333333")
+                For Each innerCtrl As Control In ctrl.Controls
+                    ApplyThemeToControl(innerCtrl, theme)
+                Next
+            ElseIf TypeOf ctrl Is GroupBox Then
+                CType(ctrl, GroupBox).ForeColor = ColorTranslator.FromHtml("#333333")
+                CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#F0F0F0")
+                For Each innerCtrl As Control In ctrl.Controls
+                    ApplyThemeToControl(innerCtrl, theme)
+                Next
+            ElseIf TypeOf ctrl Is Panel Then
+                CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#F0F0F0")
+                CType(ctrl, Panel).ForeColor = SystemColors.WindowText 'ColorTranslator.FromHtml("#333333")
+                For Each innerCtrl As Control In ctrl.Controls
+                    ApplyThemeToControl(innerCtrl, theme)
+                Next
+            ElseIf TypeOf ctrl Is TabControl Then
+                CType(ctrl, TabControl).BackColor = ColorTranslator.FromHtml("#282C34")
+                CType(ctrl, TabControl).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+                For Each tabPage As TabPage In CType(ctrl, TabControl).Controls.OfType(Of TabPage)()
+                    tabPage.BackColor = ColorTranslator.FromHtml("#282C34")
+                    tabPage.ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+                    If TypeOf ctrl Is TextBox Then
+                        CType(ctrl, TextBox).BackColor = ColorTranslator.FromHtml("#3B4048")
+                        CType(ctrl, TextBox).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+                        CType(ctrl, TextBox).BorderStyle = BorderStyle.FixedSingle
+                        For Each innerCtrl As Control In ctrl.Controls
+                            ApplyThemeToControl(innerCtrl, theme)
+                        Next
+                    ElseIf TypeOf ctrl Is Label Then
+                        CType(ctrl, Label).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+
+                    ElseIf TypeOf ctrl Is Panel Then
+                        CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#282C34")
+                        CType(ctrl, Panel).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
+                        For Each innerCtrl As Control In ctrl.Controls
+                            ApplyThemeToControl(innerCtrl, theme)
+                        Next
+                    End If
+                    For Each innerCtrl As Control In tabPage.Controls
                         ApplyThemeToControl(innerCtrl, theme)
                     Next
-                ElseIf TypeOf ctrl Is Panel Then
-                    CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#282C34")
-                    CType(ctrl, Panel).ForeColor = ColorTranslator.FromHtml("#ABB2BF")
-                    For Each innerCtrl As Control In ctrl.Controls
-                        ApplyThemeToControl(innerCtrl, theme)
-                    Next
-                End If
-                If Settings.CpuLogoName = "intel" Then
-                    PicBox2.Image = Resources.IntelLogo_white
-                ElseIf Settings.CpuLogoName = "amd" Then
-                    PicBox2.Image = Resources.AMDLogo_Dark
-                End If
-            Case "Standard"
-                If TypeOf ctrl Is Button Then
-                    CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#E1E1E1")
-                    CType(ctrl, Button).ForeColor = SystemColors.WindowText
-                    CType(ctrl, Button).FlatStyle = FlatStyle.Flat
-                    CType(ctrl, Button).FlatAppearance.BorderColor = ColorTranslator.FromHtml("#CCCCCC")
-                    CType(ctrl, Button).FlatAppearance.BorderSize = 1
-                ElseIf TypeOf ctrl Is TextBox Then
-                    CType(ctrl, TextBox).BackColor = Color.White
-                    CType(ctrl, TextBox).ForeColor = SystemColors.WindowText
-                    CType(ctrl, TextBox).BorderStyle = BorderStyle.FixedSingle
-                ElseIf TypeOf ctrl Is Label Then
-                    CType(ctrl, Label).ForeColor = SystemColors.WindowText
-                ElseIf TypeOf ctrl Is CheckBox Then
-                    CType(ctrl, CheckBox).ForeColor = ColorTranslator.FromHtml("#333333")
-                ElseIf TypeOf ctrl Is GroupBox Then
-                    CType(ctrl, GroupBox).ForeColor = ColorTranslator.FromHtml("#333333")
-                    CType(ctrl, GroupBox).BackColor = ColorTranslator.FromHtml("#F0F0F0")
-                    For Each innerCtrl As Control In ctrl.Controls
-                        ApplyThemeToControl(innerCtrl, theme)
-                    Next
-                ElseIf TypeOf ctrl Is Panel Then
-                    CType(ctrl, Panel).BackColor = ColorTranslator.FromHtml("#F0F0F0")
-                    CType(ctrl, Panel).ForeColor = SystemColors.WindowText 'ColorTranslator.FromHtml("#333333")
-                    For Each innerCtrl As Control In ctrl.Controls
-                        ApplyThemeToControl(innerCtrl, theme)
-                    Next
-                End If
-                If Settings.CpuLogoName = "intel" Then
-                    PicBox2.Image = Resources.IntelLogo
-                ElseIf Settings.CpuLogoName = "amd" Then
-                    PicBox2.Image = Resources.AMDLogo
-                End If
-        End Select
+                Next
+            End If
+            If Settings.CpuLogoName = "intel" Then
+                PicBox2.Image = Resources.IntelLogo
+            ElseIf Settings.CpuLogoName = "amd" Then
+                PicBox2.Image = Resources.AMDLogo
+            End If
+        End If
     End Sub
     Private Sub ApplyThemeToToolStripItem(item As ToolStripItem, theme As String)
-        Select Case theme
-            Case "Dark"
-                item.BackColor = ColorTranslator.FromHtml("#282C34")
-                item.ForeColor = SystemColors.ControlLightLight
-                If TypeOf item Is ToolStripDropDownItem Then
-                    Dim dropDownItem As ToolStripDropDownItem = CType(item, ToolStripDropDownItem)
-                    For Each subItem As ToolStripItem In dropDownItem.DropDownItems
-                        ApplyThemeToToolStripItem(subItem, theme)
-                    Next
-                End If
-            Case "Standard"
-                item.BackColor = SystemColors.Control
-                item.ForeColor = SystemColors.ControlText
-                If TypeOf item Is ToolStripDropDownItem Then
-                    Dim dropDownItem As ToolStripDropDownItem = CType(item, ToolStripDropDownItem)
-                    For Each subItem As ToolStripItem In dropDownItem.DropDownItems
-                        ApplyThemeToToolStripItem(subItem, theme)
-                    Next
-                End If
-        End Select
+        If theme = "Standard" Then
+            item.BackColor = SystemColors.Control
+            item.ForeColor = SystemColors.ControlText
+            If TypeOf item Is ToolStripDropDownItem Then
+                Dim dropDownItem As ToolStripDropDownItem = CType(item, ToolStripDropDownItem)
+                For Each subItem As ToolStripItem In dropDownItem.DropDownItems
+                    ApplyThemeToToolStripItem(subItem, theme)
+                Next
+            End If
+        End If
     End Sub
-    Private Sub OptionsForm_ThemeChanged(sender As Object, newTheme As String)
-        ApplyTheme(newTheme)
+    Private Sub ApplyThemeToAllControls(parent As Control, theme As String)
+        For Each ctrl As Control In parent.Controls
+            ApplyThemeToControl(ctrl, theme)
+            If ctrl.HasChildren Then
+                ApplyThemeToAllControls(ctrl, theme)
+            End If
+        Next
     End Sub
 
     'Menu Item Click Events
     Private Sub InfoMenuItem_Click(sender As Object, e As EventArgs) Handles InfoMenuItem.Click
         AboutBox1.ShowDialog(Me)
     End Sub
-    Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
-        Using optionsForm As New OptionsForm()
-            AddHandler optionsForm.ThemeChanged, AddressOf OptionsForm_ThemeChanged
-            optionsForm.ShowDialog(Me)
-        End Using
-    End Sub
+
     Private Sub CloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CloseToolStripMenuItem.Click
         Me.Close()
     End Sub
@@ -1997,5 +2032,9 @@ Public Class Form1
         ElseIf DialogResult.Cancel Then
             ' Do nothing if the user cancels
         End If
+    End Sub
+
+    Private Sub MinTemp1_TextChanged(sender As Object, e As EventArgs)
+
     End Sub
 End Class
