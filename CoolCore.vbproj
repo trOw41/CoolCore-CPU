@@ -315,9 +315,7 @@
     <None Include="Resources\pngegg.png" />
     <None Include="Resources\atiamdlogo.png" />
     <None Include="Resources\Nvidia-Logo.wine.png" />
-    <Content Include="WilkommenInfo.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="WilkommenInfo.txt" />
     <None Include="Resources\8.png" />
     <None Include="Resources\7.png" />
     <None Include="Resources\1 %282%29.png" />
@@ -341,9 +339,7 @@
     <None Include="Resources\78_11594827525_045-firmware.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="TestInfo.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="TestInfo.txt" />
     <None Include="Resources\001-computer.png" />
     <Content Include="Resources\002-app-1.png" />
     <None Include="Resources\003-computer-1.png" />

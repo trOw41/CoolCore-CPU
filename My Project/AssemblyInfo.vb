@@ -9,10 +9,10 @@ Imports System.Runtime.InteropServices
 
 ' Werte der Assemblyattribute überprüfen
 
-<Assembly: AssemblyTitle("CoolCore-CPU")>
+<Assembly: AssemblyTitle("CoolCore-CPU®")>
 <Assembly: AssemblyDescription("CPU-Real Time Monitoring about Temperature / load and Statistics of each Core.")>
 <Assembly: AssemblyCompany("Sulomusic")>
-<Assembly: AssemblyProduct("CoolCore-CPU Monitoring Tool")>
+<Assembly: AssemblyProduct("CoolCore-CPU® Monitoring Tool")>
 <Assembly: AssemblyCopyright("Copyright ©  2025 Daniel Trojan")>
 <Assembly: AssemblyTrademark("")>
 

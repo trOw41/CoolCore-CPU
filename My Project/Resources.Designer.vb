@@ -511,12 +511,36 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Wichtiger Hinweis: 
+        '''-------------------------------------------------------------------------------
+        '''Der Test Prozess kann nicht unterbrochen werden! Bitte warten Sie bis zum ende des Test Prozess und schließen Sie CoolCore nicht in der Test Phase, dies kann und wird zu unerwünschten Ergebnissen führen! 
+        '''Stress-Messungen können die Systemstabilität vorübergehend beeinträchtigen (z.B. Überlastung, Einfrieren, Abstürze, etc.).
+        '''Die Ergebnisse können von System zu System variieren und sind nicht repräsentativ fü [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        '''</summary>
+        Public ReadOnly Property TestInfo() As String
+            Get
+                Return ResourceManager.GetString("TestInfo", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         '''</summary>
         Public ReadOnly Property tools_and_utensils() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("tools_and_utensils", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Um Ihnen die bestmögliche Überwachung Ihrer CPU zu bieten, benötigt CoolCore beim ersten Start eine Internetverbindung. Diese Verbindung wird genutzt, um wichtige Metadaten wie die Lithographie oder die TjMax-Temperatur spezifisch für Ihre CPU von unseren Servern herunterzuladen.
+        '''
+        '''Keine Sorge: Dieser Internetzugriff ist nur bei der Neu- oder Erstinstallation erforderlich. Die ermittelten Daten werden anschließend als Datenbank auf Ihrem PC gespeichert, sodass CoolCore danach keinen weiteren Netzwerkzugrif [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        '''</summary>
+        Public ReadOnly Property WilkommenInfo() As String
+            Get
+                Return ResourceManager.GetString("WilkommenInfo", resourceCulture)
             End Get
         End Property
     End Module

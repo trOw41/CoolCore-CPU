@@ -57,9 +57,9 @@ Partial Class Form1
         Me.Standard = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PicBox2 = New System.Windows.Forms.PictureBox()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.BtnToggleMonitor1 = New System.Windows.Forms.Button()
@@ -132,21 +132,20 @@ Partial Class Form1
         Me.GCNameBox = New System.Windows.Forms.Label()
         Me.GCLogo = New System.Windows.Forms.PictureBox()
         Me.GCClockBox = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.GCTempLabel = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.SystemViewList = New System.Windows.Forms.ListView()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label15 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Standard.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -154,6 +153,7 @@ Partial Class Form1
         Me.Panel4.SuspendLayout()
         CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -340,6 +340,7 @@ Partial Class Form1
         Me.Standard.Multiline = True
         Me.Standard.Name = "Standard"
         Me.Standard.SelectedIndex = 0
+        Me.Standard.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
         '
         'TabPage1
         '
@@ -350,6 +351,7 @@ Partial Class Form1
         '
         'Panel1
         '
+        Me.Panel1.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Controls.Add(Me.PicBox2)
         Me.Panel1.Controls.Add(Me.Label7)
@@ -381,13 +383,6 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.Model)
         Me.Panel1.Name = "Panel1"
         '
-        'PictureBox1
-        '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        resources.ApplyResources(Me.PictureBox1, "PictureBox1")
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.TabStop = False
-        '
         'PicBox2
         '
         Me.PicBox2.BackColor = System.Drawing.Color.Transparent
@@ -406,6 +401,12 @@ Partial Class Form1
         Me.Label7.Name = "Label7"
         Me.Label7.UseCompatibleTextRendering = True
         Me.Label7.UseMnemonic = False
+        '
+        'Label3
+        '
+        resources.ApplyResources(Me.Label3, "Label3")
+        Me.Label3.BackColor = System.Drawing.Color.Transparent
+        Me.Label3.Name = "Label3"
         '
         'Panel2
         '
@@ -758,8 +759,9 @@ Partial Class Form1
         '
         'Label10
         '
-        Me.Label10.BackColor = System.Drawing.Color.Transparent
+        Me.Label10.BackColor = System.Drawing.Color.White
         resources.ApplyResources(Me.Label10, "Label10")
+        Me.Label10.ForeColor = System.Drawing.SystemColors.ControlText
         Me.Label10.Name = "Label10"
         '
         'Threads
@@ -1015,6 +1017,24 @@ Partial Class Form1
         resources.ApplyResources(Me.GCClockBox, "GCClockBox")
         Me.GCClockBox.Name = "GCClockBox"
         '
+        'Label11
+        '
+        resources.ApplyResources(Me.Label11, "Label11")
+        Me.Label11.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label11.Name = "Label11"
+        '
+        'Label15
+        '
+        resources.ApplyResources(Me.Label15, "Label15")
+        Me.Label15.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label15.Name = "Label15"
+        '
+        'Label14
+        '
+        resources.ApplyResources(Me.Label14, "Label14")
+        Me.Label14.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label14.Name = "Label14"
+        '
         'GCTempLabel
         '
         resources.ApplyResources(Me.GCTempLabel, "GCTempLabel")
@@ -1051,29 +1071,12 @@ Partial Class Form1
         Me.SystemViewList.UseCompatibleStateImageBehavior = False
         Me.SystemViewList.View = System.Windows.Forms.View.Details
         '
-        'Label3
+        'PictureBox1
         '
-        resources.ApplyResources(Me.Label3, "Label3")
-        Me.Label3.BackColor = System.Drawing.Color.Transparent
-        Me.Label3.Name = "Label3"
-        '
-        'Label14
-        '
-        resources.ApplyResources(Me.Label14, "Label14")
-        Me.Label14.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Label14.Name = "Label14"
-        '
-        'Label11
-        '
-        resources.ApplyResources(Me.Label11, "Label11")
-        Me.Label11.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Label11.Name = "Label11"
-        '
-        'Label15
-        '
-        resources.ApplyResources(Me.Label15, "Label15")
-        Me.Label15.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Label15.Name = "Label15"
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        resources.ApplyResources(Me.PictureBox1, "PictureBox1")
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.TabStop = False
         '
         'Form1
         '
@@ -1099,7 +1102,6 @@ Partial Class Form1
         Me.TabPage1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
@@ -1109,6 +1111,7 @@ Partial Class Form1
         Me.Panel4.PerformLayout()
         CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage2.ResumeLayout(False)
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
