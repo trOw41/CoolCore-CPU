@@ -344,8 +344,9 @@ Partial Class Form1
         '
         'TabPage1
         '
-        Me.TabPage1.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.TabPage1.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.TabPage1, "TabPage1")
+        Me.TabPage1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TabPage1.Controls.Add(Me.Panel1)
         Me.TabPage1.Name = "TabPage1"
         '
@@ -759,7 +760,7 @@ Partial Class Form1
         '
         'Label10
         '
-        Me.Label10.BackColor = System.Drawing.Color.White
+        Me.Label10.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.Label10, "Label10")
         Me.Label10.ForeColor = System.Drawing.SystemColors.ControlText
         Me.Label10.Name = "Label10"
@@ -1082,7 +1083,7 @@ Partial Class Form1
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
-        Me.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange
+        Me.AutoValidate = System.Windows.Forms.AutoValidate.Disable
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Standard)
