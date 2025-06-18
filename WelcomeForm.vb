@@ -14,4 +14,5 @@ Public Class WelcomeForm
         End Try
 #Const ToolTip = off
     End Sub
+
 End Class
