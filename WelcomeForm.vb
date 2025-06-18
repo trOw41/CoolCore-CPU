@@ -1,11 +1,17 @@
 ﻿Imports System.IO
 
 Public Class WelcomeForm
-    Private infoText As String = "WilkommenInfo.txt"
+    Private infoText As String = Resources.WilkommenInfo
 
 
     Private Sub WelcomeForm_load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim text As String = File.ReadAllText(infoText)
-        TextBox1.Text = text
+        Try
+            If infoText IsNot Nothing Then
+                TextBox1.Text = infoText
+            End If
+        Catch ex As Exception
+            MessageBox.Show($"Error: {infoText} wurde nicht gefunden")
+        End Try
     End Sub
+
 End Class

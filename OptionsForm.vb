@@ -4,6 +4,7 @@ Imports System.Windows.Forms
 Public Class OptionsForm
     Public Event ThemeChanged As EventHandler(Of String)
     Private _updateCheckBoxInitialState As CheckState
+    Private _StartMessageBoxCheckBoxInitialState As CheckState
     Private Sub OptionsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Settings.ApplicationTheme = "Standard"
         Label1.Text = "CPU Temperatur Test Info: " & My.Settings.MonitorTime
@@ -19,7 +20,9 @@ Public Class OptionsForm
         updateCheckBox.Checked = Settings.UpdateCheck
         BootBox.Checked = Settings.BootUp
         updateCheckBox.Checked = Settings.UpdateCheck
+        StartMessageBox.Checked = Settings.AllwaysShow
         _updateCheckBoxInitialState = updateCheckBox.CheckState
+        _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
         Dim monitorTime = Settings.MonitorTime
         If monitorTime > 0 Then
             For i = 0 To CheckedListBox1.Items.Count - 1
@@ -49,13 +52,12 @@ Public Class OptionsForm
         End If
         If CheckedListBox1.SelectedItem IsNot Nothing Then
             My.Settings.MonitorTime = CheckedListBox1.SelectedItem.ToString()
-            Label1.Text = "CPU Stresstest Intervall (in Sekunden): " & My.Settings.MonitorTime
+            Label1.Text = "CPU Stresstest Intervall: " & My.Settings.MonitorTime
         End If
         For i = 0 To CheckedListBox1.Items.Count - 1
             CheckedListBox1.SetItemChecked(i, i = CheckedListBox1.SelectedIndex)
         Next
     End Sub
-
 
     Private Sub ApplyThemeToControl(ctrl As Control, theme As String)
         If theme = "Standard" Then
@@ -144,10 +146,6 @@ Public Class OptionsForm
         End Try
     End Sub
 
-    Private Sub UpdateCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles updateCheckBox.CheckedChanged
-
-    End Sub
-
 
     Private Sub UpdateCheckBox_CheckStateChanged(sender As Object, e As EventArgs) Handles updateCheckBox.CheckStateChanged
         If updateCheckBox.CheckState = _updateCheckBoxInitialState Then
@@ -164,5 +162,19 @@ Public Class OptionsForm
         End If
 
         _updateCheckBoxInitialState = updateCheckBox.CheckState
+    End Sub
+
+    Private Sub StartMessageBox_CheckedChanged(sender As Object, e As EventArgs) Handles StartMessageBox.CheckedChanged
+        If StartMessageBox.CheckState = _StartMessageBoxCheckBoxInitialState Then
+
+        End If
+        If StartMessageBox.CheckState = CheckState.Checked Then
+            Settings.AllwaysShow = True
+            MessageBox.Show("Erst Start Info wird immer angezeigt..")
+        Else
+            Settings.AllwaysShow = False
+
+        End If
+        _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
     End Sub
 End Class

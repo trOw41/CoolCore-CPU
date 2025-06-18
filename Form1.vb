@@ -135,7 +135,7 @@ Public Class Form1
 
     'Form Logic
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If Settings.FirstStart Then
+        If Settings.FirstStart = True Or Settings.AllwaysShow = True Then
             Dim res As DialogResult = WelcomeForm.ShowDialog(Me)
             If res = DialogResult.OK Then
                 Settings.Save()
@@ -1300,7 +1300,7 @@ Public Class Form1
 
     'Test Section initialization
     Private Sub BtnToggleMonitor1_Click(sender As Object, e As EventArgs) Handles BtnToggleMonitor1.Click
-        Dim attentionMessage = File.ReadAllText("TestInfo.txt")
+        Dim attentionMessage = Resources.TestInfo
         Dim result As DialogResult = MessageBox.Show(Me, attentionMessage, "Wichtiger Hinweis", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
         If result = DialogResult.OK Then
             TestStart()
@@ -2260,37 +2260,6 @@ Public Class Form1
             End If
         End If
     End Sub
-    Private Function ToolTipSettings() As Task
-        tos.SetToolTip(LoadBox, "Aktuelle CPU-Auslastung des Kerns")
-        tos.SetToolTip(CoreTemp, "Aktuelle Kerntemperatur")
-        tos.SetToolTip(MinTemp, "Minimale Kerntemperatur seit dem letzten Start")
-        tos.IsBalloon = True
-        tos.ShowAlways = True
-        tos.AutoPopDelay = 5000 ' 0,3 Sekunden
-        tos.InitialDelay = 500 ' 0,5 Sekunden
-        tos.ReshowDelay = 1000 ' 1 Sekunde
-        tos.ToolTipIcon = ToolTipIcon.Info
-        tos.ToolTipTitle = "info:"
-        tos.SetToolTip(PicBox2, "CPU-Logo basierend auf der CPU-Herstellererkennung." & vbCrLf & "Das Logo wird automatisch angepasst, wenn Sie das Theme wechseln.")
-        tos.SetToolTip(TJBox, "Tj-Case/Max bezeichnet die maximal zugelassene  Temperatur des Integrated Heat Spreader (IHS) im Prozessor.")
-        tos.SetToolTip(TDPBox, "TDP bezeichnet die Thermal Design Power des Prozessors." & vbCrLf & "Dies ist die maximale Wärmeabgabe, die der Kühler abführen muss.")
-        tos.SetToolTip(LithographyBox, "Lithographie bezeichnet den Fertigungsprozess des Prozessors.")
-        tos.SetToolTip(SockBox, "Ein Bus ist ein Subsystem, das Daten zwischen den Komponenten eines Computers oder zwischen Computern überträgt." _
-           & vbCrLf & " Hierzu gehören: der Front-Side-Bus (FSB), der Daten zwischen der CPU und dem Memory-Controller-Hub überträgt;" _
-           & vbCrLf & "das Direct-Media-Interface (DMI), das eine Punkt-zu-Punkt-Verbindung zwischen einem integrierten Intel Speichercontroller und einem Intel I/O-Controller-Hub auf dem Mainboard des Computers herstellt;" _
-           & vbCrLf & "und die Quick-Path-Schnittstelle (QPI), die eine Punkt-zu-Punkt-Verbindung zwischen der CPU und dem integrierten Speichercontroller herstellt.")
-        tos.SetToolTip(VidBox, "Der Bus Speed bezeichnet die Geschwindigkeit des Front-Side-Bus (FSB) oder des Direct Media Interface (DMI) in MHz." & vbCrLf & "Er beeinflusst die Datenübertragungsrate zwischen der CPU und anderen Komponenten.")
-        tos.SetToolTip(PowerBox, "Die Package Power bezeichnet die Gesamtleistung, die von der CPU verbraucht wird." & vbCrLf & "Sie wird in Watt (W) gemessen und gibt an, wie viel Energie die CPU benötigt.")
-        tos.SetToolTip(PowerBox2, "Die Core Power bezeichnet die Leistung, die von den einzelnen Kernen der CPU verbraucht wird." & vbCrLf & "Sie wird in Watt (W) gemessen und gibt an, wie viel Energie jeder Kern benötigt.")
-        tos.SetToolTip(FrequencyBox, "Die CPU-Frequenz bezeichnet die Geschwindigkeit, mit der die CPU arbeitet." & vbCrLf & "Sie wird in MHz oder GHz gemessen und gibt an, wie viele Zyklen die CPU pro Sekunde ausführen kann.")
-        tos.SetToolTip(FrequencyBox2, "Die CPU-Frequenz bezeichnet die Geschwindigkeit, mit der die CPU arbeitet." & vbCrLf & "Sie wird in MHz oder GHz gemessen und gibt an, wie viele Zyklen die CPU pro Sekunde ausführen kann.")
-        tos.SetToolTip(ModelBox, "Der CPU-Name bezeichnet den Namen des Prozessors" & vbCrLf & "und gibt an, um welches Modell es sich handelt." & vbCrLf & "Er wird in der Regel auf dem Prozessor selbst aufgedruckt.")
-        tos.SetToolTip(CPUIDBox, "Die CPUID bezeichnet eine eindeutige Kennung für den Prozessor." & vbCrLf & "Sie wird verwendet, um Informationen über den Prozessor zu identifizieren und zu überprüfen.")
-        tos.SetToolTip(PlatformBox, "Die Plattform bezeichnet die Hardware-Architektur des Systems." & vbCrLf & "Sie gibt an, welche Art von Prozessor und Chipsatz verwendet wird.")
-        tos.SetToolTip(CoresBox, "Die Anzahl der Kerne bezeichnet die Anzahl der physischen Kerne im Prozessor." & vbCrLf & "Ein Kern ist ein unabhängiger Verarbeitungseinheit, die in der Lage ist, Befehle auszuführen.")
-        tos.SetToolTip(ThreadBox, "Die Anzahl der Threads bezeichnet die Anzahl der logischen Kerne im Prozessor." & vbCrLf & "Ein Thread ist ein unabhängiger Ausführungspfad, der von einem Kern verarbeitet werden kann." & vbCrLf & "Ein Prozessor kann mehrere Threads gleichzeitig ausführen, um die Leistung zu steigern.")
-        Return Task.CompletedTask
-    End Function
 
     Private Sub IntelCPUDBToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles IntelCPUDBToolStripMenuItem.Click
         Dim url As String = "https://www.cool-core.de.cool/intel_stats.html"
@@ -2298,7 +2267,7 @@ Public Class Form1
         If result = DialogResult.OK Then
             Process.Start(url)
         ElseIf DialogResult.Cancel Then
-            ' Do nothing if the user cancels
+
         End If
     End Sub
 
@@ -2308,9 +2277,17 @@ Public Class Form1
         If result = DialogResult.OK Then
             Process.Start(url)
         ElseIf DialogResult.Cancel Then
-            ' Do nothing if the user cancels
+
         End If
     End Sub
 
+    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
+        Dim url As String = "https://www.cool-core.de.cool/"
+        Dim result As DialogResult = MessageBox.Show("Sie werden zu CoolCore Website weiter geleitet", "CoolCore Website:", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
+        If result = DialogResult.OK Then
+            Process.Start(url)
+        ElseIf DialogResult.Cancel Then
 
+        End If
+    End Sub
 End Class

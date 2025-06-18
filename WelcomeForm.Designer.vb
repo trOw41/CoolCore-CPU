@@ -34,7 +34,7 @@ Partial Class WelcomeForm
         Me.Button1.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Button1.Location = New System.Drawing.Point(210, 443)
+        Me.Button1.Location = New System.Drawing.Point(192, 463)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(88, 30)
         Me.Button1.TabIndex = 1
@@ -45,10 +45,10 @@ Partial Class WelcomeForm
         '
         Me.TextBox1.AutoEllipsis = True
         Me.TextBox1.BackColor = System.Drawing.Color.Transparent
-        Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox1.Location = New System.Drawing.Point(54, 36)
+        Me.TextBox1.Font = New System.Drawing.Font("Bahnschrift", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox1.Location = New System.Drawing.Point(50, 39)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(413, 406)
+        Me.TextBox1.Size = New System.Drawing.Size(407, 431)
         Me.TextBox1.TabIndex = 2
         Me.TextBox1.Text = "Label1"
         '
@@ -57,12 +57,12 @@ Partial Class WelcomeForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
-        Me.BackColor = System.Drawing.SystemColors.ButtonShadow
+        Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(534, 477)
-        Me.Controls.Add(Me.TextBox1)
+        Me.ClientSize = New System.Drawing.Size(469, 493)
         Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.TextBox1)
         Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

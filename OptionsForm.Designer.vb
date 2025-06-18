@@ -45,6 +45,7 @@ Partial Class OptionsForm
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.InfoButton = New System.Windows.Forms.Button()
+        Me.StartMessageBox = New System.Windows.Forms.CheckBox()
         Me.Panel3.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.SuspendLayout()
@@ -54,7 +55,7 @@ Partial Class OptionsForm
         Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnSave.Location = New System.Drawing.Point(313, 289)
+        Me.btnSave.Location = New System.Drawing.Point(313, 327)
         Me.btnSave.Margin = New System.Windows.Forms.Padding(4)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(86, 25)
@@ -67,7 +68,7 @@ Partial Class OptionsForm
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnCancel.Location = New System.Drawing.Point(5, 289)
+        Me.btnCancel.Location = New System.Drawing.Point(5, 327)
         Me.btnCancel.Margin = New System.Windows.Forms.Padding(4)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(92, 25)
@@ -340,11 +341,24 @@ Partial Class OptionsForm
         Me.InfoButton.TabIndex = 14
         Me.InfoButton.UseVisualStyleBackColor = True
         '
+        'StartMessageBox
+        '
+        Me.StartMessageBox.AutoSize = True
+        Me.StartMessageBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.StartMessageBox.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.25!)
+        Me.StartMessageBox.Location = New System.Drawing.Point(5, 289)
+        Me.StartMessageBox.Name = "StartMessageBox"
+        Me.StartMessageBox.Size = New System.Drawing.Size(321, 17)
+        Me.StartMessageBox.TabIndex = 8
+        Me.StartMessageBox.Text = "Willkommen Nachricht bei Programm Start immer anzeigen."
+        Me.StartMessageBox.UseVisualStyleBackColor = True
+        '
         'OptionsForm
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
-        Me.ClientSize = New System.Drawing.Size(403, 318)
+        Me.ClientSize = New System.Drawing.Size(403, 356)
         Me.Controls.Add(Me.Label15)
+        Me.Controls.Add(Me.StartMessageBox)
         Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.InfoButton)
         Me.Controls.Add(Me.CheckedListBox1)
@@ -393,4 +407,5 @@ Partial Class OptionsForm
     Friend WithEvents Label20 As Label
     Friend WithEvents InfoButton As Button
     Friend WithEvents updateCheckBox As CheckBox
+    Friend WithEvents StartMessageBox As CheckBox
 End Class
