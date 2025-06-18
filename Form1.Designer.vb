@@ -60,7 +60,6 @@ Partial Class Form1
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PicBox2 = New System.Windows.Forms.PictureBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.BtnToggleMonitor1 = New System.Windows.Forms.Button()
@@ -124,22 +123,23 @@ Partial Class Form1
         Me.PlatformBox = New System.Windows.Forms.TextBox()
         Me.ModelBox = New System.Windows.Forms.TextBox()
         Me.Model = New System.Windows.Forms.Label()
+        Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.Loadlbl = New System.Windows.Forms.Label()
+        Me.GCList = New System.Windows.Forms.ListView()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
+        Me.GCTempBox = New System.Windows.Forms.Label()
+        Me.GCNameBox = New System.Windows.Forms.Label()
+        Me.GCLogo = New System.Windows.Forms.PictureBox()
+        Me.GCClockBox = New System.Windows.Forms.Label()
+        Me.GCTempLabel = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.SystemViewList = New System.Windows.Forms.ListView()
-        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.GCLogo = New System.Windows.Forms.PictureBox()
-        Me.GCList = New System.Windows.Forms.ListView()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.GCClockBox = New System.Windows.Forms.TextBox()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.GCLoadBox = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
-        Me.GCTempBox = New System.Windows.Forms.TextBox()
-        Me.GCTempLabel = New System.Windows.Forms.Label()
-        Me.GCLabel = New System.Windows.Forms.Label()
-        Me.GCNameBox = New System.Windows.Forms.TextBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -150,15 +150,15 @@ Partial Class Form1
         CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
-        Me.TabPage2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
-        CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
+        CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabPage2.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.BackColor = System.Drawing.SystemColors.MenuBar
+        Me.MenuStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight
         resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.MdiWindowListItem = Me.OptionsToolStripMenuItem
@@ -166,7 +166,7 @@ Partial Class Form1
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
+        Me.FileToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CloseToolStripMenuItem})
         Me.FileToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
@@ -181,7 +181,7 @@ Partial Class Form1
         '
         'OptionsToolStripMenuItem
         '
-        Me.OptionsToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
+        Me.OptionsToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.ToolStripSeparator2, Me.ExportCPUInfoToolStripMenuItem})
         Me.OptionsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
@@ -206,7 +206,7 @@ Partial Class Form1
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
+        Me.ToolsToolStripMenuItem.BackColor = System.Drawing.SystemColors.HighlightText
         Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem, Me.ToolStripSeparator5, Me.CpuInfoMenu, Me.ToolStripSeparator6})
         Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
@@ -273,7 +273,7 @@ Partial Class Form1
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.BackColor = System.Drawing.SystemColors.MenuBar
+        Me.HelpToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InfoMenuItem, Me.ToolStripSeparator3, Me.FAQToolStripMenuItem, Me.ToolStripSeparator4, Me.SupportToolStripMenuItem})
         Me.HelpToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
@@ -333,8 +333,8 @@ Partial Class Form1
         'Standard
         '
         Me.Standard.Controls.Add(Me.TabPage1)
-        Me.Standard.Controls.Add(Me.TabPage2)
         Me.Standard.Controls.Add(Me.TabPage3)
+        Me.Standard.Controls.Add(Me.TabPage2)
         resources.ApplyResources(Me.Standard, "Standard")
         Me.Standard.HotTrack = True
         Me.Standard.Multiline = True
@@ -344,13 +344,13 @@ Partial Class Form1
         'TabPage1
         '
         Me.TabPage1.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.TabPage1.Controls.Add(Me.Panel1)
         resources.ApplyResources(Me.TabPage1, "TabPage1")
+        Me.TabPage1.Controls.Add(Me.Panel1)
         Me.TabPage1.Name = "TabPage1"
         '
         'Panel1
         '
-        Me.Panel1.Controls.Add(Me.PictureBox1)
+        resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Controls.Add(Me.PicBox2)
         Me.Panel1.Controls.Add(Me.Label7)
         Me.Panel1.Controls.Add(Me.Label3)
@@ -379,7 +379,6 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.PlatformBox)
         Me.Panel1.Controls.Add(Me.ModelBox)
         Me.Panel1.Controls.Add(Me.Model)
-        resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Name = "Panel1"
         '
         'PictureBox1
@@ -391,7 +390,7 @@ Partial Class Form1
         '
         'PicBox2
         '
-        Me.PicBox2.Image = Global.CoolCore.My.Resources.Resources._002_app_1
+        Me.PicBox2.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.PicBox2, "PicBox2")
         Me.PicBox2.Name = "PicBox2"
         Me.PicBox2.TabStop = False
@@ -400,6 +399,7 @@ Partial Class Form1
         '
         Me.Label7.AutoEllipsis = True
         Me.Label7.BackColor = System.Drawing.Color.Transparent
+        Me.Label7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label7.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Label7, "Label7")
         Me.Label7.ForeColor = System.Drawing.SystemColors.ControlText
@@ -407,13 +407,10 @@ Partial Class Form1
         Me.Label7.UseCompatibleTextRendering = True
         Me.Label7.UseMnemonic = False
         '
-        'Label3
-        '
-        resources.ApplyResources(Me.Label3, "Label3")
-        Me.Label3.Name = "Label3"
-        '
         'Panel2
         '
+        Me.Panel2.BackColor = System.Drawing.Color.Transparent
+        resources.ApplyResources(Me.Panel2, "Panel2")
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel2.Controls.Add(Me.Panel3)
         Me.Panel2.Controls.Add(Me.CoreTemp3)
@@ -451,7 +448,6 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.MinTemp3)
         Me.Panel2.Controls.Add(Me.TJBox)
         Me.Panel2.Controls.Add(Me.PowerBox)
-        resources.ApplyResources(Me.Panel2, "Panel2")
         Me.Panel2.Name = "Panel2"
         '
         'Panel3
@@ -749,22 +745,26 @@ Partial Class Form1
         '
         'Lithography
         '
+        Me.Lithography.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.Lithography, "Lithography")
         Me.Lithography.Name = "Lithography"
         '
         'Label4
         '
+        Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Label4, "Label4")
         Me.Label4.Name = "Label4"
         '
         'Label10
         '
+        Me.Label10.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.Label10, "Label10")
         Me.Label10.Name = "Label10"
         '
         'Threads
         '
+        Me.Threads.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.Threads, "Threads")
         Me.Threads.Name = "Threads"
         '
@@ -776,34 +776,40 @@ Partial Class Form1
         '
         'Label8
         '
+        Me.Label8.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.Label8, "Label8")
         Me.Label8.Name = "Label8"
         '
         'TDP
         '
+        Me.TDP.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.TDP, "TDP")
         Me.TDP.Name = "TDP"
         '
         'Revision
         '
+        Me.Revision.BackColor = System.Drawing.Color.Transparent
         Me.Revision.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Revision, "Revision")
         Me.Revision.Name = "Revision"
         '
         'VID
         '
+        Me.VID.BackColor = System.Drawing.Color.Transparent
         Me.VID.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.VID, "VID")
         Me.VID.Name = "VID"
         '
         'Frequency
         '
+        Me.Frequency.BackColor = System.Drawing.Color.Transparent
         Me.Frequency.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Frequency, "Frequency")
         Me.Frequency.Name = "Frequency"
         '
         'Platform
         '
+        Me.Platform.BackColor = System.Drawing.Color.Transparent
         Me.Platform.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Platform, "Platform")
         Me.Platform.Name = "Platform"
@@ -919,31 +925,54 @@ Partial Class Form1
         'Model
         '
         resources.ApplyResources(Me.Model, "Model")
+        Me.Model.BackColor = System.Drawing.Color.Transparent
         Me.Model.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Model.Name = "Model"
         '
-        'TabPage2
+        'TabPage3
         '
-        Me.TabPage2.Controls.Add(Me.SystemViewList)
-        resources.ApplyResources(Me.TabPage2, "TabPage2")
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.UseVisualStyleBackColor = True
+        Me.TabPage3.Controls.Add(Me.Panel4)
+        resources.ApplyResources(Me.TabPage3, "TabPage3")
+        Me.TabPage3.Name = "TabPage3"
+        Me.TabPage3.UseVisualStyleBackColor = True
         '
-        'SystemViewList
+        'Panel4
         '
-        Me.SystemViewList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        resources.ApplyResources(Me.SystemViewList, "SystemViewList")
-        Me.SystemViewList.FullRowSelect = True
-        Me.SystemViewList.GridLines = True
-        Me.SystemViewList.HideSelection = False
-        Me.SystemViewList.LargeImageList = Me.ImageList1
-        Me.SystemViewList.MultiSelect = False
-        Me.SystemViewList.Name = "SystemViewList"
-        Me.SystemViewList.ShowItemToolTips = True
-        Me.SystemViewList.SmallImageList = Me.ImageList1
-        Me.SystemViewList.StateImageList = Me.ImageList1
-        Me.SystemViewList.UseCompatibleStateImageBehavior = False
-        Me.SystemViewList.View = System.Windows.Forms.View.Details
+        resources.ApplyResources(Me.Panel4, "Panel4")
+        Me.Panel4.Controls.Add(Me.Loadlbl)
+        Me.Panel4.Controls.Add(Me.GCList)
+        Me.Panel4.Controls.Add(Me.GCTempBox)
+        Me.Panel4.Controls.Add(Me.GCNameBox)
+        Me.Panel4.Controls.Add(Me.GCLogo)
+        Me.Panel4.Controls.Add(Me.GCClockBox)
+        Me.Panel4.Controls.Add(Me.Label11)
+        Me.Panel4.Controls.Add(Me.Label15)
+        Me.Panel4.Controls.Add(Me.Label14)
+        Me.Panel4.Controls.Add(Me.GCTempLabel)
+        Me.Panel4.Controls.Add(Me.Label2)
+        Me.Panel4.Name = "Panel4"
+        '
+        'Loadlbl
+        '
+        resources.ApplyResources(Me.Loadlbl, "Loadlbl")
+        Me.Loadlbl.Name = "Loadlbl"
+        '
+        'GCList
+        '
+        Me.GCList.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.GCList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        resources.ApplyResources(Me.GCList, "GCList")
+        Me.GCList.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.GCList.FullRowSelect = True
+        Me.GCList.GridLines = True
+        Me.GCList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
+        Me.GCList.HideSelection = False
+        Me.GCList.MultiSelect = False
+        Me.GCList.Name = "GCList"
+        Me.GCList.ShowItemToolTips = True
+        Me.GCList.SmallImageList = Me.ImageList1
+        Me.GCList.UseCompatibleStateImageBehavior = False
+        Me.GCList.View = System.Windows.Forms.View.SmallIcon
         '
         'ImageList1
         '
@@ -960,116 +989,91 @@ Partial Class Form1
         Me.ImageList1.Images.SetKeyName(8, "027-gpu-1.png")
         Me.ImageList1.Images.SetKeyName(9, "038-system-1.png")
         '
-        'TabPage3
+        'GCTempBox
         '
-        Me.TabPage3.Controls.Add(Me.GCList)
-        Me.TabPage3.Controls.Add(Me.Label2)
-        Me.TabPage3.Controls.Add(Me.Panel4)
-        resources.ApplyResources(Me.TabPage3, "TabPage3")
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.UseVisualStyleBackColor = True
+        Me.GCTempBox.AutoEllipsis = True
+        Me.GCTempBox.BackColor = System.Drawing.Color.Transparent
+        resources.ApplyResources(Me.GCTempBox, "GCTempBox")
+        Me.GCTempBox.Name = "GCTempBox"
+        '
+        'GCNameBox
+        '
+        resources.ApplyResources(Me.GCNameBox, "GCNameBox")
+        Me.GCNameBox.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.GCNameBox.Name = "GCNameBox"
         '
         'GCLogo
         '
-        Me.GCLogo.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.GCLogo.BackColor = System.Drawing.Color.Transparent
+        Me.GCLogo.Image = Global.CoolCore.My.Resources.Resources.Nvidia_Logo_wine
         resources.ApplyResources(Me.GCLogo, "GCLogo")
         Me.GCLogo.Name = "GCLogo"
         Me.GCLogo.TabStop = False
         '
-        'GCList
-        '
-        Me.GCList.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.GCList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        resources.ApplyResources(Me.GCList, "GCList")
-        Me.GCList.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.GCList.FullRowSelect = True
-        Me.GCList.GridLines = True
-        Me.GCList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
-        Me.GCList.HideSelection = False
-        Me.GCList.MultiSelect = False
-        Me.GCList.Name = "GCList"
-        Me.GCList.ShowItemToolTips = True
-        Me.GCList.SmallImageList = Me.ImageList1
-        Me.GCList.UseCompatibleStateImageBehavior = False
-        Me.GCList.View = System.Windows.Forms.View.SmallIcon
-        '
-        'Label2
-        '
-        resources.ApplyResources(Me.Label2, "Label2")
-        Me.Label2.Name = "Label2"
-        '
-        'Panel4
-        '
-        Me.Panel4.Controls.Add(Me.GCLogo)
-        Me.Panel4.Controls.Add(Me.GCClockBox)
-        Me.Panel4.Controls.Add(Me.Label11)
-        Me.Panel4.Controls.Add(Me.GCLoadBox)
-        Me.Panel4.Controls.Add(Me.Label14)
-        Me.Panel4.Controls.Add(Me.GCTempBox)
-        Me.Panel4.Controls.Add(Me.GCTempLabel)
-        Me.Panel4.Controls.Add(Me.GCLabel)
-        Me.Panel4.Controls.Add(Me.GCNameBox)
-        resources.ApplyResources(Me.Panel4, "Panel4")
-        Me.Panel4.Name = "Panel4"
-        '
         'GCClockBox
         '
-        Me.GCClockBox.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.GCClockBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         resources.ApplyResources(Me.GCClockBox, "GCClockBox")
-        Me.GCClockBox.ForeColor = System.Drawing.SystemColors.HotTrack
         Me.GCClockBox.Name = "GCClockBox"
-        Me.GCClockBox.ReadOnly = True
-        Me.GCClockBox.ShortcutsEnabled = False
-        '
-        'Label11
-        '
-        resources.ApplyResources(Me.Label11, "Label11")
-        Me.Label11.Name = "Label11"
-        '
-        'GCLoadBox
-        '
-        Me.GCLoadBox.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.GCLoadBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        resources.ApplyResources(Me.GCLoadBox, "GCLoadBox")
-        Me.GCLoadBox.ForeColor = System.Drawing.SystemColors.HotTrack
-        Me.GCLoadBox.Name = "GCLoadBox"
-        Me.GCLoadBox.ReadOnly = True
-        Me.GCLoadBox.ShortcutsEnabled = False
-        '
-        'Label14
-        '
-        resources.ApplyResources(Me.Label14, "Label14")
-        Me.Label14.Name = "Label14"
-        '
-        'GCTempBox
-        '
-        Me.GCTempBox.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.GCTempBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        resources.ApplyResources(Me.GCTempBox, "GCTempBox")
-        Me.GCTempBox.ForeColor = System.Drawing.SystemColors.HotTrack
-        Me.GCTempBox.Name = "GCTempBox"
-        Me.GCTempBox.ReadOnly = True
-        Me.GCTempBox.ShortcutsEnabled = False
         '
         'GCTempLabel
         '
         resources.ApplyResources(Me.GCTempLabel, "GCTempLabel")
+        Me.GCTempLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.GCTempLabel.Name = "GCTempLabel"
         '
-        'GCLabel
+        'Label2
         '
-        resources.ApplyResources(Me.GCLabel, "GCLabel")
-        Me.GCLabel.Name = "GCLabel"
+        resources.ApplyResources(Me.Label2, "Label2")
+        Me.Label2.ForeColor = System.Drawing.Color.AntiqueWhite
+        Me.Label2.Name = "Label2"
         '
-        'GCNameBox
+        'TabPage2
         '
-        Me.GCNameBox.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.GCNameBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        resources.ApplyResources(Me.GCNameBox, "GCNameBox")
-        Me.GCNameBox.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.GCNameBox.Name = "GCNameBox"
-        Me.GCNameBox.ReadOnly = True
+        resources.ApplyResources(Me.TabPage2, "TabPage2")
+        Me.TabPage2.Controls.Add(Me.SystemViewList)
+        Me.TabPage2.Name = "TabPage2"
+        Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'SystemViewList
+        '
+        Me.SystemViewList.BackColor = System.Drawing.SystemColors.Window
+        Me.SystemViewList.BorderStyle = System.Windows.Forms.BorderStyle.None
+        resources.ApplyResources(Me.SystemViewList, "SystemViewList")
+        Me.SystemViewList.FullRowSelect = True
+        Me.SystemViewList.GridLines = True
+        Me.SystemViewList.HideSelection = False
+        Me.SystemViewList.LargeImageList = Me.ImageList1
+        Me.SystemViewList.MultiSelect = False
+        Me.SystemViewList.Name = "SystemViewList"
+        Me.SystemViewList.ShowItemToolTips = True
+        Me.SystemViewList.SmallImageList = Me.ImageList1
+        Me.SystemViewList.StateImageList = Me.ImageList1
+        Me.SystemViewList.UseCompatibleStateImageBehavior = False
+        Me.SystemViewList.View = System.Windows.Forms.View.Details
+        '
+        'Label3
+        '
+        resources.ApplyResources(Me.Label3, "Label3")
+        Me.Label3.BackColor = System.Drawing.Color.Transparent
+        Me.Label3.Name = "Label3"
+        '
+        'Label14
+        '
+        resources.ApplyResources(Me.Label14, "Label14")
+        Me.Label14.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label14.Name = "Label14"
+        '
+        'Label11
+        '
+        resources.ApplyResources(Me.Label11, "Label11")
+        Me.Label11.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label11.Name = "Label11"
+        '
+        'Label15
+        '
+        resources.ApplyResources(Me.Label15, "Label15")
+        Me.Label15.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label15.Name = "Label15"
         '
         'Form1
         '
@@ -1077,6 +1081,7 @@ Partial Class Form1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Standard)
         Me.Controls.Add(Me.LblStatusMessage)
         Me.Controls.Add(Me.MenuStrip1)
@@ -1099,12 +1104,11 @@ Partial Class Form1
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.Panel3.ResumeLayout(False)
-        Me.TabPage2.ResumeLayout(False)
         Me.TabPage3.ResumeLayout(False)
-        Me.TabPage3.PerformLayout()
-        CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
+        CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TabPage2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1145,7 +1149,6 @@ Partial Class Form1
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents PicBox2 As PictureBox
     Friend WithEvents Label7 As Label
-    Friend WithEvents Label3 As Label
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Panel3 As Panel
     Friend WithEvents BtnToggleMonitor1 As Button
@@ -1213,16 +1216,17 @@ Partial Class Form1
     Friend WithEvents SystemViewList As ListView
     Friend WithEvents ImageList1 As ImageList
     Friend WithEvents TabPage3 As TabPage
-    Friend WithEvents GCTempLabel As Label
-    Friend WithEvents GCTempBox As TextBox
-    Friend WithEvents GCLabel As Label
-    Friend WithEvents GCNameBox As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Panel4 As Panel
     Friend WithEvents GCList As ListView
-    Friend WithEvents GCClockBox As TextBox
-    Friend WithEvents Label11 As Label
-    Friend WithEvents GCLoadBox As TextBox
-    Friend WithEvents Label14 As Label
+    Friend WithEvents GCNameBox As Label
     Friend WithEvents GCLogo As PictureBox
+    Friend WithEvents GCTempLabel As Label
+    Friend WithEvents GCTempBox As Label
+    Friend WithEvents GCClockBox As Label
+    Friend WithEvents Loadlbl As Label
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Label14 As Label
+    Friend WithEvents Label11 As Label
+    Friend WithEvents Label15 As Label
 End Class

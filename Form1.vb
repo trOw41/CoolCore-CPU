@@ -14,14 +14,15 @@ Imports System.Security.Principal
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports System.Threading
+Imports Google.Protobuf.WellKnownTypes
 Imports HidSharp.Utility
 Imports Microsoft.VisualBasic.Logging
 Imports MySql.Data.MySqlClient
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 Imports OpenHardwareMonitor.Hardware.Controller.AeroCool
-Imports Timer = System.Windows.Forms.Timer
 Imports BasicComputerInfo = Microsoft.VisualBasic.Devices.ComputerInfo
+Imports Timer = System.Windows.Forms.Timer
 
 
 
@@ -645,21 +646,45 @@ Public Class Form1
                       End Sub)
             Dim gpu = computer.Hardware.FirstOrDefault(Function(h) h.HardwareType = HardwareType.GpuNvidia OrElse h.HardwareType = HardwareType.GpuAmd OrElse h.HardwareType = HardwareType.GpuIntel)
             gpu?.Update()
+
             Dim gpuSensors = gpu?.Sensors.Where(Function(s) s.SensorType = SensorType.Temperature OrElse s.SensorType = SensorType.Clock OrElse s.SensorType = SensorType.Load).ToList()
             If gpuSensors IsNot Nothing Then
                 For Each sensor In gpuSensors
                     Select Case sensor.SensorType
                         Case SensorType.Temperature
                             If sensor.Value.HasValue Then
-                                Me.Invoke(Sub() GCTempBox.Text = $"{sensor.Value.Value:F1}°C")
+                                Me.Invoke(Sub()
+                                              GCTempBox.Text = $"{sensor.Value.Value:F1}°C"
+                                              GCTempBox.ForeColor = GetTemperatureColor(sensor.Value.Value)
+
+                                              Dim lastGcLoadBarValue As Integer = -1
+
+                                              If sensor.SensorType = SensorType.Temperature Then
+                                                  If sensor.Value.HasValue Then
+                                                      Dim newValue As Integer = CInt(sensor.Value.Value)
+                                                      If newValue <> lastGcLoadBarValue Then
+                                                          Me.Invoke(Sub()
+                                                                        GCTempBox.Text = $"{sensor.Value.Value:F1}°C"
+                                                                        GCTempBox.ForeColor = GetTemperatureColor(sensor.Value.Value)
+
+                                                                        lastGcLoadBarValue = newValue
+                                                                    End Sub)
+                                                      End If
+                                                  End If
+                                              End If
+                                          End Sub)
                             End If
                         Case SensorType.Clock
                             If sensor.Value.HasValue Then
                                 Me.Invoke(Sub() GCClockBox.Text = $"{sensor.Value.Value:F1}MHz")
                             End If
                         Case SensorType.Load
+
                             If sensor.Value.HasValue Then
-                                Me.Invoke(Sub() GCLoadBox.Text = $"{sensor.Value.Value:F1}%")
+                                Dim loadValue As Integer = CInt(sensor.Value.Value)
+                                Me.Invoke(Sub()
+                                              Loadlbl.Text = $"{loadValue}%"
+                                          End Sub)
                             End If
                     End Select
                 Next
@@ -927,7 +952,10 @@ Public Class Form1
                             End If
                         Case SensorType.Load
                             If sensor.Value.HasValue Then
-                                Me.Invoke(Sub() GCLoadBox.Text = $"{sensor.Value.Value:F1}%")
+
+                                Me.Invoke(Sub()
+                                              Loadlbl.Text = $"{sensor.Value.Value}%"
+                                          End Sub)
                             End If
                         Case SensorType.Fan
                             If sensor.Value.HasValue Then

@@ -35,12 +35,12 @@ Partial Class Form3
         '
         Me.LblLoadingText.AutoEllipsis = True
         Me.LblLoadingText.BackColor = System.Drawing.Color.Transparent
-        Me.LblLoadingText.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.LblLoadingText.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.LblLoadingText.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblLoadingText.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblLoadingText.Location = New System.Drawing.Point(3, 46)
+        Me.LblLoadingText.Location = New System.Drawing.Point(0, 27)
         Me.LblLoadingText.Name = "LblLoadingText"
-        Me.LblLoadingText.Size = New System.Drawing.Size(325, 65)
+        Me.LblLoadingText.Size = New System.Drawing.Size(325, 31)
         Me.LblLoadingText.TabIndex = 1
         Me.LblLoadingText.Text = "Bitte warten.."
         '
@@ -48,16 +48,18 @@ Partial Class Form3
         '
         Me.ProgressBar1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ProgressBar1.Location = New System.Drawing.Point(4, 162)
+        Me.ProgressBar1.Location = New System.Drawing.Point(4, 170)
         Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(0)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(473, 14)
+        Me.ProgressBar1.Size = New System.Drawing.Size(473, 18)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 2
         '
         'TimeLabel
         '
         Me.TimeLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TimeLabel.BackColor = System.Drawing.Color.Transparent
+        Me.TimeLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.TimeLabel.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TimeLabel.Location = New System.Drawing.Point(1, 138)
         Me.TimeLabel.Name = "TimeLabel"
@@ -70,10 +72,10 @@ Partial Class Form3
         Me.PnlCpuFanAnimation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PnlCpuFanAnimation.BackColor = System.Drawing.Color.Transparent
-        Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(334, 12)
+        Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(324, 14)
         Me.PnlCpuFanAnimation.Name = "PnlCpuFanAnimation"
         Me.PnlCpuFanAnimation.Padding = New System.Windows.Forms.Padding(3)
-        Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(137, 132)
+        Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(147, 145)
         Me.PnlCpuFanAnimation.TabIndex = 4
         '
         'AnimationTimer
@@ -84,11 +86,14 @@ Partial Class Form3
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
-        Me.ClientSize = New System.Drawing.Size(483, 179)
+        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
+        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.ClientSize = New System.Drawing.Size(483, 192)
         Me.Controls.Add(Me.PnlCpuFanAnimation)
         Me.Controls.Add(Me.TimeLabel)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.LblLoadingText)
+        Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
