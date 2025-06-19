@@ -313,16 +313,6 @@ Namespace My.Resources
         '''<summary>
         '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         '''</summary>
-        Public ReadOnly Property archiv_log_box() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("archiv_log_box", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        '''</summary>
         Public ReadOnly Property atiamdlogo() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("atiamdlogo", resourceCulture)
@@ -333,9 +323,9 @@ Namespace My.Resources
         '''<summary>
         '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         '''</summary>
-        Public ReadOnly Property cpu_test() As System.Drawing.Bitmap
+        Public ReadOnly Property border4() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("cpu_test", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("border4", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -343,9 +333,9 @@ Namespace My.Resources
         '''<summary>
         '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         '''</summary>
-        Public ReadOnly Property export_log() As System.Drawing.Bitmap
+        Public ReadOnly Property border8() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("export_log", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("border8", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -393,79 +383,9 @@ Namespace My.Resources
         '''<summary>
         '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         '''</summary>
-        Public ReadOnly Property log_1() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("log_1", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        '''</summary>
-        Public ReadOnly Property log_details() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("log_details", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        '''</summary>
-        Public ReadOnly Property Main_dark() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Main_dark", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        '''</summary>
-        Public ReadOnly Property Main_Standard() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Main_Standard", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        '''</summary>
-        Public ReadOnly Property menu_export() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("menu_export", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        '''</summary>
         Public ReadOnly Property Nvidia_Logo_wine() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Nvidia_Logo_wine", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        '''</summary>
-        Public ReadOnly Property options_Standard() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("options_Standard", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        '''</summary>
-        Public ReadOnly Property pngegg() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("pngegg", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -501,16 +421,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        '''</summary>
-        Public ReadOnly Property temperatures_standard() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("temperatures_standard", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Wichtiger Hinweis: 
         '''-------------------------------------------------------------------------------
         '''Der Test Prozess kann nicht unterbrochen werden! Bitte warten Sie bis zum ende des Test Prozess und schließen Sie CoolCore nicht in der Test Phase, dies kann und wird zu unerwünschten Ergebnissen führen! 
@@ -534,9 +444,10 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Um Ihnen die bestmögliche Überwachung Ihrer CPU zu bieten, benötigt CoolCore beim ersten Start eine Internetverbindung. Diese Verbindung wird genutzt, um wichtige Metadaten wie die Lithographie oder die TjMax-Temperatur spezifisch für Ihre CPU von unseren Servern herunterzuladen.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Um Ihnen die bestmögliche Überwachung Ihrer CPU zu bieten, benötigt CoolCore beim ersten Start eine Internetverbindung. 
+        '''Diese Verbindung wird genutzt, um wichtige Metadaten wie die Lithographie oder die TjMax-Temperatur spezifisch für Ihre CPU von unseren Servern herunterzuladen.
         '''
-        '''Keine Sorge: Dieser Internetzugriff ist nur bei der Neu- oder Erstinstallation erforderlich. Die ermittelten Daten werden anschließend als Datenbank auf Ihrem PC gespeichert, sodass CoolCore danach keinen weiteren Netzwerkzugrif [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        '''Keine Sorge: Dieser Internetzugriff ist nur bei der Neu- oder Erstinstallation erforderlich. Die ermittelten Daten werden anschließend als Datenbank auf Ihrem PC gespeichert, sodass CoolCore danach keinen weiteren Netzwerkzugr [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         '''</summary>
         Public ReadOnly Property WilkommenInfo() As String
             Get

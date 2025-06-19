@@ -54,7 +54,7 @@ Partial Class Form1
         Me.DataColumn1 = New System.Data.DataColumn()
         Me.DataColumn2 = New System.Data.DataColumn()
         Me.LblStatusMessage = New System.Windows.Forms.Label()
-        Me.Standard = New System.Windows.Forms.TabControl()
+        Me.Tabpane = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.PicBox2 = New System.Windows.Forms.PictureBox()
@@ -139,11 +139,14 @@ Partial Class Form1
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.SystemViewList = New System.Windows.Forms.ListView()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Versionlbl = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Standard.SuspendLayout()
+        Me.Tabpane.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PicBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -153,6 +156,7 @@ Partial Class Form1
         Me.Panel4.SuspendLayout()
         CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -330,17 +334,17 @@ Partial Class Form1
         resources.ApplyResources(Me.LblStatusMessage, "LblStatusMessage")
         Me.LblStatusMessage.Name = "LblStatusMessage"
         '
-        'Standard
+        'Tabpane
         '
-        Me.Standard.Controls.Add(Me.TabPage1)
-        Me.Standard.Controls.Add(Me.TabPage3)
-        Me.Standard.Controls.Add(Me.TabPage2)
-        resources.ApplyResources(Me.Standard, "Standard")
-        Me.Standard.HotTrack = True
-        Me.Standard.Multiline = True
-        Me.Standard.Name = "Standard"
-        Me.Standard.SelectedIndex = 0
-        Me.Standard.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
+        Me.Tabpane.Controls.Add(Me.TabPage1)
+        Me.Tabpane.Controls.Add(Me.TabPage3)
+        Me.Tabpane.Controls.Add(Me.TabPage2)
+        resources.ApplyResources(Me.Tabpane, "Tabpane")
+        Me.Tabpane.HotTrack = True
+        Me.Tabpane.Multiline = True
+        Me.Tabpane.Name = "Tabpane"
+        Me.Tabpane.SelectedIndex = 0
+        Me.Tabpane.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
         '
         'TabPage1
         '
@@ -387,6 +391,7 @@ Partial Class Form1
         'PicBox2
         '
         Me.PicBox2.BackColor = System.Drawing.Color.Transparent
+        Me.PicBox2.Image = Global.CoolCore.My.Resources.Resources._024_cpu
         resources.ApplyResources(Me.PicBox2, "PicBox2")
         Me.PicBox2.Name = "PicBox2"
         Me.PicBox2.TabStop = False
@@ -398,7 +403,7 @@ Partial Class Form1
         Me.Label7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label7.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         resources.ApplyResources(Me.Label7, "Label7")
-        Me.Label7.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label7.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.Label7.Name = "Label7"
         Me.Label7.UseCompatibleTextRendering = True
         Me.Label7.UseMnemonic = False
@@ -1059,11 +1064,11 @@ Partial Class Form1
         '
         Me.SystemViewList.BackColor = System.Drawing.SystemColors.Window
         Me.SystemViewList.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.SystemViewList.ContextMenuStrip = Me.ContextMenuStrip1
         resources.ApplyResources(Me.SystemViewList, "SystemViewList")
         Me.SystemViewList.FullRowSelect = True
         Me.SystemViewList.GridLines = True
         Me.SystemViewList.HideSelection = False
-        Me.SystemViewList.LargeImageList = Me.ImageList1
         Me.SystemViewList.MultiSelect = False
         Me.SystemViewList.Name = "SystemViewList"
         Me.SystemViewList.ShowItemToolTips = True
@@ -1072,12 +1077,30 @@ Partial Class Form1
         Me.SystemViewList.UseCompatibleStateImageBehavior = False
         Me.SystemViewList.View = System.Windows.Forms.View.Details
         '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        resources.ApplyResources(Me.ContextMenuStrip1, "ContextMenuStrip1")
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Image = Global.CoolCore.My.Resources.Resources._036_folder
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        resources.ApplyResources(Me.ToolStripMenuItem1, "ToolStripMenuItem1")
+        '
         'PictureBox1
         '
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox1.Image = Global.CoolCore.My.Resources.Resources._024_cpu
         resources.ApplyResources(Me.PictureBox1, "PictureBox1")
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.TabStop = False
+        '
+        'Versionlbl
+        '
+        resources.ApplyResources(Me.Versionlbl, "Versionlbl")
+        Me.Versionlbl.Name = "Versionlbl"
         '
         'Form1
         '
@@ -1085,8 +1108,9 @@ Partial Class Form1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoValidate = System.Windows.Forms.AutoValidate.Disable
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Controls.Add(Me.Versionlbl)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Controls.Add(Me.Standard)
+        Me.Controls.Add(Me.Tabpane)
         Me.Controls.Add(Me.LblStatusMessage)
         Me.Controls.Add(Me.MenuStrip1)
         Me.DoubleBuffered = True
@@ -1099,7 +1123,7 @@ Partial Class Form1
         Me.MenuStrip1.PerformLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Standard.ResumeLayout(False)
+        Me.Tabpane.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
@@ -1112,6 +1136,7 @@ Partial Class Form1
         Me.Panel4.PerformLayout()
         CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage2.ResumeLayout(False)
+        Me.ContextMenuStrip1.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -1147,7 +1172,7 @@ Partial Class Form1
     Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
     Friend WithEvents AmdCPUDBToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator6 As ToolStripSeparator
-    Friend WithEvents Standard As TabControl
+    Friend WithEvents Tabpane As TabControl
     Friend WithEvents TabPage1 As TabPage
     Friend WithEvents Panel1 As Panel
     Friend WithEvents PictureBox1 As PictureBox
@@ -1233,4 +1258,7 @@ Partial Class Form1
     Friend WithEvents Label14 As Label
     Friend WithEvents Label11 As Label
     Friend WithEvents Label15 As Label
+    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents Versionlbl As Label
 End Class

@@ -5,6 +5,7 @@ Public Class OptionsForm
     Public Event ThemeChanged As EventHandler(Of String)
     Private _updateCheckBoxInitialState As CheckState
     Private _StartMessageBoxCheckBoxInitialState As CheckState
+    Private _isInitializing As Boolean = False
     Private Sub OptionsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Settings.ApplicationTheme = "Standard"
         Label1.Text = "CPU Temperatur Test Info: " & My.Settings.MonitorTime
@@ -20,8 +21,10 @@ Public Class OptionsForm
         updateCheckBox.Checked = Settings.UpdateCheck
         BootBox.Checked = Settings.BootUp
         updateCheckBox.Checked = Settings.UpdateCheck
-        StartMessageBox.Checked = Settings.AllwaysShow
         _updateCheckBoxInitialState = updateCheckBox.CheckState
+        _isInitializing = True
+        ' Set the initial state of the StartMessageBox checkbox
+        StartMessageBox.Checked = Settings.AllwaysShow
         _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
         Dim monitorTime = Settings.MonitorTime
         If monitorTime > 0 Then
@@ -112,7 +115,7 @@ Public Class OptionsForm
                          End Sub)
         ElseIf LogStartStopBox.Checked = True Then
             My.Settings.LogStartStop = True
-            If Form1 IsNot Nothing AndAlso Form1.IsHandleCreated Then
+            If Form1 Is Nothing AndAlso Form1.IsHandleCreated Then
                 Form1.Invoke(Sub()
                                  Form1.StartStopLog()
                              End Sub)
@@ -164,17 +167,26 @@ Public Class OptionsForm
         _updateCheckBoxInitialState = updateCheckBox.CheckState
     End Sub
 
+
     Private Sub StartMessageBox_CheckedChanged(sender As Object, e As EventArgs) Handles StartMessageBox.CheckedChanged
         If StartMessageBox.CheckState = _StartMessageBoxCheckBoxInitialState Then
-
+            Return
         End If
         If StartMessageBox.CheckState = CheckState.Checked Then
-            Settings.AllwaysShow = True
-            WelcomeForm.ShowDialog(Me)
-            MessageBox.Show("Start Info wird nun immer angezeigt!")
+            My.Settings.AllwaysShow = True
+            If _isInitializing Then
+                _isInitializing = False
+                Return
+            End If
+            MessageBox.Show("Die Startnachricht wird immer angezeigt.", "Info:", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            'MessageBox.Show("Die Startnachricht immer anzeigen?.", "Info:", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
         Else
-            Settings.AllwaysShow = False
-
+            My.Settings.AllwaysShow = False
+            If _isInitializing Then
+                _isInitializing = False
+                Return
+            End If
+            MessageBox.Show("Die Startnachricht wird nicht mehr angezeigt.", "Info:", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
         _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
     End Sub

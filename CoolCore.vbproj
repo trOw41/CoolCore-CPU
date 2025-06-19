@@ -32,7 +32,7 @@
     <SuiteName>CoolCore</SuiteName>
     <TrustUrlParameters>true</TrustUrlParameters>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.9.1.%2a</ApplicationVersion>
+    <ApplicationVersion>1.9.9.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -80,7 +80,7 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\024-cpu-1.ico</ApplicationIcon>
+    <ApplicationIcon>024-cpu-1.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -303,6 +303,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="024-cpu-1.ico" />
     <Content Include="45_11594827525_023-cpu.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -348,7 +349,9 @@
     <Content Include="Resources\019-person.png" />
     <Content Include="Resources\023-cpu.png" />
     <None Include="Resources\023-cpu1.png" />
-    <None Include="Resources\024-cpu-1.png" />
+    <None Include="..\..\..\..\..\Desktop\CoolCore CPU\024-cpu-1.png">
+      <Link>Resources\024-cpu-1.png</Link>
+    </None>
     <None Include="Resources\024-cpu-1.ico" />
     <None Include="Resources\tools-and-utensils.png" />
     <None Include="Resources\temp.png" />
@@ -356,6 +359,15 @@
     <None Include="Resources\IntelLogo-white.png" />
     <None Include="Resources\AMDLogo_Dark.png" />
     <None Include="Resources\AMDLogo.png" />
+    <None Include="Resources\border4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\border8.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Resources\backround2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Support\support.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

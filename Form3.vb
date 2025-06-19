@@ -50,7 +50,7 @@ Public Class Form3
     Private Sub Form3_load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.BackColor = ColorTranslator.FromHtml("#F0F0F0")
         Me.ForeColor = ColorTranslator.FromHtml("#333333")
-        _cpuImage = My.Resources.tools_and_utensils
+        _cpuImage = My.Resources.fan1
     End Sub
 
     Public Sub UpdateElapsedTime(elapsedTime As TimeSpan)
@@ -115,7 +115,7 @@ Public Class Form3
     End Sub
     Private Sub PnlCpuFanAnimation_Paint(sender As Object, e As PaintEventArgs)
         Dim g As Graphics = e.Graphics
-        g.SmoothingMode = SmoothingMode.HighSpeed
+        g.SmoothingMode = SmoothingMode.AntiAlias ' Changed for smoother lines
         g.InterpolationMode = InterpolationMode.HighQualityBicubic
 
         Dim panelWidth As Integer = PnlCpuFanAnimation.Width
@@ -124,7 +124,7 @@ Public Class Form3
         Dim centerY As Integer = panelHeight / 2
 
         If _cpuImage IsNot Nothing Then
-
+            ' Calculate scaled CPU image size for pulsing
             Dim scaledWidth As Integer = CInt(_cpuImage.Width * _currentScale)
             Dim scaledHeight As Integer = CInt(_cpuImage.Height * _currentScale)
             Dim maxDimension As Integer = Math.Min(panelWidth, panelHeight) * 9 \ 10
@@ -138,35 +138,56 @@ Public Class Form3
             End If
             Dim drawX As Integer = centerX - (scaledWidth \ 2)
             Dim drawY As Integer = centerY - (scaledHeight \ 2)
+
             g.DrawImage(_cpuImage, drawX, drawY, scaledWidth, scaledHeight)
+
+            Dim cpuTemperature As Integer = Form1.CoreTemp.Text.Substring(0, 2)
+            Dim temperatureAlpha As Integer = CInt(Math.Min(255, cpuTemperature * 2.55))
+            Using heatBrush As New SolidBrush(Color.FromArgb(temperatureAlpha, Color.OrangeRed))
+                g.FillEllipse(heatBrush, drawX, drawY, scaledWidth, scaledHeight)
+            End Using
+
         End If
 
-        Using dataPen As New Pen(Color.FromArgb(210, Color.OrangeRed), 3)
+        ' Fan Blades (Cool Core)
+        Using fanBrush As New SolidBrush(Color.FromArgb(180, Color.LightBlue))
+            For i As Integer = 0 To 5 ' Example: 6 fan blades
+                g.TranslateTransform(centerX, centerY)
+                g.RotateTransform(_fanAngle + (i * 60)) ' Rotate each blade
+                g.FillPolygon(fanBrush, New Point() {New Point(-10, -50), New Point(10, -50), New Point(20, -10), New Point(-20, -10)}) ' Example blade shape
+                g.ResetTransform()
+            Next
+        End Using
+
+        ' Airflow/Cooling Effect (Re-purposed Data Flow)
+        Using airPen As New Pen(Color.FromArgb(180, Color.Cyan), 2) ' Cool blue for airflow
             Dim radius As Integer = CInt(Math.Min(panelWidth, panelHeight) * 0.45)
 
             For i As Integer = 0 To 10
-                Dim angle As Double = (i * 45 + _dataFlowOffset) * (Math.PI / 180.0)
-                Dim angleEnd As Double = (i * 45 + _dataFlowOffset + 20) * (Math.PI / 180.0)
+                Dim angle As Double = (i * 30 + _dataFlowOffset) * (Math.PI / 180.0) ' Adjust angle for more flow lines
+                Dim angleEnd As Double = (i * 30 + _dataFlowOffset + 15) * (Math.PI / 180.0)
 
                 Dim startX As Single = centerX + CInt(radius * Math.Cos(angle))
                 Dim startY As Single = centerY + CInt(radius * Math.Sin(angle))
 
-                Dim endX As Single = centerX + CInt((radius + 20) * Math.Cos(angleEnd))
-                Dim endY As Single = centerY + CInt((radius + 20) * Math.Sin(angleEnd))
+                Dim endX As Single = centerX + CInt((radius + 30) * Math.Cos(angleEnd)) ' Longer lines
+                Dim endY As Single = centerY + CInt((radius + 30) * Math.Sin(angleEnd))
 
-                dataPen.Color = Color.FromArgb(Math.Max(50, 200 - (_dataFlowOffset Mod 100)), Color.IndianRed)
-                g.DrawLine(dataPen, startX, startY, endX, endY)
+                ' Vary color/opacity for a dynamic look
+                airPen.Color = Color.FromArgb(Math.Max(80, 255 - (_dataFlowOffset Mod 100) * 2), Color.Cyan)
+                g.DrawLine(airPen, startX, startY, endX, endY)
 
-                Dim pointRadius As Integer = CInt(radius + (_dataFlowOffset Mod 20) - 10)
-                Dim pointX As Single = centerX + CInt(pointRadius * Math.Cos(angle + _dataFlowOffset * 0.05))
-                Dim pointY As Single = centerY + CInt(pointRadius * Math.Sin(angle + _dataFlowOffset * 0.05))
-                g.FillEllipse(Brushes.GreenYellow, pointX - 2, pointY - 2, 4, 4)
+                ' Cool air particles
+                Dim pointRadius As Integer = CInt(radius + (_dataFlowOffset Mod 30) - 15)
+                Dim pointX As Single = centerX + CInt(pointRadius * Math.Cos(angle + _dataFlowOffset * 0.08))
+                Dim pointY As Single = centerY + CInt(pointRadius * Math.Sin(angle + _dataFlowOffset * 0.08))
+                g.FillEllipse(Brushes.WhiteSmoke, pointX - 3, pointY - 3, 6, 6) ' Larger, white/smoke particles
             Next
         End Using
 
-        Using borderPen As New Pen(Color.Gray, 1)
+        ' Border (can be removed or stylized further)
+        Using borderPen As New Pen(Color.DimGray, 1)
             g.DrawRectangle(borderPen, 0, 0, panelWidth - 1, panelHeight - 1)
         End Using
     End Sub
-
 End Class

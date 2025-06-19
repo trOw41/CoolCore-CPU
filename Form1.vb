@@ -2,6 +2,7 @@
 Imports System.ComponentModel.Design
 Imports System.Drawing
 Imports System.Globalization
+Imports System.IdentityModel.Protocols.WSTrust
 Imports System.IO
 Imports System.Linq
 Imports System.Management
@@ -69,7 +70,6 @@ Public Class Form1
     Private Const CPU_SPECS_CSV_FILE As String = "intel-cpus.csv"
     Private foundCpuDetails As New Dictionary(Of String, String)()
     Private tos As New ToolTip()
-    ' MySQL Connection String Constants
     Private _mysqlServer As String
     Private _mysqlPort As String
     Private _mysqlDatabase As String
@@ -78,6 +78,11 @@ Public Class Form1
     Private _mysqlCpuTableName As String
     Private Const MYSQL_CONFIG_FILE As String = "mysql_credentials.json"
     Private WithEvents OhmComputer As New OpenHardwareMonitor.Hardware.Computer()
+    Private _backgroundImage1 As Image
+    Private _backgroundImage2 As Image
+    Private _backgroundImage3 As Image
+
+
     'Programm initialization
     Public Sub New()
         InitializeComponent()
@@ -120,10 +125,7 @@ Public Class Form1
             .IsPsuEnabled = True,
             .IsStorageEnabled = True
         }
-
         Dim InitBoxes As Task = Task.Run(Function() CeckTempLoadBoxes())
-
-
     End Sub
 
     'Admin check
@@ -135,26 +137,39 @@ Public Class Form1
 
     'Form Logic
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ApplyTheme(My.Settings.ApplicationTheme)
+        ClearCpuDisplayControls()
         If Settings.FirstStart = True Or Settings.AllwaysShow = True Then
             Dim res As DialogResult = WelcomeForm.ShowDialog(Me)
             If res = DialogResult.OK Then
-                Settings.Save()
                 Settings.FirstStart = False
                 Settings.Save()
+                refreshTimer.Start()
                 LoadMySqlCredentials()
                 Start_extend()
-                refreshTimer.Start()
+                Set_image()
             Else
                 Settings.FirstStart = True
                 Me.Close()
             End If
         Else
+
+            refreshTimer.Start()
             LoadMySqlCredentials()
             Start_extend()
-            refreshTimer.Start()
+            Set_image()
         End If
-    End Sub
 
+    End Sub
+    Private Function Set_image()
+        _backgroundImage1 = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory & "Resources", "border8.png"))
+        TabPage1.BackgroundImage = _backgroundImage1
+        _backgroundImage2 = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory & "Resources", "border4.png"))
+        TabPage2.BackgroundImage = _backgroundImage2
+        _backgroundImage3 = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory & "Resources", "backround2.png"))
+        TabPage3.BackgroundImage = _backgroundImage3
+        Return Task.CompletedTask
+    End Function
     Private Async Sub Start_extend()
         LblStatusMessage.Text = "Ready to read system information."
         LblStatusMessage.ForeColor = Color.Black
@@ -175,10 +190,15 @@ Public Class Form1
         SystemViewList.View = View.Details
         SystemViewList.Columns.Add("Category", 150)
         SystemViewList.Columns.Add("Information", 300)
-
-        Me.Text = "CoolCore-CPU®" & " - " & My.Application.Info.Version.ToString(4)
-        ApplyTheme(My.Settings.ApplicationTheme)
-        ClearCpuDisplayControls()
+        Me.Text = "CoolCore-CPU®"
+        Dim currentVersion As New Version(My.Application.Info.Version.ToString(3))
+        Versionlbl.Text = $"v{currentVersion}"
+        Dim hardwareInfoTask As Task = Task.Run(Async Function()
+                                                    Await ReadAndDisplaySystemInfoAsync()
+                                                    Await CheckCpuSub()
+                                                    Return Task.CompletedTask
+                                                End Function)
+        Await hardwareInfoTask
         Await Task.Run(Sub()
                            InitializePerCoreCounters()
                            InitializeCoreTemperatureSensors()
@@ -193,17 +213,6 @@ Public Class Form1
 
                                          End Sub)
         Await LogSystem
-        Dim hardwareInfoTask As Task = Task.Run(Async Function()
-                                                    Await ReadAndDisplaySystemInfoAsync()
-
-
-                                                    Await CheckCpuSub()
-
-                                                    Collect_AllSystemInfo()
-                                                    Return Task.CompletedTask
-                                                End Function)
-        Await hardwareInfoTask
-
         If My.Settings.UpdateCheck = True Then
             Dim url As String = "https://cool-core.de.cool/updates/cool-core/version.txt"
             Dim versionCheckTask As Task = Task.Run(Sub()
@@ -222,26 +231,6 @@ Public Class Form1
 
                                                     End Sub)
         ElseIf Settings.UpdateCheck = False Then
-        End If
-        ReadGraphicCardInfo()
-        If My.Settings.BootUp = True Then
-            Dim startupPath As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "CoolCore-CPU.lnk")
-            If Not File.Exists(startupPath) Then
-                Try
-                    Dim psi As New ProcessStartInfo With {
-                        .FileName = Application.ExecutablePath,
-                        .Arguments = "--startup",
-                        .WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory
-                    }
-                    Dim shell As Object = CreateObject("WScript.Shell")
-                    Dim shortcut As Object = shell.CreateShortcut(startupPath)
-                    shortcut.TargetPath = psi.FileName
-                    shortcut.Arguments = psi.Arguments
-                    shortcut.Save()
-                Catch ex As Exception
-                    MessageBox.Show("Error creating startup shortcut: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End If
         End If
     End Sub
     Private Sub LoadMySqlCredentials()
@@ -287,6 +276,7 @@ Public Class Form1
                             LblStatusMessage.Text = $"Latest version from server: {version}"
                         End If
                         Dim currentVersion As New Version(My.Application.Info.Version.ToString(4))
+                        Versionlbl.Text = $"v{currentVersion}"
                         Dim serverVersion As New Version(version)
                         If serverVersion.Equals(currentVersion) Then
                         ElseIf serverVersion > currentVersion Then
@@ -532,10 +522,6 @@ Public Class Form1
                 End If
             Next
         End Try
-    End Sub
-
-    Private Sub UpdateCpuFan()
-
     End Sub
 
     'Timer Progress
@@ -897,25 +883,25 @@ Public Class Form1
                 Next
                 ' Hinweis: Die Images müssen vorher in ImageList1 hinzugefügt worden sein (z.B. im Designer oder per Code).
                 For Each queryObj As ManagementObject In searcher.Get()
-                        boardGpuInfo = If(queryObj("Name"), "N/A").ToString()
-                        Me.Invoke(Sub()
-                                      GCNameBox.Text = boardGpuInfo
-                                      SystemViewList.Items.Add($"On Board Graphic: {boardGpuInfo}").ImageIndex = 1
-                                      ' Detaillierte Infos in GCViewList eintragen
-                                      GCList.Items.Clear()
-                                      GCList.Items.Add($"Name: {If(queryObj("Name"), "N/A")}")
-                                      GCList.Items.Add($"Hersteller: {If(queryObj("AdapterCompatibility"), "N/A")}")
-                                      Dim vramSize = If(queryObj("AdapterRAM"), 0L)
-                                      GCList.Items.Add($"VRAM: {FormatBytes(vramSize)}")
-                                      GCList.Items.Add($"Treiberversion: {If(queryObj("DriverVersion"), "N/A")}")
-                                      GCList.Items.Add($"Status: {If(queryObj("Status"), "N/A")}")
-                                      GCList.Items.Add($"Geräte-ID: {If(queryObj("PNPDeviceID"), "N/A")}")
-                                      GCList.Items.Add($"Video-Prozessor: {If(queryObj("VideoProcessor"), "N/A")}")
-                                      GCList.Items.Add($"Auflösung: {If(queryObj("CurrentHorizontalResolution"), "N/A")} x {If(queryObj("CurrentVerticalResolution"), "N/A")}")
-                                      GCList.Items.Add($"Farb-Tiefe: {If(queryObj("CurrentBitsPerPixel"), "N/A")} Bit")
-                                      GCList.Items.Add($"Aktualisierungsrate: {If(queryObj("CurrentRefreshRate"), "N/A")} Hz")
-                                  End Sub)
-                    Next
+                    boardGpuInfo = If(queryObj("Name"), "N/A").ToString()
+                    Me.Invoke(Sub()
+                                  GCNameBox.Text = boardGpuInfo
+                                  SystemViewList.Items.Add($"On Board Graphic: {boardGpuInfo}").ImageIndex = 1
+                                  ' Detaillierte Infos in GCViewList eintragen
+                                  GCList.Items.Clear()
+                                  GCList.Items.Add($"Name: {If(queryObj("Name"), "N/A")}")
+                                  GCList.Items.Add($"Hersteller: {If(queryObj("AdapterCompatibility"), "N/A")}")
+                                  Dim vramSize = If(queryObj("AdapterRAM"), 0L)
+                                  GCList.Items.Add($"VRAM: {FormatBytes(vramSize)}")
+                                  GCList.Items.Add($"Treiberversion: {If(queryObj("DriverVersion"), "N/A")}")
+                                  GCList.Items.Add($"Status: {If(queryObj("Status"), "N/A")}")
+                                  GCList.Items.Add($"Geräte-ID: {If(queryObj("PNPDeviceID"), "N/A")}")
+                                  GCList.Items.Add($"Video-Prozessor: {If(queryObj("VideoProcessor"), "N/A")}")
+                                  GCList.Items.Add($"Auflösung: {If(queryObj("CurrentHorizontalResolution"), "N/A")} x {If(queryObj("CurrentVerticalResolution"), "N/A")}")
+                                  GCList.Items.Add($"Farb-Tiefe: {If(queryObj("CurrentBitsPerPixel"), "N/A")} Bit")
+                                  GCList.Items.Add($"Aktualisierungsrate: {If(queryObj("CurrentRefreshRate"), "N/A")} Hz")
+                              End Sub)
+                Next
 
             End If
             If computer Is Nothing Then
@@ -994,7 +980,7 @@ Public Class Form1
         SystemViewList.Items.Clear()
     End Sub
 
-    'CPU Sub Information
+    'CPU Sub Information  / CSV File check
     Private Async Function CheckCpuSub() As Task
         Dim cid As String = Settings.MashineID
         If Not File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{cid}.csv")) Then
@@ -1305,12 +1291,14 @@ Public Class Form1
         Dim result As DialogResult = MessageBox.Show(Me, attentionMessage, "Wichtiger Hinweis", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
         If result = DialogResult.OK Then
             TestStart()
+            BtnToggleMonitor1.Enabled = False
         Else
             MessageBox.Show(Me,
                             "Test Vorgang nicht gestartet!",
                             caption:="Info: Test nicht gestartet:",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information)
+            BtnToggleMonitor1.Enabled = True
         End If
     End Sub
     Private Sub TestStart()
@@ -1388,6 +1376,9 @@ Public Class Form1
                                                     Return Task.CompletedTask
                                                 End Function)
         Await hardwareInfoTask
+        cts = Nothing
+        monitoringTask = Nothing
+        BtnToggleMonitor1.Enabled = True
         LblStatusMessage.Text = "Real-time monitoring started. Static info saved."
         LblStatusMessage.ForeColor = SystemColors.WindowText
     End Sub
@@ -1441,15 +1432,14 @@ Public Class Form1
             cancellationTokenSource = Nothing
         End If
         stressTasks.Clear()
+
         Me.Invoke(Async Sub()
-                      LblStatusMessage.Text = "CPU-Stresstest beendet."
-                      If Settings.ApplicationTheme = "Dark" Then
-                          LblStatusMessage.ForeColor = SystemColors.ControlLight
-                      ElseIf Settings.ApplicationTheme = "Standard" Then
-                          LblStatusMessage.ForeColor = SystemColors.ControlText
-                      End If
-                      'Await ReadAndDisplaySystemInfoAsync()
                       Await CheckCpuSub()
+                  End Sub)
+        Me.Invoke(Sub()
+                      LblStatusMessage.Text = "CPU-Stresstest beendet."
+                      LblStatusMessage.ForeColor = SystemColors.ControlText
+                      Me.Invalidate()
                   End Sub)
     End Sub
     Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
@@ -1570,8 +1560,7 @@ Public Class Form1
     'SystemView Section
     Private Function Collect_AllSystemInfo()
         Try
-
-
+            SystemViewList.Items.Clear() ' Leeren der ListView vor dem Hinzufügen neuer Einträge
             ' --- Allgemeine Systeminformationen (mit ComputerInfo via Alias) ---
             Dim basicComputerInfo As New BasicComputerInfo() ' Hier verwenden wir den Alias "BasicComputerInfo"
             AddListViewItem("OS Vollständiger Name", basicComputerInfo.OSFullName)
@@ -1654,7 +1643,10 @@ Public Class Form1
         If SystemViewList.InvokeRequired Then
             SystemViewList.Invoke(Sub() AddListViewItem(category, info))
         Else
-            Dim item As New ListViewItem(category)
+            Dim item As New ListViewItem(category) With {
+                .UseItemStyleForSubItems = False,
+                .ImageIndex = If(String.IsNullOrEmpty(info), 0, 1)
+                }
             item.SubItems.Add(info)
             SystemViewList.Items.Add(item)
         End If
@@ -1799,8 +1791,8 @@ Public Class Form1
     Private Sub ApplyThemeToControl(ctrl As Control, theme As String)
         theme = Settings.ApplicationTheme
         If theme = "Standard" Then
-            Standard.BackColor = ColorTranslator.FromHtml("#F0F0F0")
-            Standard.ForeColor = SystemColors.WindowText
+            Tabpane.BackColor = ColorTranslator.FromHtml("#F0F0F0")
+            Tabpane.ForeColor = SystemColors.WindowText
             If TypeOf ctrl Is Button Then
                 CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#E1E1E1")
                 CType(ctrl, Button).ForeColor = SystemColors.WindowText
@@ -2292,7 +2284,44 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub TabPage1_Click(sender As Object, e As EventArgs) Handles TabPage1.Click
-
+    Private Sub Tabpane_SelectedIndexChanged(sender As Object, e As EventArgs) Handles Tabpane.SelectedIndexChanged
+        Dim tabIndex As Integer = Tabpane.SelectedIndex
+        Dim tabPage As TabPage = Tabpane.SelectedTab
+        If tabIndex = 0 Then
+            tabPage.BackgroundImageLayout = ImageLayout.Stretch
+            tabPage.BackgroundImage = _backgroundImage1
+        ElseIf tabIndex = 1 Then
+            'TabPage2.BackgroundImage = _backgroundImage2
+            tabPage.BackgroundImageLayout = ImageLayout.Stretch
+            tabPage.BackgroundImage = _backgroundImage2
+            ReadGraphicCardInfo()
+        ElseIf tabIndex = 2 Then
+            tabPage.BackgroundImageLayout = ImageLayout.Stretch
+            tabPage.BackgroundImage = _backgroundImage3
+            Collect_AllSystemInfo()
+        End If
     End Sub
+
+
+    Private Sub ContextMenuStrip1_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
+        ' Keine Aktion beim Öffnen, nur Kontextmenü vorbereiten (optional)
+    End Sub
+
+    Private Sub ContextMenuStrip1_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles ContextMenuStrip1.ItemClicked
+        If e.ClickedItem IsNot Nothing AndAlso SystemViewList.SelectedItems.Count > 0 Then
+            Dim selectedItem As ListViewItem = SystemViewList.SelectedItems(0)
+            Dim itemText As String = selectedItem.SubItems(1).Text
+            If e.ClickedItem.Text.StartsWith("kopiere Zeile:") Then
+                Clipboard.SetText(itemText)
+                MessageBox.Show(Me, $"{selectedItem.Text}: {itemText}", "kopiert")
+            End If
+        End If
+    End Sub
+
+    Private Sub SystemViewList_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SystemViewList.SelectedIndexChanged
+        If SystemViewList.SelectedItems.Count > 0 Then
+
+        End If
+    End Sub
+
 End Class
