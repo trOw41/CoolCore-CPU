@@ -1,6 +1,6 @@
 # CoolCore-CPU® ✨
 
-## Halten Sie Ihre Kerne cool und Ihre Leistung im Blick.
+## Halten Sie Ihre Prozessor Temperatur und Leistung im Blick.
 
 [![Built with VB.NET](https://img.shields.io/badge/Built%20with-VB.NET-blue.svg)](https://docs.microsoft.com/en-us/dotnet/visual-basic/)
 
