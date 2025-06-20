@@ -128,8 +128,8 @@ Partial Class Form1
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Loadlbl = New System.Windows.Forms.Label()
         Me.GCList = New System.Windows.Forms.ListView()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.GCTempBox = New System.Windows.Forms.Label()
         Me.GCNameBox = New System.Windows.Forms.Label()
@@ -142,9 +142,9 @@ Partial Class Form1
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.SystemViewList = New System.Windows.Forms.ListView()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -156,11 +156,11 @@ Partial Class Form1
         Me.Panel3.SuspendLayout()
         Me.TabPage3.SuspendLayout()
         Me.Panel4.SuspendLayout()
-        Me.ContextMenuStrip1.SuspendLayout()
+        Me.ContextMenuStrip2.SuspendLayout()
         CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ContextMenuStrip2.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -992,19 +992,18 @@ Partial Class Form1
         Me.GCList.UseCompatibleStateImageBehavior = False
         Me.GCList.View = System.Windows.Forms.View.List
         '
-        'ContextMenuStrip1
+        'ContextMenuStrip2
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1})
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        resources.ApplyResources(Me.ContextMenuStrip1, "ContextMenuStrip1")
+        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2})
+        Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
+        resources.ApplyResources(Me.ContextMenuStrip2, "ContextMenuStrip2")
         '
-        'ToolStripMenuItem1
+        'ToolStripMenuItem2
         '
-        Me.ToolStripMenuItem1.BackColor = System.Drawing.SystemColors.HotTrack
-        Me.ToolStripMenuItem1.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.ToolStripMenuItem1.Image = Global.CoolCore.My.Resources.Resources._036_folder
-        resources.ApplyResources(Me.ToolStripMenuItem1, "ToolStripMenuItem1")
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem2.BackColor = System.Drawing.SystemColors.Highlight
+        Me.ToolStripMenuItem2.Image = Global.CoolCore.My.Resources.Resources._036_folder
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        resources.ApplyResources(Me.ToolStripMenuItem2, "ToolStripMenuItem2")
         '
         'ImageList1
         '
@@ -1101,25 +1100,26 @@ Partial Class Form1
         Me.SystemViewList.UseCompatibleStateImageBehavior = False
         Me.SystemViewList.View = System.Windows.Forms.View.Details
         '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        resources.ApplyResources(Me.ContextMenuStrip1, "ContextMenuStrip1")
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.BackColor = System.Drawing.SystemColors.HotTrack
+        Me.ToolStripMenuItem1.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.ToolStripMenuItem1.Image = Global.CoolCore.My.Resources.Resources._036_folder
+        resources.ApplyResources(Me.ToolStripMenuItem1, "ToolStripMenuItem1")
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        '
         'PictureBox1
         '
         Me.PictureBox1.BackColor = System.Drawing.SystemColors.Highlight
         resources.ApplyResources(Me.PictureBox1, "PictureBox1")
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.TabStop = False
-        '
-        'ContextMenuStrip2
-        '
-        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2})
-        Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        resources.ApplyResources(Me.ContextMenuStrip2, "ContextMenuStrip2")
-        '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.BackColor = System.Drawing.SystemColors.Highlight
-        Me.ToolStripMenuItem2.Image = Global.CoolCore.My.Resources.Resources._036_folder
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        resources.ApplyResources(Me.ToolStripMenuItem2, "ToolStripMenuItem2")
         '
         'Form1
         '
@@ -1152,11 +1152,11 @@ Partial Class Form1
         Me.TabPage3.ResumeLayout(False)
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
-        Me.ContextMenuStrip1.ResumeLayout(False)
+        Me.ContextMenuStrip2.ResumeLayout(False)
         CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage2.ResumeLayout(False)
+        Me.ContextMenuStrip1.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ContextMenuStrip2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

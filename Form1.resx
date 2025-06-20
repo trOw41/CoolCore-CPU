@@ -2370,16 +2370,16 @@
     <value>Stretch</value>
   </data>
   <data name="Loadlbl.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift SemiLight, 13pt</value>
+    <value>Bahnschrift SemiLight, 18pt</value>
   </data>
   <data name="Loadlbl.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="Loadlbl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>160, 74</value>
+    <value>166, 79</value>
   </data>
   <data name="Loadlbl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>60, 30</value>
+    <value>81, 39</value>
   </data>
   <data name="Loadlbl.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -2437,7 +2437,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAS
-        EQAAAk1TRnQBSQFMAgEBCgEAATABAAEwAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCgEAATgBAAE4AQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -2528,7 +2528,7 @@
     <value>1</value>
   </data>
   <data name="GCTempBox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift SemiLight, 10pt</value>
+    <value>Bahnschrift SemiLight, 11.75pt</value>
   </data>
   <data name="GCTempBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -2537,7 +2537,7 @@
     <value>90, 45</value>
   </data>
   <data name="GCTempBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 22</value>
+    <value>65, 22</value>
   </data>
   <data name="GCTempBox.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -2621,16 +2621,16 @@
     <value>4</value>
   </data>
   <data name="GCClockBox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift SemiLight, 13pt</value>
+    <value>Bahnschrift SemiLight, 18pt</value>
   </data>
   <data name="GCClockBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="GCClockBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>206, 209</value>
+    <value>207, 212</value>
   </data>
   <data name="GCClockBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>109, 38</value>
+    <value>122, 38</value>
   </data>
   <data name="GCClockBox.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -8268,7 +8268,7 @@
   <data name="PictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        hgAAC4YBQQdltwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAqiSURBVHhe7Z17
+        hQAAC4UB7L5E2gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAqiSURBVHhe7Z17
         jB1VHccvIKAkPkhI5A//8BFNTIzGNJoYItbIP92ZWSpaECsgpYAGrVoi8pC4giFIkIgRTRWBlrYzc6GP
         7W5buhRKH5TSp33Z0rKULn2/aMu2270z5/w8v7m/tbuzP7fdu2fv3nPu+SafP3Zn5vxO5vu7M+fMnDmn
         4OSkTVBsuLJU9EYlccPVSexd49BJw9V4bvEc0+keWQEULkjixquSOHgoDf3laRQcTyMfHNUgO9fLktBv
@@ -8699,10 +8699,10 @@
   <data name="&gt;&gt;DataColumn2.Type" xml:space="preserve">
     <value>System.Data.DataColumn, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ToolStripMenuItem1.Name" xml:space="preserve">
-    <value>ToolStripMenuItem1</value>
+  <data name="&gt;&gt;ToolStripMenuItem2.Name" xml:space="preserve">
+    <value>ToolStripMenuItem2</value>
   </data>
-  <data name="&gt;&gt;ToolStripMenuItem1.Type" xml:space="preserve">
+  <data name="&gt;&gt;ToolStripMenuItem2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;ImageList1.Name" xml:space="preserve">
@@ -8711,10 +8711,10 @@
   <data name="&gt;&gt;ImageList1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ToolStripMenuItem2.Name" xml:space="preserve">
-    <value>ToolStripMenuItem2</value>
+  <data name="&gt;&gt;ToolStripMenuItem1.Name" xml:space="preserve">
+    <value>ToolStripMenuItem1</value>
   </data>
-  <data name="&gt;&gt;ToolStripMenuItem2.Type" xml:space="preserve">
+  <data name="&gt;&gt;ToolStripMenuItem1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
