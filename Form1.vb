@@ -15,6 +15,8 @@ Imports System.Security.Principal
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports System.Threading
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Header
+Imports System.Xml.Serialization
 Imports Google.Protobuf.WellKnownTypes
 Imports HidSharp.Utility
 Imports Microsoft.VisualBasic.Logging
@@ -31,7 +33,10 @@ Public Structure CoreTempData
     Public Property Timestamp As DateTime
     Public Property CoreTemperatures As Dictionary(Of String, Single)
 End Structure
-
+Public Structure CoreVoltageData
+    Public Property Timestamp As DateTime
+    Public Property CoreVolt As Dictionary(Of String, Single)
+End Structure
 Public Class Form1
     Private systemInfoRepository As SystemInfoRepository
     Private cpuLoadCounter As PerformanceCounter
@@ -47,6 +52,7 @@ Public Class Form1
     Private loadingForm As Form3
     Private isMonitoringActive As Boolean = False
     Private backgroundTempMeasurements As New List(Of CoreTempData)()
+    Private backgroundVoltMeasurements As New List(Of CoreVoltageData)()
     Private monitoringTask As Task
     Private cts As CancellationTokenSource
     Private ReadOnly CoreTempBoxes As New Dictionary(Of Integer, TextBox)()
@@ -56,6 +62,7 @@ Public Class Form1
     Private monitoringForm As Form3
     Private ReadOnly VoltBoxes As New Dictionary(Of Integer, TextBox)
     Private cpuVoltageSensorMap As New Dictionary(Of Integer, ISensor)
+    Private cpuVoltages As New List(Of ISensor)()
     Private genericVcoreSensor As ISensor = Nothing
     Private stressTasks As New List(Of Task)()
     Private cancellationTokenSource As CancellationTokenSource
@@ -81,8 +88,8 @@ Public Class Form1
     Private _backgroundImage1 As Image
     Private _backgroundImage2 As Image
     Private _backgroundImage3 As Image
-
-
+    Dim documentsPath As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+    Dim settingsPath As String = Path.Combine(documentsPath, "CoolCore")
     'Programm initialization
     Public Sub New()
         InitializeComponent()
@@ -104,18 +111,27 @@ Public Class Form1
             Application.Exit()
             Return
         End If
-
+        If Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log")) = False Then
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log"))
+            File.OpenWrite(Path.Combine(logDir, "CoolCore_TemperatureLog1.txt")).Close()
+            MessageBox.Show("Log-Verzeichnis wurde erstellt." & logDir, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+        If Directory.Exists(settingsPath) = False Then
+            Directory.CreateDirectory(settingsPath)
+            File.OpenWrite(Path.Combine(settingsPath, "CoolCoreSettings.xml")).Close()
+            MessageBox.Show(settingsPath)
+        Else
+            If File.Exists(Path.Combine(settingsPath, "CoolCoreSettings.xml")) Then
+                LoadSettingsFromXml()
+            End If
+        End If
         CheckAndSetSystemFonts()
         systemInfoRepository = New SystemInfoRepository()
         cpuLoadCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
         refreshTimer = New Timer With {
             .Interval = 1000
             }
-        If Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log")) = False Then
-            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log"))
-            File.OpenWrite(Path.Combine(logDir, "CoolCore_TemperatureLog1.txt")).Close()
-            MessageBox.Show("Log-Verzeichnis wurde erstellt." & logDir, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        End If
+
         AddHandler refreshTimer.Tick, AddressOf RefreshTimer_Tick
         computer = New Computer() With {
             .IsMotherboardEnabled = True,
@@ -135,16 +151,45 @@ Public Class Form1
         Return principal.IsInRole(WindowsBuiltInRole.Administrator)
     End Function
 
+    Private Sub LoadSettingsFromXml()
+        Dim documentsPath As String = settingsPath
+        Dim xmlPath As String = Path.Combine(documentsPath, "CoolCoreSettings.xml")
+        If File.Exists(xmlPath) Then
+            Using fs As New FileStream(xmlPath, FileMode.Open)
+                Dim serializer As New XmlSerializer(GetType(AppSettingsXml))
+                Dim loaded As AppSettingsXml = CType(serializer.Deserialize(fs), AppSettingsXml)
+                ' Werte zurück in My.Settings schreiben:
+                My.Settings.ApplicationTheme = loaded.ApplicationTheme
+                My.Settings.MonitorTime = loaded.MonitorTime
+                My.Settings.MAX_LOG_SIZE_KB = loaded.MAX_LOG_SIZE_KB
+                My.Settings.LogStartStop = loaded.LogStartStop
+                My.Settings.CpuLogoName = loaded.CpuLogoName
+                My.Settings.BootUp = loaded.BootUp
+                My.Settings.Autostart = loaded.Autostart
+                My.Settings.InfoMessage = loaded.InfoMessage
+                My.Settings.MashineID = loaded.MashineID
+                My.Settings.IsCpuSubInfoLoaded = loaded.IsCpuSubInfoLoaded
+                My.Settings.FirstStart = loaded.FirstStart
+                My.Settings.UpdateCheck = loaded.UpdateCheck
+                My.Settings.AllwaysShow = loaded.AllwaysShow
+                My.Settings.CName = loaded.CName
+            End Using
+        End If
+    End Sub
     'Form Logic
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.Text = "CoolCore-CPU®"
+        Dim currentVersion As New Version(My.Application.Info.Version.ToString(3))
+        Versionlbl.Text = $"v{currentVersion}"
         ApplyTheme(My.Settings.ApplicationTheme)
         ClearCpuDisplayControls()
+
         If Settings.FirstStart = True Or Settings.AllwaysShow = True Then
             Dim res As DialogResult = WelcomeForm.ShowDialog(Me)
             If res = DialogResult.OK Then
                 Settings.FirstStart = False
                 Settings.Save()
-                refreshTimer.Start()
+                'refreshTimer.Start()
                 LoadMySqlCredentials()
                 Start_extend()
                 Set_image()
@@ -154,7 +199,7 @@ Public Class Form1
             End If
         Else
 
-            refreshTimer.Start()
+            'refreshTimer.Start()
             LoadMySqlCredentials()
             Start_extend()
             Set_image()
@@ -190,29 +235,27 @@ Public Class Form1
         SystemViewList.View = View.Details
         SystemViewList.Columns.Add("Category", 150)
         SystemViewList.Columns.Add("Information", 300)
-        Me.Text = "CoolCore-CPU®"
-        Dim currentVersion As New Version(My.Application.Info.Version.ToString(3))
-        Versionlbl.Text = $"v{currentVersion}"
+
+        Await Task.Run(Sub()
+                           InitializeCoreTemperatureSensors()
+                           InitializePerCoreCounters()
+                           InitializeVoltageSensors()
+
+                       End Sub)
         Dim hardwareInfoTask As Task = Task.Run(Async Function()
                                                     Await ReadAndDisplaySystemInfoAsync()
                                                     Await CheckCpuSub()
                                                     Return Task.CompletedTask
                                                 End Function)
         Await hardwareInfoTask
-        Await Task.Run(Sub()
-                           InitializePerCoreCounters()
-                           InitializeCoreTemperatureSensors()
-                           InitializeVoltageSensors()
-
-                       End Sub)
-        refreshTimer.Start()
         Dim LogSystem As Task = Task.Run(Sub()
                                              StartStopLog()
                                              UpdateLogSize()
                                              BrandCheck()
-
+                                             Collect_AllSystemInfo()
                                          End Sub)
         Await LogSystem
+        refreshTimer.Start()
         If My.Settings.UpdateCheck = True Then
             Dim url As String = "https://cool-core.de.cool/updates/cool-core/version.txt"
             Dim versionCheckTask As Task = Task.Run(Sub()
@@ -222,7 +265,7 @@ Public Class Form1
                                                             If Not My.Application.Info.Version.ToString().Equals(latestVersion) Then
 
                                                             Else
-                                                                LblStatusMessage.Text = "You are using the latest version."
+                                                                MessageBox.Show(Me, "You are using the latest version.", MessageBoxButtons.OK, MessageBoxIcon.Information)
                                                             End If
                                                         Else
                                                             LblStatusMessage.Text = "Error checking for updates."
@@ -444,10 +487,12 @@ Public Class Form1
     End Sub
     Private Sub InitializeVoltageSensors()
         cpuVoltageSensorMap.Clear()
+        cpuVoltages.Clear()
         genericVcoreSensor = Nothing
         If cpu IsNot Nothing Then
             For Each sensor In cpu.Sensors
                 If sensor.SensorType = SensorType.Voltage Then
+                    cpuVoltages.Add(sensor)
                     If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) Then
                         Dim namePart As String = sensor.Name.Replace("CPU Core #", "").Trim()
                         Dim coreNum As Integer
@@ -464,6 +509,7 @@ Public Class Form1
                     End If
                 End If
             Next
+            cpuVoltages = cpuVoltages.OrderBy(Function(s) s.Name).ToList()
         End If
     End Sub
     Private Sub UpdateVoltageDisplay()
@@ -527,8 +573,8 @@ Public Class Form1
     'Timer Progress
     Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs)
         If cpu Is Nothing Then
-            InitializeCoreTemperatureSensors()
             InitializePerCoreCounters()
+            InitializeCoreTemperatureSensors()
             InitializeVoltageSensors()
         End If
         Try
@@ -1305,6 +1351,7 @@ Public Class Form1
         If Not isMonitoringActive Then
             isMonitoringActive = True
             backgroundTempMeasurements.Clear()
+            backgroundVoltMeasurements.Clear()
             cts = New CancellationTokenSource()
             monitoringTask = Task.Run(Sub() RecordTemperaturesInBackground(cts.Token))
 
@@ -1394,7 +1441,7 @@ Public Class Form1
     End Sub
     Private Sub StartCpuStressTest()
 
-        StopCpuStressTest()
+        'StopCpuStressTest()
         cancellationTokenSource = New CancellationTokenSource()
         Dim cancellationToken = cancellationTokenSource.Token
         Dim processorCount As Integer = Environment.ProcessorCount
@@ -1404,6 +1451,7 @@ Public Class Form1
 
                                                  Dim result As Double = 1.0
                                                  For j As Integer = 0 To 1000000
+                                                     'result = Math.Sqrt(Math.Sin(j) * Math.Cos(j))
                                                      result = Math.Sqrt(result + Math.Sin(j) * Math.Cos(j))
                                                  Next
                                              End While
@@ -1454,6 +1502,12 @@ Public Class Form1
                         currentCoreTemps.Add(sensor.Name, sensor.Value.Value)
                     End If
                 Next
+                Dim voltCores As New Dictionary(Of String, Single)()
+                For Each sensor As ISensor In cpuVoltages
+                    If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) And Not sensor.Name.Contains("Voltage") AndAlso sensor.Value.HasValue Then
+                        voltCores.Add(sensor.Name, sensor.Value.Value)
+                    End If
+                Next
                 If currentCoreTemps.Any() Then
                     SyncLock backgroundTempMeasurements
                         Dim newEntry As New CoreTempData With {
@@ -1464,7 +1518,6 @@ Public Class Form1
                 End If
                 Task.Delay(intervalMs, cancellationToken).Wait()
             Catch ex As OperationCanceledException
-
                 Exit Do
             Catch ex As Exception
                 Exit Do
@@ -2311,17 +2364,23 @@ Public Class Form1
         If e.ClickedItem IsNot Nothing AndAlso SystemViewList.SelectedItems.Count > 0 Then
             Dim selectedItem As ListViewItem = SystemViewList.SelectedItems(0)
             Dim itemText As String = selectedItem.SubItems(1).Text
-            If e.ClickedItem.Text.StartsWith("kopiere Zeile:") Then
+            If e.ClickedItem.Text = "kopieren" Then
+                ContextMenuStrip1.Close()
                 Clipboard.SetText(itemText)
-                MessageBox.Show(Me, $"{selectedItem.Text}: {itemText}", "kopiert")
+                MessageBox.Show(Me, $"{itemText}", "kopiert")
             End If
         End If
     End Sub
 
-    Private Sub SystemViewList_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SystemViewList.SelectedIndexChanged
-        If SystemViewList.SelectedItems.Count > 0 Then
-
+    Private Sub ContextMenuStrip2_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles ContextMenuStrip2.ItemClicked
+        If e.ClickedItem IsNot Nothing AndAlso GCList.SelectedItems.Count > 0 Then
+            Dim selectedItem2 As ListViewItem = GCList.SelectedItems(0)
+            Dim itemText2 As String = selectedItem2.SubItems(0).Text
+            If e.ClickedItem.Text = "kopieren" Then
+                ContextMenuStrip2.Close()
+                Clipboard.SetText(itemText2)
+                MessageBox.Show(Me, $"{itemText2}", "kopiert")
+            End If
         End If
     End Sub
-
 End Class

@@ -9,10 +9,10 @@ Public Class Form3
     Public Event StopRequested As EventHandler
     Private frameCounter As Integer = 0
     Private _fanAngle As Single = 0.0F
-    Private Const _fanRotationSpeed As Single = 10.0F
+    Private Const _fanRotationSpeed As Single = 5.0F
     Private _heatEffectOffset As Integer = 0
     Private _pulseDirection As Integer = 1
-    Private _currentScale As Single = 2.0F ' Aktueller Skalierungsfaktor für Pulsieren
+    Private _currentScale As Single = 3.0F ' Aktueller Skalierungsfaktor für Pulsieren
     Private Const _maxScale As Single = 1.2F ' Maximale Größe (110%)
     Private Const _minScale As Single = 0.8F ' Minimale Größe (90%)
     Private Const _scaleSpeed As Single = 0.01F
@@ -21,17 +21,15 @@ Public Class Form3
     Private _cpuImage As Image
     Public Sub New()
         InitializeComponent()
-        Me.Text = "CPU Monitoring"
         Me.ControlBox = False
         Me.FormBorderStyle = FormBorderStyle.FixedDialog
         Me.StartPosition = FormStartPosition.CenterParent
         ProgressBar1.Style = ProgressBarStyle.Blocks
 
-        LblLoadingText.Text = "Monitoring CPU Temperatur:"
-        LblLoadingText.AutoSize = True
+        Me.Text = "CPU Temperatur Messung:"
         If TimeLabel IsNot Nothing Then
             TimeLabel.Text = "Wird geladen.."
-            TimeLabel.AutoSize = True
+            TimeLabel.AutoSize = False
         End If
         If PnlCpuFanAnimation IsNot Nothing Then
             _cpuImage = My.Resources.temp2
@@ -58,34 +56,13 @@ Public Class Form3
         Dim tickerMax As Integer = monitorTime
         Dim ticker As Integer = elapsedTime.TotalSeconds
         ProgressBar1.Maximum = tickerMax
-
+        ProgressBar1.Value = ticker
         If Me.InvokeRequired Then
             Me.Invoke(Sub() UpdateElapsedTime(elapsedTime))
         Else
             If TimeLabel IsNot Nothing Then
                 TimeLabel.Text = $"Dauer: {elapsedTime:hh\:mm\:ss}"
-                'LblLoadingText.Text = $"Monitoring CPU Temperatur noch: {Math.Round(monitorTime - elapsedTime.TotalSeconds)}s"
-                Me.Invoke(Sub()
-                              ProgressBar1.Value = ticker
-                              If ticker > 0 Then
-                                  LblLoadingText.Text = "ermittel Sensoren.."
-                              End If
-                              If ticker > 4 Then
-                                  LblLoadingText.Text = "Starte CPU überladung (Stress).."
-                              End If
-                              If ticker > 9 Then
-                                  LblLoadingText.Text = $"ermittel Temperatur Werte bitte warten {Math.Round(monitorTime - elapsedTime.TotalSeconds)}s"
-                              End If
-                              If monitorTime - ticker < 7 Then
-                                  LblLoadingText.Text = "beende Stress Ladung.."
-                              End If
-                              If monitorTime - ticker < 4 Then
-                                  LblLoadingText.Text = "schreibe Werte in die Tabelle.."
-                              End If
-                              If ticker = monitorTime Then
-                                  LblLoadingText.Text = "Beende Stress-Test"
-                              End If
-                          End Sub)
+                Me.Text = $"Monitoring CPU Temperatur noch: {Math.Round(monitorTime - elapsedTime.TotalSeconds)}s"
             End If
         End If
     End Sub

@@ -1,11 +1,17 @@
 ﻿' OptionsForm.vb
 Imports System.Windows.Forms
+Imports System.IO
+Imports System.Xml.Serialization
+Imports System.Runtime.InteropServices
 
 Public Class OptionsForm
     Public Event ThemeChanged As EventHandler(Of String)
     Private _updateCheckBoxInitialState As CheckState
     Private _StartMessageBoxCheckBoxInitialState As CheckState
     Private _isInitializing As Boolean = False
+    Dim documentsPath As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+    Dim settingsPath As String = Path.Combine(documentsPath, "CoolCore")
+
     Private Sub OptionsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Settings.ApplicationTheme = "Standard"
         Label1.Text = "CPU Temperatur Test Info: " & My.Settings.MonitorTime
@@ -23,7 +29,6 @@ Public Class OptionsForm
         updateCheckBox.Checked = Settings.UpdateCheck
         _updateCheckBoxInitialState = updateCheckBox.CheckState
         _isInitializing = True
-        ' Set the initial state of the StartMessageBox checkbox
         StartMessageBox.Checked = Settings.AllwaysShow
         _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
         Dim monitorTime = Settings.MonitorTime
@@ -36,11 +41,35 @@ Public Class OptionsForm
                 End If
             Next
         End If
-
     End Sub
 
+    Private Sub SaveSettingsToXml()
+        Dim settings As New AppSettingsXml With {
+        .ApplicationTheme = My.Settings.ApplicationTheme,
+        .MonitorTime = My.Settings.MonitorTime,
+        .MAX_LOG_SIZE_KB = My.Settings.MAX_LOG_SIZE_KB,
+        .LogStartStop = My.Settings.LogStartStop,
+        .CpuLogoName = My.Settings.CpuLogoName,
+        .BootUp = My.Settings.BootUp,
+        .Autostart = My.Settings.Autostart,
+        .InfoMessage = My.Settings.InfoMessage,
+        .MashineID = My.Settings.MashineID,
+        .IsCpuSubInfoLoaded = My.Settings.IsCpuSubInfoLoaded,
+        .FirstStart = My.Settings.FirstStart,
+        .UpdateCheck = My.Settings.UpdateCheck,
+        .AllwaysShow = My.Settings.AllwaysShow,
+        .CName = My.Settings.CName
+    }
+        Dim documentsPath As String = settingsPath
+        Dim xmlPath As String = Path.Combine(documentsPath, "CoolCoreSettings.xml")
+        Using fs As New FileStream(xmlPath, FileMode.Create)
+            Dim serializer As New XmlSerializer(GetType(AppSettingsXml))
+            serializer.Serialize(fs, settings)
+        End Using
+    End Sub
     Private Sub BtnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         My.Settings.Save()
+        SaveSettingsToXml()
         RaiseEvent ThemeChanged(Me, My.Settings.ApplicationTheme)
         Me.Close()
     End Sub
@@ -190,4 +219,6 @@ Public Class OptionsForm
         End If
         _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
     End Sub
+
+
 End Class

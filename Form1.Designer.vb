@@ -58,6 +58,7 @@ Partial Class Form1
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.PicBox2 = New System.Windows.Forms.PictureBox()
+        Me.Versionlbl = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
@@ -127,6 +128,8 @@ Partial Class Form1
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Loadlbl = New System.Windows.Forms.Label()
         Me.GCList = New System.Windows.Forms.ListView()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.GCTempBox = New System.Windows.Forms.Label()
         Me.GCNameBox = New System.Windows.Forms.Label()
@@ -139,10 +142,9 @@ Partial Class Form1
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.SystemViewList = New System.Windows.Forms.ListView()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Versionlbl = New System.Windows.Forms.Label()
+        Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -154,15 +156,16 @@ Partial Class Form1
         Me.Panel3.SuspendLayout()
         Me.TabPage3.SuspendLayout()
         Me.Panel4.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout()
         CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
-        Me.ContextMenuStrip1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ContextMenuStrip2.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.MenuStrip1.BackColor = System.Drawing.SystemColors.Highlight
         resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.MdiWindowListItem = Me.OptionsToolStripMenuItem
@@ -170,9 +173,9 @@ Partial Class Form1
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.FileToolStripMenuItem.BackColor = System.Drawing.Color.Transparent
         Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CloseToolStripMenuItem})
-        Me.FileToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.FileToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         resources.ApplyResources(Me.FileToolStripMenuItem, "FileToolStripMenuItem")
         '
@@ -185,9 +188,9 @@ Partial Class Form1
         '
         'OptionsToolStripMenuItem
         '
-        Me.OptionsToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.OptionsToolStripMenuItem.BackColor = System.Drawing.Color.Transparent
         Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.ToolStripSeparator2, Me.ExportCPUInfoToolStripMenuItem})
-        Me.OptionsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.OptionsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
         resources.ApplyResources(Me.OptionsToolStripMenuItem, "OptionsToolStripMenuItem")
         '
@@ -210,9 +213,9 @@ Partial Class Form1
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.BackColor = System.Drawing.SystemColors.HighlightText
+        Me.ToolsToolStripMenuItem.BackColor = System.Drawing.Color.Transparent
         Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem, Me.ToolStripSeparator5, Me.CpuInfoMenu, Me.ToolStripSeparator6})
-        Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
         '
@@ -277,9 +280,9 @@ Partial Class Form1
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.HelpToolStripMenuItem.BackColor = System.Drawing.Color.Transparent
         Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InfoMenuItem, Me.ToolStripSeparator3, Me.FAQToolStripMenuItem, Me.ToolStripSeparator4, Me.SupportToolStripMenuItem})
-        Me.HelpToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.HelpToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         resources.ApplyResources(Me.HelpToolStripMenuItem, "HelpToolStripMenuItem")
         '
@@ -359,6 +362,7 @@ Partial Class Form1
         Me.Panel1.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Controls.Add(Me.PicBox2)
+        Me.Panel1.Controls.Add(Me.Versionlbl)
         Me.Panel1.Controls.Add(Me.Label7)
         Me.Panel1.Controls.Add(Me.Label3)
         Me.Panel1.Controls.Add(Me.Panel2)
@@ -395,6 +399,11 @@ Partial Class Form1
         resources.ApplyResources(Me.PicBox2, "PicBox2")
         Me.PicBox2.Name = "PicBox2"
         Me.PicBox2.TabStop = False
+        '
+        'Versionlbl
+        '
+        resources.ApplyResources(Me.Versionlbl, "Versionlbl")
+        Me.Versionlbl.Name = "Versionlbl"
         '
         'Label7
         '
@@ -969,6 +978,7 @@ Partial Class Form1
         '
         Me.GCList.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.GCList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.GCList.ContextMenuStrip = Me.ContextMenuStrip2
         resources.ApplyResources(Me.GCList, "GCList")
         Me.GCList.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.GCList.FullRowSelect = True
@@ -980,7 +990,21 @@ Partial Class Form1
         Me.GCList.ShowItemToolTips = True
         Me.GCList.SmallImageList = Me.ImageList1
         Me.GCList.UseCompatibleStateImageBehavior = False
-        Me.GCList.View = System.Windows.Forms.View.SmallIcon
+        Me.GCList.View = System.Windows.Forms.View.List
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        resources.ApplyResources(Me.ContextMenuStrip1, "ContextMenuStrip1")
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.BackColor = System.Drawing.SystemColors.HotTrack
+        Me.ToolStripMenuItem1.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.ToolStripMenuItem1.Image = Global.CoolCore.My.Resources.Resources._036_folder
+        resources.ApplyResources(Me.ToolStripMenuItem1, "ToolStripMenuItem1")
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
         '
         'ImageList1
         '
@@ -1077,30 +1101,25 @@ Partial Class Form1
         Me.SystemViewList.UseCompatibleStateImageBehavior = False
         Me.SystemViewList.View = System.Windows.Forms.View.Details
         '
-        'ContextMenuStrip1
-        '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1})
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        resources.ApplyResources(Me.ContextMenuStrip1, "ContextMenuStrip1")
-        '
-        'ToolStripMenuItem1
-        '
-        Me.ToolStripMenuItem1.Image = Global.CoolCore.My.Resources.Resources._036_folder
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        resources.ApplyResources(Me.ToolStripMenuItem1, "ToolStripMenuItem1")
-        '
         'PictureBox1
         '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox1.Image = Global.CoolCore.My.Resources.Resources._024_cpu
+        Me.PictureBox1.BackColor = System.Drawing.SystemColors.Highlight
         resources.ApplyResources(Me.PictureBox1, "PictureBox1")
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.TabStop = False
         '
-        'Versionlbl
+        'ContextMenuStrip2
         '
-        resources.ApplyResources(Me.Versionlbl, "Versionlbl")
-        Me.Versionlbl.Name = "Versionlbl"
+        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2})
+        Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
+        resources.ApplyResources(Me.ContextMenuStrip2, "ContextMenuStrip2")
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.BackColor = System.Drawing.SystemColors.Highlight
+        Me.ToolStripMenuItem2.Image = Global.CoolCore.My.Resources.Resources._036_folder
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        resources.ApplyResources(Me.ToolStripMenuItem2, "ToolStripMenuItem2")
         '
         'Form1
         '
@@ -1108,7 +1127,6 @@ Partial Class Form1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoValidate = System.Windows.Forms.AutoValidate.Disable
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Controls.Add(Me.Versionlbl)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Tabpane)
         Me.Controls.Add(Me.LblStatusMessage)
@@ -1134,10 +1152,11 @@ Partial Class Form1
         Me.TabPage3.ResumeLayout(False)
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
+        Me.ContextMenuStrip1.ResumeLayout(False)
         CType(Me.GCLogo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage2.ResumeLayout(False)
-        Me.ContextMenuStrip1.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ContextMenuStrip2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1261,4 +1280,6 @@ Partial Class Form1
     Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
     Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents Versionlbl As Label
+    Friend WithEvents ContextMenuStrip2 As ContextMenuStrip
+    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
 End Class

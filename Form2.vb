@@ -1,7 +1,9 @@
 ﻿Imports System.Globalization
 Imports System.IO
+Imports System.Security.Cryptography.X509Certificates
 Imports System.Text
 Imports System.Windows.Forms.DataVisualization.Charting
+Imports Org.BouncyCastle.Tls
 
 Public Class Form2
     Private temperatureData As New List(Of CoreTempData)()
@@ -52,7 +54,7 @@ Public Class Form2
         chartArea.AxisX.MinorGrid.Enabled = True
         chartArea.AxisX.LabelStyle.Angle = -45
         chartArea.AxisX.LabelStyle.IsStaggered = True
-        chartArea.AxisY.Title = "Temperatur (°C)"
+        chartArea.AxisY.Title = "Temperatur (°C), Volt"
         chartArea.AxisY.MajorGrid.LineColor = Color.LightGray
         chartArea.AxisY.MinorGrid.LineColor = Color.LightGray
         chartArea.AxisY.MinorGrid.Enabled = True
@@ -77,20 +79,17 @@ Public Class Form2
 
     Private Sub LoadDataFromCsv(filePath As String)
         temperatureData.Clear()
-        'Debug: Debug.WriteLine($"Attempting to load CSV from: {filePath}")
         If Not File.Exists(filePath) Then
             MessageBox.Show($"Die Datei wurde nicht gefunden: {filePath}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            'Debug: Debug.WriteLine("File not found.")
             Exit Sub
         End If
         Try
             Using reader As New StreamReader(filePath, Encoding.UTF8)
                 Dim headerLine As String = reader.ReadLine()
                 If String.IsNullOrEmpty(headerLine) Then
-                    'Debug: Debug.WriteLine("CSV header is empty or null.")
                     Exit Sub
                 End If
-                'Debug: Debug.WriteLine($"CSV Header: {headerLine}")
+                Debug.WriteLine($"CSV Header: {headerLine}")
                 Dim headers() As String = headerLine.Split(","c).Select(Function(s) s.Trim()).ToArray()
                 Dim coreHeaderIndices As New Dictionary(Of String, Integer)()
                 For i As Integer = 1 To headers.Length - 1
@@ -98,9 +97,8 @@ Public Class Form2
                     If header.EndsWith(" (°C)", StringComparison.OrdinalIgnoreCase) Then
                         Dim coreName As String = header.Replace(" (°C)", "").Trim()
                         coreHeaderIndices.Add(coreName, i)
-                        'Debug: Debug.WriteLine($"Found core header: {coreName} at index {i}")
+                        Debug.WriteLine($"Found core header: {coreName} at index {i}")
                     Else
-                        'Debug: Debug.WriteLine($"Skipping unknown header: {header}")
                     End If
                 Next
                 If Not coreHeaderIndices.Any() Then
@@ -111,23 +109,20 @@ Public Class Form2
                 While Not reader.EndOfStream
                     Dim line As String = reader.ReadLine()
                     If String.IsNullOrEmpty(line) Then Continue While
-                    'Debug:  Debug.WriteLine($"Processing line: {line}")
                     Dim parts() As String = line.Split(","c).Select(Function(s) s.Trim()).ToArray()
                     If parts.Length > 0 Then
                         Dim timestamp As DateTime
                         If DateTime.TryParse(parts(0), timestamp) Then
                             Dim coreTemps As New Dictionary(Of String, Single)()
+
                             For Each kvp In coreHeaderIndices
                                 If parts.Length > kvp.Value Then
                                     Dim tempString As String = parts(kvp.Value)
                                     Dim tempValue As Single
                                     If Single.TryParse(tempString, NumberStyles.Any, CultureInfo.InvariantCulture, tempValue) Then
                                         coreTemps.Add(kvp.Key, tempValue)
-                                        'Debug: Debug.WriteLine($"  Parsed core {kvp.Key}: {tempValue}°C")
                                     ElseIf tempString.Equals("N/A", StringComparison.OrdinalIgnoreCase) Then
-                                        'Debug: Debug.WriteLine($"  Core {kvp.Key} is N/A - skipping this value.")
                                     Else
-                                        'Debug: Debug.WriteLine($"  Failed to parse temperature for core {kvp.Key}: '{parts(kvp.Value)}'")
                                     End If
                                 End If
                             Next
@@ -136,36 +131,28 @@ Public Class Form2
                                     .Timestamp = timestamp,
                                     .CoreTemperatures = coreTemps
                                 })
-                                'Debug: Debug.WriteLine($"Added entry for {timestamp} with {coreTemps.Count} temperatures. Total entries: {temperatureData.Count}")
                             Else
-                                'Debug: Debug.WriteLine($"No valid temperatures found for timestamp: {timestamp}.")
                             End If
                         Else
-                            'Debug: Debug.WriteLine($"Failed to parse timestamp: '{parts(0)}'")
                         End If
                     Else
-                        'Debug: Debug.WriteLine("Line is empty after splitting or malformed.")
                     End If
                 End While
             End Using
-            'Debug: Debug.WriteLine($"Finished reading CSV. Total data points collected: {temperatureData.Count}")
             If temperatureData.Any() Then
                 LoadChartData()
             Else
-                'Debug: Debug.WriteLine("No data points in temperatureData list after parsing. Chart will be empty.")
                 Chart1.Series("Temperatures").Points.Clear()
             End If
         Catch ex As Exception
             MessageBox.Show($"Fehler beim Lesen der CSV-Datei: {ex.Message}{Environment.NewLine}Datei: {filePath}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            'Debug Debug.WriteLine($"Exception during CSV loading: {ex.Message}{Environment.NewLine}{ex.StackTrace}")
+
         End Try
     End Sub
 
     Private Sub LoadChartData()
-        'Debug: Debug.WriteLine($"LoadChartData called. Data points available in internal list: {temperatureData.Count}")
         If temperatureData Is Nothing OrElse Not temperatureData.Any() Then
             Chart1.Series.Clear()
-            'Debug: Debug.WriteLine("No data in temperatureData list, chart cleared.")
             Exit Sub
         End If
         Chart1.Series.Clear()
