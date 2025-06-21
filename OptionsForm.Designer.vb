@@ -45,9 +45,12 @@ Partial Class OptionsForm
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.InfoButton = New System.Windows.Forms.Button()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.StartMessageBox = New System.Windows.Forms.CheckBox()
         Me.Panel3.SuspendLayout()
         Me.Panel4.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnSave
@@ -55,7 +58,7 @@ Partial Class OptionsForm
         Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnSave.Location = New System.Drawing.Point(313, 327)
+        Me.btnSave.Location = New System.Drawing.Point(313, 381)
         Me.btnSave.Margin = New System.Windows.Forms.Padding(4)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(86, 25)
@@ -68,7 +71,7 @@ Partial Class OptionsForm
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnCancel.Location = New System.Drawing.Point(5, 327)
+        Me.btnCancel.Location = New System.Drawing.Point(5, 381)
         Me.btnCancel.Margin = New System.Windows.Forms.Padding(4)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(92, 25)
@@ -78,15 +81,16 @@ Partial Class OptionsForm
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.BackColor = System.Drawing.Color.Transparent
-        Me.Label1.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 7)
+        Me.Label1.AutoEllipsis = True
+        Me.Label1.BackColor = System.Drawing.SystemColors.Highlight
+        Me.Label1.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label1.Location = New System.Drawing.Point(4, 28)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(169, 18)
+        Me.Label1.Size = New System.Drawing.Size(393, 18)
         Me.Label1.TabIndex = 5
-        Me.Label1.Text = "Temp. Monitor & CPU Streß:"
+        Me.Label1.Text = "Rechenoperationen Zeit:"
         Me.Label1.UseMnemonic = False
         '
         'CheckedListBox1
@@ -94,7 +98,7 @@ Partial Class OptionsForm
         Me.CheckedListBox1.BackColor = System.Drawing.Color.Azure
         Me.CheckedListBox1.FormattingEnabled = True
         Me.CheckedListBox1.Items.AddRange(New Object() {"30", "45", "60", "120"})
-        Me.CheckedListBox1.Location = New System.Drawing.Point(341, 33)
+        Me.CheckedListBox1.Location = New System.Drawing.Point(339, 56)
         Me.CheckedListBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckedListBox1.Name = "CheckedListBox1"
         Me.CheckedListBox1.Size = New System.Drawing.Size(57, 64)
@@ -104,7 +108,7 @@ Partial Class OptionsForm
         '
         Me.LogSizeBox.FormattingEnabled = True
         Me.LogSizeBox.Items.AddRange(New Object() {"5", "10", "50", "100", "200", "500", "1000"})
-        Me.LogSizeBox.Location = New System.Drawing.Point(127, 8)
+        Me.LogSizeBox.Location = New System.Drawing.Point(9, 27)
         Me.LogSizeBox.Margin = New System.Windows.Forms.Padding(4)
         Me.LogSizeBox.Name = "LogSizeBox"
         Me.LogSizeBox.Size = New System.Drawing.Size(57, 21)
@@ -115,13 +119,13 @@ Partial Class OptionsForm
         Me.Label4.AutoEllipsis = True
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Label4.Font = New System.Drawing.Font("Bahnschrift SemiLight", 10.0!)
+        Me.Label4.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.75!)
         Me.Label4.ForeColor = System.Drawing.SystemColors.WindowText
         Me.Label4.LiveSetting = System.Windows.Forms.Automation.AutomationLiveSetting.Assertive
-        Me.Label4.Location = New System.Drawing.Point(4, 34)
+        Me.Label4.Location = New System.Drawing.Point(7, 55)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(379, 35)
+        Me.Label4.Size = New System.Drawing.Size(376, 31)
         Me.Label4.TabIndex = 2
         Me.Label4.Text = "10 KB entsprechen ca. 2 min  - 100KB = 10min --> 1000 KB (Max) ca. 100min"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -133,34 +137,35 @@ Partial Class OptionsForm
         Me.LogStartStopBox.AutoSize = True
         Me.LogStartStopBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.LogStartStopBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LogStartStopBox.Location = New System.Drawing.Point(222, 10)
+        Me.LogStartStopBox.Location = New System.Drawing.Point(211, 31)
         Me.LogStartStopBox.Margin = New System.Windows.Forms.Padding(4)
         Me.LogStartStopBox.Name = "LogStartStopBox"
-        Me.LogStartStopBox.Size = New System.Drawing.Size(169, 17)
+        Me.LogStartStopBox.Size = New System.Drawing.Size(98, 17)
         Me.LogStartStopBox.TabIndex = 3
-        Me.LogStartStopBox.Text = "keine Temperatur Log erstellen"
+        Me.LogStartStopBox.Text = "Temperatur Log"
         Me.LogStartStopBox.UseVisualStyleBackColor = True
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.BackColor = System.Drawing.Color.Transparent
+        Me.Label3.AutoEllipsis = True
+        Me.Label3.BackColor = System.Drawing.SystemColors.Highlight
         Me.Label3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Label3.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label3.Location = New System.Drawing.Point(4, 8)
+        Me.Label3.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label3.Location = New System.Drawing.Point(-1, -1)
         Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(117, 18)
+        Me.Label3.Size = New System.Drawing.Size(392, 18)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "Log Start & Größe:"
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.Label3.UseMnemonic = False
         '
         'Label20
         '
         Me.Label20.BackColor = System.Drawing.Color.Transparent
         Me.Label20.Font = New System.Drawing.Font("Bahnschrift SemiLight", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label20.Location = New System.Drawing.Point(185, 9)
+        Me.Label20.Location = New System.Drawing.Point(74, 29)
         Me.Label20.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(29, 17)
@@ -174,7 +179,7 @@ Partial Class OptionsForm
         Me.Label5.AutoEllipsis = True
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(162, 80)
+        Me.Label5.Location = New System.Drawing.Point(162, 103)
         Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(150, 12)
@@ -187,7 +192,7 @@ Partial Class OptionsForm
         '
         Me.Label6.BackColor = System.Drawing.Color.Transparent
         Me.Label6.Font = New System.Drawing.Font("Bahnschrift SemiLight", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(229, 56)
+        Me.Label6.Location = New System.Drawing.Point(229, 79)
         Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(131, 12)
@@ -200,7 +205,7 @@ Partial Class OptionsForm
         '
         Me.Label14.BackColor = System.Drawing.Color.Transparent
         Me.Label14.Font = New System.Drawing.Font("Bahnschrift SemiLight", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.Location = New System.Drawing.Point(92, 55)
+        Me.Label14.Location = New System.Drawing.Point(92, 78)
         Me.Label14.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(80, 16)
@@ -213,7 +218,7 @@ Partial Class OptionsForm
         '
         Me.Label15.AutoSize = True
         Me.Label15.Font = New System.Drawing.Font("Bahnschrift Light SemiCondensed", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label15.Location = New System.Drawing.Point(145, 56)
+        Me.Label15.Location = New System.Drawing.Point(145, 79)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(87, 13)
         Me.Label15.TabIndex = 12
@@ -223,7 +228,7 @@ Partial Class OptionsForm
         '
         Me.Label16.AutoSize = True
         Me.Label16.Font = New System.Drawing.Font("Bahnschrift Light SemiCondensed", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label16.Location = New System.Drawing.Point(265, 56)
+        Me.Label16.Location = New System.Drawing.Point(265, 79)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(70, 13)
         Me.Label16.TabIndex = 12
@@ -234,7 +239,7 @@ Partial Class OptionsForm
         Me.Label17.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Label17.Font = New System.Drawing.Font("Bahnschrift Light SemiCondensed", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label17.LiveSetting = System.Windows.Forms.Automation.AutomationLiveSetting.Polite
-        Me.Label17.Location = New System.Drawing.Point(136, 41)
+        Me.Label17.Location = New System.Drawing.Point(136, 64)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(136, 13)
         Me.Label17.TabIndex = 12
@@ -245,16 +250,16 @@ Partial Class OptionsForm
         'Panel3
         '
         Me.Panel3.BackColor = System.Drawing.SystemColors.Control
-        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel3.Controls.Add(Me.StartMessageBox)
         Me.Panel3.Controls.Add(Me.Panel4)
         Me.Panel3.Controls.Add(Me.LogStartStopBox)
         Me.Panel3.Controls.Add(Me.Label4)
         Me.Panel3.Controls.Add(Me.LogSizeBox)
         Me.Panel3.Controls.Add(Me.Label3)
         Me.Panel3.Controls.Add(Me.Label20)
-        Me.Panel3.Location = New System.Drawing.Point(5, 103)
+        Me.Panel3.Location = New System.Drawing.Point(5, 130)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(393, 179)
+        Me.Panel3.Size = New System.Drawing.Size(393, 244)
         Me.Panel3.TabIndex = 13
         '
         'Panel4
@@ -264,9 +269,9 @@ Partial Class OptionsForm
         Me.Panel4.Controls.Add(Me.BootBox)
         Me.Panel4.Controls.Add(Me.Label9)
         Me.Panel4.Controls.Add(Me.Label18)
-        Me.Panel4.Location = New System.Drawing.Point(-1, 87)
+        Me.Panel4.Location = New System.Drawing.Point(0, 87)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(393, 92)
+        Me.Panel4.Size = New System.Drawing.Size(393, 117)
         Me.Panel4.TabIndex = 14
         '
         'updateCheckBox
@@ -274,7 +279,7 @@ Partial Class OptionsForm
         Me.updateCheckBox.AutoSize = True
         Me.updateCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.updateCheckBox.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.25!)
-        Me.updateCheckBox.Location = New System.Drawing.Point(222, 2)
+        Me.updateCheckBox.Location = New System.Drawing.Point(210, 32)
         Me.updateCheckBox.Name = "updateCheckBox"
         Me.updateCheckBox.Size = New System.Drawing.Size(117, 17)
         Me.updateCheckBox.TabIndex = 8
@@ -286,7 +291,7 @@ Partial Class OptionsForm
         Me.BootBox.AutoSize = True
         Me.BootBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.BootBox.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.25!)
-        Me.BootBox.Location = New System.Drawing.Point(126, 2)
+        Me.BootBox.Location = New System.Drawing.Point(8, 32)
         Me.BootBox.Name = "BootBox"
         Me.BootBox.Size = New System.Drawing.Size(85, 17)
         Me.BootBox.TabIndex = 8
@@ -295,15 +300,15 @@ Partial Class OptionsForm
         '
         'Label9
         '
-        Me.Label9.AutoSize = True
-        Me.Label9.BackColor = System.Drawing.Color.Transparent
+        Me.Label9.AutoEllipsis = True
+        Me.Label9.BackColor = System.Drawing.SystemColors.Highlight
         Me.Label9.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Label9.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label9.Location = New System.Drawing.Point(4, 0)
+        Me.Label9.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label9.Location = New System.Drawing.Point(-1, 0)
         Me.Label9.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(86, 18)
+        Me.Label9.Size = New System.Drawing.Size(394, 18)
         Me.Label9.TabIndex = 0
         Me.Label9.Text = "System Start:"
         Me.Label9.UseMnemonic = False
@@ -312,12 +317,12 @@ Partial Class OptionsForm
         '
         Me.Label18.BackColor = System.Drawing.Color.Transparent
         Me.Label18.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Label18.Font = New System.Drawing.Font("Bahnschrift SemiLight", 10.0!)
+        Me.Label18.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.75!)
         Me.Label18.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Label18.Location = New System.Drawing.Point(4, 23)
+        Me.Label18.Location = New System.Drawing.Point(7, 61)
         Me.Label18.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(383, 65)
+        Me.Label18.Size = New System.Drawing.Size(376, 40)
         Me.Label18.TabIndex = 7
         Me.Label18.Text = "Hier können die Einstellungen für einen Start von CoolCore bei System-boot vorgen" &
     "ommen werden. Wenn ""Update check"" aktiviert ist prüft CC bei jedem Start des Pro" &
@@ -329,36 +334,60 @@ Partial Class OptionsForm
         '
         Me.InfoButton.BackgroundImage = Global.CoolCore.My.Resources.Resources._009_system
         Me.InfoButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.InfoButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.InfoButton.FlatAppearance.BorderColor = System.Drawing.SystemColors.Highlight
         Me.InfoButton.FlatAppearance.BorderSize = 2
         Me.InfoButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent
         Me.InfoButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.InfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.InfoButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.InfoButton.Location = New System.Drawing.Point(7, 33)
+        Me.InfoButton.Location = New System.Drawing.Point(7, 56)
         Me.InfoButton.Name = "InfoButton"
         Me.InfoButton.Size = New System.Drawing.Size(75, 59)
         Me.InfoButton.TabIndex = 14
         Me.InfoButton.UseVisualStyleBackColor = True
+        '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.SystemColors.Highlight
+        Me.Panel1.Controls.Add(Me.Label2)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(403, 25)
+        Me.Panel1.TabIndex = 15
+        '
+        'Label2
+        '
+        Me.Label2.BackColor = System.Drawing.Color.Transparent
+        Me.Label2.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 15.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ForeColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Label2.Location = New System.Drawing.Point(115, 0)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(169, 25)
+        Me.Label2.TabIndex = 5
+        Me.Label2.Text = "Einstellungen"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.Label2.UseMnemonic = False
         '
         'StartMessageBox
         '
         Me.StartMessageBox.AutoSize = True
         Me.StartMessageBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.StartMessageBox.Font = New System.Drawing.Font("Bahnschrift SemiLight", 8.25!)
-        Me.StartMessageBox.Location = New System.Drawing.Point(5, 289)
+        Me.StartMessageBox.Location = New System.Drawing.Point(9, 211)
         Me.StartMessageBox.Name = "StartMessageBox"
         Me.StartMessageBox.Size = New System.Drawing.Size(321, 17)
-        Me.StartMessageBox.TabIndex = 8
+        Me.StartMessageBox.TabIndex = 15
         Me.StartMessageBox.Text = "Willkommen Nachricht bei Programm Start immer anzeigen."
         Me.StartMessageBox.UseVisualStyleBackColor = True
         '
         'OptionsForm
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
-        Me.ClientSize = New System.Drawing.Size(403, 356)
+        Me.ClientSize = New System.Drawing.Size(403, 410)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Label15)
-        Me.Controls.Add(Me.StartMessageBox)
         Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.InfoButton)
         Me.Controls.Add(Me.CheckedListBox1)
@@ -381,6 +410,7 @@ Partial Class OptionsForm
         Me.Panel3.PerformLayout()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -407,5 +437,7 @@ Partial Class OptionsForm
     Friend WithEvents Label20 As Label
     Friend WithEvents InfoButton As Button
     Friend WithEvents updateCheckBox As CheckBox
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Label2 As Label
     Friend WithEvents StartMessageBox As CheckBox
 End Class

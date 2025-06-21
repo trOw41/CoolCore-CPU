@@ -31,10 +31,10 @@ Partial Class InfoDialog
         '
         Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox1.AutoEllipsis = True
-        Me.CheckBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CheckBox1.CheckAlign = System.Drawing.ContentAlignment.TopLeft
         Me.CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CheckBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBox1.Location = New System.Drawing.Point(189, 277)
+        Me.CheckBox1.Location = New System.Drawing.Point(172, 277)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(149, 17)
         Me.CheckBox1.TabIndex = 1
@@ -46,7 +46,7 @@ Partial Class InfoDialog
         '
         Me.InfoBox.AutoEllipsis = True
         Me.InfoBox.Dock = System.Windows.Forms.DockStyle.Top
-        Me.InfoBox.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.InfoBox.Font = New System.Drawing.Font("Bahnschrift SemiLight", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InfoBox.Location = New System.Drawing.Point(0, 0)
         Me.InfoBox.Name = "InfoBox"
         Me.InfoBox.Size = New System.Drawing.Size(515, 256)
@@ -67,6 +67,7 @@ Partial Class InfoDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.ClientSize = New System.Drawing.Size(515, 303)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.InfoBox)

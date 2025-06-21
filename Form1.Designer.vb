@@ -31,7 +31,6 @@ Partial Class Form1
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -145,6 +144,12 @@ Partial Class Form1
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.ExportCPUInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
+        Me.DruckenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SystemInfoDruckenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ProzessorInforDruckenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -174,7 +179,7 @@ Partial Class Form1
         'FileToolStripMenuItem
         '
         Me.FileToolStripMenuItem.BackColor = System.Drawing.Color.Transparent
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CloseToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DruckenToolStripMenuItem, Me.ToolStripSeparator8, Me.CloseToolStripMenuItem})
         Me.FileToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         resources.ApplyResources(Me.FileToolStripMenuItem, "FileToolStripMenuItem")
@@ -189,7 +194,7 @@ Partial Class Form1
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.BackColor = System.Drawing.Color.Transparent
-        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.ToolStripSeparator2, Me.ExportCPUInfoToolStripMenuItem})
+        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.ToolStripSeparator2})
         Me.OptionsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
         resources.ApplyResources(Me.OptionsToolStripMenuItem, "OptionsToolStripMenuItem")
@@ -205,16 +210,10 @@ Partial Class Form1
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         resources.ApplyResources(Me.ToolStripSeparator2, "ToolStripSeparator2")
         '
-        'ExportCPUInfoToolStripMenuItem
-        '
-        Me.ExportCPUInfoToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._036_folder
-        Me.ExportCPUInfoToolStripMenuItem.Name = "ExportCPUInfoToolStripMenuItem"
-        resources.ApplyResources(Me.ExportCPUInfoToolStripMenuItem, "ExportCPUInfoToolStripMenuItem")
-        '
         'ToolsToolStripMenuItem
         '
         Me.ToolsToolStripMenuItem.BackColor = System.Drawing.Color.Transparent
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem, Me.ToolStripSeparator5, Me.CpuInfoMenu, Me.ToolStripSeparator6})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem, Me.ToolStripSeparator6, Me.ExportCPUInfoToolStripMenuItem, Me.ToolStripSeparator5, Me.CpuInfoMenu})
         Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
@@ -224,15 +223,14 @@ Partial Class Form1
         Me.LogMenuItem.AutoToolTip = True
         Me.LogMenuItem.CheckOnClick = True
         Me.LogMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportLogToolStripMenuItem})
-        Me.LogMenuItem.Image = Global.CoolCore.My.Resources.Resources._004_computer_science
+        Me.LogMenuItem.Image = Global.CoolCore.My.Resources.Resources._034_signature
         Me.LogMenuItem.Name = "LogMenuItem"
         resources.ApplyResources(Me.LogMenuItem, "LogMenuItem")
         '
         'ExportLogToolStripMenuItem
         '
-        Me.ExportLogToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._030_ram_2
-        Me.ExportLogToolStripMenuItem.Name = "ExportLogToolStripMenuItem"
         resources.ApplyResources(Me.ExportLogToolStripMenuItem, "ExportLogToolStripMenuItem")
+        Me.ExportLogToolStripMenuItem.Name = "ExportLogToolStripMenuItem"
         '
         'ToolStripSeparator1
         '
@@ -252,9 +250,8 @@ Partial Class Form1
         'CpuInfoMenu
         '
         Me.CpuInfoMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.IntelCPUDBToolStripMenuItem, Me.ToolStripSeparator7, Me.AmdCPUDBToolStripMenuItem})
-        Me.CpuInfoMenu.Image = Global.CoolCore.My.Resources.Resources._023_cpu
-        Me.CpuInfoMenu.Name = "CpuInfoMenu"
         resources.ApplyResources(Me.CpuInfoMenu, "CpuInfoMenu")
+        Me.CpuInfoMenu.Name = "CpuInfoMenu"
         '
         'IntelCPUDBToolStripMenuItem
         '
@@ -1121,6 +1118,40 @@ Partial Class Form1
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.TabStop = False
         '
+        'ExportCPUInfoToolStripMenuItem
+        '
+        Me.ExportCPUInfoToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._031_computer
+        Me.ExportCPUInfoToolStripMenuItem.Name = "ExportCPUInfoToolStripMenuItem"
+        resources.ApplyResources(Me.ExportCPUInfoToolStripMenuItem, "ExportCPUInfoToolStripMenuItem")
+        '
+        'ToolStripSeparator8
+        '
+        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
+        resources.ApplyResources(Me.ToolStripSeparator8, "ToolStripSeparator8")
+        '
+        'DruckenToolStripMenuItem
+        '
+        Me.DruckenToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SystemInfoDruckenToolStripMenuItem, Me.ToolStripSeparator9, Me.ProzessorInforDruckenToolStripMenuItem})
+        resources.ApplyResources(Me.DruckenToolStripMenuItem, "DruckenToolStripMenuItem")
+        Me.DruckenToolStripMenuItem.Name = "DruckenToolStripMenuItem"
+        '
+        'SystemInfoDruckenToolStripMenuItem
+        '
+        Me.SystemInfoDruckenToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._031_computer
+        Me.SystemInfoDruckenToolStripMenuItem.Name = "SystemInfoDruckenToolStripMenuItem"
+        resources.ApplyResources(Me.SystemInfoDruckenToolStripMenuItem, "SystemInfoDruckenToolStripMenuItem")
+        '
+        'ToolStripSeparator9
+        '
+        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
+        resources.ApplyResources(Me.ToolStripSeparator9, "ToolStripSeparator9")
+        '
+        'ProzessorInforDruckenToolStripMenuItem
+        '
+        Me.ProzessorInforDruckenToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._023_cpu
+        Me.ProzessorInforDruckenToolStripMenuItem.Name = "ProzessorInforDruckenToolStripMenuItem"
+        resources.ApplyResources(Me.ProzessorInforDruckenToolStripMenuItem, "ProzessorInforDruckenToolStripMenuItem")
+        '
         'Form1
         '
         resources.ApplyResources(Me, "$this")
@@ -1177,7 +1208,6 @@ Partial Class Form1
     Friend WithEvents LoadArchivedMeasurementsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ExportCPUInfoToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents FAQToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SupportToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExportLogToolStripMenuItem As ToolStripMenuItem
@@ -1282,4 +1312,10 @@ Partial Class Form1
     Friend WithEvents Versionlbl As Label
     Friend WithEvents ContextMenuStrip2 As ContextMenuStrip
     Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
+    Friend WithEvents ExportCPUInfoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator8 As ToolStripSeparator
+    Friend WithEvents DruckenToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SystemInfoDruckenToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator9 As ToolStripSeparator
+    Friend WithEvents ProzessorInforDruckenToolStripMenuItem As ToolStripMenuItem
 End Class

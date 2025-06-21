@@ -90,6 +90,9 @@ Public Class Form1
     Private _backgroundImage3 As Image
     Dim documentsPath As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim settingsPath As String = Path.Combine(documentsPath, "CoolCore")
+    Private printDocument As New Printing.PrintDocument()
+    Private printPreviewDialog As New PrintPreviewDialog()
+    Private cpuInfoToPrint As String
     'Programm initialization
     Public Sub New()
         InitializeComponent()
@@ -1992,15 +1995,6 @@ Public Class Form1
             MessageBox.Show($"Fehler beim Öffnen der Supportseite: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Private Sub CpuInfoMenu_Click(sender As Object, e As EventArgs) Handles CpuInfoMenu.Click
-        If foundCpuDetails.Count > 0 Then
-            Dim cpuInfoForm As New CpuinfoForm()
-            cpuInfoForm.LoadCpuInfo(foundCpuDetails)
-            cpuInfoForm.Show()
-        Else
-            MessageBox.Show("Keine detaillierten CPU-Informationen in der CSV-Datei für Ihre CPU gefunden.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        End If
-    End Sub
     Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
         OptionsForm.ShowDialog(Me)
     End Sub
@@ -2382,5 +2376,36 @@ Public Class Form1
                 MessageBox.Show(Me, $"{itemText2}", "kopiert")
             End If
         End If
+    End Sub
+
+    Private Sub DruckenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DruckenToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub ExportCPUInfoToolStripMenuItem_Click_1(sender As Object, e As EventArgs) Handles ExportCPUInfoToolStripMenuItem.Click
+        If foundCpuDetails.Count > 0 Then
+            Dim cpuInfoForm As New CpuinfoForm()
+            cpuInfoForm.LoadCpuInfo(foundCpuDetails)
+            cpuInfoForm.Show()
+        Else
+            MessageBox.Show("Keine detaillierten CPU-Informationen in der Datenbank für Ihre CPU gefunden. Schauen Sie in unserer Online-Datenbank ob ihre CPU unterstürzt wird: [https://www.cool-core.de.cool] ", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+    End Sub
+    Private Sub ProzessorInforDruckenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProzessorInforDruckenToolStripMenuItem.Click
+        ' CPU-Infos als String holen (z. B. aus foundCpuDetails)
+        cpuInfoToPrint = ""
+        For Each kvp In foundCpuDetails
+            cpuInfoToPrint &= $"{kvp.Key}: {kvp.Value}" & Environment.NewLine
+        Next
+
+        AddHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
+        printPreviewDialog.Document = printDocument
+        printPreviewDialog.ShowDialog()
+        RemoveHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
+    End Sub
+
+    Private Sub PrintDocument_PrintPage(sender As Object, e As Printing.PrintPageEventArgs)
+        Dim font As New Font("Segoe UI", 10)
+        e.Graphics.DrawString(cpuInfoToPrint, font, Brushes.Black, 50, 50)
     End Sub
 End Class

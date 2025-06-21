@@ -25,16 +25,19 @@ Partial Class CpuinfoForm
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CpuinfoForm))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.InfoList = New System.Windows.Forms.ListView()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
+        Me.Label1.AutoEllipsis = True
+        Me.Label1.BackColor = System.Drawing.SystemColors.Highlight
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Label1.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(65, 19)
+        Me.Label1.Size = New System.Drawing.Size(335, 19)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "CPU Info:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -42,33 +45,48 @@ Partial Class CpuinfoForm
         'InfoList
         '
         Me.InfoList.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.InfoList.Font = New System.Drawing.Font("Bahnschrift", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.InfoList.Font = New System.Drawing.Font("Bahnschrift", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InfoList.FullRowSelect = True
+        Me.InfoList.GridLines = True
         Me.InfoList.HideSelection = False
         Me.InfoList.Location = New System.Drawing.Point(0, 19)
         Me.InfoList.MultiSelect = False
         Me.InfoList.Name = "InfoList"
         Me.InfoList.ShowItemToolTips = True
-        Me.InfoList.Size = New System.Drawing.Size(417, 287)
+        Me.InfoList.Size = New System.Drawing.Size(335, 241)
         Me.InfoList.TabIndex = 1
         Me.InfoList.UseCompatibleStateImageBehavior = False
         Me.InfoList.View = System.Windows.Forms.View.Details
+        '
+        'Button1
+        '
+        Me.Button1.BackColor = System.Drawing.Color.Transparent
+        Me.Button1.BackgroundImage = CType(resources.GetObject("Button1.BackgroundImage"), System.Drawing.Image)
+        Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.Button1.Location = New System.Drawing.Point(282, 211)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(52, 48)
+        Me.Button1.TabIndex = 2
+        Me.Button1.Text = "Print"
+        Me.Button1.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.Button1.UseVisualStyleBackColor = False
         '
         'CpuinfoForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(417, 306)
+        Me.ClientSize = New System.Drawing.Size(335, 260)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.InfoList)
         Me.Controls.Add(Me.Label1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "CpuinfoForm"
-        Me.Text = "Detail Cpu Info"
+        Me.Text = "Prozessor:"
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
     Friend WithEvents Label1 As Label
     Friend WithEvents InfoList As ListView
+    Friend WithEvents Button1 As Button
 End Class

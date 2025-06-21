@@ -1,8 +1,11 @@
 ﻿' CpuinfoForm.vb
 Imports System.Collections.Generic
+Imports System.Drawing.Printing
 
 Public Class CpuinfoForm
-
+    Private printDocument As New Printing.PrintDocument()
+    Private printPreviewDialog As New PrintPreviewDialog()
+    Private cpuInfoToPrint As String
     Public Sub LoadCpuInfo(ByVal cpuData As Dictionary(Of String, String))
         InfoList.View = View.Details
         If InfoList.Columns.Count = 0 Then
@@ -104,5 +107,22 @@ Public Class CpuinfoForm
                     Next
                 End If
         End Select
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        cpuInfoToPrint = ""
+        For Each kvp In InfoList.Items
+            cpuInfoToPrint &= $"{kvp.Key}: {kvp.Value}" & Environment.NewLine
+        Next
+
+        AddHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
+        PrintPreviewDialog.Document = printDocument
+        PrintPreviewDialog.ShowDialog()
+        RemoveHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
+    End Sub
+
+    Private Sub PrintDocument_PrintPage(sender As Object, e As Printing.PrintPageEventArgs)
+        Dim font As New Font("Segoe UI", 10)
+        e.Graphics.DrawString(cpuInfoToPrint, font, Brushes.Black, 50, 50)
     End Sub
 End Class

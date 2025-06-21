@@ -14,7 +14,7 @@ Public Class OptionsForm
 
     Private Sub OptionsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Settings.ApplicationTheme = "Standard"
-        Label1.Text = "CPU Temperatur Test Info: " & My.Settings.MonitorTime
+        Label1.Text = $"Temp. Monitor & CPU Streß: {Settings.MonitorTime} s"
         For i = 0 To LogSizeBox.Items.Count - 1
             Dim items = i
             LogSizeBox.Items(i) = Settings.MAX_LOG_SIZE_KB
@@ -197,7 +197,7 @@ Public Class OptionsForm
     End Sub
 
 
-    Private Sub StartMessageBox_CheckedChanged(sender As Object, e As EventArgs) Handles StartMessageBox.CheckedChanged
+    Private Sub StartMessageBox_CheckedChanged(sender As Object, e As EventArgs)
         If StartMessageBox.CheckState = _StartMessageBoxCheckBoxInitialState Then
             Return
         End If
@@ -208,7 +208,6 @@ Public Class OptionsForm
                 Return
             End If
             MessageBox.Show("Die Startnachricht wird immer angezeigt.", "Info:", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            'MessageBox.Show("Die Startnachricht immer anzeigen?.", "Info:", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
         Else
             My.Settings.AllwaysShow = False
             If _isInitializing Then
@@ -220,5 +219,7 @@ Public Class OptionsForm
         _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
     End Sub
 
-
+    Private Sub InfoButton_Click(sender As Object, e As EventArgs) Handles InfoButton.Click
+        InfoDialog.ShowDialog(Me)
+    End Sub
 End Class
