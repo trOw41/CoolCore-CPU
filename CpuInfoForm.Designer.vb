@@ -45,7 +45,7 @@ Partial Class CpuinfoForm
         'InfoList
         '
         Me.InfoList.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.InfoList.Font = New System.Drawing.Font("Bahnschrift", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.InfoList.Font = New System.Drawing.Font("Bahnschrift", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.InfoList.FullRowSelect = True
         Me.InfoList.GridLines = True
         Me.InfoList.HideSelection = False
@@ -62,13 +62,15 @@ Partial Class CpuinfoForm
         '
         Me.Button1.BackColor = System.Drawing.Color.Transparent
         Me.Button1.BackgroundImage = CType(resources.GetObject("Button1.BackgroundImage"), System.Drawing.Image)
-        Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.Button1.Location = New System.Drawing.Point(282, 211)
+        Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.Button1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button1.Location = New System.Drawing.Point(0, 212)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(52, 48)
+        Me.Button1.Size = New System.Drawing.Size(335, 48)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Print"
-        Me.Button1.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
         Me.Button1.UseVisualStyleBackColor = False
         '
         'CpuinfoForm
@@ -80,6 +82,8 @@ Partial Class CpuinfoForm
         Me.Controls.Add(Me.InfoList)
         Me.Controls.Add(Me.Label1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "CpuinfoForm"
         Me.Text = "Prozessor:"
         Me.ResumeLayout(False)

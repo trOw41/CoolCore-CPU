@@ -93,6 +93,7 @@ Public Class Form1
     Private printDocument As New Printing.PrintDocument()
     Private printPreviewDialog As New PrintPreviewDialog()
     Private cpuInfoToPrint As String
+    Private systemInfoPrint As String
     'Programm initialization
     Public Sub New()
         InitializeComponent()
@@ -248,17 +249,21 @@ Public Class Form1
         Dim hardwareInfoTask As Task = Task.Run(Async Function()
                                                     Await ReadAndDisplaySystemInfoAsync()
                                                     Await CheckCpuSub()
+
+                                                    Await BrandCheck()
+
                                                     Return Task.CompletedTask
                                                 End Function)
         Await hardwareInfoTask
+        refreshTimer.Start()
         Dim LogSystem As Task = Task.Run(Sub()
                                              StartStopLog()
                                              UpdateLogSize()
-                                             BrandCheck()
+                                             ' BrandCheck()
                                              Collect_AllSystemInfo()
+                                             ReadGraphicCardInfo()
                                          End Sub)
         Await LogSystem
-        refreshTimer.Start()
         If My.Settings.UpdateCheck = True Then
             Dim url As String = "https://cool-core.de.cool/updates/cool-core/version.txt"
             Dim versionCheckTask As Task = Task.Run(Sub()
@@ -322,34 +327,21 @@ Public Class Form1
                             LblStatusMessage.Text = $"Latest version from server: {version}"
                         End If
                         Dim currentVersion As New Version(My.Application.Info.Version.ToString(4))
-                        Versionlbl.Text = $"v{currentVersion}"
+                        If Versionlbl.InvokeRequired Then
+                            Versionlbl.Invoke(Sub()
+                                                  Versionlbl.Text = $"v{currentVersion}"
+                                              End Sub)
+                        Else
+                            Versionlbl.Text = $"v{currentVersion}"
+                        End If
                         Dim serverVersion As New Version(version)
                         If serverVersion.Equals(currentVersion) Then
                         ElseIf serverVersion > currentVersion Then
                             Dim result As DialogResult = MessageBox.Show("New version available: " & serverVersion.ToString() & vbCrLf & "Do you want to download it now?", "Update Available", MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
                             If result = DialogResult.OK Then
-                                Dim setupPath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CoolCoreSetup.exe")
-                                Try
-                                    client.DownloadFile("https://cool-core.de.cool/updates/cool-core/CoolCoreSetup.exe", setupPath)
-                                    MessageBox.Show("Update wird installiert. Anwendung wird beendet...")
-                                    If File.Exists(setupPath) Then
-                                        Try
-                                            Dim psi As New ProcessStartInfo() With {
-                                                .FileName = setupPath,
-                                                .UseShellExecute = True,
-                                                .WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory
-                                            }
-                                            Process.Start(psi)
-                                        Catch ex As Exception
-                                            MessageBox.Show("Fehler beim Starten des Setups: " & ex.Message)
-                                        End Try
-                                        Application.Exit()
-                                    Else
-                                        MessageBox.Show("Error File not found!")
-                                    End If
-                                Catch ex As Exception
-                                    MessageBox.Show("Fehler beim Herunterladen des Updates: " & ex.Message)
-                                End Try
+                                Me.Invoke(Sub()
+                                              UpdateForm.ShowDialog(Me)
+                                          End Sub)
                             End If
                         End If
                     End If
@@ -580,52 +572,12 @@ Public Class Form1
             InitializeCoreTemperatureSensors()
             InitializeVoltageSensors()
         End If
+        'CPU Monitoring
         Try
             cpu?.Update()
             For i As Integer = 0 To cpuLoadCounters.Count - 1
-                Dim currentCoreLoad As Single = cpuLoadCounters(i).NextValue()
-                If LoadBoxes.ContainsKey(i) Then
-                    LoadBoxes(i).Text = $"{currentCoreLoad:F2}%"
-                End If
-            Next
-            Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
-            If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
-                PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W"
-            End If
-            Dim aeroCoolController As AeroCoolGroup = Nothing
-            For Each hw In computer.Hardware
-                If TypeOf hw Is AeroCoolGroup Then
-                    aeroCoolController = CType(hw, AeroCoolGroup)
-                    Debug.WriteLine($"AeroCool Controller gefunden: {hw.Name}")
-                    hw.Update()
-                    Exit For
-                End If
-            Next
-            If aeroCoolController IsNot Nothing Then
-                Dim fanValues As New List(Of String)
-                For Each sensor As ISensor In aeroCoolController.Hardware
-                    If sensor.SensorType = SensorType.Fan AndAlso sensor.Value.HasValue Then
-                        fanValues.Add($"{sensor.Name}: {sensor.Value.Value:F0} RPM")
-                    End If
-                Next
-                If fanValues.Count > 0 Then
-                    FanBox.Text = String.Join(" | ", fanValues)
-                Else
-                    FanBox.Text = "N/A"
-                End If
-            Else
-                ' Fallback: CPU-Lüfter anzeigen, falls AeroCool nicht gefunden
-                Dim cpuFan = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Fan)
-                If cpuFan IsNot Nothing AndAlso cpuFan.Value.HasValue Then
-                    FanBox.Text = $"{cpuFan.Name}: {cpuFan.Value.Value:F0} RPM"
-                Else
-                    FanBox.Text = "N/A"
-                End If
-            End If
-            For i As Integer = 0 To cpuLoadCounters.Count - 1
                 Dim sensor As ISensor = coreTemperatures(i)
                 Dim coreIndex As Integer = i
-
                 Me.Invoke(Sub()
                               If MinTempBoxes.ContainsKey(coreIndex) Then
                                   MinTempBoxes(coreIndex).Text = $"{sensor.Min:F1}°C"
@@ -655,78 +607,93 @@ Public Class Form1
                                   CoreTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Value)
                               End If
 
+                              Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
+                              If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
+                                  PowerBox.Text = $"{packagePowerSensor.Value.Value:F1}W"
+                              End If
                           End Sub)
+
                 If isLoggingActive AndAlso temperatureLogWriter IsNot Nothing Then
                     Try
                         temperatureLogWriter.WriteLine(
-                            $"{DateTime.Now:yyyy-MM-dd HH:mm:ss};" &
-                            $"Core {coreIndex};" &
-                            $"{sensor.Min:F1};" &
-                            $"{sensor.Max:F1};" &
-                            $"{sensor.Value:F1}")
-
+                                $"{DateTime.Now:yyyy-MM-dd HH:mm:ss};" &
+                                $"Core {coreIndex};" &
+                                $"{sensor.Min:F1};" &
+                                $"{sensor.Max:F1};" &
+                                $"{sensor.Value:F1}")
                         temperatureLogWriter.Flush()
                     Catch ex As Exception
-                        Debug.WriteLine($"Fehler beim Schreiben ins Temperatur-Log: {ex.Message}")
+                        Debug.WriteLine($"Error writing to log file: {ex.Message}")
                     End Try
                 End If
+                If monitoringStopwatch.Elapsed.TotalSeconds >= My.Settings.MonitorTime Then
+                    StopMonitoringProcess()
+                    StopCpuStressTest()
+                    'Exit Sub
+                End If
+                Me.Invoke(Sub()
+                              CheckAndManageLogFile()
+                              FrequencyBox2.Text = $"{Math.Round(UpdateCpuFrequencyDisplay(), 1)} MHz"
+                          End Sub)
             Next
-            If monitoringStopwatch.Elapsed.TotalSeconds >= My.Settings.MonitorTime Then
-                StopMonitoringProcess()
-                StopCpuStressTest()
-                'Exit Sub
-            End If
-            Me.Invoke(Sub()
-                          CheckAndManageLogFile()
-                          FrequencyBox2.Text = $"{Math.Round(UpdateCpuFrequencyDisplay(), 1)} MHz"
-                      End Sub)
-            Dim gpu = computer.Hardware.FirstOrDefault(Function(h) h.HardwareType = HardwareType.GpuNvidia OrElse h.HardwareType = HardwareType.GpuAmd OrElse h.HardwareType = HardwareType.GpuIntel)
-            gpu?.Update()
-
-            Dim gpuSensors = gpu?.Sensors.Where(Function(s) s.SensorType = SensorType.Temperature OrElse s.SensorType = SensorType.Clock OrElse s.SensorType = SensorType.Load).ToList()
-            If gpuSensors IsNot Nothing Then
-                For Each sensor In gpuSensors
-                    Select Case sensor.SensorType
-                        Case SensorType.Temperature
-                            If sensor.Value.HasValue Then
-                                Me.Invoke(Sub()
-                                              GCTempBox.Text = $"{sensor.Value.Value:F1}°C"
-                                              GCTempBox.ForeColor = GetTemperatureColor(sensor.Value.Value)
-
-                                              Dim lastGcLoadBarValue As Integer = -1
-
-                                              If sensor.SensorType = SensorType.Temperature Then
-                                                  If sensor.Value.HasValue Then
-                                                      Dim newValue As Integer = CInt(sensor.Value.Value)
-                                                      If newValue <> lastGcLoadBarValue Then
-                                                          Me.Invoke(Sub()
-                                                                        GCTempBox.Text = $"{sensor.Value.Value:F1}°C"
-                                                                        GCTempBox.ForeColor = GetTemperatureColor(sensor.Value.Value)
-
-                                                                        lastGcLoadBarValue = newValue
-                                                                    End Sub)
+            For i As Integer = 0 To cpuLoadCounters.Count - 1
+                Dim currentCoreLoad As Single = cpuLoadCounters(i).NextValue()
+                If LoadBoxes.ContainsKey(i) Then
+                    LoadBoxes(i).Text = $"{currentCoreLoad:F2}%"
+                End If
+            Next
+        Catch ex As Exception
+            Debug.WriteLine($"Error in RefreshTimer_Tick: {ex.Message}")
+            For Each kvp In LoadBoxes : kvp.Value.Text = "Error" : Next
+            For Each kvp In CoreTempBoxes : kvp.Value.Text = "Error" : Next
+            For Each kvp In MinTempBoxes : kvp.Value.Text = "Error" : Next
+            For Each kvp In MaxTempBoxes : kvp.Value.Text = "Error" : Next
+        End Try
+        'GPU Monitoring
+        Dim gpu = computer.Hardware.FirstOrDefault(Function(h) h.HardwareType = HardwareType.GpuNvidia OrElse h.HardwareType = HardwareType.GpuAmd OrElse h.HardwareType = HardwareType.GpuIntel)
+            Try
+                gpu?.Update()
+                Dim gpuSensors = gpu?.Sensors.Where(Function(s) s.SensorType = SensorType.Temperature OrElse s.SensorType = SensorType.Clock OrElse s.SensorType = SensorType.Load).ToList()
+                If gpuSensors IsNot Nothing Then
+                    For Each sensor In gpuSensors
+                        Select Case sensor.SensorType
+                            Case SensorType.Temperature
+                                If sensor.Value.HasValue Then
+                                    Me.Invoke(Sub()
+                                                  GCTempBox.Text = $"{sensor.Value.Value:F1}°C"
+                                                  GCTempBox.ForeColor = GetTemperatureColor(sensor.Value.Value)
+                                                  Dim lastGcLoadBarValue As Integer = -1
+                                                  If sensor.SensorType = SensorType.Temperature Then
+                                                      If sensor.Value.HasValue Then
+                                                          Dim newValue As Integer = CInt(sensor.Value.Value)
+                                                          If newValue <> lastGcLoadBarValue Then
+                                                              Me.Invoke(Sub()
+                                                                            GCTempBox.Text = $"{sensor.Value.Value:F1}°C"
+                                                                            GCTempBox.ForeColor = GetTemperatureColor(sensor.Value.Value)
+                                                                            lastGcLoadBarValue = newValue
+                                                                        End Sub)
+                                                          End If
                                                       End If
                                                   End If
-                                              End If
-                                          End Sub)
-                            End If
-                        Case SensorType.Clock
-                            If sensor.Value.HasValue Then
-                                Me.Invoke(Sub() GCClockBox.Text = $"{sensor.Value.Value:F1}MHz")
-                            End If
-                        Case SensorType.Load
+                                              End Sub)
+                                End If
+                            Case SensorType.Clock
+                                If sensor.Value.HasValue Then
+                                    Me.Invoke(Sub() GCClockBox.Text = $"{sensor.Value.Value:F1}MHz")
+                                End If
+                            Case SensorType.Load
 
-                            If sensor.Value.HasValue Then
-                                Dim loadValue As Integer = CInt(sensor.Value.Value)
-                                Me.Invoke(Sub()
-                                              Loadlbl.Text = $"{loadValue}%"
-                                          End Sub)
-                            End If
-                    End Select
-                Next
-            End If
-        Catch ex As Exception
-            For Each kvp In LoadBoxes : kvp.Value.Text = "Error" : Next
+                                If sensor.Value.HasValue Then
+                                    Dim loadValue As Integer = CInt(sensor.Value.Value)
+                                    Me.Invoke(Sub()
+                                                  Loadlbl.Text = $"{loadValue}%"
+                                              End Sub)
+                                End If
+                        End Select
+                    Next
+                End If
+            Catch ex As Exception
+                For Each kvp In LoadBoxes : kvp.Value.Text = "Error" : Next
             For Each kvp In CoreTempBoxes : kvp.Value.Text = "Error" : Next
             For Each kvp In MinTempBoxes : kvp.Value.Text = "Error" : Next
             For Each kvp In MaxTempBoxes : kvp.Value.Text = "Error" : Next
@@ -1701,7 +1668,7 @@ Public Class Form1
         Else
             Dim item As New ListViewItem(category) With {
                 .UseItemStyleForSubItems = False,
-                .ImageIndex = If(String.IsNullOrEmpty(info), 0, 1)
+                .ImageIndex = If(String.IsNullOrEmpty(info), 0, 0)
                 }
             item.SubItems.Add(info)
             SystemViewList.Items.Add(item)
@@ -2334,18 +2301,15 @@ Public Class Form1
     Private Sub Tabpane_SelectedIndexChanged(sender As Object, e As EventArgs) Handles Tabpane.SelectedIndexChanged
         Dim tabIndex As Integer = Tabpane.SelectedIndex
         Dim tabPage As TabPage = Tabpane.SelectedTab
-        If tabIndex = 0 Then
-            tabPage.BackgroundImageLayout = ImageLayout.Stretch
-            tabPage.BackgroundImage = _backgroundImage1
-        ElseIf tabIndex = 1 Then
+        If tabIndex = 1 Then
             'TabPage2.BackgroundImage = _backgroundImage2
             tabPage.BackgroundImageLayout = ImageLayout.Stretch
             tabPage.BackgroundImage = _backgroundImage2
-            ReadGraphicCardInfo()
+
         ElseIf tabIndex = 2 Then
             tabPage.BackgroundImageLayout = ImageLayout.Stretch
             tabPage.BackgroundImage = _backgroundImage3
-            Collect_AllSystemInfo()
+            'Collect_AllSystemInfo()
         End If
     End Sub
 
@@ -2378,10 +2342,6 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub DruckenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DruckenToolStripMenuItem.Click
-
-    End Sub
-
     Private Sub ExportCPUInfoToolStripMenuItem_Click_1(sender As Object, e As EventArgs) Handles ExportCPUInfoToolStripMenuItem.Click
         If foundCpuDetails.Count > 0 Then
             Dim cpuInfoForm As New CpuinfoForm()
@@ -2392,12 +2352,29 @@ Public Class Form1
         End If
     End Sub
     Private Sub ProzessorInforDruckenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProzessorInforDruckenToolStripMenuItem.Click
-        ' CPU-Infos als String holen (z. B. aus foundCpuDetails)
         cpuInfoToPrint = ""
+        Dim printDocument As New Printing.PrintDocument()
+
+        Dim printPreviewDialog As New PrintPreviewDialog()
+        printPreviewDialog.ClientSize = New Size(600, 800)
+        printPreviewDialog.Document = printDocument
+        printDocument.DefaultPageSettings.Landscape = False
+        printDocument.DefaultPageSettings.Margins = New Printing.Margins(50, 50, 50, 50)
+        cpuInfoToPrint = "CPU-Informationen:" & Environment.NewLine & Environment.NewLine
+        cpuInfoToPrint &= "" & Environment.NewLine
+        cpuInfoToPrint &= "" & Environment.NewLine
         For Each kvp In foundCpuDetails
             cpuInfoToPrint &= $"{kvp.Key}: {kvp.Value}" & Environment.NewLine
         Next
-
+        cpuInfoToPrint &= "" & Environment.NewLine
+        cpuInfoToPrint &= "" & Environment.NewLine
+        cpuInfoToPrint &= "" & Environment.NewLine
+        cpuInfoToPrint &= "" & Environment.NewLine
+        cpuInfoToPrint &= "" & Environment.NewLine
+        cpuInfoToPrint &= "---------------------------------------------------------" & Environment.NewLine
+        cpuInfoToPrint &= "Datum: " & DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") & Environment.NewLine & Environment.NewLine
+        cpuInfoToPrint &= Environment.NewLine & "Hinweis: Diese Informationen wurden automatisch gesammelt und können je nach System variieren." & Environment.NewLine
+        cpuInfoToPrint &= $"{Date.Now.Year} © CoolCore-CPU®" & Environment.NewLine
         AddHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
         printPreviewDialog.Document = printDocument
         printPreviewDialog.ShowDialog()
@@ -2405,7 +2382,60 @@ Public Class Form1
     End Sub
 
     Private Sub PrintDocument_PrintPage(sender As Object, e As Printing.PrintPageEventArgs)
-        Dim font As New Font("Segoe UI", 10)
+        Dim font As New Font("Arial", 10, FontStyle.Bold)
         e.Graphics.DrawString(cpuInfoToPrint, font, Brushes.Black, 50, 50)
+    End Sub
+
+    Private Sub SystemInfoDruckenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SystemInfoDruckenToolStripMenuItem.Click
+        Dim i As Integer
+        Dim j As Integer
+        Dim line As String = ""
+        Dim item As ListViewItem = Nothing
+        Dim printDocument As New Printing.PrintDocument()
+        systemInfoPrint = ""
+        AddHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
+        Dim printPreviewDialog As New PrintPreviewDialog()
+        printPreviewDialog.ClientSize = New Size(600, 800)
+        printPreviewDialog.Document = printDocument
+        printDocument.DefaultPageSettings.Landscape = False
+        printDocument.DefaultPageSettings.Margins = New Printing.Margins(50, 50, 50, 50)
+        printDocument.DocumentName = "Systeminformationen"
+        Dim systemInfo As String = "Systeminformationen:" & Environment.NewLine & Environment.NewLine
+        systemInfo &= "" & Environment.NewLine
+        systemInfo &= "" & Environment.NewLine
+        systemInfo &= "" & Environment.NewLine
+        systemInfo &= "" & Environment.NewLine
+        For i = 0 To SystemViewList.Items.Count - 1
+            item = SystemViewList.Items(i)
+            line = ""
+            line &= item.Text & ": "
+            If item.SubItems.Count = 0 Then
+                line &= "Keine Informationen verfügbar"
+                systemInfo &= line & Environment.NewLine
+                Continue For
+            End If
+            For j = 0 To item.SubItems.Count - 1
+                If j = 0 Then
+                    line &= item.SubItems(j).Text
+                Else
+                    line &= ": " & item.SubItems(j).Text
+                End If
+            Next
+            systemInfo &= line & Environment.NewLine
+        Next
+        systemInfo &= "" & Environment.NewLine
+        systemInfo &= "" & Environment.NewLine
+        systemInfo &= "" & Environment.NewLine
+        systemInfo &= "" & Environment.NewLine
+        systemInfo &= "" & Environment.NewLine
+        systemInfo &= "-------------------------------------------" & Environment.NewLine
+        systemInfo &= "Datum: " & DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") & Environment.NewLine & Environment.NewLine
+        systemInfo &= Environment.NewLine & "Hinweis: Diese Informationen wurden automatisch gesammelt und können je nach System variieren." & Environment.NewLine
+        systemInfo &= $"{Date.Now.Year} © CoolCore-CPU®" & Environment.NewLine
+        cpuInfoToPrint = systemInfo
+        AddHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
+        printPreviewDialog.Document = printDocument
+        printPreviewDialog.ShowDialog()
+        RemoveHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
     End Sub
 End Class
