@@ -73,6 +73,7 @@ Partial Class Form1
         Me.CoreTemp2 = New System.Windows.Forms.TextBox()
         Me.CoreTemp1 = New System.Windows.Forms.TextBox()
         Me.TjMax = New System.Windows.Forms.Label()
+        Me.PowerBox = New System.Windows.Forms.Label()
         Me.Power = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
@@ -91,7 +92,7 @@ Partial Class Form1
         Me.MaxTemp1 = New System.Windows.Forms.TextBox()
         Me.MinTemp2 = New System.Windows.Forms.TextBox()
         Me.MinTemp1 = New System.Windows.Forms.TextBox()
-        Me.PowerBox2 = New System.Windows.Forms.TextBox()
+        Me.s = New System.Windows.Forms.TextBox()
         Me.LoadBox = New System.Windows.Forms.TextBox()
         Me.MaxTemp3 = New System.Windows.Forms.TextBox()
         Me.MaxTemp = New System.Windows.Forms.TextBox()
@@ -103,7 +104,6 @@ Partial Class Form1
         Me.MinTemp = New System.Windows.Forms.TextBox()
         Me.MinTemp3 = New System.Windows.Forms.TextBox()
         Me.TJBox = New System.Windows.Forms.TextBox()
-        Me.PowerBox = New System.Windows.Forms.TextBox()
         Me.Lithography = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -454,6 +454,7 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.CoreTemp2)
         Me.Panel2.Controls.Add(Me.CoreTemp1)
         Me.Panel2.Controls.Add(Me.TjMax)
+        Me.Panel2.Controls.Add(Me.PowerBox)
         Me.Panel2.Controls.Add(Me.Power)
         Me.Panel2.Controls.Add(Me.Label13)
         Me.Panel2.Controls.Add(Me.Label12)
@@ -472,7 +473,7 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.MaxTemp1)
         Me.Panel2.Controls.Add(Me.MinTemp2)
         Me.Panel2.Controls.Add(Me.MinTemp1)
-        Me.Panel2.Controls.Add(Me.PowerBox2)
+        Me.Panel2.Controls.Add(Me.s)
         Me.Panel2.Controls.Add(Me.LoadBox)
         Me.Panel2.Controls.Add(Me.MaxTemp3)
         Me.Panel2.Controls.Add(Me.MaxTemp)
@@ -484,7 +485,6 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.MinTemp)
         Me.Panel2.Controls.Add(Me.MinTemp3)
         Me.Panel2.Controls.Add(Me.TJBox)
-        Me.Panel2.Controls.Add(Me.PowerBox)
         Me.Panel2.Name = "Panel2"
         '
         'Panel3
@@ -510,7 +510,9 @@ Partial Class Form1
         '
         'CoreTemp3
         '
+        Me.CoreTemp3.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
         Me.CoreTemp3.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.CoreTemp3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.CoreTemp3.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.CoreTemp3, "CoreTemp3")
         Me.CoreTemp3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
@@ -519,7 +521,9 @@ Partial Class Form1
         '
         'CoreTemp2
         '
+        Me.CoreTemp2.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
         Me.CoreTemp2.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.CoreTemp2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.CoreTemp2.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.CoreTemp2, "CoreTemp2")
         Me.CoreTemp2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
@@ -528,7 +532,9 @@ Partial Class Form1
         '
         'CoreTemp1
         '
+        Me.CoreTemp1.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
         Me.CoreTemp1.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.CoreTemp1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.CoreTemp1.Cursor = System.Windows.Forms.Cursors.Default
         resources.ApplyResources(Me.CoreTemp1, "CoreTemp1")
         Me.CoreTemp1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
@@ -539,6 +545,13 @@ Partial Class Form1
         '
         resources.ApplyResources(Me.TjMax, "TjMax")
         Me.TjMax.Name = "TjMax"
+        '
+        'PowerBox
+        '
+        Me.PowerBox.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.PowerBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        resources.ApplyResources(Me.PowerBox, "PowerBox")
+        Me.PowerBox.Name = "PowerBox"
         '
         'Power
         '
@@ -770,15 +783,6 @@ Partial Class Form1
         Me.TJBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.TJBox.Name = "TJBox"
         Me.TJBox.ReadOnly = True
-        '
-        'PowerBox
-        '
-        Me.PowerBox.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.PowerBox.Cursor = System.Windows.Forms.Cursors.IBeam
-        resources.ApplyResources(Me.PowerBox, "PowerBox")
-        Me.PowerBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.PowerBox.Name = "PowerBox"
-        Me.PowerBox.ReadOnly = True
         '
         'Lithography
         '
@@ -1248,7 +1252,6 @@ Partial Class Form1
     Friend WithEvents MinTemp As TextBox
     Friend WithEvents MinTemp3 As TextBox
     Friend WithEvents TJBox As TextBox
-    Friend WithEvents PowerBox As TextBox
     Friend WithEvents Lithography As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents Label10 As Label
