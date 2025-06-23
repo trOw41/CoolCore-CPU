@@ -31,6 +31,7 @@ Partial Class Form1
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SystemGrafikInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -55,14 +56,17 @@ Partial Class Form1
         Me.DataColumn2 = New System.Data.DataColumn()
         Me.LblStatusMessage = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.PicBox2 = New System.Windows.Forms.PictureBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.BtnToggleMonitor1 = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.CoreTemp3 = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.CoreTemp2 = New System.Windows.Forms.TextBox()
         Me.CoreTemp1 = New System.Windows.Forms.TextBox()
         Me.TjMax = New System.Windows.Forms.Label()
@@ -121,10 +125,6 @@ Partial Class Form1
         Me.Model = New System.Windows.Forms.Label()
         Me.Versionlbl = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.SystemGrafikInfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -183,6 +183,12 @@ Partial Class Form1
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         resources.ApplyResources(Me.ToolStripSeparator2, "ToolStripSeparator2")
+        '
+        'SystemGrafikInfoToolStripMenuItem
+        '
+        Me.SystemGrafikInfoToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._031_computer
+        Me.SystemGrafikInfoToolStripMenuItem.Name = "SystemGrafikInfoToolStripMenuItem"
+        resources.ApplyResources(Me.SystemGrafikInfoToolStripMenuItem, "SystemGrafikInfoToolStripMenuItem")
         '
         'ToolsToolStripMenuItem
         '
@@ -349,6 +355,17 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.Model)
         Me.Panel1.Name = "Panel1"
         '
+        'Label11
+        '
+        resources.ApplyResources(Me.Label11, "Label11")
+        Me.Label11.BackColor = System.Drawing.Color.Transparent
+        Me.Label11.Name = "Label11"
+        '
+        'Label8
+        '
+        resources.ApplyResources(Me.Label8, "Label8")
+        Me.Label8.Name = "Label8"
+        '
         'PicBox2
         '
         Me.PicBox2.BackColor = System.Drawing.Color.Transparent
@@ -368,12 +385,6 @@ Partial Class Form1
         Me.Label7.Name = "Label7"
         Me.Label7.UseCompatibleTextRendering = True
         Me.Label7.UseMnemonic = False
-        '
-        'Label3
-        '
-        resources.ApplyResources(Me.Label3, "Label3")
-        Me.Label3.BackColor = System.Drawing.Color.Transparent
-        Me.Label3.Name = "Label3"
         '
         'Panel2
         '
@@ -451,6 +462,19 @@ Partial Class Form1
         Me.CoreTemp3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.CoreTemp3.Name = "CoreTemp3"
         Me.CoreTemp3.ReadOnly = True
+        '
+        'Label2
+        '
+        Me.Label2.AutoEllipsis = True
+        Me.Label2.BackColor = System.Drawing.Color.Transparent
+        resources.ApplyResources(Me.Label2, "Label2")
+        Me.Label2.Name = "Label2"
+        '
+        'Label3
+        '
+        resources.ApplyResources(Me.Label3, "Label3")
+        Me.Label3.BackColor = System.Drawing.Color.Transparent
+        Me.Label3.Name = "Label3"
         '
         'CoreTemp2
         '
@@ -921,30 +945,6 @@ Partial Class Form1
         resources.ApplyResources(Me.PictureBox1, "PictureBox1")
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.TabStop = False
-        '
-        'SystemGrafikInfoToolStripMenuItem
-        '
-        Me.SystemGrafikInfoToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._031_computer
-        Me.SystemGrafikInfoToolStripMenuItem.Name = "SystemGrafikInfoToolStripMenuItem"
-        resources.ApplyResources(Me.SystemGrafikInfoToolStripMenuItem, "SystemGrafikInfoToolStripMenuItem")
-        '
-        'Label2
-        '
-        Me.Label2.AutoEllipsis = True
-        Me.Label2.BackColor = System.Drawing.Color.Transparent
-        resources.ApplyResources(Me.Label2, "Label2")
-        Me.Label2.Name = "Label2"
-        '
-        'Label8
-        '
-        resources.ApplyResources(Me.Label8, "Label8")
-        Me.Label8.Name = "Label8"
-        '
-        'Label11
-        '
-        resources.ApplyResources(Me.Label11, "Label11")
-        Me.Label11.BackColor = System.Drawing.Color.Transparent
-        Me.Label11.Name = "Label11"
         '
         'Form1
         '
