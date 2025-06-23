@@ -1,31 +1,23 @@
-﻿Imports System.Collections.Generic
-Imports System.ComponentModel.Design
-Imports System.Drawing
-Imports System.Globalization
-Imports System.IdentityModel.Protocols.WSTrust
+﻿Imports System.Globalization
 Imports System.IO
-Imports System.Linq
-Imports System.Management
 Imports System.Net
-Imports System.Reflection
-Imports System.Runtime.InteropServices
-Imports System.Runtime.Serialization
-Imports System.Runtime.Versioning
 Imports System.Security.Principal
 Imports System.Text
-Imports System.Text.RegularExpressions
 Imports System.Threading
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Header
 Imports System.Xml.Serialization
-Imports Google.Protobuf.WellKnownTypes
-Imports HidSharp.Utility
-Imports Microsoft.VisualBasic.Logging
-Imports MySql.Data.MySqlClient
-Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
-Imports OpenHardwareMonitor.Hardware.Controller.AeroCool
-Imports BasicComputerInfo = Microsoft.VisualBasic.Devices.ComputerInfo
+Imports OpenHardwareMonitor.Hardware
+Imports System.Diagnostics
+Imports System.Management
+Imports System.Threading.Tasks
+Imports System.Windows.Forms
+Imports System.Drawing
+Imports System.Drawing.Printing
+Imports System.Collections.Generic
+Imports System.Linq
+
 Imports Timer = System.Windows.Forms.Timer
+Imports System.Runtime.CompilerServices
 
 
 
@@ -196,29 +188,19 @@ Public Class Form1
                 'refreshTimer.Start()
                 LoadMySqlCredentials()
                 Start_extend()
-                Set_image()
             Else
                 Settings.FirstStart = True
                 Me.Close()
             End If
         Else
-
             'refreshTimer.Start()
             LoadMySqlCredentials()
             Start_extend()
-            Set_image()
+
         End If
 
     End Sub
-    Private Function Set_image()
-        _backgroundImage1 = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory & "Resources", "border8.png"))
-        TabPage1.BackgroundImage = _backgroundImage1
-        _backgroundImage2 = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory & "Resources", "border4.png"))
-        TabPage2.BackgroundImage = _backgroundImage2
-        _backgroundImage3 = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory & "Resources", "backround2.png"))
-        TabPage3.BackgroundImage = _backgroundImage3
-        Return Task.CompletedTask
-    End Function
+
     Private Async Sub Start_extend()
         LblStatusMessage.Text = "Ready to read system information."
         LblStatusMessage.ForeColor = Color.Black
@@ -235,17 +217,14 @@ Public Class Form1
         OhmComputer.IsGpuEnabled = True
         OhmComputer.IsStorageEnabled = True
         OhmComputer.Open(True) ' Startet die Überwachung
-        LblStatusMessage.ForeColor = Color.Black
-        SystemViewList.View = View.Details
-        SystemViewList.Columns.Add("Category", 150)
-        SystemViewList.Columns.Add("Information", 300)
-
+        LblStatusMessage.ForeColor = SystemColors.ControlLightLight
         Await Task.Run(Sub()
                            InitializeCoreTemperatureSensors()
                            InitializePerCoreCounters()
                            InitializeVoltageSensors()
 
                        End Sub)
+        refreshTimer.Start()
         Dim hardwareInfoTask As Task = Task.Run(Async Function()
                                                     Await ReadAndDisplaySystemInfoAsync()
                                                     Await CheckCpuSub()
@@ -255,13 +234,12 @@ Public Class Form1
                                                     Return Task.CompletedTask
                                                 End Function)
         Await hardwareInfoTask
-        refreshTimer.Start()
+
         Dim LogSystem As Task = Task.Run(Sub()
                                              StartStopLog()
                                              UpdateLogSize()
                                              ' BrandCheck()
-                                             Collect_AllSystemInfo()
-                                             ReadGraphicCardInfo()
+
                                          End Sub)
         Await LogSystem
         If My.Settings.UpdateCheck = True Then
@@ -603,7 +581,8 @@ Public Class Form1
                                   MaxTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Max)
                               End If
                               If CoreTempBoxes.ContainsKey(coreIndex) Then
-                                  CoreTempBoxes(coreIndex).Text = $"{sensor.Value:F1}°C"
+                                  'CoreTempBoxes(coreIndex).Text = $"{sensor.Value:F1}°C"
+                                  CoreTemp.Text = $"{sensor.Value:F1}°C"
                                   CoreTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Value)
                               End If
 
@@ -649,55 +628,7 @@ Public Class Form1
             For Each kvp In MinTempBoxes : kvp.Value.Text = "Error" : Next
             For Each kvp In MaxTempBoxes : kvp.Value.Text = "Error" : Next
         End Try
-        'GPU Monitoring
-        Dim gpu = computer.Hardware.FirstOrDefault(Function(h) h.HardwareType = HardwareType.GpuNvidia OrElse h.HardwareType = HardwareType.GpuAmd OrElse h.HardwareType = HardwareType.GpuIntel)
-            Try
-                gpu?.Update()
-                Dim gpuSensors = gpu?.Sensors.Where(Function(s) s.SensorType = SensorType.Temperature OrElse s.SensorType = SensorType.Clock OrElse s.SensorType = SensorType.Load).ToList()
-                If gpuSensors IsNot Nothing Then
-                    For Each sensor In gpuSensors
-                        Select Case sensor.SensorType
-                            Case SensorType.Temperature
-                                If sensor.Value.HasValue Then
-                                    Me.Invoke(Sub()
-                                                  GCTempBox.Text = $"{sensor.Value.Value:F1}°C"
-                                                  GCTempBox.ForeColor = GetTemperatureColor(sensor.Value.Value)
-                                                  Dim lastGcLoadBarValue As Integer = -1
-                                                  If sensor.SensorType = SensorType.Temperature Then
-                                                      If sensor.Value.HasValue Then
-                                                          Dim newValue As Integer = CInt(sensor.Value.Value)
-                                                          If newValue <> lastGcLoadBarValue Then
-                                                              Me.Invoke(Sub()
-                                                                            GCTempBox.Text = $"{sensor.Value.Value:F1}°C"
-                                                                            GCTempBox.ForeColor = GetTemperatureColor(sensor.Value.Value)
-                                                                            lastGcLoadBarValue = newValue
-                                                                        End Sub)
-                                                          End If
-                                                      End If
-                                                  End If
-                                              End Sub)
-                                End If
-                            Case SensorType.Clock
-                                If sensor.Value.HasValue Then
-                                    Me.Invoke(Sub() GCClockBox.Text = $"{sensor.Value.Value:F1}MHz")
-                                End If
-                            Case SensorType.Load
 
-                                If sensor.Value.HasValue Then
-                                    Dim loadValue As Integer = CInt(sensor.Value.Value)
-                                    Me.Invoke(Sub()
-                                                  Loadlbl.Text = $"{loadValue}%"
-                                              End Sub)
-                                End If
-                        End Select
-                    Next
-                End If
-            Catch ex As Exception
-                For Each kvp In LoadBoxes : kvp.Value.Text = "Error" : Next
-            For Each kvp In CoreTempBoxes : kvp.Value.Text = "Error" : Next
-            For Each kvp In MinTempBoxes : kvp.Value.Text = "Error" : Next
-            For Each kvp In MaxTempBoxes : kvp.Value.Text = "Error" : Next
-        End Try
     End Sub
 
     Private Function UpdateCpuFrequencyDisplay()
@@ -802,17 +733,7 @@ Public Class Form1
                 numberOfCores = If(queryObj("NumberOfCores"), 0)
                 numberOfLogicalProcessors = If(queryObj("NumberOfLogicalProcessors"), 0)
                 currentClockSpeed = If(queryObj("CurrentClockSpeed"), 0)
-                Dim archValue As Integer = If(queryObj("Architecture"), -1)
-                Select Case archValue
-                    Case 0 : architecture = "X86"
-                    Case 1 : architecture = "MIPS"
-                    Case 2 : architecture = "Alpha"
-                    Case 3 : architecture = "PowerPC"
-                    Case 5 : architecture = "ARM"
-                    Case 6 : architecture = "ia64"
-                    Case 9 : architecture = "X64"
-                    Case Else : architecture = "Unknown"
-                End Select
+                Dim archValue As String = GetProcessorArchitecture(queryObj("Architecture"))
                 Exit For
             Next
             '#--------------------------------------------------------------------------------------------------------------------'
@@ -825,7 +746,7 @@ Public Class Form1
             Dim MaxFreq As Double = Math.Round(systemInfo.CurrentClockSpeedMHz / 1000, 2, MidpointRounding.ToEven) ' Convert MHz to GHz for display
             '#--------------------------------------------------------------------------------------------------------------------'
             Me.Invoke(Sub()
-                          SystemViewList.Items.Clear()
+
                           'ModelBox.Text = systemInfo.CpuName.Aggregate("", Function(current, nextChar) current & nextChar.ToString().ToUpperInvariant())
                           PlatformBox.Text = systemInfo.Architecture
                           CoresBox.Text = systemInfo.NumberOfCores.ToString()
@@ -845,7 +766,7 @@ Public Class Form1
                                   'PowerBox2.Text = $"{coreVoltageSensor.Value.Value:F3}V"
                                   UpdateVoltageDisplay()
                               Else
-                                  PowerBox2.Text = "N/A"
+                                  s.Text = "N/A"
                               End If
 
                           Else
@@ -862,7 +783,7 @@ Public Class Form1
                           End If
                           Dim PowerAllCores = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Cores"))
                           If PowerAllCores IsNot Nothing AndAlso PowerAllCores.Value.HasValue Then
-                              PowerBox2.Text = $"{PowerAllCores.Value.Value:F3}V"
+                              s.Text = $"{PowerAllCores.Value.Value:F3}V"
                           Else
                           End If
                       End Sub)
@@ -879,100 +800,7 @@ Public Class Form1
         End Try
         Return Task.CompletedTask
     End Function
-    Private Function ReadGraphicCardInfo() As Boolean
-        Dim UseWmiForGpu = True
-        Dim gpuInfo As String = "N/A"
-        Dim boardGpuInfo As String = "N/A"
 
-        Try
-            If UseWmiForGpu Then
-                Dim searcher As New ManagementObjectSearcher("SELECT * FROM Win32_VideoController")
-                Dim icon = ImageList1
-
-
-                GCList.LargeImageList = ImageList1
-                GCList.SmallImageList = ImageList1
-                GCList.View = View.SmallIcon
-                GCList.Items.Clear()
-                For i = 0 To GCList.Items.Count - 1
-                    GCList.Items(i).ImageIndex = i
-                Next
-                ' Hinweis: Die Images müssen vorher in ImageList1 hinzugefügt worden sein (z.B. im Designer oder per Code).
-                For Each queryObj As ManagementObject In searcher.Get()
-                    boardGpuInfo = If(queryObj("Name"), "N/A").ToString()
-                    Me.Invoke(Sub()
-                                  GCNameBox.Text = boardGpuInfo
-                                  SystemViewList.Items.Add($"On Board Graphic: {boardGpuInfo}").ImageIndex = 1
-                                  ' Detaillierte Infos in GCViewList eintragen
-                                  GCList.Items.Clear()
-                                  GCList.Items.Add($"Name: {If(queryObj("Name"), "N/A")}")
-                                  GCList.Items.Add($"Hersteller: {If(queryObj("AdapterCompatibility"), "N/A")}")
-                                  Dim vramSize = If(queryObj("AdapterRAM"), 0L)
-                                  GCList.Items.Add($"VRAM: {FormatBytes(vramSize)}")
-                                  GCList.Items.Add($"Treiberversion: {If(queryObj("DriverVersion"), "N/A")}")
-                                  GCList.Items.Add($"Status: {If(queryObj("Status"), "N/A")}")
-                                  GCList.Items.Add($"Geräte-ID: {If(queryObj("PNPDeviceID"), "N/A")}")
-                                  GCList.Items.Add($"Video-Prozessor: {If(queryObj("VideoProcessor"), "N/A")}")
-                                  GCList.Items.Add($"Auflösung: {If(queryObj("CurrentHorizontalResolution"), "N/A")} x {If(queryObj("CurrentVerticalResolution"), "N/A")}")
-                                  GCList.Items.Add($"Farb-Tiefe: {If(queryObj("CurrentBitsPerPixel"), "N/A")} Bit")
-                                  GCList.Items.Add($"Aktualisierungsrate: {If(queryObj("CurrentRefreshRate"), "N/A")} Hz")
-                              End Sub)
-                Next
-
-            End If
-            If computer Is Nothing Then
-                computer = New Computer()
-                computer.Open(True)
-            End If
-            Dim gpu = computer.Hardware.FirstOrDefault(Function(h) h.HardwareType = HardwareType.GpuNvidia OrElse h.HardwareType = HardwareType.GpuAmd OrElse h.HardwareType = HardwareType.GpuIntel)
-            If gpu IsNot Nothing Then
-                gpu.Update()
-                gpuInfo = gpu.Name
-                Me.Invoke(Sub()
-                              'GCNameBox.Text = gpu.Name
-                          End Sub)
-            End If
-            Dim gcMemmory As Double = 0.0
-            If gpu IsNot Nothing AndAlso gpu.HardwareType = HardwareType.GpuNvidia Then
-                GCLogo.Image = Resources.Nvidia_Logo_wine
-            ElseIf gpu IsNot Nothing AndAlso gpu.HardwareType = HardwareType.GpuAmd Then
-                GCLogo.Image = Resources.atiamdlogo
-            ElseIf gpu Is Nothing Then
-                gpuInfo = "No GPU found"
-                GCNameBox.Text = gpuInfo
-            End If
-            Dim gpuSensors = gpu?.Sensors.Where(Function(s) s.SensorType = SensorType.Temperature OrElse s.SensorType = SensorType.Clock OrElse s.SensorType = SensorType.Load).ToList()
-            If gpuSensors IsNot Nothing Then
-                For Each sensor In gpuSensors
-                    Select Case sensor.SensorType
-                        Case SensorType.Temperature
-                            If sensor.Value.HasValue Then
-                                Me.Invoke(Sub() GCTempBox.Text = $"{sensor.Value.Value:F1}°C")
-                            End If
-                        Case SensorType.Clock
-                            If sensor.Value.HasValue Then
-                                Me.Invoke(Sub() GCClockBox.Text = $"{sensor.Value.Value:F1} MHz")
-                            End If
-                        Case SensorType.Load
-                            If sensor.Value.HasValue Then
-
-                                Me.Invoke(Sub()
-                                              Loadlbl.Text = $"{sensor.Value.Value}%"
-                                          End Sub)
-                            End If
-                        Case SensorType.Fan
-                            If sensor.Value.HasValue Then
-                                Debug.WriteLine($"{sensor.Value.Value:F0} RPM")
-                            End If
-                    End Select
-                Next
-            End If
-        Catch ex As Exception
-            Debug.WriteLine($"Error reading GPU info: {ex.Message}")
-            MessageBox.Show("An error occurred while reading GPU information: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-        Return True
-    End Function
     Private Sub ClearCpuDisplayControls()
         If Me.InvokeRequired Then
             Me.Invoke(Sub() ClearCpuDisplayControls())
@@ -981,7 +809,7 @@ Public Class Form1
         ModelBox.Text = ""
         FrequencyBox.Text = ""
         PlatformBox.Text = ""
-        PowerBox2.Text = ""
+        s.Text = ""
         TDPBox.Text = ""
         LithographyBox.Text = ""
         SockBox.Text = ""
@@ -993,7 +821,6 @@ Public Class Form1
         For Each kvp In CoreTempBoxes : kvp.Value.Text = "" : Next
         For Each kvp In MinTempBoxes : kvp.Value.Text = "" : Next
         For Each kvp In MaxTempBoxes : kvp.Value.Text = "" : Next
-        SystemViewList.Items.Clear()
     End Sub
 
     'CPU Sub Information  / CSV File check
@@ -1457,7 +1284,6 @@ Public Class Form1
         Me.Invoke(Sub()
                       LblStatusMessage.Text = "CPU-Stresstest beendet."
                       LblStatusMessage.ForeColor = SystemColors.ControlText
-                      Me.Invalidate()
                   End Sub)
     End Sub
     Private Sub RecordTemperaturesInBackground(cancellationToken As CancellationToken)
@@ -1581,99 +1407,6 @@ Public Class Form1
     End Sub
 
     'SystemView Section
-    Private Function Collect_AllSystemInfo()
-        Try
-            SystemViewList.Items.Clear() ' Leeren der ListView vor dem Hinzufügen neuer Einträge
-            ' --- Allgemeine Systeminformationen (mit ComputerInfo via Alias) ---
-            Dim basicComputerInfo As New BasicComputerInfo() ' Hier verwenden wir den Alias "BasicComputerInfo"
-            AddListViewItem("OS Vollständiger Name", basicComputerInfo.OSFullName)
-            AddListViewItem("OS Plattform", basicComputerInfo.OSPlatform)
-            AddListViewItem("OS Version", basicComputerInfo.OSVersion)
-            AddListViewItem("OS Service Pack", basicComputerInfo.InstalledUICulture.ThreeLetterISOLanguageName)
-            AddListViewItem("Verfügbarer Phys. Speicher", FormatBytes(basicComputerInfo.AvailablePhysicalMemory))
-            AddListViewItem("Gesamter Phys. Speicher", FormatBytes(basicComputerInfo.TotalPhysicalMemory))
-            AddListViewItem("Verfügbarer Virt. Speicher", FormatBytes(basicComputerInfo.AvailableVirtualMemory))
-            AddListViewItem("Gesamter Virt. Speicher", FormatBytes(basicComputerInfo.TotalVirtualMemory))
-            AddListViewItem("Computer Name", Environment.MachineName)
-            AddListViewItem("Benutzername", Environment.UserName)
-            AddListViewItem("Prozessoranzahl", Environment.ProcessorCount.ToString())
-            AddListViewItem("Systemverzeichnis", Environment.SystemDirectory)
-            AddListViewItem("Aktuelles Verzeichnis", Environment.CurrentDirectory)
-            AddListViewItem("CLR Version", Environment.Version.ToString())
-            AddListViewItem("Ist 64-bit OS", Environment.Is64BitOperatingSystem.ToString())
-            AddListViewItem("Ist 64-bit Prozess", Environment.Is64BitProcess.ToString())
-
-            For Each hardware As IHardware In OhmComputer.Hardware
-                AddListViewItem("Hardware", hardware.Name & " (" & hardware.HardwareType.ToString() & ")")
-
-                If hardware.SubHardware.Count > 0 Then
-                    For Each subHardware As IHardware In hardware.SubHardware
-                        AddListViewItem("  Sub-Hardware", subHardware.Name & " (" & subHardware.HardwareType.ToString() & ")")
-                        For Each sensor As ISensor In subHardware.Sensors
-                            Dim sensorValue As String = If(sensor.Value.HasValue, sensor.Value.Value.ToString("0.0") & GetSensorUnit(sensor.SensorType), "N/A")
-                            AddListViewItem("    " & sensor.Name, sensorValue)
-                        Next
-                    Next
-                End If
-
-            Next
-
-            AddListViewItem("", "--- Festplatteninformationen ---") ' Trennlinie
-            Dim searcherHD As New ManagementObjectSearcher("SELECT * FROM Win32_LogicalDisk WHERE DriveType = 3") ' DriveType 3 für lokale Festplatte
-            For Each queryObj As ManagementObject In searcherHD.Get()
-                AddListViewItem("Laufwerk (" & queryObj("DeviceID").ToString() & ")", queryObj("VolumeName") & " (" & queryObj("FileSystem") & ")")
-                AddListViewItem("  Gesamtspeicher", FormatBytes(Convert.ToUInt64(queryObj("Size"))))
-                AddListViewItem("  Freier Speicher", FormatBytes(Convert.ToUInt64(queryObj("FreeSpace"))))
-            Next
-
-            ' --- Prozessorinformationen (mit WMI) ---
-            AddListViewItem("", "--- Prozessorinformationen ---") ' Trennlinie
-            Dim searcherCPU As New ManagementObjectSearcher("SELECT * FROM Win32_Processor")
-            For Each queryObj As ManagementObject In searcherCPU.Get()
-                AddListViewItem("Prozessor Name", queryObj("Name").ToString())
-                AddListViewItem("  Hersteller", queryObj("Manufacturer").ToString())
-                AddListViewItem("  Anzahl der Kerne", queryObj("NumberOfCores").ToString())
-                AddListViewItem("  Anzahl logischer Prozessoren", queryObj("NumberOfLogicalProcessors").ToString())
-                AddListViewItem("  Architektur", GetProcessorArchitecture(Convert.ToUInt16(queryObj("Architecture"))))
-            Next
-
-            ' --- Netzwerkadapterinformationen (mit WMI) ---
-            AddListViewItem("", "--- Netzwerkadapterinformationen ---") ' Trennlinie
-            Dim searcherNet As New ManagementObjectSearcher("SELECT * FROM Win32_NetworkAdapterConfiguration WHERE IPEnabled = TRUE")
-            For Each queryObj As ManagementObject In searcherNet.Get()
-                AddListViewItem("Adapter Name", queryObj("Description").ToString())
-                If queryObj("IPAddress") IsNot Nothing Then
-                    Dim ipAddresses As String() = DirectCast(queryObj("IPAddress"), String())
-                    For Each ip As String In ipAddresses
-                        AddListViewItem("  IP Adresse", ip)
-                    Next
-                End If
-                If queryObj("MACAddress") IsNot Nothing Then
-                    AddListViewItem("  MAC Adresse", queryObj("MACAddress").ToString())
-                End If
-                If queryObj("DNSHostName") IsNot Nothing Then
-                    AddListViewItem("  DNS Host Name", queryObj("DNSHostName").ToString())
-                End If
-            Next
-            Return True
-        Catch ex As Exception
-            MessageBox.Show("Ein Fehler beim Sammeln der Systeminformationen ist aufgetreten: " & ex.Message, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Debug.WriteLine($"Fehler Collect System Data: {ex.Message}")
-            Return False
-        End Try
-    End Function
-    Private Sub AddListViewItem(category As String, info As String)
-        If SystemViewList.InvokeRequired Then
-            SystemViewList.Invoke(Sub() AddListViewItem(category, info))
-        Else
-            Dim item As New ListViewItem(category) With {
-                .UseItemStyleForSubItems = False,
-                .ImageIndex = If(String.IsNullOrEmpty(info), 0, 0)
-                }
-            item.SubItems.Add(info)
-            SystemViewList.Items.Add(item)
-        End If
-    End Sub
     Private Function FormatBytes(bytes As ULong) As String
         Const KB As ULong = 1024
         Const MB As ULong = KB * 1024
@@ -1688,50 +1421,6 @@ Public Class Form1
         Else
             Return bytes.ToString() & " Bytes"
         End If
-    End Function
-
-    Private Function GetProcessorArchitecture(architectureCode As UShort) As String
-        Select Case architectureCode
-            Case 0
-                Return "Intel x86"
-            Case 1
-                Return "MIPS"
-            Case 2
-                Return "Alpha"
-            Case 3
-                Return "PowerPC"
-            Case 5
-                Return "ARM"
-            Case 6
-                Return "Itanium-based Alpha"
-            Case 9
-                Return "x64 (AMD64 und Intel EM64T)"
-            Case 12
-                Return "ARM64"
-            Case Else
-                Return "Unbekannt"
-        End Select
-    End Function
-
-    Private Function GetSensorUnit(sensorType As SensorType) As String
-        Select Case sensorType
-            Case SensorType.Temperature
-                Return " °C"
-            Case SensorType.Fan
-                Return " RPM"
-            Case SensorType.Load
-                Return " %"
-            Case SensorType.Clock
-                Return " MHz"
-            Case SensorType.Power
-                Return " W"
-            Case SensorType.Data
-                Return " GB" ' Oder Bytes/MB/KB je nach Kontext, hier als Beispiel GB
-            Case SensorType.Voltage
-                Return " V"
-            Case Else
-                Return ""
-        End Select
     End Function
 
     Private Function GenerateSystemInfoHtml(cpuData As Dictionary(Of String, String)) As String
@@ -1814,8 +1503,7 @@ Public Class Form1
     Private Sub ApplyThemeToControl(ctrl As Control, theme As String)
         theme = Settings.ApplicationTheme
         If theme = "Standard" Then
-            Tabpane.BackColor = ColorTranslator.FromHtml("#F0F0F0")
-            Tabpane.ForeColor = SystemColors.WindowText
+
             If TypeOf ctrl Is Button Then
                 CType(ctrl, Button).BackColor = ColorTranslator.FromHtml("#E1E1E1")
                 CType(ctrl, Button).ForeColor = SystemColors.WindowText
@@ -2094,9 +1782,9 @@ Public Class Form1
                 Dim coreKey As String = entry.Core
                 Dim roundedTimestamp As DateTime = entry.Timestamp
                 roundedTimestamp = New DateTime(roundedTimestamp.Year, roundedTimestamp.Month, roundedTimestamp.Day,
-                                            roundedTimestamp.Hour, roundedTimestamp.Minute, (roundedTimestamp.Second \ 10) * 10,
+                                            roundedTimestamp.Hour, (roundedTimestamp.Minute \ 60) * 10, (roundedTimestamp.Second \ 10) * 10,
                                             roundedTimestamp.Kind)
-                If Not lastFilteredTimestampPerCore.ContainsKey(coreKey) OrElse (roundedTimestamp - lastFilteredTimestampPerCore(coreKey)).TotalSeconds >= 10 Then
+                If Not lastFilteredTimestampPerCore.ContainsKey(coreKey) OrElse (roundedTimestamp - lastFilteredTimestampPerCore(coreKey)).TotalSeconds >= 1 Then
                     filteredLogEntries.Add(entry)
                     lastFilteredTimestampPerCore(coreKey) = roundedTimestamp
                     Debug.WriteLine($"Added entry to filtered (10s interval): {entry.Timestamp} - {entry.Core}")
@@ -2298,48 +1986,8 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Tabpane_SelectedIndexChanged(sender As Object, e As EventArgs) Handles Tabpane.SelectedIndexChanged
-        Dim tabIndex As Integer = Tabpane.SelectedIndex
-        Dim tabPage As TabPage = Tabpane.SelectedTab
-        If tabIndex = 1 Then
-            'TabPage2.BackgroundImage = _backgroundImage2
-            tabPage.BackgroundImageLayout = ImageLayout.Stretch
-            tabPage.BackgroundImage = _backgroundImage2
-
-        ElseIf tabIndex = 2 Then
-            tabPage.BackgroundImageLayout = ImageLayout.Stretch
-            tabPage.BackgroundImage = _backgroundImage3
-            'Collect_AllSystemInfo()
-        End If
-    End Sub
-
-
-    Private Sub ContextMenuStrip1_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
+    Private Sub ContextMenuStrip1_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs)
         ' Keine Aktion beim Öffnen, nur Kontextmenü vorbereiten (optional)
-    End Sub
-
-    Private Sub ContextMenuStrip1_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles ContextMenuStrip1.ItemClicked
-        If e.ClickedItem IsNot Nothing AndAlso SystemViewList.SelectedItems.Count > 0 Then
-            Dim selectedItem As ListViewItem = SystemViewList.SelectedItems(0)
-            Dim itemText As String = selectedItem.SubItems(1).Text
-            If e.ClickedItem.Text = "kopieren" Then
-                ContextMenuStrip1.Close()
-                Clipboard.SetText(itemText)
-                MessageBox.Show(Me, $"{itemText}", "kopiert")
-            End If
-        End If
-    End Sub
-
-    Private Sub ContextMenuStrip2_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles ContextMenuStrip2.ItemClicked
-        If e.ClickedItem IsNot Nothing AndAlso GCList.SelectedItems.Count > 0 Then
-            Dim selectedItem2 As ListViewItem = GCList.SelectedItems(0)
-            Dim itemText2 As String = selectedItem2.SubItems(0).Text
-            If e.ClickedItem.Text = "kopieren" Then
-                ContextMenuStrip2.Close()
-                Clipboard.SetText(itemText2)
-                MessageBox.Show(Me, $"{itemText2}", "kopiert")
-            End If
-        End If
     End Sub
 
     Private Sub ExportCPUInfoToolStripMenuItem_Click_1(sender As Object, e As EventArgs) Handles ExportCPUInfoToolStripMenuItem.Click
@@ -2351,13 +1999,14 @@ Public Class Form1
             MessageBox.Show("Keine detaillierten CPU-Informationen in der Datenbank für Ihre CPU gefunden. Schauen Sie in unserer Online-Datenbank ob ihre CPU unterstürzt wird: [https://www.cool-core.de.cool] ", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
-    Private Sub ProzessorInforDruckenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProzessorInforDruckenToolStripMenuItem.Click
+    Private Sub ProzessorInforDruckenToolStripMenuItem_Click(sender As Object, e As EventArgs)
         cpuInfoToPrint = ""
         Dim printDocument As New Printing.PrintDocument()
 
-        Dim printPreviewDialog As New PrintPreviewDialog()
-        printPreviewDialog.ClientSize = New Size(600, 800)
-        printPreviewDialog.Document = printDocument
+        Dim printPreviewDialog As New PrintPreviewDialog With {
+            .ClientSize = New Size(600, 800),
+            .Document = printDocument
+        }
         printDocument.DefaultPageSettings.Landscape = False
         printDocument.DefaultPageSettings.Margins = New Printing.Margins(50, 50, 50, 50)
         cpuInfoToPrint = "CPU-Informationen:" & Environment.NewLine & Environment.NewLine
@@ -2386,56 +2035,30 @@ Public Class Form1
         e.Graphics.DrawString(cpuInfoToPrint, font, Brushes.Black, 50, 50)
     End Sub
 
-    Private Sub SystemInfoDruckenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SystemInfoDruckenToolStripMenuItem.Click
-        Dim i As Integer
-        Dim j As Integer
-        Dim line As String = ""
-        Dim item As ListViewItem = Nothing
-        Dim printDocument As New Printing.PrintDocument()
-        systemInfoPrint = ""
-        AddHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
-        Dim printPreviewDialog As New PrintPreviewDialog()
-        printPreviewDialog.ClientSize = New Size(600, 800)
-        printPreviewDialog.Document = printDocument
-        printDocument.DefaultPageSettings.Landscape = False
-        printDocument.DefaultPageSettings.Margins = New Printing.Margins(50, 50, 50, 50)
-        printDocument.DocumentName = "Systeminformationen"
-        Dim systemInfo As String = "Systeminformationen:" & Environment.NewLine & Environment.NewLine
-        systemInfo &= "" & Environment.NewLine
-        systemInfo &= "" & Environment.NewLine
-        systemInfo &= "" & Environment.NewLine
-        systemInfo &= "" & Environment.NewLine
-        For i = 0 To SystemViewList.Items.Count - 1
-            item = SystemViewList.Items(i)
-            line = ""
-            line &= item.Text & ": "
-            If item.SubItems.Count = 0 Then
-                line &= "Keine Informationen verfügbar"
-                systemInfo &= line & Environment.NewLine
-                Continue For
-            End If
-            For j = 0 To item.SubItems.Count - 1
-                If j = 0 Then
-                    line &= item.SubItems(j).Text
-                Else
-                    line &= ": " & item.SubItems(j).Text
-                End If
-            Next
-            systemInfo &= line & Environment.NewLine
-        Next
-        systemInfo &= "" & Environment.NewLine
-        systemInfo &= "" & Environment.NewLine
-        systemInfo &= "" & Environment.NewLine
-        systemInfo &= "" & Environment.NewLine
-        systemInfo &= "" & Environment.NewLine
-        systemInfo &= "-------------------------------------------" & Environment.NewLine
-        systemInfo &= "Datum: " & DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") & Environment.NewLine & Environment.NewLine
-        systemInfo &= Environment.NewLine & "Hinweis: Diese Informationen wurden automatisch gesammelt und können je nach System variieren." & Environment.NewLine
-        systemInfo &= $"{Date.Now.Year} © CoolCore-CPU®" & Environment.NewLine
-        cpuInfoToPrint = systemInfo
-        AddHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
-        printPreviewDialog.Document = printDocument
-        printPreviewDialog.ShowDialog()
-        RemoveHandler printDocument.PrintPage, AddressOf PrintDocument_PrintPage
+    Private Sub SystemGrafikInfoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SystemGrafikInfoToolStripMenuItem.Click
+        GrafikInfo.Show()
     End Sub
+
+    Private Function GetProcessorArchitecture(architectureCode As UShort) As String
+        Select Case architectureCode
+            Case 0
+                Return "Intel x86"
+            Case 1
+                Return "MIPS"
+            Case 2
+                Return "Alpha"
+            Case 3
+                Return "PowerPC"
+            Case 5
+                Return "ARM"
+            Case 6
+                Return "Itanium-based Alpha"
+            Case 9
+                Return "x64 (AMD64 und Intel EM64T)"
+            Case 12
+                Return "ARM64"
+            Case Else
+                Return "Unbekannt"
+        End Select
+    End Function
 End Class

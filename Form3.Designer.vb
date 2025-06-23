@@ -26,8 +26,8 @@ Partial Class Form3
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form3))
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.PnlCpuFanAnimation = New System.Windows.Forms.Panel()
-        Me.AnimationTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TimeLabel = New System.Windows.Forms.Label()
+        Me.AnimationTimer = New System.Windows.Forms.Timer(Me.components)
         Me.PnlCpuFanAnimation.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -53,10 +53,6 @@ Partial Class Form3
         Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(214, 164)
         Me.PnlCpuFanAnimation.TabIndex = 4
         '
-        'AnimationTimer
-        '
-        Me.AnimationTimer.Interval = 30
-        '
         'TimeLabel
         '
         Me.TimeLabel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -72,6 +68,10 @@ Partial Class Form3
         Me.TimeLabel.TabIndex = 4
         Me.TimeLabel.Text = "Label1"
         Me.TimeLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'AnimationTimer
+        '
+        Me.AnimationTimer.Interval = 30
         '
         'Form3
         '
@@ -90,7 +90,7 @@ Partial Class Form3
         Me.MinimizeBox = False
         Me.Name = "Form3"
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Form3"
         Me.TopMost = True
         Me.PnlCpuFanAnimation.ResumeLayout(False)

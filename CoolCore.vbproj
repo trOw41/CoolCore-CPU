@@ -126,6 +126,11 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Import Include="Azure" />
+    <Import Include="Azure.Core" />
+    <Import Include="Azure.Core.Diagnostics" />
+    <Import Include="Azure.Core.Serialization" />
+    <Import Include="Azure.Identity" />
     <Import Include="CoolCore" />
     <Import Include="CoolCore.My" />
     <Import Include="CoolCore.My.Resources" />
@@ -201,6 +206,12 @@
     <Compile Include="Form5.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="GrafikInfo.Designer.vb">
+      <DependentUpon>GrafikInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="GrafikInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="InfoDialog.Designer.vb">
       <DependentUpon>InfoDialog.vb</DependentUpon>
     </Compile>
@@ -269,6 +280,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form5.resx">
       <DependentUpon>Form5.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GrafikInfo.resx">
+      <DependentUpon>GrafikInfo.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InfoDialog.resx">
       <DependentUpon>InfoDialog.vb</DependentUpon>
@@ -426,7 +440,7 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="OpenHardwareMonitorLib">
-      <Version>1.0.9270</Version>
+      <Version>1.0.9300</Version>
     </PackageReference>
     <PackageReference Include="Stub.System.Data.SQLite.Core.NetStandard">
       <Version>1.0.119</Version>
