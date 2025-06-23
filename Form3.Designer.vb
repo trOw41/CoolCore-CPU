@@ -33,11 +33,12 @@ Partial Class Form3
         '
         'ProgressBar1
         '
+        Me.ProgressBar1.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ProgressBar1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ProgressBar1.Location = New System.Drawing.Point(0, 173)
+        Me.ProgressBar1.Location = New System.Drawing.Point(0, 195)
         Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(0)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(214, 18)
+        Me.ProgressBar1.Size = New System.Drawing.Size(242, 18)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 2
         '
@@ -45,12 +46,12 @@ Partial Class Form3
         '
         Me.PnlCpuFanAnimation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PnlCpuFanAnimation.BackColor = System.Drawing.Color.Transparent
+        Me.PnlCpuFanAnimation.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.PnlCpuFanAnimation.Controls.Add(Me.TimeLabel)
         Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(0, 1)
         Me.PnlCpuFanAnimation.Name = "PnlCpuFanAnimation"
         Me.PnlCpuFanAnimation.Padding = New System.Windows.Forms.Padding(3)
-        Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(214, 164)
+        Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(242, 191)
         Me.PnlCpuFanAnimation.TabIndex = 4
         '
         'TimeLabel
@@ -62,9 +63,9 @@ Partial Class Form3
         Me.TimeLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.TimeLabel.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 15.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TimeLabel.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.TimeLabel.Location = New System.Drawing.Point(3, 140)
+        Me.TimeLabel.Location = New System.Drawing.Point(3, 159)
         Me.TimeLabel.Name = "TimeLabel"
-        Me.TimeLabel.Size = New System.Drawing.Size(207, 21)
+        Me.TimeLabel.Size = New System.Drawing.Size(235, 29)
         Me.TimeLabel.TabIndex = 4
         Me.TimeLabel.Text = "Label1"
         Me.TimeLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -77,9 +78,8 @@ Partial Class Form3
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
-        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(214, 191)
+        Me.ClientSize = New System.Drawing.Size(242, 213)
         Me.Controls.Add(Me.PnlCpuFanAnimation)
         Me.Controls.Add(Me.ProgressBar1)
         Me.DoubleBuffered = True

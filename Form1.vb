@@ -217,7 +217,7 @@ Public Class Form1
         OhmComputer.IsGpuEnabled = True
         OhmComputer.IsStorageEnabled = True
         OhmComputer.Open(True) ' Startet die Überwachung
-        LblStatusMessage.ForeColor = SystemColors.ControlLightLight
+        LblStatusMessage.ForeColor = SystemColors.WindowText
         Await Task.Run(Sub()
                            InitializeCoreTemperatureSensors()
                            InitializePerCoreCounters()
@@ -2061,4 +2061,6 @@ Public Class Form1
                 Return "Unbekannt"
         End Select
     End Function
+
+
 End Class

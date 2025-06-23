@@ -139,7 +139,9 @@ Partial Class Form1
         '
         Me.MenuStrip1.BackColor = System.Drawing.SystemColors.Highlight
         resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
+        Me.MenuStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
+        Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
         Me.MenuStrip1.MdiWindowListItem = Me.OptionsToolStripMenuItem
         Me.MenuStrip1.Name = "MenuStrip1"
         '
@@ -148,8 +150,8 @@ Partial Class Form1
         Me.FileToolStripMenuItem.BackColor = System.Drawing.Color.Transparent
         Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator8, Me.CloseToolStripMenuItem})
         Me.FileToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         resources.ApplyResources(Me.FileToolStripMenuItem, "FileToolStripMenuItem")
+        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         '
         'ToolStripSeparator8
         '
@@ -187,8 +189,8 @@ Partial Class Form1
         Me.ToolsToolStripMenuItem.BackColor = System.Drawing.Color.Transparent
         Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogMenuItem, Me.ToolStripSeparator1, Me.LoadArchivedMeasurementsToolStripMenuItem, Me.ToolStripSeparator6, Me.ExportCPUInfoToolStripMenuItem, Me.ToolStripSeparator5, Me.CpuInfoMenu})
         Me.ToolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         resources.ApplyResources(Me.ToolsToolStripMenuItem, "ToolsToolStripMenuItem")
+        Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         '
         'LogMenuItem
         '
@@ -420,7 +422,7 @@ Partial Class Form1
         '
         'Panel3
         '
-        Me.Panel3.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.Panel3.BackColor = System.Drawing.Color.WhiteSmoke
         Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel3.Controls.Add(Me.BtnToggleMonitor1)
         Me.Panel3.Controls.Add(Me.Label1)
