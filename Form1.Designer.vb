@@ -81,7 +81,7 @@ Partial Class Form1
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Core2 = New System.Windows.Forms.Label()
         Me.Core3 = New System.Windows.Forms.Label()
-        Me.CoreTemp = New System.Windows.Forms.TextBox()
+        Me.CoreTemp0 = New System.Windows.Forms.TextBox()
         Me.LoadBox2 = New System.Windows.Forms.TextBox()
         Me.MaxTemp2 = New System.Windows.Forms.TextBox()
         Me.LoadBox1 = New System.Windows.Forms.TextBox()
@@ -409,7 +409,7 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.Label9)
         Me.Panel2.Controls.Add(Me.Core2)
         Me.Panel2.Controls.Add(Me.Core3)
-        Me.Panel2.Controls.Add(Me.CoreTemp)
+        Me.Panel2.Controls.Add(Me.CoreTemp0)
         Me.Panel2.Controls.Add(Me.LoadBox2)
         Me.Panel2.Controls.Add(Me.MaxTemp2)
         Me.Panel2.Controls.Add(Me.LoadBox1)
@@ -560,15 +560,15 @@ Partial Class Form1
         resources.ApplyResources(Me.Core3, "Core3")
         Me.Core3.Name = "Core3"
         '
-        'CoreTemp
+        'CoreTemp0
         '
-        Me.CoreTemp.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
-        Me.CoreTemp.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.CoreTemp.Cursor = System.Windows.Forms.Cursors.Default
-        resources.ApplyResources(Me.CoreTemp, "CoreTemp")
-        Me.CoreTemp.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.CoreTemp.Name = "CoreTemp"
-        Me.CoreTemp.ReadOnly = True
+        Me.CoreTemp0.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
+        Me.CoreTemp0.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.CoreTemp0.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.CoreTemp0, "CoreTemp0")
+        Me.CoreTemp0.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.CoreTemp0.Name = "CoreTemp0"
+        Me.CoreTemp0.ReadOnly = True
         '
         'LoadBox2
         '
@@ -1031,7 +1031,7 @@ Partial Class Form1
     Friend WithEvents Label9 As Label
     Friend WithEvents Core2 As Label
     Friend WithEvents Core3 As Label
-    Friend WithEvents CoreTemp As TextBox
+    Friend WithEvents CoreTemp0 As TextBox
     Friend WithEvents LoadBox2 As TextBox
     Friend WithEvents MaxTemp2 As TextBox
     Friend WithEvents LoadBox1 As TextBox

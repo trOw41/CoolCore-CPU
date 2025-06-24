@@ -28,6 +28,8 @@ Partial Class Form3
         Me.PnlCpuFanAnimation = New System.Windows.Forms.Panel()
         Me.TimeLabel = New System.Windows.Forms.Label()
         Me.AnimationTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.lblResults = New System.Windows.Forms.Label()
         Me.PnlCpuFanAnimation.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -35,23 +37,22 @@ Partial Class Form3
         '
         Me.ProgressBar1.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.ProgressBar1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ProgressBar1.Location = New System.Drawing.Point(0, 195)
+        Me.ProgressBar1.Location = New System.Drawing.Point(0, 115)
         Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(0)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(242, 18)
+        Me.ProgressBar1.Size = New System.Drawing.Size(387, 18)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 2
         '
         'PnlCpuFanAnimation
         '
-        Me.PnlCpuFanAnimation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PnlCpuFanAnimation.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.PnlCpuFanAnimation.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.PnlCpuFanAnimation.Controls.Add(Me.TimeLabel)
-        Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(0, 1)
+        Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(263, 4)
         Me.PnlCpuFanAnimation.Name = "PnlCpuFanAnimation"
         Me.PnlCpuFanAnimation.Padding = New System.Windows.Forms.Padding(3)
-        Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(242, 191)
+        Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(112, 109)
         Me.PnlCpuFanAnimation.TabIndex = 4
         '
         'TimeLabel
@@ -65,7 +66,7 @@ Partial Class Form3
         Me.TimeLabel.ForeColor = System.Drawing.SystemColors.ControlText
         Me.TimeLabel.Location = New System.Drawing.Point(3, 159)
         Me.TimeLabel.Name = "TimeLabel"
-        Me.TimeLabel.Size = New System.Drawing.Size(235, 29)
+        Me.TimeLabel.Size = New System.Drawing.Size(105, 0)
         Me.TimeLabel.TabIndex = 4
         Me.TimeLabel.Text = "Label1"
         Me.TimeLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -74,12 +75,34 @@ Partial Class Form3
         '
         Me.AnimationTimer.Interval = 30
         '
+        'lblStatus
+        '
+        Me.lblStatus.AutoSize = True
+        Me.lblStatus.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblStatus.Location = New System.Drawing.Point(2, 4)
+        Me.lblStatus.Name = "lblStatus"
+        Me.lblStatus.Size = New System.Drawing.Size(45, 18)
+        Me.lblStatus.TabIndex = 5
+        Me.lblStatus.Text = "Label1"
+        '
+        'lblResults
+        '
+        Me.lblResults.AutoSize = True
+        Me.lblResults.Font = New System.Drawing.Font("Bahnschrift", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblResults.Location = New System.Drawing.Point(0, 69)
+        Me.lblResults.Name = "lblResults"
+        Me.lblResults.Size = New System.Drawing.Size(50, 18)
+        Me.lblResults.TabIndex = 5
+        Me.lblResults.Text = "Label1"
+        '
         'Form3
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(242, 213)
+        Me.ClientSize = New System.Drawing.Size(387, 133)
+        Me.Controls.Add(Me.lblResults)
+        Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.PnlCpuFanAnimation)
         Me.Controls.Add(Me.ProgressBar1)
         Me.DoubleBuffered = True
@@ -95,10 +118,13 @@ Partial Class Form3
         Me.TopMost = True
         Me.PnlCpuFanAnimation.ResumeLayout(False)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents ProgressBar1 As ProgressBar
     Friend WithEvents PnlCpuFanAnimation As Panel
     Friend WithEvents AnimationTimer As Timer
     Friend WithEvents TimeLabel As Label
+    Friend WithEvents lblStatus As Label
+    Friend WithEvents lblResults As Label
 End Class

@@ -209,16 +209,28 @@ Namespace My
                 Me("AllwaysShow") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(),
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
-         Global.System.Configuration.DefaultSettingValueAttribute("")>
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
         Public Property CName() As String
             Get
-                Return CType(Me("CName"), String)
+                Return CType(Me("CName"),String)
             End Get
             Set
-                Me("CName") = Value
+                Me("CName") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property ops() As Integer
+            Get
+                Return CType(Me("ops"),Integer)
+            End Get
+            Set
+                Me("ops") = value
             End Set
         End Property
     End Class

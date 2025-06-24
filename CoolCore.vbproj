@@ -440,7 +440,7 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="OpenHardwareMonitorLib">
-      <Version>1.0.9300</Version>
+      <Version>1.0.9270</Version>
     </PackageReference>
     <PackageReference Include="Stub.System.Data.SQLite.Core.NetStandard">
       <Version>1.0.119</Version>

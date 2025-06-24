@@ -67,6 +67,10 @@ Public Class Form3
             If TimeLabel IsNot Nothing Then
                 TimeLabel.Text = $"Dauer: {elapsedTime:hh\:mm\:ss}"
                 Me.Text = $"Monitoring CPU Temperatur noch: {Math.Round(monitorTime - elapsedTime.TotalSeconds)}s"
+                lblResults.Text = $"CPU Temperatur: {Form1.CoreTemp0.Text}.."
+                lblResults?.Invalidate()
+                Form1.CoreTemp0?.Invalidate()
+                lblStatus.Text = $"{Settings.ops}"
             End If
         End If
     End Sub
@@ -113,9 +117,9 @@ Public Class Form3
         Dim centerY As Integer = panelHeight / 2
 
         Dim cpuTemperature As Integer = 0
-        If Form1.CoreTemp IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(Form1.CoreTemp.Text) Then
+        If Form1.CoreTemp0 IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(Form1.CoreTemp0.Text) Then
 
-            Integer.TryParse(Form1.CoreTemp.Text.Replace("°C", "").Trim(), cpuTemperature)
+            Integer.TryParse(Form1.CoreTemp0.Text.Replace("°C", "").Trim(), cpuTemperature)
         End If
 
         If cpuTemperature < 0 Then cpuTemperature = 0

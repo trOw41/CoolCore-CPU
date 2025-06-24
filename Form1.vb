@@ -1,23 +1,24 @@
-﻿Imports System.Globalization
+﻿Imports System.Collections.Generic
+Imports System.Diagnostics
+Imports System.Drawing
+Imports System.Drawing.Printing
+Imports System.Globalization
 Imports System.IO
+Imports System.Linq
+Imports System.Management
 Imports System.Net
+Imports System.Runtime.CompilerServices
 Imports System.Security.Principal
 Imports System.Text
 Imports System.Threading
-Imports System.Xml.Serialization
-Imports Newtonsoft.Json.Linq
-Imports OpenHardwareMonitor.Hardware
-Imports System.Diagnostics
-Imports System.Management
 Imports System.Threading.Tasks
 Imports System.Windows.Forms
-Imports System.Drawing
-Imports System.Drawing.Printing
-Imports System.Collections.Generic
-Imports System.Linq
-
+Imports System.Xml.Serialization
+Imports Google.Protobuf.WellKnownTypes
+Imports Newtonsoft.Json.Linq
+Imports OpenHardwareMonitor.Hardware
+Imports Org.BouncyCastle.Asn1.Cmp
 Imports Timer = System.Windows.Forms.Timer
-Imports System.Runtime.CompilerServices
 
 
 
@@ -38,6 +39,7 @@ Public Class Form1
     Private ReadOnly LoadBoxes As New Dictionary(Of Integer, TextBox)()
     Private ReadOnly MinTempBoxes As New Dictionary(Of Integer, TextBox)()
     Private ReadOnly MaxTempBoxes As New Dictionary(Of Integer, TextBox)()
+
     Private computer As Computer
     Private cpu As IHardware
     Private coreTemperatures As New List(Of ISensor)()
@@ -86,6 +88,7 @@ Public Class Form1
     Private printPreviewDialog As New PrintPreviewDialog()
     Private cpuInfoToPrint As String
     Private systemInfoPrint As String
+    Private totalOperations As Long = 0
     'Programm initialization
     Public Sub New()
         InitializeComponent()
@@ -336,7 +339,7 @@ Public Class Form1
         If LoadBox1 IsNot Nothing Then LoadBoxes.Add(1, LoadBox1)
         If LoadBox2 IsNot Nothing Then LoadBoxes.Add(2, LoadBox2)
         If LoadBox3 IsNot Nothing Then LoadBoxes.Add(3, LoadBox3)
-        If CoreTemp IsNot Nothing Then CoreTempBoxes.Add(0, CoreTemp)
+        If CoreTemp0 IsNot Nothing Then CoreTempBoxes.Add(0, CoreTemp0)
         If CoreTemp1 IsNot Nothing Then CoreTempBoxes.Add(1, CoreTemp1)
         If CoreTemp2 IsNot Nothing Then CoreTempBoxes.Add(2, CoreTemp2)
         If CoreTemp3 IsNot Nothing Then CoreTempBoxes.Add(3, CoreTemp3)
@@ -580,11 +583,7 @@ Public Class Form1
                                   MaxTempBoxes(coreIndex).Text = $"{sensor.Max:F1}°C"
                                   MaxTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Max)
                               End If
-                              If CoreTempBoxes.ContainsKey(coreIndex) Then
-                                  'CoreTempBoxes(coreIndex).Text = $"{sensor.Value:F1}°C"
-                                  CoreTemp.Text = $"{sensor.Value:F1}°C"
-                                  CoreTempBoxes(coreIndex).ForeColor = GetTemperatureColor(sensor.Value)
-                              End If
+
 
                               Dim packagePowerSensor = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Package"))
                               If packagePowerSensor IsNot Nothing AndAlso packagePowerSensor.Value.HasValue Then
@@ -1167,7 +1166,7 @@ Public Class Form1
             monitoringStopwatch.Restart()
             monitoringTimer.Start()
             StartCpuStressTest()
-            LblStatusMessage.Text = "Background temperature monitoring started. CPU stress test running..."
+
         Else
 
         End If
@@ -1236,9 +1235,8 @@ Public Class Form1
         Call StopMonitoringProcess()
 
     End Sub
-    Private Sub StartCpuStressTest()
-
-        'StopCpuStressTest()
+    Public Sub StartCpuStressTest()
+        StopCpuStressTest()
         cancellationTokenSource = New CancellationTokenSource()
         Dim cancellationToken = cancellationTokenSource.Token
         Dim processorCount As Integer = Environment.ProcessorCount
@@ -1248,17 +1246,17 @@ Public Class Form1
 
                                                  Dim result As Double = 1.0
                                                  For j As Integer = 0 To 1000000
-                                                     'result = Math.Sqrt(Math.Sin(j) * Math.Cos(j))
                                                      result = Math.Sqrt(result + Math.Sin(j) * Math.Cos(j))
                                                  Next
                                              End While
                                          End Sub, cancellationToken)
             stressTasks.Add(cpuStressTask)
         Next
-
         Me.Invoke(Sub()
                       LblStatusMessage.Text = "CPU-Stresstest läuft..."
                       LblStatusMessage.ForeColor = Color.DarkOrange
+
+
                   End Sub)
     End Sub
     Private Sub StopCpuStressTest()
