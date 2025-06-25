@@ -1,8 +1,6 @@
 ﻿' OptionsForm.vb
-Imports System.Windows.Forms
 Imports System.IO
 Imports System.Xml.Serialization
-Imports System.Runtime.InteropServices
 
 Public Class OptionsForm
     Public Event ThemeChanged As EventHandler(Of String)
@@ -11,27 +9,27 @@ Public Class OptionsForm
     Private _isInitializing As Boolean = False
     Dim documentsPath As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim settingsPath As String = Path.Combine(documentsPath, "CoolCore")
-
+    Private getSettings = Settings
     Private Sub OptionsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Settings.ApplicationTheme = "Standard"
-        Label1.Text = $"Temp. Monitor & CPU Streß: {Settings.MonitorTime} s"
+        GetSettings().ApplicationTheme = "Standard"
+        Label1.Text = $"Temp. Monitor & CPU Streß: {GetSettings().MonitorTime} s"
         For i = 0 To LogSizeBox.Items.Count - 1
             Dim items = i
-            LogSizeBox.Items(i) = Settings.MAX_LOG_SIZE_KB
-            If My.Settings.MAX_LOG_SIZE_KB = LogSizeBox.Items(i).ToString() Then
+            LogSizeBox.Items(i) = GetSettings().MAX_LOG_SIZE_KB
+            If Settings().MAX_LOG_SIZE_KB = LogSizeBox.Items(i).ToString() Then
                 LogSizeBox.SelectedIndex = i
                 Exit For
             End If
         Next
-        LogStartStopBox.Checked = Settings.LogStartStop
-        updateCheckBox.Checked = Settings.UpdateCheck
-        BootBox.Checked = Settings.BootUp
-        updateCheckBox.Checked = Settings.UpdateCheck
+        LogStartStopBox.Checked = Settings().LogStartStop
+        updateCheckBox.Checked = GetSettings().UpdateCheck
+        BootBox.Checked = GetSettings().BootUp
+        updateCheckBox.Checked = GetSettings().UpdateCheck
         _updateCheckBoxInitialState = updateCheckBox.CheckState
         _isInitializing = True
-        StartMessageBox.Checked = Settings.AllwaysShow
+        StartMessageBox.Checked = GetSettings().AllwaysShow
         _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
-        Dim monitorTime = Settings.MonitorTime
+        Dim monitorTime = GetSettings().MonitorTime
         If monitorTime > 0 Then
             For i = 0 To CheckedListBox1.Items.Count - 1
                 If CheckedListBox1.Items(i).ToString() = monitorTime.ToString() Then
@@ -41,24 +39,25 @@ Public Class OptionsForm
                 End If
             Next
         End If
+        LogPanelCheckBox.Checked = GetSettings().LogPanel
     End Sub
 
     Private Sub SaveSettingsToXml()
         Dim settings As New AppSettingsXml With {
-        .ApplicationTheme = My.Settings.ApplicationTheme,
-        .MonitorTime = My.Settings.MonitorTime,
-        .MAX_LOG_SIZE_KB = My.Settings.MAX_LOG_SIZE_KB,
-        .LogStartStop = My.Settings.LogStartStop,
-        .CpuLogoName = My.Settings.CpuLogoName,
-        .BootUp = My.Settings.BootUp,
-        .Autostart = My.Settings.Autostart,
-        .InfoMessage = My.Settings.InfoMessage,
-        .MashineID = My.Settings.MashineID,
-        .IsCpuSubInfoLoaded = My.Settings.IsCpuSubInfoLoaded,
-        .FirstStart = My.Settings.FirstStart,
-        .UpdateCheck = My.Settings.UpdateCheck,
-        .AllwaysShow = My.Settings.AllwaysShow,
-        .CName = My.Settings.CName
+        .ApplicationTheme = getSettings().ApplicationTheme,
+        .MonitorTime = getSettings().MonitorTime,
+        .MAX_LOG_SIZE_KB = getSettings().MAX_LOG_SIZE_KB,
+        .LogStartStop = getSettings().LogStartStop,
+        .CpuLogoName = getSettings().CpuLogoName,
+        .BootUp = getSettings().BootUp,
+        .Autostart = getSettings().Autostart,
+        .InfoMessage = getSettings().InfoMessage,
+        .MashineID = getSettings().MashineID,
+        .IsCpuSubInfoLoaded = getSettings().IsCpuSubInfoLoaded,
+        .FirstStart = getSettings().FirstStart,
+        .UpdateCheck = getSettings().UpdateCheck,
+        .AllwaysShow = getSettings().AllwaysShow,
+        .CName = getSettings().CName
     }
         Dim documentsPath As String = settingsPath
         Dim xmlPath As String = Path.Combine(documentsPath, "CoolCoreSettings.xml")
@@ -68,23 +67,23 @@ Public Class OptionsForm
         End Using
     End Sub
     Private Sub BtnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        My.Settings.Save()
+        getSettings().Save()
         SaveSettingsToXml()
-        RaiseEvent ThemeChanged(Me, My.Settings.ApplicationTheme)
-        Me.Close()
+        RaiseEvent ThemeChanged(Me, getSettings().ApplicationTheme)
+        Close()
     End Sub
 
     Private Sub BtnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub CheckedListBox1_SelectedValueChanged(sender As Object, e As EventArgs) Handles CheckedListBox1.SelectedValueChanged
-        If Settings.InfoMessage = False Then
+        If GetSettings().InfoMessage = False Then
             InfoDialog.ShowDialog(Me)
         End If
         If CheckedListBox1.SelectedItem IsNot Nothing Then
-            My.Settings.MonitorTime = CheckedListBox1.SelectedItem.ToString()
-            Label1.Text = "CPU Stresstest Intervall: " & My.Settings.MonitorTime
+            getSettings().MonitorTime = CheckedListBox1.SelectedItem.ToString()
+            Label1.Text = "CPU Stresstest Intervall: " & getSettings().MonitorTime
         End If
         For i = 0 To CheckedListBox1.Items.Count - 1
             CheckedListBox1.SetItemChecked(i, i = CheckedListBox1.SelectedIndex)
@@ -126,7 +125,7 @@ Public Class OptionsForm
     Private Sub LogSizeBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LogSizeBox.SelectedIndexChanged
 
         If LogSizeBox.SelectedItem IsNot Nothing Then
-            My.Settings.MAX_LOG_SIZE_KB = LogSizeBox.SelectedItem.ToString()
+            getSettings().MAX_LOG_SIZE_KB = LogSizeBox.SelectedItem.ToString()
         End If
         If Form1 IsNot Nothing AndAlso Form1.IsHandleCreated Then
             Form1.Invoke(Sub()
@@ -138,12 +137,12 @@ Public Class OptionsForm
 
     Private Sub LogStartStopBox_CheckedChanged(sender As Object, e As EventArgs) Handles LogStartStopBox.CheckedChanged
         If LogStartStopBox.Checked = False Then
-            My.Settings.LogStartStop = False
+            getSettings().LogStartStop = False
             Form1.Invoke(Sub()
                              Form1.StartStopLog()
                          End Sub)
         ElseIf LogStartStopBox.Checked = True Then
-            My.Settings.LogStartStop = True
+            getSettings().LogStartStop = True
             If Form1 Is Nothing AndAlso Form1.IsHandleCreated Then
                 Form1.Invoke(Sub()
                                  Form1.StartStopLog()
@@ -152,22 +151,37 @@ Public Class OptionsForm
         End If
     End Sub
 
+    Private Sub LogPanelCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles LogPanelCheckBox.CheckedChanged
+        Try
+            If LogPanelCheckBox.Checked = True Then
+                GetSettings().LogPanel = True
+                Form1.LblStatusMessage.Visible = True
+            ElseIf LogPanelCheckBox.Checked = False Then
+                GetSettings().LogPanel = False
+                Form1.LblStatusMessage.Visible = False
+            End If
+        Catch ex As Exception
+            MessageBox.Show($"Error Prozess kan nicht gestartet werden: {ex.Message}")
+            LogPanelCheckBox.Checked = Not LogPanelCheckBox.Checked ' Reset the checkbox state
+        End Try
+    End Sub
+
     Public Sub BootBox_CheckedChanged(sender As Object, e As EventArgs) Handles BootBox.CheckedChanged
         Try
             If BootBox.Checked = True Then
-                Settings.BootUp = True
-                If Settings.Autostart = False Then
+                GetSettings().BootUp = True
+                If GetSettings().Autostart = False Then
                     Using Process.Start("setreg.bat")
-                        Settings.Autostart = True
+                        GetSettings().Autostart = True
                         MessageBox.Show("Autostart wurde aktiviert. CoolCore wird mit dem nächsten System Start ausgeführt.", "Autostart aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End Using
                 Else
                 End If
             ElseIf BootBox.Checked = False Then
-                Settings.BootUp = False
-                If Settings.Autostart = True Then
+                GetSettings().BootUp = False
+                If GetSettings().Autostart = True Then
                     Using Process.Start("rmreg2.bat")
-                        Settings.Autostart = False
+                        GetSettings().Autostart = False
                         MessageBox.Show("Autostart wurde deaktiviert. CoolCore wird nicht mehr automatisch gestartet.", "Autostart deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End Using
                 End If
@@ -186,10 +200,10 @@ Public Class OptionsForm
         End If
 
         If updateCheckBox.CheckState = CheckState.Checked Then
-            My.Settings.UpdateCheck = True
+            getSettings().UpdateCheck = True
             'MessageBox.Show("Update Check wurde aktiviert. Sie werden benachrichtigt, wenn eine neue Version verfügbar ist.", "Update Check aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            My.Settings.UpdateCheck = False
+            getSettings().UpdateCheck = False
             MessageBox.Show("Update Check wurde deaktiviert. Sie werden keine Benachrichtigungen über neue Versionen erhalten.", "Update Check deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
 
@@ -202,14 +216,14 @@ Public Class OptionsForm
             Return
         End If
         If StartMessageBox.CheckState = CheckState.Checked Then
-            My.Settings.AllwaysShow = True
+            getSettings().AllwaysShow = True
             If _isInitializing Then
                 _isInitializing = False
                 Return
             End If
             MessageBox.Show("Die Startnachricht wird immer angezeigt.", "Info:", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            My.Settings.AllwaysShow = False
+            getSettings().AllwaysShow = False
             If _isInitializing Then
                 _isInitializing = False
                 Return
