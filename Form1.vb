@@ -153,27 +153,34 @@ Public Class Form1
     Private Sub LoadSettingsFromXml()
         Dim documentsPath As String = settingsPath
         Dim xmlPath As String = Path.Combine(documentsPath, "CoolCoreSettings.xml")
-        If File.Exists(xmlPath) Then
-            Using fs As New FileStream(xmlPath, FileMode.Open)
-                Dim serializer As New XmlSerializer(GetType(AppSettingsXml))
-                Dim loaded As AppSettingsXml = CType(serializer.Deserialize(fs), AppSettingsXml)
-                ' Werte zurück in My.Settings schreiben:
-                My.Settings.ApplicationTheme = loaded.ApplicationTheme
-                My.Settings.MonitorTime = loaded.MonitorTime
-                My.Settings.MAX_LOG_SIZE_KB = loaded.MAX_LOG_SIZE_KB
-                My.Settings.LogStartStop = loaded.LogStartStop
-                My.Settings.CpuLogoName = loaded.CpuLogoName
-                My.Settings.BootUp = loaded.BootUp
-                My.Settings.Autostart = loaded.Autostart
-                My.Settings.InfoMessage = loaded.InfoMessage
-                My.Settings.MashineID = loaded.MashineID
-                My.Settings.IsCpuSubInfoLoaded = loaded.IsCpuSubInfoLoaded
-                My.Settings.FirstStart = loaded.FirstStart
-                My.Settings.UpdateCheck = loaded.UpdateCheck
-                My.Settings.AllwaysShow = loaded.AllwaysShow
-                My.Settings.CName = loaded.CName
-            End Using
-        End If
+        Try
+            If File.Exists(xmlPath) Then
+                Using fs As New FileStream(xmlPath, FileMode.Open)
+                    Dim serializer As New XmlSerializer(GetType(SettingsXml))
+                    Dim loaded As SettingsXml = CType(serializer.Deserialize(fs), SettingsXml)
+                    ' Werte zurück in My.Settings schreiben:
+                    My.Settings.ApplicationTheme = loaded.ApplicationTheme
+                    My.Settings.MonitorTime = loaded.MonitorTime
+                    My.Settings.MAX_LOG_SIZE_KB = loaded.MAX_LOG_SIZE_KB
+                    My.Settings.LogStartStop = loaded.LogStartStop
+                    My.Settings.CpuLogoName = loaded.CpuLogoName
+                    My.Settings.BootUp = loaded.BootUp
+                    My.Settings.Autostart = loaded.Autostart
+                    My.Settings.InfoMessage = loaded.InfoMessage
+                    My.Settings.MashineID = loaded.MashineID
+                    My.Settings.IsCpuSubInfoLoaded = loaded.IsCpuSubInfoLoaded
+                    My.Settings.FirstStart = loaded.FirstStart
+                    My.Settings.UpdateCheck = loaded.UpdateCheck
+                    My.Settings.AllwaysShow = loaded.AllwaysShow
+                    My.Settings.CName = loaded.CName
+                    My.Settings.LogPanel = loaded.LogPanel
+                    My.Settings.Save()
+                End Using
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Fehler beim Speichern der Einstellungen: " & ex.Message & vbCrLf &
+        If(ex.InnerException IsNot Nothing, ex.InnerException.Message, ""))
+        End Try
     End Sub
     'Form Logic
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load

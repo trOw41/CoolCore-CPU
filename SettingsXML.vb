@@ -1,5 +1,5 @@
 ﻿<Serializable>
-Public Class AppSettingsXml
+Public Class SettingsXml
     Public Property ApplicationTheme As String
     Public Property MonitorTime As Double
     Public Property MAX_LOG_SIZE_KB As Long
@@ -14,4 +14,5 @@ Public Class AppSettingsXml
     Public Property UpdateCheck As Boolean
     Public Property AllwaysShow As Boolean
     Public Property CName As String
+    Public Property LogPanel As Boolean
 End Class

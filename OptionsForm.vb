@@ -9,27 +9,27 @@ Public Class OptionsForm
     Private _isInitializing As Boolean = False
     Dim documentsPath As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
     Dim settingsPath As String = Path.Combine(documentsPath, "CoolCore")
-    Private getSettings = Settings
+
     Private Sub OptionsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        GetSettings().ApplicationTheme = "Standard"
-        Label1.Text = $"Temp. Monitor & CPU Streß: {GetSettings().MonitorTime} s"
+        Settings().ApplicationTheme = "Standard"
+        Label1.Text = $"Temp. Monitor & CPU Streß: {Settings().MonitorTime} s"
         For i = 0 To LogSizeBox.Items.Count - 1
             Dim items = i
-            LogSizeBox.Items(i) = GetSettings().MAX_LOG_SIZE_KB
+            LogSizeBox.Items(i) = Settings().MAX_LOG_SIZE_KB
             If Settings().MAX_LOG_SIZE_KB = LogSizeBox.Items(i).ToString() Then
                 LogSizeBox.SelectedIndex = i
                 Exit For
             End If
         Next
         LogStartStopBox.Checked = Settings().LogStartStop
-        updateCheckBox.Checked = GetSettings().UpdateCheck
-        BootBox.Checked = GetSettings().BootUp
-        updateCheckBox.Checked = GetSettings().UpdateCheck
+        updateCheckBox.Checked = Settings().UpdateCheck
+        BootBox.Checked = Settings().BootUp
+        updateCheckBox.Checked = Settings().UpdateCheck
         _updateCheckBoxInitialState = updateCheckBox.CheckState
         _isInitializing = True
-        StartMessageBox.Checked = GetSettings().AllwaysShow
+        StartMessageBox.Checked = Settings().AllwaysShow
         _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
-        Dim monitorTime = GetSettings().MonitorTime
+        Dim monitorTime = Settings().MonitorTime
         If monitorTime > 0 Then
             For i = 0 To CheckedListBox1.Items.Count - 1
                 If CheckedListBox1.Items(i).ToString() = monitorTime.ToString() Then
@@ -39,37 +39,37 @@ Public Class OptionsForm
                 End If
             Next
         End If
-        LogPanelCheckBox.Checked = GetSettings().LogPanel
+        LogPanelCheckBox.Checked = Settings().LogPanel
     End Sub
 
     Private Sub SaveSettingsToXml()
-        Dim settings As New AppSettingsXml With {
-        .ApplicationTheme = getSettings().ApplicationTheme,
-        .MonitorTime = getSettings().MonitorTime,
-        .MAX_LOG_SIZE_KB = getSettings().MAX_LOG_SIZE_KB,
-        .LogStartStop = getSettings().LogStartStop,
-        .CpuLogoName = getSettings().CpuLogoName,
-        .BootUp = getSettings().BootUp,
-        .Autostart = getSettings().Autostart,
-        .InfoMessage = getSettings().InfoMessage,
-        .MashineID = getSettings().MashineID,
-        .IsCpuSubInfoLoaded = getSettings().IsCpuSubInfoLoaded,
-        .FirstStart = getSettings().FirstStart,
-        .UpdateCheck = getSettings().UpdateCheck,
-        .AllwaysShow = getSettings().AllwaysShow,
-        .CName = getSettings().CName
+        Dim getsettings As New SettingsXml With {
+        .ApplicationTheme = Settings().ApplicationTheme,
+        .MonitorTime = Settings().MonitorTime,
+        .MAX_LOG_SIZE_KB = Settings().MAX_LOG_SIZE_KB,
+        .LogStartStop = Settings().LogStartStop,
+        .CpuLogoName = Settings().CpuLogoName,
+        .BootUp = Settings().BootUp,
+        .Autostart = Settings().Autostart,
+        .InfoMessage = Settings().InfoMessage,
+        .MashineID = Settings().MashineID,
+        .IsCpuSubInfoLoaded = Settings().IsCpuSubInfoLoaded,
+        .FirstStart = Settings().FirstStart,
+        .UpdateCheck = Settings().UpdateCheck,
+        .AllwaysShow = Settings().AllwaysShow,
+        .CName = Settings().CName
     }
         Dim documentsPath As String = settingsPath
         Dim xmlPath As String = Path.Combine(documentsPath, "CoolCoreSettings.xml")
         Using fs As New FileStream(xmlPath, FileMode.Create)
-            Dim serializer As New XmlSerializer(GetType(AppSettingsXml))
-            serializer.Serialize(fs, settings)
+            Dim serializer As New XmlSerializer(GetType(SettingsXml))
+            serializer.Serialize(fs, getsettings)
         End Using
     End Sub
     Private Sub BtnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        getSettings().Save()
+        Settings().Save()
         SaveSettingsToXml()
-        RaiseEvent ThemeChanged(Me, getSettings().ApplicationTheme)
+        RaiseEvent ThemeChanged(Me, Settings().ApplicationTheme)
         Close()
     End Sub
 
@@ -78,12 +78,12 @@ Public Class OptionsForm
     End Sub
 
     Private Sub CheckedListBox1_SelectedValueChanged(sender As Object, e As EventArgs) Handles CheckedListBox1.SelectedValueChanged
-        If GetSettings().InfoMessage = False Then
+        If Settings().InfoMessage = False Then
             InfoDialog.ShowDialog(Me)
         End If
         If CheckedListBox1.SelectedItem IsNot Nothing Then
-            getSettings().MonitorTime = CheckedListBox1.SelectedItem.ToString()
-            Label1.Text = "CPU Stresstest Intervall: " & getSettings().MonitorTime
+            Settings().MonitorTime = CheckedListBox1.SelectedItem.ToString()
+            Label1.Text = "CPU Stresstest Intervall: " & Settings().MonitorTime
         End If
         For i = 0 To CheckedListBox1.Items.Count - 1
             CheckedListBox1.SetItemChecked(i, i = CheckedListBox1.SelectedIndex)
@@ -125,7 +125,7 @@ Public Class OptionsForm
     Private Sub LogSizeBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LogSizeBox.SelectedIndexChanged
 
         If LogSizeBox.SelectedItem IsNot Nothing Then
-            getSettings().MAX_LOG_SIZE_KB = LogSizeBox.SelectedItem.ToString()
+            Settings().MAX_LOG_SIZE_KB = LogSizeBox.SelectedItem.ToString()
         End If
         If Form1 IsNot Nothing AndAlso Form1.IsHandleCreated Then
             Form1.Invoke(Sub()
@@ -137,12 +137,12 @@ Public Class OptionsForm
 
     Private Sub LogStartStopBox_CheckedChanged(sender As Object, e As EventArgs) Handles LogStartStopBox.CheckedChanged
         If LogStartStopBox.Checked = False Then
-            getSettings().LogStartStop = False
+            Settings().LogStartStop = False
             Form1.Invoke(Sub()
                              Form1.StartStopLog()
                          End Sub)
         ElseIf LogStartStopBox.Checked = True Then
-            getSettings().LogStartStop = True
+            Settings().LogStartStop = True
             If Form1 Is Nothing AndAlso Form1.IsHandleCreated Then
                 Form1.Invoke(Sub()
                                  Form1.StartStopLog()
@@ -154,10 +154,10 @@ Public Class OptionsForm
     Private Sub LogPanelCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles LogPanelCheckBox.CheckedChanged
         Try
             If LogPanelCheckBox.Checked = True Then
-                GetSettings().LogPanel = True
+                Settings().LogPanel = True
                 Form1.LblStatusMessage.Visible = True
             ElseIf LogPanelCheckBox.Checked = False Then
-                GetSettings().LogPanel = False
+                Settings().LogPanel = False
                 Form1.LblStatusMessage.Visible = False
             End If
         Catch ex As Exception
@@ -169,19 +169,19 @@ Public Class OptionsForm
     Public Sub BootBox_CheckedChanged(sender As Object, e As EventArgs) Handles BootBox.CheckedChanged
         Try
             If BootBox.Checked = True Then
-                GetSettings().BootUp = True
-                If GetSettings().Autostart = False Then
+                Settings().BootUp = True
+                If Settings().Autostart = False Then
                     Using Process.Start("setreg.bat")
-                        GetSettings().Autostart = True
+                        Settings().Autostart = True
                         MessageBox.Show("Autostart wurde aktiviert. CoolCore wird mit dem nächsten System Start ausgeführt.", "Autostart aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End Using
                 Else
                 End If
             ElseIf BootBox.Checked = False Then
-                GetSettings().BootUp = False
-                If GetSettings().Autostart = True Then
+                Settings().BootUp = False
+                If Settings().Autostart = True Then
                     Using Process.Start("rmreg2.bat")
-                        GetSettings().Autostart = False
+                        Settings().Autostart = False
                         MessageBox.Show("Autostart wurde deaktiviert. CoolCore wird nicht mehr automatisch gestartet.", "Autostart deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End Using
                 End If
@@ -200,10 +200,10 @@ Public Class OptionsForm
         End If
 
         If updateCheckBox.CheckState = CheckState.Checked Then
-            getSettings().UpdateCheck = True
+            Settings().UpdateCheck = True
             'MessageBox.Show("Update Check wurde aktiviert. Sie werden benachrichtigt, wenn eine neue Version verfügbar ist.", "Update Check aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            getSettings().UpdateCheck = False
+            Settings().UpdateCheck = False
             MessageBox.Show("Update Check wurde deaktiviert. Sie werden keine Benachrichtigungen über neue Versionen erhalten.", "Update Check deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
 
@@ -216,14 +216,14 @@ Public Class OptionsForm
             Return
         End If
         If StartMessageBox.CheckState = CheckState.Checked Then
-            getSettings().AllwaysShow = True
+            Settings().AllwaysShow = True
             If _isInitializing Then
                 _isInitializing = False
                 Return
             End If
             MessageBox.Show("Die Startnachricht wird immer angezeigt.", "Info:", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            getSettings().AllwaysShow = False
+            Settings().AllwaysShow = False
             If _isInitializing Then
                 _isInitializing = False
                 Return

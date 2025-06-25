@@ -242,7 +242,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Settings.vb" />
-    <Compile Include="SettingsXML.vb" />
+    <Compile Include="SettingsXML.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="SystemInfoData.vb" />
     <Compile Include="SysteminfoRepository.vb" />
     <Compile Include="UpdateForm.Designer.vb">
@@ -311,7 +313,7 @@
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
     <None Include="My Project\Settings.settings">
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
@@ -440,7 +442,7 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="OpenHardwareMonitorLib">
-      <Version>1.0.9270</Version>
+      <Version>1.0.9300</Version>
     </PackageReference>
     <PackageReference Include="Stub.System.Data.SQLite.Core.NetStandard">
       <Version>1.0.119</Version>
