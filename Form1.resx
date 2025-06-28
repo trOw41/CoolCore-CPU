@@ -350,25 +350,25 @@
     <value>Tools</value>
   </data>
   <data name="InfoMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>120, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="InfoMenuItem.Text" xml:space="preserve">
     <value>Info</value>
   </data>
   <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>117, 6</value>
+    <value>177, 6</value>
   </data>
   <data name="FAQToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>120, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="FAQToolStripMenuItem.Text" xml:space="preserve">
     <value>FAQ</value>
   </data>
   <data name="ToolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>117, 6</value>
+    <value>177, 6</value>
   </data>
   <data name="SupportToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>120, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="SupportToolStripMenuItem.Text" xml:space="preserve">
     <value>Support</value>

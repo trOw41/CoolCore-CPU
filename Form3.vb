@@ -1,6 +1,5 @@
 ﻿Imports System.Drawing.Drawing2D
-Imports System.Threading.Tasks
-
+Imports CoolCore.My
 Public Class Form3
     Public Event StopRequested As EventHandler
     Private frameCounter As Integer = 0
@@ -21,38 +20,39 @@ Public Class Form3
 
     Public Sub New()
         InitializeComponent()
-        Me.ControlBox = False
-        Me.FormBorderStyle = FormBorderStyle.FixedDialog
-        Me.StartPosition = FormStartPosition.CenterParent
+        ControlBox = False
+        FormBorderStyle = FormBorderStyle.FixedDialog
+        StartPosition = FormStartPosition.CenterParent
         ProgressBar1.Style = ProgressBarStyle.Blocks
 
-        Me.Text = "CPU Temperatur Messung:"
+        Text = "CPU Temperatur Messung:"
         If TimeLabel IsNot Nothing Then
             TimeLabel.Text = "Wird geladen.."
             TimeLabel.AutoSize = False
         End If
         If PnlCpuFanAnimation IsNot Nothing Then
-            _cpuImage = My.Resources.temp2 '
+            _cpuImage = My.Resources.fan2
+            PnlCpuFanAnimation.Size = New Size(200, 200)
             PnlCpuFanAnimation.BackColor = SystemColors.Control
             PnlCpuFanAnimation.BorderStyle = BorderStyle.None
             AddHandler PnlCpuFanAnimation.Paint, AddressOf PnlCpuFanAnimation_Paint
         End If
 
         If AnimationTimer IsNot Nothing Then
-            AnimationTimer.Interval = My.Settings.MonitorTime
+            AnimationTimer.Interval = Settings().MonitorTime
             AddHandler AnimationTimer.Tick, AddressOf AnimationTimer_Tick
         End If
 
     End Sub
 
     Private Sub Form3_load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.BackColor = ColorTranslator.FromHtml("#F0F0F0")
-        Me.ForeColor = ColorTranslator.FromHtml("#333333")
-        _cpuImage = My.Resources.fan1
+        BackColor = ColorTranslator.FromHtml("#F0F0F0")
+        ForeColor = ColorTranslator.FromHtml("#333333")
+        _cpuImage = My.Resources.fan2
     End Sub
 
     Public Sub UpdateElapsedTime(elapsedTime As TimeSpan)
-        Dim monitorTime As Double = My.Settings.MonitorTime
+        Dim monitorTime As Double = My.Settings().MonitorTime
         Dim tickerMax As Integer = CInt(monitorTime)
         Dim ticker As Integer = CInt(elapsedTime.TotalSeconds)
 
@@ -61,16 +61,16 @@ Public Class Form3
             ProgressBar1.Value = Math.Min(ticker, tickerMax)
         End If
 
-        If Me.InvokeRequired Then
-            Me.Invoke(Sub() UpdateElapsedTime(elapsedTime))
+        If InvokeRequired Then
+            Invoke(Sub() UpdateElapsedTime(elapsedTime))
         Else
             If TimeLabel IsNot Nothing Then
                 TimeLabel.Text = $"Dauer: {elapsedTime:hh\:mm\:ss}"
-                Me.Text = $"Monitoring CPU Temperatur noch: {Math.Round(monitorTime - elapsedTime.TotalSeconds)}s"
-                lblResults.Text = $"CPU Temperatur: {Form1.CoreTemp0.Text}.."
+                Text = $"Monitoring CPU Temperatur noch: {Math.Round(monitorTime - elapsedTime.TotalSeconds)}s"
+                lblResults.Text = $"CPU Temperatur: COre1:{Form1.CoreTemp0.Text} -> Core2:{Form1.CoreTemp1.Text} -> Core3:{Form1.CoreTemp2.Text} -> Core4:{Form1.CoreTemp3.Text}"
                 lblResults?.Invalidate()
                 Form1.CoreTemp0?.Invalidate()
-                lblStatus.Text = $"{Settings.ops}"
+                lblStatus.Text = $"{Settings().Ops * monitorTime / 4} / Millionen -> Operationen pro Thread / sekunde"
             End If
         End If
     End Sub

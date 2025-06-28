@@ -153,34 +153,28 @@ Public Class Form1
     Private Sub LoadSettingsFromXml()
         Dim documentsPath As String = settingsPath
         Dim xmlPath As String = Path.Combine(documentsPath, "CoolCoreSettings.xml")
-        Try
-            If File.Exists(xmlPath) Then
-                Using fs As New FileStream(xmlPath, FileMode.Open)
-                    Dim serializer As New XmlSerializer(GetType(SettingsXml))
-                    Dim loaded As SettingsXml = CType(serializer.Deserialize(fs), SettingsXml)
-                    ' Werte zurück in My.Settings schreiben:
-                    My.Settings.ApplicationTheme = loaded.ApplicationTheme
-                    My.Settings.MonitorTime = loaded.MonitorTime
-                    My.Settings.MAX_LOG_SIZE_KB = loaded.MAX_LOG_SIZE_KB
-                    My.Settings.LogStartStop = loaded.LogStartStop
-                    My.Settings.CpuLogoName = loaded.CpuLogoName
-                    My.Settings.BootUp = loaded.BootUp
-                    My.Settings.Autostart = loaded.Autostart
-                    My.Settings.InfoMessage = loaded.InfoMessage
-                    My.Settings.MashineID = loaded.MashineID
-                    My.Settings.IsCpuSubInfoLoaded = loaded.IsCpuSubInfoLoaded
-                    My.Settings.FirstStart = loaded.FirstStart
-                    My.Settings.UpdateCheck = loaded.UpdateCheck
-                    My.Settings.AllwaysShow = loaded.AllwaysShow
-                    My.Settings.CName = loaded.CName
-                    My.Settings.LogPanel = loaded.LogPanel
-                    My.Settings.Save()
-                End Using
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Fehler beim Speichern der Einstellungen: " & ex.Message & vbCrLf &
-        If(ex.InnerException IsNot Nothing, ex.InnerException.Message, ""))
-        End Try
+        If File.Exists(xmlPath) Then
+            Using fs As New FileStream(xmlPath, FileMode.Open)
+                Dim serializer As New XmlSerializer(GetType(AppSettingsXML))
+                Dim loaded As AppSettingsXML = CType(serializer.Deserialize(fs), AppSettingsXML)
+                Settings().MonitorTime = loaded.MonitorTime
+                Settings().MAX_LOG_SIZE_KB = loaded.MAX_LOG_SIZE_KB
+                Settings().LogStartStop = loaded.LogStartStop
+                Settings().CpuLogoName = loaded.CpuLogoName
+                Settings().BootUp = loaded.BootUp
+                Settings().Autostart = loaded.Autostart
+                Settings().InfoMessage = loaded.InfoMessage
+                Settings().MashineID = loaded.MashineID
+                Settings().IsCpuSubInfoLoaded = loaded.IsCpuSubInfoLoaded
+                Settings().FirstStart = loaded.FirstStart
+                Settings().UpdateCheck = loaded.UpdateCheck
+                Settings().AllwaysShow = loaded.AllwaysShow
+                Settings().CName = loaded.CName
+                Settings().LogPanel = loaded.LogPanel
+                Settings().ops = loaded.Ops
+            End Using
+            LblStatusMessage.Visible = Settings.LogPanel
+        End If
     End Sub
     'Form Logic
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -740,6 +734,24 @@ Public Class Form1
                 numberOfLogicalProcessors = If(queryObj("NumberOfLogicalProcessors"), 0)
                 currentClockSpeed = If(queryObj("CurrentClockSpeed"), 0)
                 Dim archValue As String = GetProcessorArchitecture(queryObj("Architecture"))
+                Exit For
+            Next
+            For Each queryObj As ManagementObject In searcher.Get()
+                cpuName = If(queryObj("Name"), "N/A").ToString()
+                numberOfCores = If(queryObj("NumberOfCores"), 0)
+                numberOfLogicalProcessors = If(queryObj("NumberOfLogicalProcessors"), 0)
+                currentClockSpeed = If(queryObj("CurrentClockSpeed"), 0)
+                Dim archValue As Integer = If(queryObj("Architecture"), -1)
+                Select Case archValue
+                    Case 0 : architecture = "X86"
+                    Case 1 : architecture = "MIPS"
+                    Case 2 : architecture = "Alpha"
+                    Case 3 : architecture = "PowerPC"
+                    Case 5 : architecture = "ARM"
+                    Case 6 : architecture = "ia64"
+                    Case 9 : architecture = "X64"
+                    Case Else : architecture = "Unknown"
+                End Select
                 Exit For
             Next
             '#--------------------------------------------------------------------------------------------------------------------'

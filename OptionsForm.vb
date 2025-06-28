@@ -1,7 +1,7 @@
 ﻿' OptionsForm.vb
 Imports System.IO
 Imports System.Xml.Serialization
-
+Imports CoolCore.My
 Public Class OptionsForm
     Public Event ThemeChanged As EventHandler(Of String)
     Private _updateCheckBoxInitialState As CheckState
@@ -11,10 +11,9 @@ Public Class OptionsForm
     Dim settingsPath As String = Path.Combine(documentsPath, "CoolCore")
 
     Private Sub OptionsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Settings().ApplicationTheme = "Standard"
-        Label1.Text = $"Temp. Monitor & CPU Streß: {Settings().MonitorTime} s"
+
+        'Label1.Text = $"Temp. Monitor & CPU Streß: {Settings().MonitorTime} s"
         For i = 0 To LogSizeBox.Items.Count - 1
-            Dim items = i
             LogSizeBox.Items(i) = Settings().MAX_LOG_SIZE_KB
             If Settings().MAX_LOG_SIZE_KB = LogSizeBox.Items(i).ToString() Then
                 LogSizeBox.SelectedIndex = i
@@ -24,11 +23,12 @@ Public Class OptionsForm
         LogStartStopBox.Checked = Settings().LogStartStop
         updateCheckBox.Checked = Settings().UpdateCheck
         BootBox.Checked = Settings().BootUp
+        LogPanelCheckBox.Checked = Settings().LogPanel
+        StartMessageBox.Checked = Settings().AllwaysShow
         updateCheckBox.Checked = Settings().UpdateCheck
         _updateCheckBoxInitialState = updateCheckBox.CheckState
         _isInitializing = True
-        StartMessageBox.Checked = Settings().AllwaysShow
-        _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
+
         Dim monitorTime = Settings().MonitorTime
         If monitorTime > 0 Then
             For i = 0 To CheckedListBox1.Items.Count - 1
@@ -39,12 +39,20 @@ Public Class OptionsForm
                 End If
             Next
         End If
-        LogPanelCheckBox.Checked = Settings().LogPanel
-    End Sub
 
+    End Sub
+    Private Sub UpdateSettingsFromUI()
+        Settings().MonitorTime = CheckedListBox1.SelectedItem?.ToString()
+        Settings().MAX_LOG_SIZE_KB = LogSizeBox.SelectedItem?.ToString()
+        Settings().LogStartStop = LogStartStopBox.Checked
+        Settings().BootUp = BootBox.Checked
+        Settings().LogPanel = LogPanelCheckBox.Checked
+        Settings().AllwaysShow = StartMessageBox.Checked
+        Settings().UpdateCheck = updateCheckBox.Checked
+        ' ... weitere Felder nach Bedarf
+    End Sub
     Private Sub SaveSettingsToXml()
-        Dim getsettings As New SettingsXml With {
-        .ApplicationTheme = Settings().ApplicationTheme,
+        Dim getsettings As New AppSettingsXML With {
         .MonitorTime = Settings().MonitorTime,
         .MAX_LOG_SIZE_KB = Settings().MAX_LOG_SIZE_KB,
         .LogStartStop = Settings().LogStartStop,
@@ -57,19 +65,21 @@ Public Class OptionsForm
         .FirstStart = Settings().FirstStart,
         .UpdateCheck = Settings().UpdateCheck,
         .AllwaysShow = Settings().AllwaysShow,
-        .CName = Settings().CName
-    }
+        .CName = Settings().CName,
+        .LogPanel = Settings().LogPanel,
+        .Ops = Settings().ops
+        }
         Dim documentsPath As String = settingsPath
         Dim xmlPath As String = Path.Combine(documentsPath, "CoolCoreSettings.xml")
         Using fs As New FileStream(xmlPath, FileMode.Create)
-            Dim serializer As New XmlSerializer(GetType(SettingsXml))
+            Dim serializer As New XmlSerializer(GetType(AppSettingsXML))
             serializer.Serialize(fs, getsettings)
         End Using
     End Sub
     Private Sub BtnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        Settings().Save()
+        UpdateSettingsFromUI()
         SaveSettingsToXml()
-        RaiseEvent ThemeChanged(Me, Settings().ApplicationTheme)
+        Settings().Save()
         Close()
     End Sub
 
@@ -83,7 +93,7 @@ Public Class OptionsForm
         End If
         If CheckedListBox1.SelectedItem IsNot Nothing Then
             Settings().MonitorTime = CheckedListBox1.SelectedItem.ToString()
-            Label1.Text = "CPU Stresstest Intervall: " & Settings().MonitorTime
+            'Label1.Text = "CPU Stresstest Intervall: " & Settings().MonitorTime
         End If
         For i = 0 To CheckedListBox1.Items.Count - 1
             CheckedListBox1.SetItemChecked(i, i = CheckedListBox1.SelectedIndex)
@@ -138,11 +148,13 @@ Public Class OptionsForm
     Private Sub LogStartStopBox_CheckedChanged(sender As Object, e As EventArgs) Handles LogStartStopBox.CheckedChanged
         If LogStartStopBox.Checked = False Then
             Settings().LogStartStop = False
+            Settings.Save()
             Form1.Invoke(Sub()
                              Form1.StartStopLog()
                          End Sub)
         ElseIf LogStartStopBox.Checked = True Then
             Settings().LogStartStop = True
+            Settings.Save()
             If Form1 Is Nothing AndAlso Form1.IsHandleCreated Then
                 Form1.Invoke(Sub()
                                  Form1.StartStopLog()
@@ -155,11 +167,14 @@ Public Class OptionsForm
         Try
             If LogPanelCheckBox.Checked = True Then
                 Settings().LogPanel = True
+                Settings.Save()
                 Form1.LblStatusMessage.Visible = True
             ElseIf LogPanelCheckBox.Checked = False Then
                 Settings().LogPanel = False
+                Settings.Save()
                 Form1.LblStatusMessage.Visible = False
             End If
+
         Catch ex As Exception
             MessageBox.Show($"Error Prozess kan nicht gestartet werden: {ex.Message}")
             LogPanelCheckBox.Checked = Not LogPanelCheckBox.Checked ' Reset the checkbox state
@@ -210,17 +225,10 @@ Public Class OptionsForm
         _updateCheckBoxInitialState = updateCheckBox.CheckState
     End Sub
 
-
     Private Sub StartMessageBox_CheckedChanged(sender As Object, e As EventArgs)
-        If StartMessageBox.CheckState = _StartMessageBoxCheckBoxInitialState Then
-            Return
-        End If
-        If StartMessageBox.CheckState = CheckState.Checked Then
+        If StartMessageBox.CheckState = True Then
             Settings().AllwaysShow = True
-            If _isInitializing Then
-                _isInitializing = False
-                Return
-            End If
+            Settings.Save()
             MessageBox.Show("Die Startnachricht wird immer angezeigt.", "Info:", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
             Settings().AllwaysShow = False
@@ -228,9 +236,9 @@ Public Class OptionsForm
                 _isInitializing = False
                 Return
             End If
+            Settings.Save()
             MessageBox.Show("Die Startnachricht wird nicht mehr angezeigt.", "Info:", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-        _StartMessageBoxCheckBoxInitialState = StartMessageBox.CheckState
     End Sub
 
     Private Sub InfoButton_Click(sender As Object, e As EventArgs) Handles InfoButton.Click

@@ -35,16 +35,18 @@ Partial Class WelcomeForm
         'Button1
         '
         Me.Button1.AutoSize = True
+        Me.Button1.BackColor = System.Drawing.SystemColors.Highlight
         Me.Button1.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Button1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button1.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Button1.Font = New System.Drawing.Font("Bahnschrift", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.ForeColor = System.Drawing.SystemColors.ControlLightLight
         Me.Button1.Location = New System.Drawing.Point(0, 400)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(622, 50)
         Me.Button1.TabIndex = 1
-        Me.Button1.Text = "Ok"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Text = "Start"
+        Me.Button1.UseVisualStyleBackColor = False
         '
         'Panel1
         '
@@ -52,9 +54,9 @@ Partial Class WelcomeForm
         Me.Panel1.BackColor = System.Drawing.Color.Transparent
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel1.Controls.Add(Me.TextBox1)
-        Me.Panel1.Location = New System.Drawing.Point(21, 68)
+        Me.Panel1.Location = New System.Drawing.Point(0, 87)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(575, 306)
+        Me.Panel1.Size = New System.Drawing.Size(622, 287)
         Me.Panel1.TabIndex = 4
         '
         'TextBox1
@@ -64,9 +66,9 @@ Partial Class WelcomeForm
         Me.TextBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.TextBox1.Font = New System.Drawing.Font("Bahnschrift", 10.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox1.LiveSetting = System.Windows.Forms.Automation.AutomationLiveSetting.Polite
-        Me.TextBox1.Location = New System.Drawing.Point(-2, 0)
+        Me.TextBox1.Location = New System.Drawing.Point(10, 14)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(552, 491)
+        Me.TextBox1.Size = New System.Drawing.Size(580, 497)
         Me.TextBox1.TabIndex = 3
         Me.TextBox1.Text = "Label1"
         Me.TextBox1.UseCompatibleTextRendering = True
@@ -79,7 +81,7 @@ Partial Class WelcomeForm
         Me.Label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.Label1.Location = New System.Drawing.Point(90, 5)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(441, 46)
+        Me.Label1.Size = New System.Drawing.Size(441, 37)
         Me.Label1.TabIndex = 5
         Me.Label1.Text = "CoolCore-CPU®"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -87,10 +89,10 @@ Partial Class WelcomeForm
         'PictureBox1
         '
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox1.Image = Global.CoolCore.My.Resources.Resources._024_cpu
-        Me.PictureBox1.Location = New System.Drawing.Point(558, 24)
+        Me.PictureBox1.Image = Global.CoolCore.My.Resources.Resources._021_about
+        Me.PictureBox1.Location = New System.Drawing.Point(551, 14)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(63, 53)
+        Me.PictureBox1.Size = New System.Drawing.Size(59, 67)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 6
         Me.PictureBox1.TabStop = False
@@ -100,9 +102,9 @@ Partial Class WelcomeForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
-        Me.BackColor = System.Drawing.Color.AliceBlue
-        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
-        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.BackgroundImage = Global.CoolCore.My.Resources.Resources.border8
+        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(622, 450)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Button1)
