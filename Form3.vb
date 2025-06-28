@@ -1,5 +1,4 @@
 ﻿Imports System.Drawing.Drawing2D
-Imports CoolCore.My
 Public Class Form3
     Public Event StopRequested As EventHandler
     Private frameCounter As Integer = 0
@@ -31,8 +30,10 @@ Public Class Form3
             TimeLabel.AutoSize = False
         End If
         If PnlCpuFanAnimation IsNot Nothing Then
-            _cpuImage = My.Resources.fan2
-            PnlCpuFanAnimation.Size = New Size(200, 200)
+            _cpuImage = fan1
+            PnlCpuFanAnimation.Size = New Size(180, 180)
+            'PnlCpuFanAnimation.Location = New Point((ClientSize.Width - PnlCpuFanAnimation.Width) \ 2, (ClientSize.Height - PnlCpuFanAnimation.Height) \ 2)
+            'PnlCpuFanAnimation.Anchor = AnchorStyles.None
             PnlCpuFanAnimation.BackColor = SystemColors.Control
             PnlCpuFanAnimation.BorderStyle = BorderStyle.None
             AddHandler PnlCpuFanAnimation.Paint, AddressOf PnlCpuFanAnimation_Paint
@@ -67,7 +68,7 @@ Public Class Form3
             If TimeLabel IsNot Nothing Then
                 TimeLabel.Text = $"Dauer: {elapsedTime:hh\:mm\:ss}"
                 Text = $"Monitoring CPU Temperatur noch: {Math.Round(monitorTime - elapsedTime.TotalSeconds)}s"
-                lblResults.Text = $"CPU Temperatur: COre1:{Form1.CoreTemp0.Text} -> Core2:{Form1.CoreTemp1.Text} -> Core3:{Form1.CoreTemp2.Text} -> Core4:{Form1.CoreTemp3.Text}"
+                lblResults.Text = $"CPU Temperatur: Core1:{Form1.CoreTemp0.Text} -> Core2:{Form1.CoreTemp1.Text} -> Core3:{Form1.CoreTemp2.Text} -> Core4:{Form1.CoreTemp3.Text}"
                 lblResults?.Invalidate()
                 Form1.CoreTemp0?.Invalidate()
                 lblStatus.Text = $"{Settings().Ops * monitorTime / 4} / Millionen -> Operationen pro Thread / sekunde"

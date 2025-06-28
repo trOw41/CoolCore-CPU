@@ -40,7 +40,7 @@ Partial Class Form3
         Me.ProgressBar1.Location = New System.Drawing.Point(0, 166)
         Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(0)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(345, 17)
+        Me.ProgressBar1.Size = New System.Drawing.Size(457, 17)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 2
         '
@@ -50,7 +50,7 @@ Partial Class Form3
         Me.PnlCpuFanAnimation.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.PnlCpuFanAnimation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.PnlCpuFanAnimation.Controls.Add(Me.TimeLabel)
-        Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(175, 3)
+        Me.PnlCpuFanAnimation.Location = New System.Drawing.Point(287, 3)
         Me.PnlCpuFanAnimation.Name = "PnlCpuFanAnimation"
         Me.PnlCpuFanAnimation.Padding = New System.Windows.Forms.Padding(3)
         Me.PnlCpuFanAnimation.Size = New System.Drawing.Size(169, 161)
@@ -83,9 +83,10 @@ Partial Class Form3
         Me.lblStatus.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblStatus.Location = New System.Drawing.Point(0, 33)
         Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Size = New System.Drawing.Size(175, 37)
+        Me.lblStatus.Size = New System.Drawing.Size(281, 37)
         Me.lblStatus.TabIndex = 5
         Me.lblStatus.Text = "Bitte warten.."
+        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'lblResults
         '
@@ -97,7 +98,7 @@ Partial Class Form3
         Me.lblResults.ForeColor = System.Drawing.SystemColors.ControlText
         Me.lblResults.Location = New System.Drawing.Point(0, 75)
         Me.lblResults.Name = "lblResults"
-        Me.lblResults.Size = New System.Drawing.Size(175, 91)
+        Me.lblResults.Size = New System.Drawing.Size(284, 91)
         Me.lblResults.TabIndex = 5
         Me.lblResults.Text = "bitte warten.."
         '
@@ -108,7 +109,7 @@ Partial Class Form3
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.BackgroundImage = Global.CoolCore.My.Resources.Resources.border8
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(345, 183)
+        Me.ClientSize = New System.Drawing.Size(457, 183)
         Me.Controls.Add(Me.lblResults)
         Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.PnlCpuFanAnimation)

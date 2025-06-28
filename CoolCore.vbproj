@@ -375,9 +375,6 @@
     <Content Include="Resources\019-person.png" />
     <Content Include="Resources\023-cpu.png" />
     <None Include="Resources\023-cpu1.png" />
-    <None Include="..\..\..\..\..\Desktop\CoolCore CPU\024-cpu-1.png">
-      <Link>Resources\024-cpu-1.png</Link>
-    </None>
     <None Include="Resources\024-cpu-1.ico" />
     <None Include="Resources\tools-and-utensils.png" />
     <None Include="Resources\temp.png" />
