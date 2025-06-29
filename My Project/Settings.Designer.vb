@@ -245,6 +245,18 @@ Namespace My
                 Me("LogPanel") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property LogNormal() As Boolean
+            Get
+                Return CType(Me("LogNormal"),Boolean)
+            End Get
+            Set
+                Me("LogNormal") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

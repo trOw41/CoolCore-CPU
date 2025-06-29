@@ -15,6 +15,6 @@ Public Class AppSettingsXML
     Public Property AllwaysShow As Boolean
     Public Property CName As String
     Public Property LogPanel As Boolean
-
+    Public Property LogNormal As Boolean
     Public Property Ops As Integer
 End Class

@@ -61,6 +61,10 @@ Partial Class Form1
         Me.PicBox2 = New System.Windows.Forms.PictureBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.VBox4 = New System.Windows.Forms.TextBox()
+        Me.VBox3 = New System.Windows.Forms.TextBox()
+        Me.VBox2 = New System.Windows.Forms.TextBox()
+        Me.Vbox1 = New System.Windows.Forms.TextBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.BtnToggleMonitor1 = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -94,10 +98,6 @@ Partial Class Form1
         Me.MaxTemp3 = New System.Windows.Forms.TextBox()
         Me.MaxTemp = New System.Windows.Forms.TextBox()
         Me.LoadBox3 = New System.Windows.Forms.TextBox()
-        Me.VBox4 = New System.Windows.Forms.TextBox()
-        Me.VBox3 = New System.Windows.Forms.TextBox()
-        Me.VBox2 = New System.Windows.Forms.TextBox()
-        Me.Vbox1 = New System.Windows.Forms.TextBox()
         Me.MinTemp = New System.Windows.Forms.TextBox()
         Me.MinTemp3 = New System.Windows.Forms.TextBox()
         Me.TJBox = New System.Windows.Forms.TextBox()
@@ -391,6 +391,10 @@ Partial Class Form1
         Me.Panel2.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.Panel2, "Panel2")
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel2.Controls.Add(Me.VBox4)
+        Me.Panel2.Controls.Add(Me.VBox3)
+        Me.Panel2.Controls.Add(Me.VBox2)
+        Me.Panel2.Controls.Add(Me.Vbox1)
         Me.Panel2.Controls.Add(Me.Panel3)
         Me.Panel2.Controls.Add(Me.CoreTemp3)
         Me.Panel2.Controls.Add(Me.Label2)
@@ -422,14 +426,50 @@ Partial Class Form1
         Me.Panel2.Controls.Add(Me.MaxTemp3)
         Me.Panel2.Controls.Add(Me.MaxTemp)
         Me.Panel2.Controls.Add(Me.LoadBox3)
-        Me.Panel2.Controls.Add(Me.VBox4)
-        Me.Panel2.Controls.Add(Me.VBox3)
-        Me.Panel2.Controls.Add(Me.VBox2)
-        Me.Panel2.Controls.Add(Me.Vbox1)
         Me.Panel2.Controls.Add(Me.MinTemp)
         Me.Panel2.Controls.Add(Me.MinTemp3)
         Me.Panel2.Controls.Add(Me.TJBox)
         Me.Panel2.Name = "Panel2"
+        '
+        'VBox4
+        '
+        Me.VBox4.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
+        Me.VBox4.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.VBox4.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.VBox4, "VBox4")
+        Me.VBox4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.VBox4.Name = "VBox4"
+        Me.VBox4.ReadOnly = True
+        '
+        'VBox3
+        '
+        Me.VBox3.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
+        Me.VBox3.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.VBox3.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.VBox3, "VBox3")
+        Me.VBox3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.VBox3.Name = "VBox3"
+        Me.VBox3.ReadOnly = True
+        '
+        'VBox2
+        '
+        Me.VBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
+        Me.VBox2.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.VBox2.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.VBox2, "VBox2")
+        Me.VBox2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.VBox2.Name = "VBox2"
+        Me.VBox2.ReadOnly = True
+        '
+        'Vbox1
+        '
+        Me.Vbox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
+        Me.Vbox1.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Vbox1.Cursor = System.Windows.Forms.Cursors.Default
+        resources.ApplyResources(Me.Vbox1, "Vbox1")
+        Me.Vbox1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.Vbox1.Name = "Vbox1"
+        Me.Vbox1.ReadOnly = True
         '
         'Panel3
         '
@@ -688,46 +728,6 @@ Partial Class Form1
         Me.LoadBox3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.LoadBox3.Name = "LoadBox3"
         Me.LoadBox3.ReadOnly = True
-        '
-        'VBox4
-        '
-        Me.VBox4.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
-        Me.VBox4.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.VBox4.Cursor = System.Windows.Forms.Cursors.Default
-        resources.ApplyResources(Me.VBox4, "VBox4")
-        Me.VBox4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.VBox4.Name = "VBox4"
-        Me.VBox4.ReadOnly = True
-        '
-        'VBox3
-        '
-        Me.VBox3.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
-        Me.VBox3.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.VBox3.Cursor = System.Windows.Forms.Cursors.Default
-        resources.ApplyResources(Me.VBox3, "VBox3")
-        Me.VBox3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.VBox3.Name = "VBox3"
-        Me.VBox3.ReadOnly = True
-        '
-        'VBox2
-        '
-        Me.VBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
-        Me.VBox2.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.VBox2.Cursor = System.Windows.Forms.Cursors.Default
-        resources.ApplyResources(Me.VBox2, "VBox2")
-        Me.VBox2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.VBox2.Name = "VBox2"
-        Me.VBox2.ReadOnly = True
-        '
-        'Vbox1
-        '
-        Me.Vbox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Text
-        Me.Vbox1.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Vbox1.Cursor = System.Windows.Forms.Cursors.Default
-        resources.ApplyResources(Me.Vbox1, "Vbox1")
-        Me.Vbox1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Vbox1.Name = "Vbox1"
-        Me.Vbox1.ReadOnly = True
         '
         'MinTemp
         '
@@ -1043,10 +1043,6 @@ Partial Class Form1
     Friend WithEvents MaxTemp3 As TextBox
     Friend WithEvents MaxTemp As TextBox
     Friend WithEvents LoadBox3 As TextBox
-    Friend WithEvents VBox4 As TextBox
-    Friend WithEvents VBox3 As TextBox
-    Friend WithEvents VBox2 As TextBox
-    Friend WithEvents Vbox1 As TextBox
     Friend WithEvents MinTemp As TextBox
     Friend WithEvents MinTemp3 As TextBox
     Friend WithEvents TJBox As TextBox
@@ -1081,4 +1077,8 @@ Partial Class Form1
     Friend WithEvents Label2 As Label
     Friend WithEvents Label11 As Label
     Friend WithEvents Label8 As Label
+    Friend WithEvents VBox4 As TextBox
+    Friend WithEvents VBox3 As TextBox
+    Friend WithEvents VBox2 As TextBox
+    Friend WithEvents Vbox1 As TextBox
 End Class

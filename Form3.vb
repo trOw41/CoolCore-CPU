@@ -38,9 +38,14 @@ Public Class Form3
             PnlCpuFanAnimation.BorderStyle = BorderStyle.None
             AddHandler PnlCpuFanAnimation.Paint, AddressOf PnlCpuFanAnimation_Paint
         End If
-
-        If AnimationTimer IsNot Nothing Then
-            AnimationTimer.Interval = Settings().MonitorTime
+        Dim moni As Double = Settings.MonitorTime
+        If AnimationTimer IsNot Nothing AndAlso moni >= 30 Then
+            AnimationTimer.Interval = Settings.MonitorTime
+            AddHandler AnimationTimer.Tick, AddressOf AnimationTimer_Tick
+            AnimationTimer.Enabled = True
+        Else
+            Settings.MonitorTime = 30
+            AnimationTimer.Interval = Settings.MonitorTime
             AddHandler AnimationTimer.Tick, AddressOf AnimationTimer_Tick
         End If
 
@@ -53,7 +58,7 @@ Public Class Form3
     End Sub
 
     Public Sub UpdateElapsedTime(elapsedTime As TimeSpan)
-        Dim monitorTime As Double = My.Settings().MonitorTime
+        Dim monitorTime As Double = My.Settings.MonitorTime
         Dim tickerMax As Integer = CInt(monitorTime)
         Dim ticker As Integer = CInt(elapsedTime.TotalSeconds)
 
@@ -71,7 +76,7 @@ Public Class Form3
                 lblResults.Text = $"CPU Temperatur: Core1:{Form1.CoreTemp0.Text} -> Core2:{Form1.CoreTemp1.Text} -> Core3:{Form1.CoreTemp2.Text} -> Core4:{Form1.CoreTemp3.Text}"
                 lblResults?.Invalidate()
                 Form1.CoreTemp0?.Invalidate()
-                lblStatus.Text = $"{Settings().Ops * monitorTime / 4} / Millionen -> Operationen pro Thread / sekunde"
+                lblStatus.Text = $"{Settings.ops * monitorTime / 4} / Millionen -> Operationen pro Thread / sekunde"
             End If
         End If
     End Sub
