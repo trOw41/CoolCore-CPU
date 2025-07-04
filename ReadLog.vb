@@ -3,8 +3,11 @@ Imports System.Diagnostics
 Imports System.Globalization
 Imports System.IO
 Imports System.Text
+Imports System.Web.UI.DataVisualization.Charting
 Imports System.Windows.Forms
+Imports Google.Protobuf.WellKnownTypes
 Imports Newtonsoft.Json
+Imports Org.BouncyCastle.Asn1.Cms
 
 Public Class ReadLog
     Private logDir As String = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory & "log")
@@ -15,7 +18,10 @@ Public Class ReadLog
         ListView1.FullRowSelect = True
         LogFilePath = Settings.LogFilePath
     End Sub
+
     Public Sub LoadLogEntries(logEntries As List(Of LogEntry), headerLine As String)
+        Debug.WriteLine("LogEntries count: " & logEntries.Count)
+        Debug.WriteLine("Header: " & headerLine)
         ListView1.Items.Clear()
         ListView1.Columns.Clear()
         Dim headers() As String = headerLine.Split(";"c)
@@ -24,11 +30,12 @@ Public Class ReadLog
         Next
         For Each entry As LogEntry In logEntries
             Dim item As New ListViewItem(entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss"))
-            item.SubItems.Add(entry.CpuName)
             item.SubItems.Add(entry.Core)
+            item.SubItems.Add(entry.CurrentTemp.ToString("F1"))
             item.SubItems.Add(entry.CurrentTemp.ToString("F1"))
             item.SubItems.Add(entry.MinTemp.ToString("F1"))
             item.SubItems.Add(entry.MaxTemp.ToString("F1"))
+
             ListView1.Items.Add(item)
         Next
 
@@ -41,7 +48,7 @@ Public Class ReadLog
                          End Sub)
         End If
     End Sub
-    Private Sub ErstelleTempReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ErstelleTempReportToolStripMenuItem.Click
+    Private Sub ErstelleTempReportToolStripMenuItem_Click(sender As Object, e As EventArgs)
         If ListView1.Items.Count = 0 Then
             MessageBox.Show("Die Liste ist leer. Bitte laden Sie zuerst eine Log-Datei.", "Keine Daten", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Return
@@ -58,17 +65,16 @@ Public Class ReadLog
                 Dim maxTemp As Single
 
                 If DateTime.TryParseExact(item.Text, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, timestamp) AndAlso
-                   Single.TryParse(item.SubItems(3).Text.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, currentTemp) AndAlso
-                   Single.TryParse(item.SubItems(4).Text.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, minTemp) AndAlso
-                   Single.TryParse(item.SubItems(5).Text.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, maxTemp) Then
+                   Single.TryParse(item.SubItems(2).Text.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, currentTemp) AndAlso
+                   Single.TryParse(item.SubItems(3).Text.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, minTemp) AndAlso
+                   Single.TryParse(item.SubItems(4).Text.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, maxTemp) Then
 
                     reportDataList.Add(New LogEntry With {
                         .Timestamp = timestamp,
-                        .CpuName = cpuName,
                         .Core = core,
+                        .CurrentTemp = currentTemp,
                         .MinTemp = minTemp,
-                        .MaxTemp = maxTemp,
-                        .CurrentTemp = currentTemp
+                        .MaxTemp = maxTemp
                     })
                 End If
             Next
@@ -107,5 +113,15 @@ Public Class ReadLog
         End Try
 
     End Sub
+
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub CloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CloseToolStripMenuItem.Click
+        Me.Close()
+    End Sub
+
+
 End Class
 

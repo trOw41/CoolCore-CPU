@@ -23,6 +23,7 @@ Partial Class Form1
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -125,6 +126,10 @@ Partial Class Form1
         Me.Model = New System.Windows.Forms.Label()
         Me.Versionlbl = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.NotifyIcon2 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.NotifyIcon3 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.NotifyIcon4 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.MenuStrip1.SuspendLayout()
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -946,6 +951,22 @@ Partial Class Form1
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.TabStop = False
         '
+        'NotifyIcon1
+        '
+        resources.ApplyResources(Me.NotifyIcon1, "NotifyIcon1")
+        '
+        'NotifyIcon2
+        '
+        resources.ApplyResources(Me.NotifyIcon2, "NotifyIcon2")
+        '
+        'NotifyIcon3
+        '
+        resources.ApplyResources(Me.NotifyIcon3, "NotifyIcon3")
+        '
+        'NotifyIcon4
+        '
+        resources.ApplyResources(Me.NotifyIcon4, "NotifyIcon4")
+        '
         'Form1
         '
         resources.ApplyResources(Me, "$this")
@@ -1081,4 +1102,8 @@ Partial Class Form1
     Friend WithEvents VBox3 As TextBox
     Friend WithEvents VBox2 As TextBox
     Friend WithEvents Vbox1 As TextBox
+    Friend WithEvents NotifyIcon1 As NotifyIcon
+    Friend WithEvents NotifyIcon2 As NotifyIcon
+    Friend WithEvents NotifyIcon3 As NotifyIcon
+    Friend WithEvents NotifyIcon4 As NotifyIcon
 End Class

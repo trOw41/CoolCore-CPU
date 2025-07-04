@@ -92,6 +92,8 @@ Public Class Form1
     Private systemInfoPrint As String
     Private totalOperations As Long = 0
     Private lastLoggedTimePerCore As New Dictionary(Of Integer, DateTime)()
+    Private lastLoggedMaxTemp As New Dictionary(Of Integer, Single)()
+
     'Programm initialization
     Public Sub New()
         InitializeComponent()
@@ -133,6 +135,15 @@ Public Class Form1
         refreshTimer = New Timer With {
             .Interval = 1000
             }
+        'Notify Section
+        If NotifyIcon1 IsNot Nothing Then
+            NotifyIcon1.Icon = My.Resources._024_cpu_1
+            NotifyIcon1.Text = "CoolCore-CPU®"
+            NotifyIcon1.Visible = True
+            NotifyIcon1.BalloonTipTitle = "CoolCore-CPU®"
+            NotifyIcon1.BalloonTipText = "CoolCore-CPU® is running in the background."
+            NotifyIcon1.ShowBalloonTip(3000)
+        End If
 
         AddHandler refreshTimer.Tick, AddressOf RefreshTimer_Tick
         computer = New Computer() With {
@@ -247,8 +258,7 @@ Public Class Form1
         Dim LogSystem As Task = Task.Run(Sub()
                                              StartStopLog()
                                              UpdateLogSize()
-                                             ' BrandCheck()
-
+                                             Notify_Me()
                                          End Sub)
         Await LogSystem
         If My.Settings.UpdateCheck = True Then
@@ -415,6 +425,16 @@ Public Class Form1
         End If
         computer?.Close()
         OhmComputer?.Close()
+        If NotifyIcon1 IsNot Nothing Or NotifyIcon2 IsNot Nothing Or NotifyIcon3 IsNot Nothing Or NotifyIcon4 IsNot Nothing Then
+            NotifyIcon1.Visible = False
+            NotifyIcon1.Dispose()
+            NotifyIcon2.Visible = False
+            NotifyIcon2.Dispose()
+            NotifyIcon3.Visible = False
+            NotifyIcon3.Dispose()
+            NotifyIcon4.Visible = False
+            NotifyIcon4.Dispose()
+        End If
     End Sub
 
     'Sensor initialization
@@ -504,7 +524,7 @@ Public Class Form1
 
                     If sensor.Value.HasValue AndAlso VoltBoxes.ContainsKey(boxIndex) Then
                         Me.Invoke(Sub()
-                                      VoltBoxes(boxIndex).Text = $"{sensor.Value.Value:F3}V"
+                                      VoltBoxes(boxIndex).Text = $"{sensor.Value.Value:F2}V"
                                   End Sub)
                     ElseIf VoltBoxes.ContainsKey(boxIndex) Then
                         Me.Invoke(Sub()
@@ -516,7 +536,7 @@ Public Class Form1
                 If genericVcoreSensor IsNot Nothing AndAlso genericVcoreSensor.Value.HasValue Then
                     If Not cpuVoltageSensorMap.ContainsKey(1) AndAlso VoltBoxes.ContainsKey(1) Then
                         Me.Invoke(Sub()
-                                      VoltBoxes(1).Text = $"{genericVcoreSensor.Value.Value:F3}V (VCore)"
+                                      VoltBoxes(1).Text = $"{genericVcoreSensor.Value.Value:F2}V (VCore)"
                                   End Sub)
                     End If
                 End If
@@ -553,7 +573,6 @@ Public Class Form1
     End Sub
 
     'Timer Progress
-    Private lastLoggedMaxTemp As New Dictionary(Of Integer, Single)()
     Private Sub RefreshTimer_Tick(sender As Object, e As EventArgs)
         If cpu Is Nothing Then
             InitializePerCoreCounters()
@@ -613,12 +632,10 @@ Public Class Form1
                                     Me.Invoke(Sub()
                                                   temperatureLogWriter.WriteLine(
                                                          $"{now:yyyy-MM-dd HH:mm:ss};" &
-                                                         $"{cpu.Name};" &
                                                          $"Core {coreIndex};" &
+                                                         $"{currentTemp:F1};" &
                                                          $"{sensor.Min:F1};" &
-                                                         $"{sensor.Max:F1};" &
-                                                         $"{currentTemp:F1}"
-                                                         )
+                                                         $"{sensor.Max:F1}")
                                                   temperatureLogWriter.Flush()
                                               End Sub)
                                 End If
@@ -627,12 +644,10 @@ Public Class Form1
                                               If Not lastLoggedTimePerCore.ContainsKey(coreIndex) Then
                                                   temperatureLogWriter.WriteLine(
                                                          $"{now:yyyy-MM-dd HH:mm:ss};" &
-                                                         $"{cpu.Name};" &
                                                          $"Core {coreIndex};" &
+                                                         $"{currentTemp:F1};" &
                                                          $"{sensor.Min:F1};" &
-                                                         $"{sensor.Max:F1};" &
-                                                         $"{currentTemp:F1}"
-                                                         )
+                                                         $"{sensor.Max:F1}")
                                                   temperatureLogWriter.Flush()
                                                   lastLoggedTimePerCore.Add(coreIndex, now)
                                               End If
@@ -651,13 +666,14 @@ Public Class Form1
                 End If
                 Me.Invoke(Sub()
                               CheckAndManageLogFile()
+                              Notify_Me()
                               FrequencyBox2.Text = $"{Math.Round(UpdateCpuFrequencyDisplay(), 1)} MHz"
                           End Sub)
             Next
             For i As Integer = 0 To cpuLoadCounters.Count - 1
                 Dim currentCoreLoad As Single = cpuLoadCounters(i).NextValue()
                 If LoadBoxes.ContainsKey(i) Then
-                    LoadBoxes(i).Text = $"{currentCoreLoad:F2}%"
+                    LoadBoxes(i).Text = $"{currentCoreLoad:F1}%"
                 End If
             Next
         Catch ex As Exception
@@ -700,15 +716,14 @@ Public Class Form1
         Return True
     End Function
     Public Sub LogTemperatureIfNeeded(coreIndex As Integer, temperature As Single)
-        If isLoggingActive AndAlso temperatureLogWriter IsNot Nothing Then
+        If isLoggingActive AndAlso temperatureLogWriter IsNot Nothing AndAlso Settings.LogNormal = False Then
             Try
                 temperatureLogWriter.WriteLine(
                     $"{DateTime.Now:yyyy-MM-dd HH:mm:ss};" &
-                    $"{cpu.Name};" &
                     $"Core{coreIndex};" &
                     $"0;" &
-                    $"{temperature:F1}" &
-                    $"0;")
+                    $"0;" &
+                    $"{temperature:F1}")
                 temperatureLogWriter.Flush()
             Catch ex As Exception
                 Debug.WriteLine($"Fehler beim Logging ab YELLOW_THRESHOLD: {ex.Message}")
@@ -739,7 +754,7 @@ Public Class Form1
             End If
             temperatureLogWriter = New StreamWriter(LogFilePath, append:=True)
             temperatureLogWriter.WriteLine($"--- CoolCore Temperatur-Log gestartet: {DateTime.Now} ---")
-            temperatureLogWriter.WriteLine("Zeitpunkt;CPU Name;Core;CurrentTemp;MinTemp;MaxTemp")
+            temperatureLogWriter.WriteLine("Zeitpunkt;Core;CurrentTemp;MinTemp;MaxTemp")
             isLoggingActive = True
             LblStatusMessage.Text = "Temperatur-Logging wurde gestartet. Daten werden in 'CoolCore_TemperatureLog.txt' geschrieben."
             Debug.WriteLine("Temperatur-Logging gestartet.")
@@ -865,32 +880,32 @@ Public Class Form1
             End If
 
             ' Die Header-Zeile erfassen und überspringen
-            If line.StartsWith("Zeitpunkt;") Then
+            If line.StartsWith("Zeitpunkt;Core;CurrentTemp;MinTemp;MaxTemp") Then
                 headerLine = line
                 Continue For
             End If
 
             Dim parts() As String = line.Split(";"c)
-            If parts.Length = 6 Then
+            Debug.WriteLine($"ExportLog: Parsing line: {line}")
+            If parts.Length = 5 Then
                 Dim timestamp As DateTime
-                Dim cpuName As String = parts(1).Trim()
-                Dim core As String = parts(2).Trim()
+                'Dim cpuName As Single = parts(1).Trim()
+                Dim core As String = parts(1).Trim()
                 Dim currentTemp As Single
                 Dim minTemp As Single
                 Dim maxTemp As Single
 
                 If DateTime.TryParseExact(parts(0).Trim(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, timestamp) AndAlso
-               Single.TryParse(parts(3).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, currentTemp) AndAlso
-               Single.TryParse(parts(4).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, minTemp) AndAlso
-               Single.TryParse(parts(5).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, maxTemp) Then
+                 Single.TryParse(parts(2).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, currentTemp) AndAlso
+                 Single.TryParse(parts(3).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, minTemp) AndAlso
+                 Single.TryParse(parts(4).Trim().Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, maxTemp) Then
 
                     parsedLogEntries.Add(New LogEntry With {
                     .Timestamp = timestamp,
-                    .CpuName = cpuName, ' CPU-Name aus der Datei, nicht WMI
-                    .Core = core,
-                    .MinTemp = minTemp,
-                    .MaxTemp = maxTemp,
-                    .CurrentTemp = currentTemp
+                        .Core = core,
+                        .CurrentTemp = currentTemp,
+                        .MaxTemp = maxTemp,
+                    .MinTemp = minTemp
                 })
                 End If
             End If
@@ -899,12 +914,16 @@ Public Class Form1
         ' Instanz der ReadLog-Form erstellen und Daten übergeben
         Dim readLogForm As New ReadLog()
         If Not String.IsNullOrEmpty(headerLine) Then
-            readLogForm.LoadLogEntries(parsedLogEntries, headerLine)
+            Me.Invoke(Sub()
+                          readLogForm.LoadLogEntries(parsedLogEntries, headerLine)
+                      End Sub)
         Else
             MessageBox.Show("Log-Header-Informationen wurden nicht gefunden. Die Spaltennamen werden nicht korrekt angezeigt.", "Header-Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
-        readLogForm.Show()
+        Me.Invoke(Sub()
+                      readLogForm.Show()
 
+                  End Sub)
     End Sub
     Private Function UpdateCpuFrequencyDisplay()
         Try
@@ -1068,7 +1087,7 @@ Public Class Form1
                           If vid IsNot Nothing AndAlso vid.Value.HasValue Then
                               Dim sum As Double = 0.0
                               Dim total As Double = 0.0
-                              VidBox.Text = $"{vid.Value.Value:F3} Mhz"
+                              VidBox.Text = $"{vid.Value.Value:F2} Mhz"
                               sum = systemInfo.CurrentClockSpeedMHz + CInt(vid.Value.Value)
                               FrequencyBox.Text = Math.Round(sum / 1000, 1) & " GHz"
                           Else
@@ -1076,7 +1095,7 @@ Public Class Form1
                           End If
                           Dim PowerAllCores = cpu.Sensors.FirstOrDefault(Function(s) s.SensorType = SensorType.Power AndAlso s.Name.Contains("Cores"))
                           If PowerAllCores IsNot Nothing AndAlso PowerAllCores.Value.HasValue Then
-                              s.Text = $"{PowerAllCores.Value.Value:F3}V"
+                              s.Text = $"{PowerAllCores.Value.Value:F2}V"
                           Else
                           End If
                       End Sub)
@@ -1590,12 +1609,6 @@ Public Class Form1
                         currentCoreTemps.Add(sensor.Name, sensor.Value.Value)
                     End If
                 Next
-                Dim voltCores As New Dictionary(Of String, Single)()
-                For Each sensor As ISensor In cpuVoltages
-                    If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) And Not sensor.Name.Contains("Voltage") AndAlso sensor.Value.HasValue Then
-                        voltCores.Add(sensor.Name, sensor.Value.Value)
-                    End If
-                Next
                 If currentCoreTemps.Any() Then
                     SyncLock backgroundTempMeasurements
                         Dim newEntry As New CoreTempData With {
@@ -1948,9 +1961,6 @@ Public Class Form1
     End Sub
 
     'Log Section
-
-
-
     Private Sub CheckAndSetSystemFonts()
         Dim isWindows7OrOlder As Boolean = False
         Dim osVersion As Version = Environment.OSVersion.Version
@@ -2110,7 +2120,56 @@ Public Class Form1
         End Select
     End Function
 
-    Private Sub MinTemplbl_Click(sender As Object, e As EventArgs) Handles MinTemplbl.Click
+    Private Function Notify_Me()
 
-    End Sub
+        Try
+            cpu?.Update()
+            Dim currentCoreTemps As New Dictionary(Of String, Single)()
+            For Each sensor As ISensor In coreTemperatures
+                If sensor.Name.StartsWith("CPU Core #", StringComparison.OrdinalIgnoreCase) AndAlso sensor.Value.HasValue Then
+                    currentCoreTemps(sensor.Name) = sensor.Value.Value
+                End If
+            Next
+            ' Für jeden Core ein eigenes Notify erzeugen
+            Dim notifyIndex As Integer = 1
+            For Each kvp In currentCoreTemps.OrderBy(Function(x) x.Key)
+                Dim coreLabel As String = kvp.Key.Replace("CPU Core #", "Core ")
+                Dim tempStr As String = $"{coreLabel}: {kvp.Value:F1}°C"
+
+                ' Dynamisch ein NotifyIcon erzeugen (maximal 4, falls mehr Cores, ggf. anpassen)
+                Dim notifyIcon As NotifyIcon = Nothing
+                Select Case notifyIndex
+                    Case 1
+                        notifyIcon = NotifyIcon1
+                    Case 2
+                        notifyIcon = NotifyIcon2
+                    Case 3
+                        notifyIcon = NotifyIcon3
+                    Case 4
+                        notifyIcon = NotifyIcon4
+                    Case Else
+                        ' Für mehr als 4 Cores keine weiteren NotifyIcons erzeugen
+                        Exit For
+                End Select
+                Return True
+                If notifyIcon IsNot Nothing Then
+                    notifyIcon.Text = tempStr
+                    notifyIcon.BalloonTipTitle = coreLabel
+                    notifyIcon.BalloonTipText = tempStr
+                    notifyIcon.Icon = My.Resources._024_cpu_1
+                    notifyIcon.Visible = False
+                    ' notifyIcon.ShowBalloonTip(1000)
+                End If
+
+                notifyIndex += 1
+            Next
+
+        Catch ex As Exception
+            NotifyIcon1.Text = "CPU Temp: Fehler"
+            NotifyIcon1.BalloonTipTitle = "Fehler"
+            NotifyIcon1.BalloonTipText = "Fehler beim Auslesen der CPU-Temperatur."
+            'NotifyIcon1.ShowBalloonTip(2000)
+        End Try
+        Return True
+    End Function
 End Class

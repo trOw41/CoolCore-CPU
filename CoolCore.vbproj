@@ -350,28 +350,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\nvidia-logo-vert.png" />
-    <None Include="Resources\pngegg.png" />
     <None Include="Resources\atiamdlogo.png" />
     <None Include="Resources\Nvidia-Logo.wine.png" />
-    <None Include="Resources\8.png" />
-    <None Include="Resources\7.png" />
-    <None Include="Resources\1 %282%29.png" />
-    <None Include="Resources\2 %282%29.png" />
-    <None Include="Resources\3 %282%29.png" />
-    <None Include="Resources\4.png" />
-    <None Include="Resources\5.png" />
-    <None Include="Resources\6.png" />
-    <None Include="Resources\archiv_log_box.png" />
-    <None Include="Resources\cpu_test.png" />
-    <None Include="Resources\export_log.png" />
-    <None Include="Resources\log_1.png" />
-    <None Include="Resources\log_details.png" />
-    <None Include="Resources\Main_dark.png" />
-    <None Include="Resources\Main_Standard.png" />
-    <None Include="Resources\menu_export.png" />
-    <None Include="Resources\options_Standard.png" />
-    <None Include="Resources\statistics_detail.png" />
-    <None Include="Resources\temperatures_standard.png" />
     <None Include="Resources\009-system.png" />
     <None Include="Resources\78_11594827525_045-firmware.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -392,15 +372,10 @@
     <None Include="Resources\IntelLogo-white.png" />
     <None Include="Resources\AMDLogo_Dark.png" />
     <None Include="Resources\AMDLogo.png" />
-    <None Include="Resources\border4.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\border8.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Content Include="Resources\backround2.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="Resources\border8.png" />
+    <None Include="Resources\statistics_detail.png" />
+    <None Include="Resources\038-system-1.png" />
+    <None Include="Resources\037-folder-1.png" />
     <Content Include="Support\support.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -420,8 +395,6 @@
     <Content Include="Resources\033-monitor-1.png" />
     <Content Include="Resources\034-signature.png" />
     <Content Include="Resources\036-folder.png" />
-    <Content Include="Resources\037-folder-1.png" />
-    <Content Include="Resources\038-system-1.png" />
     <Content Include="Resources\042-mergers-and-acquisitions.png" />
     <Content Include="Resources\046-cpu-2.png" />
     <AdditionalFiles Include="SystemInfoExport.xslt" />

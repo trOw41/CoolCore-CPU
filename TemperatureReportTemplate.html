@@ -128,7 +128,7 @@
             <thead>
                 <tr>
                     <th>Zeitpunkt</th>
-                    <th>CPU Name</th>
+                    <th></th>
                     <th>Core 0</th>
                     <th>Core 1</th>
                     <th>Core 2</th>
@@ -267,7 +267,6 @@
                     dataByTimestamp[entry.Timestamp] = {
                         cores: {},
                         coreCount: 0,
-                        cpuName: entry.CpuName,
                         totalTemp: 0,
                         maxOverallTemp: -Infinity,
                     };
@@ -286,7 +285,7 @@
                 const avgTemp = rowData.totalTemp / rowData.coreCount;
                 const row = summaryTableBody.insertRow();
                 row.insertCell().innerText = new Date(timestamp).toLocaleString('de-DE');
-                row.insertCell().innerText = rowData.cpuName || 'Unbekannt';
+                row.insertCell().innerText = "- - - - - >";
                 uniqueCores.forEach(core => {
                     const cell = row.insertCell();
                     cell.innerText = rowData.cores[core] !== undefined ? rowData.cores[core].toFixed(1) + '°C' : 'N/A';

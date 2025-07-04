@@ -10,12 +10,9 @@ Public Class Form2
     Private sourceFilePath As String
     Public Property PanelColorLegend As Color
 
-    ' This class is required for the CoreTempData type.
-    ' Assuming CoreTempData looks something like this:
     Public Class CoreTempData
         Public Property Timestamp As Date
         Public Property CoreTemperatures As Dictionary(Of String, Single)
-        ' Add any other properties your actual CoreTempData class might have
     End Class
 
     Public Sub New(data As List(Of CoreTempData))
@@ -31,6 +28,10 @@ Public Class Form2
         Text = $"CPU Temperature History: {Path.GetFileName(filePath)}"
         SetupFormAndChart()
         LoadDataFromCsv(filePath)
+    End Sub
+
+    Public Sub LoadExternChartData(filepath As String)
+        LoadDataFromCsv(filepath)
     End Sub
 
     Private Sub SetupFormAndChart()

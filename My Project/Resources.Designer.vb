@@ -265,7 +265,7 @@ Namespace My.Resources
         '''</summary>
         Public ReadOnly Property _037_folder_1() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("037-folder-1", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("_037_folder_1", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -275,7 +275,7 @@ Namespace My.Resources
         '''</summary>
         Public ReadOnly Property _038_system_1() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("038-system-1", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("_038_system_1", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -316,16 +316,6 @@ Namespace My.Resources
         Public ReadOnly Property atiamdlogo() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("atiamdlogo", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        '''</summary>
-        Public ReadOnly Property border4() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("border4", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -425,7 +415,7 @@ Namespace My.Resources
         '''-------------------------------------------------------------------------------
         '''Der Test Prozess kann nicht unterbrochen werden! Bitte warten Sie bis zum ende des Test Prozess und schließen Sie CoolCore nicht in der Test Phase, dies kann und wird zu unerwünschten Ergebnissen führen! 
         '''Stress-Messungen können die Systemstabilität vorübergehend beeinträchtigen (z.B. Überlastung, Einfrieren, Abstürze, etc.).
-        '''Die Ergebnisse können von System zu System variieren und sind nicht repräsentativ fü [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        '''Die Ergebnisse können von System zu System variieren und sind nicht repräsentati [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         '''</summary>
         Public ReadOnly Property TestInfo() As String
             Get
