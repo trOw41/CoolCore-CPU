@@ -180,9 +180,8 @@ Partial Class Form1
         '
         'SettingsToolStripMenuItem
         '
-        Me.SettingsToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._038_system_1
-        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
         resources.ApplyResources(Me.SettingsToolStripMenuItem, "SettingsToolStripMenuItem")
+        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
         '
         'ToolStripSeparator2
         '
@@ -973,7 +972,6 @@ Partial Class Form1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoValidate = System.Windows.Forms.AutoValidate.Disable
         Me.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.BackgroundImage = Global.CoolCore.My.Resources.Resources.border8
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Versionlbl)
         Me.Controls.Add(Me.PictureBox1)

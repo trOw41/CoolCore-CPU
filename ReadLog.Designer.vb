@@ -36,7 +36,7 @@ Partial Class ReadLog
         '
         'ListView1
         '
-        Me.ListView1.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 10.25!)
+        Me.ListView1.Font = New System.Drawing.Font("Bahnschrift SemiCondensed", 11.0!)
         Me.ListView1.FullRowSelect = True
         Me.ListView1.GridLines = True
         Me.ListView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
@@ -50,6 +50,7 @@ Partial Class ReadLog
         '
         'MenuStrip1
         '
+        Me.MenuStrip1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
@@ -69,7 +70,7 @@ Partial Class ReadLog
         Me.ExportToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogAlstxtToolStripMenuItem, Me.ToolStripSeparator2})
         Me.ExportToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._034_signature
         Me.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem"
-        Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(108, 22)
         Me.ExportToolStripMenuItem.Text = "Export"
         '
         'LogAlstxtToolStripMenuItem
@@ -87,19 +88,20 @@ Partial Class ReadLog
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(105, 6)
         '
         'CloseToolStripMenuItem
         '
         Me.CloseToolStripMenuItem.Image = Global.CoolCore.My.Resources.Resources._014_close
         Me.CloseToolStripMenuItem.Name = "CloseToolStripMenuItem"
-        Me.CloseToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.CloseToolStripMenuItem.Size = New System.Drawing.Size(108, 22)
         Me.CloseToolStripMenuItem.Text = "Close"
         '
         'ReadLog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackgroundImage = Global.CoolCore.My.Resources.Resources.border8
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(699, 540)
         Me.Controls.Add(Me.ListView1)

@@ -128,6 +128,18 @@
   <data name="MenuStrip1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Bahnschrift Light, 9.75pt</value>
   </data>
+  <data name="ToolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 6</value>
+  </data>
+  <data name="CloseToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>124, 22</value>
+  </data>
+  <data name="CloseToolStripMenuItem.Text" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
+  <data name="CloseToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Exit Programm</value>
+  </data>
   <data name="FileToolStripMenuItem.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
@@ -143,81 +155,99 @@
   <data name="FileToolStripMenuItem.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
     <value>ImageAboveText</value>
   </data>
-  <data name="OptionsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>62, 20</value>
-  </data>
-  <data name="OptionsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Options</value>
-  </data>
-  <data name="ToolsToolStripMenuItem.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="ToolsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>49, 20</value>
-  </data>
-  <data name="ToolsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Tools</value>
-  </data>
-  <data name="HelpToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 20</value>
-  </data>
-  <data name="HelpToolStripMenuItem.Text" xml:space="preserve">
-    <value>Help</value>
-  </data>
-  <data name="MenuStrip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="MenuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>7, 2, 0, 2</value>
-  </data>
-  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>394, 24</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="MenuStrip1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="MenuStrip1.Text" xml:space="preserve">
-    <value>MenuStrip1</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.Name" xml:space="preserve">
-    <value>MenuStrip1</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="ToolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
-  </data>
-  <data name="CloseToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="CloseToolStripMenuItem.Text" xml:space="preserve">
-    <value>Beenden</value>
-  </data>
-  <data name="CloseToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Exit Programm</value>
+  <data name="SettingsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+</value>
   </data>
   <data name="SettingsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>142, 22</value>
   </data>
   <data name="SettingsToolStripMenuItem.Text" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>139, 6</value>
   </data>
   <data name="SystemGrafikInfoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>142, 22</value>
   </data>
   <data name="SystemGrafikInfoToolStripMenuItem.Text" xml:space="preserve">
     <value>System Info</value>
+  </data>
+  <data name="OptionsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 20</value>
+  </data>
+  <data name="OptionsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Options</value>
   </data>
   <data name="ExportLogToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -247,19 +277,19 @@
 </value>
   </data>
   <data name="ExportLogToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 22</value>
+    <value>137, 22</value>
   </data>
   <data name="ExportLogToolStripMenuItem.Text" xml:space="preserve">
     <value>Export Log</value>
   </data>
   <data name="LogMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>169, 22</value>
   </data>
   <data name="LogMenuItem.Text" xml:space="preserve">
     <value>Log -&gt;</value>
   </data>
   <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>166, 6</value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -291,34 +321,34 @@
 </value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>169, 22</value>
   </data>
   <data name="LoadArchivedMeasurementsToolStripMenuItem.Text" xml:space="preserve">
     <value>Temp. Archiv</value>
   </data>
   <data name="ToolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>166, 6</value>
   </data>
   <data name="ExportCPUInfoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>169, 22</value>
   </data>
   <data name="ExportCPUInfoToolStripMenuItem.Text" xml:space="preserve">
     <value>Export CPU Info</value>
   </data>
   <data name="ToolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>166, 6</value>
   </data>
   <data name="IntelCPUDBToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>142, 22</value>
+    <value>148, 22</value>
   </data>
   <data name="IntelCPUDBToolStripMenuItem.Text" xml:space="preserve">
     <value>Intel CPU DB</value>
   </data>
   <data name="ToolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>139, 6</value>
+    <value>145, 6</value>
   </data>
   <data name="AmdCPUDBToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>142, 22</value>
+    <value>148, 22</value>
   </data>
   <data name="AmdCPUDBToolStripMenuItem.Text" xml:space="preserve">
     <value>amd CPU DB</value>
@@ -378,34 +408,77 @@
 </value>
   </data>
   <data name="CpuInfoMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>169, 22</value>
   </data>
   <data name="CpuInfoMenu.Text" xml:space="preserve">
     <value>CPU: Info | DB -&gt;</value>
   </data>
+  <data name="ToolsToolStripMenuItem.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="ToolsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>49, 20</value>
+  </data>
+  <data name="ToolsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Tools</value>
+  </data>
   <data name="InfoMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>120, 22</value>
   </data>
   <data name="InfoMenuItem.Text" xml:space="preserve">
     <value>Info</value>
   </data>
   <data name="ToolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>117, 6</value>
   </data>
   <data name="FAQToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>120, 22</value>
   </data>
   <data name="FAQToolStripMenuItem.Text" xml:space="preserve">
     <value>FAQ</value>
   </data>
   <data name="ToolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>117, 6</value>
   </data>
   <data name="SupportToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>120, 22</value>
   </data>
   <data name="SupportToolStripMenuItem.Text" xml:space="preserve">
     <value>Support</value>
+  </data>
+  <data name="HelpToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 20</value>
+  </data>
+  <data name="HelpToolStripMenuItem.Text" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="MenuStrip1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="MenuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>7, 2, 0, 2</value>
+  </data>
+  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>394, 24</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="MenuStrip1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="MenuStrip1.Text" xml:space="preserve">
+    <value>MenuStrip1</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.Name" xml:space="preserve">
+    <value>MenuStrip1</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;MenuStrip1.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <metadata name="DataSet1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>147, 19</value>
@@ -804,7 +877,7 @@
     <value>5</value>
   </data>
   <data name="Label2.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift, 9.75pt</value>
+    <value>Bahnschrift, 9.75pt, style=Underline</value>
   </data>
   <data name="Label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -819,7 +892,10 @@
     <value>4</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Aktuell °C</value>
+    <value>Aktuell</value>
+  </data>
+  <data name="Label2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopCenter</value>
   </data>
   <data name="&gt;&gt;Label2.Name" xml:space="preserve">
     <value>Label2</value>
@@ -1053,13 +1129,13 @@
     <value>13</value>
   </data>
   <data name="Label5.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift, 9.75pt</value>
+    <value>Bahnschrift, 9.75pt, style=Underline</value>
   </data>
   <data name="Label5.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="Label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>333, 85</value>
+    <value>335, 85</value>
   </data>
   <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 16</value>
@@ -1086,7 +1162,7 @@
     <value>14</value>
   </data>
   <data name="MaxTemplbl.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift, 9.75pt</value>
+    <value>Bahnschrift, 9.75pt, style=Underline</value>
   </data>
   <data name="MaxTemplbl.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1119,7 +1195,7 @@
     <value>15</value>
   </data>
   <data name="Label6.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift, 9.75pt</value>
+    <value>Bahnschrift, 9.75pt, style=Underline</value>
   </data>
   <data name="Label6.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1152,7 +1228,7 @@
     <value>16</value>
   </data>
   <data name="MinTemplbl.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Bahnschrift, 9.75pt</value>
+    <value>Bahnschrift, 9.75pt, style=Underline</value>
   </data>
   <data name="MinTemplbl.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -4882,24 +4958,6 @@
   <data name="&gt;&gt;FileToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;OptionsToolStripMenuItem.Name" xml:space="preserve">
-    <value>OptionsToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;OptionsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ToolsToolStripMenuItem.Name" xml:space="preserve">
-    <value>ToolsToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;ToolsToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;HelpToolStripMenuItem.Name" xml:space="preserve">
-    <value>HelpToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;HelpToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;ToolStripSeparator8.Name" xml:space="preserve">
     <value>ToolStripSeparator8</value>
   </data>
@@ -4910,6 +4968,12 @@
     <value>CloseToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;CloseToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;OptionsToolStripMenuItem.Name" xml:space="preserve">
+    <value>OptionsToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;OptionsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;SettingsToolStripMenuItem.Name" xml:space="preserve">
@@ -4928,6 +4992,12 @@
     <value>SystemGrafikInfoToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;SystemGrafikInfoToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ToolsToolStripMenuItem.Name" xml:space="preserve">
+    <value>ToolsToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;ToolsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LogMenuItem.Name" xml:space="preserve">
@@ -4994,6 +5064,12 @@
     <value>AmdCPUDBToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;AmdCPUDBToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;HelpToolStripMenuItem.Name" xml:space="preserve">
+    <value>HelpToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;HelpToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;InfoMenuItem.Name" xml:space="preserve">

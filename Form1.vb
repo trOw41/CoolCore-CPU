@@ -1549,6 +1549,7 @@ Public Class Form1
 
     End Sub
     Public Sub StartCpuStressTest()
+        refreshTimer.Enabled = False
         StopCpuStressTest()
         cancellationTokenSource = New CancellationTokenSource()
         Dim cancellationToken = cancellationTokenSource.Token
@@ -1591,6 +1592,7 @@ Public Class Form1
 
         Me.Invoke(Async Sub()
                       Await CheckCpuSub()
+                      refreshTimer.Enabled = True
                   End Sub)
         Me.Invoke(Sub()
                       LblStatusMessage.Text = "CPU-Stresstest beendet."
